@@ -76,6 +76,7 @@ flutter:
   assets:
     - assets/images/svg/
     - assets/images/svg/home/
+    - assets/images/svg/core/
     - pubspec.yaml
 
   # To add assets to your application, add an assets section, like this:

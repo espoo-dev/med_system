@@ -13,6 +13,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   MenuHomeModel menuHomeModel = MenuHomeModel();
+
   _buildPageBody(BuildContext context) {
     return ListView(
         physics: const BouncingScrollPhysics(
