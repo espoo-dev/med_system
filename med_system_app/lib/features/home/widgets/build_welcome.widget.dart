@@ -26,6 +26,7 @@ class _WelcomeWidgetState extends State<WelcomeWidget> {
                     text: 'Olá!',
                     style: TextStyle(
                       color: Colors.grey,
+                      fontWeight: FontWeight.w400,
                       fontSize: 30,
                     )),
                 TextSpan(
@@ -33,7 +34,7 @@ class _WelcomeWidgetState extends State<WelcomeWidget> {
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary,
                         fontSize: 30,
-                        fontWeight: FontWeight.bold)),
+                        fontWeight: FontWeight.w700)),
               ],
             ),
           ),
