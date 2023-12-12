@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:med_system_app/core/theme/icons.dart';
 
-class MyListComponent extends StatefulWidget {
+class ListEventsWidget extends StatefulWidget {
   final List<EventItem> items;
 
-  const MyListComponent({super.key, required this.items});
+  const ListEventsWidget({super.key, required this.items});
 
   @override
-  State<MyListComponent> createState() => _MyListComponentState();
+  State<ListEventsWidget> createState() => _ListEventsWidgetState();
 }
 
-class _MyListComponentState extends State<MyListComponent> {
+class _ListEventsWidgetState extends State<ListEventsWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -41,49 +41,52 @@ class _MyListComponentState extends State<MyListComponent> {
             height: 20,
           ),
           SizedBox(
-            height: 48,
+            height: MediaQuery.of(context).size.height * 0.28,
             child: ListView.builder(
               scrollDirection: Axis.vertical,
               itemCount: widget.items.length,
               itemBuilder: (BuildContext context, int index) {
                 EventItem item = widget.items[index];
                 debugPrint(widget.items.length.toString());
-                return Container(
-                  height: 48,
-                  width: MediaQuery.of(context).size.width * 0.28,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(9),
-                    color: const Color(0xFFECF2F3),
-                  ),
-                  child: ListTile(
-                    title: Row(
-                      children: [
-                        Text(item.name,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                            )),
-                        const SizedBox(width: 15),
-                        Text(item.value,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                            )),
-                      ],
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Container(
+                    height: 48,
+                    width: MediaQuery.of(context).size.width * 0.28,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(9),
+                      color: const Color(0xFFECF2F3),
                     ),
-                    leading: SvgPicture.asset(
-                      iconCheckCoreAsset,
-                      width: 18,
-                      height: 18,
-                      color: Theme.of(context).colorScheme.primary,
+                    child: ListTile(
+                      title: Row(
+                        children: [
+                          Text(item.name,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                              )),
+                          const SizedBox(width: 15),
+                          Text(item.value,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              )),
+                        ],
+                      ),
+                      leading: SvgPicture.asset(
+                        iconCheckCoreAsset,
+                        width: 18,
+                        height: 18,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      onTap: () {},
                     ),
-                    trailing: Icon(
-                      Icons.arrow_forward_ios,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    onTap: () {},
                   ),
                 );
               },
