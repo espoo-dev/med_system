@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:med_system_app/core/theme/icons.dart';
+import 'package:med_system_app/core/utils/navigation_utils.dart';
+import 'package:med_system_app/features/procedures/pages/procedures_page.dart';
 
 class ListEventsWidget extends StatefulWidget {
   final List<EventItem> items;
@@ -28,13 +30,16 @@ class _ListEventsWidgetState extends State<ListEventsWidget> {
                   )),
               const Spacer(),
               InkWell(
+                  onTap: () {
+                    push(context, const ProceduresPage());
+                  },
                   child: Text(
-                'Ver todos',
-                style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    color: Theme.of(context).colorScheme.primary),
-              )),
+                    'Ver todos',
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: Theme.of(context).colorScheme.primary),
+                  )),
             ],
           ),
           const SizedBox(
@@ -49,7 +54,7 @@ class _ListEventsWidgetState extends State<ListEventsWidget> {
                 EventItem item = widget.items[index];
                 debugPrint(widget.items.length.toString());
                 return Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
+                  padding: const EdgeInsets.only(top: 8, bottom: 8),
                   child: Container(
                     height: 48,
                     width: MediaQuery.of(context).size.width * 0.28,
@@ -82,6 +87,7 @@ class _ListEventsWidgetState extends State<ListEventsWidget> {
                         color: Theme.of(context).colorScheme.primary,
                       ),
                       trailing: Icon(
+                        size: 8.0,
                         Icons.arrow_forward_ios,
                         color: Theme.of(context).colorScheme.primary,
                       ),
