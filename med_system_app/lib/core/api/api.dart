@@ -1,5 +1,8 @@
 import 'package:chopper/chopper.dart';
+import 'package:med_system_app/core/api/interceptors/MyRequest.interceptor.dart';
+import 'package:med_system_app/core/api/interceptors/MyResponse.interceptor.dart';
 import 'package:med_system_app/core/api/services/auth/sign_in.service.dart';
+import 'package:med_system_app/core/api/services/events/events_procedure.service.dart';
 import 'package:med_system_app/core/api/services/procedures/procedure.service.dart';
 
 var customHeaders = {
@@ -11,11 +14,18 @@ var customHeaders = {
 
 final _chopper = ChopperClient(
   baseUrl: Uri.parse("https://med-system-backend.onrender.com"),
-  services: [SignInService.create(), ProcedureService.create()],
+  services: [
+    SignInService.create(),
+    ProcedureService.create(),
+    EventsService.create()
+  ],
   interceptors: [
     HeadersInterceptor(customHeaders),
     HttpLoggingInterceptor(),
+    MyRequestInterceptor(),
+    MyResponseInterceptor()
   ],
 );
 final signInService = _chopper.getService<SignInService>();
 final procedureService = _chopper.getService<ProcedureService>();
+final eventsService = _chopper.getService<EventsService>();
