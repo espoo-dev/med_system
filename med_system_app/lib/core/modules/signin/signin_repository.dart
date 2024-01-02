@@ -6,8 +6,13 @@ import 'package:med_system_app/core/api/error.model.dart';
 import 'package:med_system_app/core/api/network_exceptions.dart';
 import 'package:med_system_app/core/modules/signin/model/signin_request.model.dart';
 import 'package:med_system_app/core/modules/signin/model/user_dto.model.dart';
+import 'package:med_system_app/core/storage/constants/preferences.dart';
+import 'package:med_system_app/core/storage/shared_preference_helper.dart';
 
 class SignInRepository {
+  final SharedPreferenceHelper _sharedPrefsHelper;
+
+  SignInRepository(this._sharedPrefsHelper);
   Future<Result<dynamic>> login(String email, String password) async {
     try {
       SignInRequest? signInRequest = SignInRequest(
@@ -29,5 +34,17 @@ class SignInRepository {
     } catch (e) {
       return Result.failure(NetworkExceptions.getException(e));
     }
+  }
+
+  saveUserStorage(UserDTO user) async {
+    await _sharedPrefsHelper.saveUserData(user);
+  }
+
+  getUserStorage() async {
+    return await _sharedPrefsHelper.userData;
+  }
+
+  clearUserStorage() async {
+    return await _sharedPrefsHelper.deleteSecureData(Preferences.isUser);
   }
 }
