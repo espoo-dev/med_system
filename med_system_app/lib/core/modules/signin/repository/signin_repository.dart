@@ -13,7 +13,8 @@ class SignInRepository {
   final SharedPreferenceHelper _sharedPrefsHelper;
 
   SignInRepository(this._sharedPrefsHelper);
-  Future<Result<dynamic>> login(String email, String password) async {
+
+  Future<Result<dynamic>> signIn(String email, String password) async {
     try {
       SignInRequest? signInRequest = SignInRequest(
         email: email,
