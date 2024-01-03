@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
+import 'package:med_system_app/core/di/service_locator.dart';
+import 'package:med_system_app/core/modules/signin/page/signin.page.dart';
 import 'package:med_system_app/features/home/pages/home_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  _setupLogging();
+  setupServiceLocator();
   runApp(const MyApp());
+}
+
+void _setupLogging() {
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((rec) {
+    debugPrint('${rec.level.name}: ${rec.time}: ${rec.message}');
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -35,7 +48,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Nunito',
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const SignInPage(),
     );
   }
 }
