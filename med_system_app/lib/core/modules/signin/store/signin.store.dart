@@ -15,6 +15,14 @@ abstract class _SignInBaseStore with Store {
   _SignInBaseStore(this._signInRepository);
 
   @observable
+  UserDTO? _currentUser;
+
+  @action
+  setCurrentUser(UserDTO userModelResponse) => _currentUser = userModelResponse;
+
+  UserDTO? get currentUser => _currentUser;
+
+  @observable
   String _email = "";
 
   @observable
@@ -45,6 +53,7 @@ abstract class _SignInBaseStore with Store {
     var authResult = await _signInRepository.signIn(document, password);
     authResult.when(success: (dynamic result) async {
       if (result is UserDTO) {
+        setCurrentUser(await _signInRepository.getUserStorage());
         signInState = SignInState.success;
       } else {
         handleError(result.message);

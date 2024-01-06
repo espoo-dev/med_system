@@ -25,7 +25,7 @@ class SignInRepository {
       if (requestLogin.isSuccessful) {
         UserDTO? userModelResponse =
             UserDTO.fromJson(json.decode(requestLogin.body));
-
+        saveUserStorage(userModelResponse);
         return Result.success(userModelResponse);
       } else {
         ErrorModelResponse? errorModelResponse = ErrorModelResponse.fromJson(

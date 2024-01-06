@@ -9,6 +9,22 @@ part of 'signin.store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$SignInStore on _SignInBaseStore, Store {
+  late final _$_currentUserAtom =
+      Atom(name: '_SignInBaseStore._currentUser', context: context);
+
+  @override
+  UserDTO? get _currentUser {
+    _$_currentUserAtom.reportRead();
+    return super._currentUser;
+  }
+
+  @override
+  set _currentUser(UserDTO? value) {
+    _$_currentUserAtom.reportWrite(value, super._currentUser, () {
+      super._currentUser = value;
+    });
+  }
+
   late final _$_emailAtom =
       Atom(name: '_SignInBaseStore._email', context: context);
 
@@ -75,6 +91,17 @@ mixin _$SignInStore on _SignInBaseStore, Store {
 
   late final _$_SignInBaseStoreActionController =
       ActionController(name: '_SignInBaseStore', context: context);
+
+  @override
+  dynamic setCurrentUser(UserDTO userModelResponse) {
+    final _$actionInfo = _$_SignInBaseStoreActionController.startAction(
+        name: '_SignInBaseStore.setCurrentUser');
+    try {
+      return super.setCurrentUser(userModelResponse);
+    } finally {
+      _$_SignInBaseStoreActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   dynamic changeEmail(String value) {
