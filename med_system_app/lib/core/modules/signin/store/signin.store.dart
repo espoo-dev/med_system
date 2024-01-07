@@ -1,5 +1,5 @@
 import 'package:med_system_app/core/api/network_exceptions.dart';
-import 'package:med_system_app/core/modules/signin/model/user_dto.model.dart';
+import 'package:med_system_app/core/modules/signin/model/user.model.dart';
 import 'package:med_system_app/core/modules/signin/repository/signin_repository.dart';
 import 'package:mobx/mobx.dart';
 part 'signin.store.g.dart';
@@ -15,12 +15,13 @@ abstract class _SignInBaseStore with Store {
   _SignInBaseStore(this._signInRepository);
 
   @observable
-  UserDTO? _currentUser;
+  UserModel? _currentUser;
 
   @action
-  setCurrentUser(UserDTO userModelResponse) => _currentUser = userModelResponse;
+  setCurrentUser(UserModel userModelResponse) =>
+      _currentUser = userModelResponse;
 
-  UserDTO? get currentUser => _currentUser;
+  UserModel? get currentUser => _currentUser;
 
   @observable
   String _email = "";
@@ -52,7 +53,7 @@ abstract class _SignInBaseStore with Store {
     signInState = SignInState.loading;
     var authResult = await _signInRepository.signIn(document, password);
     authResult.when(success: (dynamic result) async {
-      if (result is UserDTO) {
+      if (result is UserModel) {
         setCurrentUser(await _signInRepository.getUserStorage());
         signInState = SignInState.success;
       } else {

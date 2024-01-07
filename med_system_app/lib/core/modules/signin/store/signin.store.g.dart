@@ -13,13 +13,13 @@ mixin _$SignInStore on _SignInBaseStore, Store {
       Atom(name: '_SignInBaseStore._currentUser', context: context);
 
   @override
-  UserDTO? get _currentUser {
+  UserModel? get _currentUser {
     _$_currentUserAtom.reportRead();
     return super._currentUser;
   }
 
   @override
-  set _currentUser(UserDTO? value) {
+  set _currentUser(UserModel? value) {
     _$_currentUserAtom.reportWrite(value, super._currentUser, () {
       super._currentUser = value;
     });
@@ -93,7 +93,7 @@ mixin _$SignInStore on _SignInBaseStore, Store {
       ActionController(name: '_SignInBaseStore', context: context);
 
   @override
-  dynamic setCurrentUser(UserDTO userModelResponse) {
+  dynamic setCurrentUser(UserModel userModelResponse) {
     final _$actionInfo = _$_SignInBaseStoreActionController.startAction(
         name: '_SignInBaseStore.setCurrentUser');
     try {
