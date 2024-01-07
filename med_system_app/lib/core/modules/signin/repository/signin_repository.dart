@@ -5,7 +5,7 @@ import 'package:med_system_app/core/api/api_result.dart';
 import 'package:med_system_app/core/api/error.model.dart';
 import 'package:med_system_app/core/api/network_exceptions.dart';
 import 'package:med_system_app/core/modules/signin/model/signin_request.model.dart';
-import 'package:med_system_app/core/modules/signin/model/user_dto.model.dart';
+import 'package:med_system_app/core/modules/signin/model/user.model.dart';
 import 'package:med_system_app/core/storage/constants/preferences.dart';
 import 'package:med_system_app/core/storage/shared_preference_helper.dart';
 
@@ -23,8 +23,8 @@ class SignInRepository {
       final requestLogin =
           await signInService.signIn(json.encode(signInRequest.toJson()));
       if (requestLogin.isSuccessful) {
-        UserDTO? userModelResponse =
-            UserDTO.fromJson(json.decode(requestLogin.body));
+        UserModel? userModelResponse =
+            UserModel.fromJson(json.decode(requestLogin.body));
         saveUserStorage(userModelResponse);
         return Result.success(userModelResponse);
       } else {
@@ -37,7 +37,7 @@ class SignInRepository {
     }
   }
 
-  saveUserStorage(UserDTO user) async {
+  saveUserStorage(UserModel user) async {
     await _sharedPrefsHelper.saveUserData(user);
   }
 
