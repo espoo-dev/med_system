@@ -30,8 +30,8 @@ abstract class _ProcedureStoreBase with Store {
     state = ProcedureState.loading;
     var resultProcedures =
         await _procedureRepository.getAllProcedures().asObservable();
-    resultProcedures?.when(success: (List<Procedure>? listInvoices) {
-      procedureList.addAll(listInvoices!);
+    resultProcedures?.when(success: (List<Procedure>? listProcedures) {
+      procedureList.addAll(listProcedures!);
       state = ProcedureState.success;
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));
