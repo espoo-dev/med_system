@@ -1,7 +1,7 @@
 import 'dart:convert' show json;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:med_system_app/core/modules/signin/model/user.model.dart';
 import 'package:med_system_app/core/storage/constants/preferences.dart';
+import 'package:med_system_app/features/signin/model/user.model.dart';
 
 class SharedPreferenceHelper {
   final FlutterSecureStorage _sharedPreference;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:med_system_app/core/di/service_locator.dart';
-import 'package:med_system_app/core/modules/signin/page/signin.page.dart';
 import 'package:med_system_app/features/home/pages/home_page.dart';
+import 'package:med_system_app/features/signin/page/signin.page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

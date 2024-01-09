@@ -3,11 +3,11 @@ class ProcedureModel {
 
   ProcedureModel({this.procedureList});
 
-  ProcedureModel.fromJson(List<Map<String, dynamic>> jsonList) {
+  ProcedureModel.fromJson(List<dynamic> jsonList) {
     procedureList = jsonList.map((json) => Procedure.fromJson(json)).toList();
   }
 
-  List<Map<String, dynamic>> toJsonList() {
+  List<dynamic> toJsonList() {
     return procedureList?.map((procedure) => procedure.toJson()).toList() ?? [];
   }
 }

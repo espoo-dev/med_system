@@ -1,10 +1,10 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
-import 'package:med_system_app/core/modules/signin/repository/signin_repository.dart';
-import 'package:med_system_app/core/modules/signin/store/signin.store.dart';
 import 'package:med_system_app/core/storage/shared_preference_helper.dart';
 import 'package:med_system_app/features/procedures/repository/procedure_repository.dart';
 import 'package:med_system_app/features/procedures/store/procedure.store.dart';
+import 'package:med_system_app/features/signin/repository/signin_repository.dart';
+import 'package:med_system_app/features/signin/store/signin.store.dart';
 
 GetIt getIt = GetIt.I;
 

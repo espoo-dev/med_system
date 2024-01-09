@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:med_system_app/core/modules/signin/store/signin.store.dart';
 import 'package:med_system_app/core/widgets/my_button_widget.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:med_system_app/features/signin/store/signin.store.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
