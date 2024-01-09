@@ -3,6 +3,7 @@ import 'package:med_system_app/core/api/interceptors/MyRequest.interceptor.dart'
 import 'package:med_system_app/core/api/interceptors/MyResponse.interceptor.dart';
 import 'package:med_system_app/core/api/services/auth/sign_in.service.dart';
 import 'package:med_system_app/core/api/services/events/events_procedure.service.dart';
+import 'package:med_system_app/core/api/services/hospitals/hospital.service.dart';
 import 'package:med_system_app/core/api/services/patients/patient.service.dart';
 import 'package:med_system_app/core/api/services/procedures/procedure.service.dart';
 
@@ -19,7 +20,8 @@ final _chopper = ChopperClient(
     SignInService.create(),
     ProcedureService.create(),
     EventsService.create(),
-    PatientService.create()
+    PatientService.create(),
+    HospitalService.create()
   ],
   interceptors: [
     HeadersInterceptor(customHeaders),
@@ -32,3 +34,4 @@ final signInService = _chopper.getService<SignInService>();
 final procedureService = _chopper.getService<ProcedureService>();
 final eventsService = _chopper.getService<EventsService>();
 final patientService = _chopper.getService<PatientService>();
+final hospitalService = _chopper.getService<HospitalService>();
