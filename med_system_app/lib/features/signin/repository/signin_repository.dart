@@ -4,10 +4,10 @@ import 'package:med_system_app/core/api/api.dart';
 import 'package:med_system_app/core/api/api_result.dart';
 import 'package:med_system_app/core/api/error.model.dart';
 import 'package:med_system_app/core/api/network_exceptions.dart';
-import 'package:med_system_app/core/modules/signin/model/signin_request.model.dart';
-import 'package:med_system_app/core/modules/signin/model/user.model.dart';
 import 'package:med_system_app/core/storage/constants/preferences.dart';
 import 'package:med_system_app/core/storage/shared_preference_helper.dart';
+import 'package:med_system_app/features/signin/model/signin_request.model.dart';
+import 'package:med_system_app/features/signin/model/user.model.dart';
 
 class SignInRepository {
   final SharedPreferenceHelper _sharedPrefsHelper;

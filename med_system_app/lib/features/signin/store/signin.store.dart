@@ -1,6 +1,6 @@
 import 'package:med_system_app/core/api/network_exceptions.dart';
-import 'package:med_system_app/core/modules/signin/model/user.model.dart';
-import 'package:med_system_app/core/modules/signin/repository/signin_repository.dart';
+import 'package:med_system_app/features/signin/model/user.model.dart';
+import 'package:med_system_app/features/signin/repository/signin_repository.dart';
 import 'package:mobx/mobx.dart';
 part 'signin.store.g.dart';
 
