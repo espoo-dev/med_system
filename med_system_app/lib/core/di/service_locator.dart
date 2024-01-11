@@ -1,6 +1,8 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:med_system_app/core/storage/shared_preference_helper.dart';
+import 'package:med_system_app/features/health_insurances/repository/health_insurances_repository.dart';
+import 'package:med_system_app/features/health_insurances/store/health_insurances.store.dart';
 import 'package:med_system_app/features/hospitals/respository/hospital_repository.dart';
 import 'package:med_system_app/features/hospitals/store/hospital.store.dart';
 import 'package:med_system_app/features/patients/repository/patient_repository.dart';
@@ -26,6 +28,7 @@ void setupServiceLocator() {
   getIt.registerSingleton(ProcedureRepository());
   getIt.registerSingleton(PatientRepository());
   getIt.registerSingleton(HospitalRepository());
+  getIt.registerSingleton(HealthInsurancesRepository());
 
   // stores
   getIt.registerLazySingleton<SignInStore>(
@@ -36,4 +39,6 @@ void setupServiceLocator() {
       () => PatientStore(getIt<PatientRepository>()));
   getIt.registerLazySingleton<HospitalStore>(
       () => HospitalStore(getIt<HospitalRepository>()));
+  getIt.registerLazySingleton<HealthInsurancesStore>(
+      () => HealthInsurancesStore(getIt<HealthInsurancesRepository>()));
 }
