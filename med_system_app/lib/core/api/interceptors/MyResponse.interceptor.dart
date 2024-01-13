@@ -8,7 +8,7 @@ class MyResponseInterceptor implements ResponseInterceptor {
   @override
   FutureOr<Response> onResponse(Response response) {
     if (response.statusCode == 401) {
-      //
+      signStore.forceLogout();
     }
     return response;
   }
