@@ -85,4 +85,12 @@ class _SignInPageState extends State<SignInPage> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    for (var disposer in _disposers) {
+      disposer();
+    }
+    super.dispose();
+  }
 }
