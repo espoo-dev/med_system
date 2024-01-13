@@ -28,8 +28,8 @@ class SignInRepository {
         saveUserStorage(userModelResponse);
         return Result.success(userModelResponse);
       } else {
-        ErrorModelResponse? errorModelResponse = ErrorModelResponse.fromJson(
-            json.decode(requestLogin.error.toString()));
+        ErrorModelResponse? errorModelResponse =
+            ErrorModelResponse(message: "E-mail ou Senha inválidos.");
         return Result.success(errorModelResponse);
       }
     } catch (e) {

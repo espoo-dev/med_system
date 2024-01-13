@@ -49,6 +49,30 @@ abstract class _SignInBaseStore with Store {
   String _errorMessage = "";
   get errorMessage => _errorMessage;
 
+  @observable
+  bool _isAuthenticated = false;
+
+  get isAuthenticated => _isAuthenticated;
+  @action
+  setAuthentication(bool isAuth) {
+    _isAuthenticated = isAuth;
+  }
+
+  getUserStorage() async {
+    _currentUser = await _signInRepository.getUserStorage();
+    if (_currentUser != null) {
+      setAuthentication(true);
+      return _currentUser;
+    }
+    return _currentUser;
+  }
+
+  @action
+  forceLogout() async {
+    _isAuthenticated = false;
+    await _signInRepository.clearUserStorage();
+  }
+
   signIn(String document, String password) async {
     signInState = SignInState.loading;
     var authResult = await _signInRepository.signIn(document, password);

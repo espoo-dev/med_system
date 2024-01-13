@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:med_system_app/core/utils/navigation_utils.dart';
+import 'package:med_system_app/core/utils/utils.dart';
 import 'package:med_system_app/core/widgets/my_button_widget.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:med_system_app/features/home/pages/home_page.dart';
 import 'package:med_system_app/features/signin/store/signin.store.dart';
+import 'package:mobx/mobx.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -17,6 +21,21 @@ class _SignInPageState extends State<SignInPage> {
 
   final signInStore = GetIt.I.get<SignInStore>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final List<ReactionDisposer> _disposers = [];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    _disposers
+        .add(reaction<SignInState>((_) => signInStore.signInState, (state) {
+      if (state == SignInState.success) {
+        to(context, const HomePage());
+      } else if (state == SignInState.error) {
+        showSnack(context, signInStore.errorMessage, Colors.red);
+      }
+    }));
+  }
 
   @override
   Widget build(BuildContext context) {
