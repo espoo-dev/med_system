@@ -89,6 +89,30 @@ mixin _$SignInStore on _SignInBaseStore, Store {
     });
   }
 
+  late final _$_isAuthenticatedAtom =
+      Atom(name: '_SignInBaseStore._isAuthenticated', context: context);
+
+  @override
+  bool get _isAuthenticated {
+    _$_isAuthenticatedAtom.reportRead();
+    return super._isAuthenticated;
+  }
+
+  @override
+  set _isAuthenticated(bool value) {
+    _$_isAuthenticatedAtom.reportWrite(value, super._isAuthenticated, () {
+      super._isAuthenticated = value;
+    });
+  }
+
+  late final _$forceLogoutAsyncAction =
+      AsyncAction('_SignInBaseStore.forceLogout', context: context);
+
+  @override
+  Future forceLogout() {
+    return _$forceLogoutAsyncAction.run(() => super.forceLogout());
+  }
+
   late final _$_SignInBaseStoreActionController =
       ActionController(name: '_SignInBaseStore', context: context);
 
@@ -120,6 +144,17 @@ mixin _$SignInStore on _SignInBaseStore, Store {
         name: '_SignInBaseStore.changePassword');
     try {
       return super.changePassword(value);
+    } finally {
+      _$_SignInBaseStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setAuthentication(bool isAuth) {
+    final _$actionInfo = _$_SignInBaseStoreActionController.startAction(
+        name: '_SignInBaseStore.setAuthentication');
+    try {
+      return super.setAuthentication(isAuth);
     } finally {
       _$_SignInBaseStoreActionController.endAction(_$actionInfo);
     }
