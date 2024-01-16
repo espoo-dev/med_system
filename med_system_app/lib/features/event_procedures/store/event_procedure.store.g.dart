@@ -41,14 +41,44 @@ mixin _$EventProcedureStore on _EventProcedureStoreBase, Store {
     });
   }
 
+  late final _$_pageAtom =
+      Atom(name: '_EventProcedureStoreBase._page', context: context);
+
+  @override
+  int get _page {
+    _$_pageAtom.reportRead();
+    return super._page;
+  }
+
+  @override
+  set _page(int value) {
+    _$_pageAtom.reportWrite(value, super._page, () {
+      super._page = value;
+    });
+  }
+
   late final _$getAllEventProceduresAsyncAction = AsyncAction(
       '_EventProcedureStoreBase.getAllEventProcedures',
       context: context);
 
   @override
-  Future getAllEventProcedures() {
+  Future getAllEventProcedures({bool isRefresh = false}) {
     return _$getAllEventProceduresAsyncAction
-        .run(() => super.getAllEventProcedures());
+        .run(() => super.getAllEventProcedures(isRefresh: isRefresh));
+  }
+
+  late final _$_EventProcedureStoreBaseActionController =
+      ActionController(name: '_EventProcedureStoreBase', context: context);
+
+  @override
+  dynamic dispose() {
+    final _$actionInfo = _$_EventProcedureStoreBaseActionController.startAction(
+        name: '_EventProcedureStoreBase.dispose');
+    try {
+      return super.dispose();
+    } finally {
+      _$_EventProcedureStoreBaseActionController.endAction(_$actionInfo);
+    }
   }
 
   @override

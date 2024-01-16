@@ -22,30 +22,48 @@ abstract class _EventProcedureStoreBase with Store {
   String _errorMessage = "";
   get errorMessage => _errorMessage;
 
+  @observable
+  int _page = 1;
+  get page => _page;
+
   _EventProcedureStoreBase(EventProcedureRepository eventProcedureRepository)
       : _eventProcedureRepository = eventProcedureRepository;
 
   @action
-  getAllEventProcedures() async {
-    eventProcedureList.clear();
+  getAllEventProcedures({bool isRefresh = false}) async {
+    if (isRefresh) {
+      _page = 1;
+      eventProcedureList.clear();
+    }
     state = EventProcedureState.loading;
-    var resultEventProcedures =
-        await _eventProcedureRepository.getAllEventProcedures().asObservable();
+    if (!isRefresh) {
+      _page++;
+    }
+    Future.delayed(const Duration(seconds: 3));
+    var resultEventProcedures = await _eventProcedureRepository
+        .getAllEventProcedures(_page)
+        .asObservable();
     resultEventProcedures?.when(
         success: (List<EventProcedures>? listEventProcedures) {
-      eventProcedureList.addAll(listEventProcedures!);
-      state = EventProcedureState.success;
+      handleSuccess(listEventProcedures);
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));
-      state = EventProcedureState.error;
     });
+  }
+
+  handleSuccess(List<EventProcedures>? listEventProcedures) {
+    eventProcedureList.addAll(listEventProcedures!);
+    state = EventProcedureState.success;
   }
 
   handleError(String reason) {
     _errorMessage = reason;
+    state = EventProcedureState.error;
   }
 
+  @action
   dispose() {
     eventProcedureList.clear();
+    _page = 1;
   }
 }

@@ -6,9 +6,10 @@ import 'package:med_system_app/core/api/network_exceptions.dart';
 import 'package:med_system_app/features/event_procedures/model/event_procedure.model.dart';
 
 class EventProcedureRepository {
-  Future<Result<List<EventProcedures>?>?> getAllEventProcedures() async {
+  Future<Result<List<EventProcedures>?>?> getAllEventProcedures(
+      int page) async {
     try {
-      final response = await eventProcedureService.getAllEventProcedures();
+      final response = await eventProcedureService.getAllEventProcedures(page);
       if (response.isSuccessful) {
         EventProcedureModel? eventProcedureModel =
             EventProcedureModel.fromJson(json.decode(response.body));
