@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:med_system_app/core/theme/icons.dart';
 import 'package:med_system_app/core/utils/navigation_utils.dart';
-import 'package:med_system_app/features/procedures/pages/procedures_page.dart';
+import 'package:med_system_app/features/event_procedures/pages/event_procedures_page.dart';
 
 class ListEventsWidget extends StatefulWidget {
   final List<EventItem> items;
@@ -31,7 +31,7 @@ class _ListEventsWidgetState extends State<ListEventsWidget> {
               const Spacer(),
               InkWell(
                   onTap: () {
-                    push(context, const ProceduresPage());
+                    push(context, const EventProceduresPage());
                   },
                   child: Text(
                     'Ver todos',
