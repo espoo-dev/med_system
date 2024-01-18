@@ -34,61 +34,57 @@ class EventProcedureModel {
 
 class EventProcedures {
   int? id;
-  int? procedureId;
-  int? patientId;
-  int? hospitalId;
-  int? healthInsuranceId;
+  String? procedure;
+  String? patient;
+  String? hospital;
+  String? healthInsurance;
   String? patientServiceNumber;
   String? date;
+  String? roomType;
   bool? urgency;
   String? paydAt;
-  String? roomType;
-  String? createdAt;
-  String? updatedAt;
+  String? totalAmountCents;
 
   EventProcedures(
       {this.id,
-      this.procedureId,
-      this.patientId,
-      this.hospitalId,
-      this.healthInsuranceId,
+      this.procedure,
+      this.patient,
+      this.hospital,
+      this.healthInsurance,
       this.patientServiceNumber,
       this.date,
+      this.roomType,
       this.urgency,
       this.paydAt,
-      this.roomType,
-      this.createdAt,
-      this.updatedAt});
+      this.totalAmountCents});
 
   EventProcedures.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    procedureId = json['procedure_id'];
-    patientId = json['patient_id'];
-    hospitalId = json['hospital_id'];
-    healthInsuranceId = json['health_insurance_id'];
+    procedure = json['procedure'];
+    patient = json['patient'];
+    hospital = json['hospital'];
+    healthInsurance = json['health_insurance'];
     patientServiceNumber = json['patient_service_number'];
     date = json['date'];
+    roomType = json['room_type'];
     urgency = json['urgency'];
     paydAt = json['payd_at'];
-    roomType = json['room_type'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    totalAmountCents = json['total_amount_cents'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['procedure_id'] = procedureId;
-    data['patient_id'] = patientId;
-    data['hospital_id'] = hospitalId;
-    data['health_insurance_id'] = healthInsuranceId;
+    data['procedure'] = procedure;
+    data['patient'] = patient;
+    data['hospital'] = hospital;
+    data['health_insurance'] = healthInsurance;
     data['patient_service_number'] = patientServiceNumber;
     data['date'] = date;
+    data['room_type'] = roomType;
     data['urgency'] = urgency;
     data['payd_at'] = paydAt;
-    data['room_type'] = roomType;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
+    data['total_amount_cents'] = totalAmountCents;
     return data;
   }
 }
