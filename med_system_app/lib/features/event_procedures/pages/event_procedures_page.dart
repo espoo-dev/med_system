@@ -106,8 +106,8 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                         return ListTile(
                           leading: CircleAvatar(
                               child: Text(eventProcedures.id.toString())),
-                          title: const Text("Test"),
-                          subtitle: const Text("Description"),
+                          title: Text(eventProcedures.procedure ?? ""),
+                          subtitle: Text(eventProcedures.patient ?? ""),
                         );
                       } else {
                         return const Center(child: CircularProgressIndicator());
