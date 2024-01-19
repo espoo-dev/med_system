@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:med_system_app/core/theme/icons.dart';
 import 'package:med_system_app/features/signin/page/signin.page.dart';
 
 class SplashScreenPage extends StatefulWidget {
@@ -35,7 +37,7 @@ class _SplashScreenState extends State<SplashScreenPage> {
           Container(
               decoration:
                   BoxDecoration(color: Theme.of(context).colorScheme.primary)),
-          const Column(
+          Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Expanded(
@@ -44,8 +46,15 @@ class _SplashScreenState extends State<SplashScreenPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Center(child: Text("App Médicos")),
-                    Padding(
+                    Center(
+                      child: SvgPicture.asset(
+                        iconLogoAsset,
+                        width: 50,
+                        height: 50,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    const Padding(
                       padding: EdgeInsets.only(top: 10.0),
                     ),
                   ],

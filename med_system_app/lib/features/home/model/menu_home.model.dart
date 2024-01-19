@@ -24,7 +24,7 @@ class MenuHomeModel {
           label: 'R\$32.587,21',
           description: 'A receber',
           image: SvgPicture.asset(
-            iconHeartTickHomeAsset,
+            iconHeartRemoveHomeAsset,
             width: 42,
             height: 42,
             color: Colors.white,
@@ -33,9 +33,9 @@ class MenuHomeModel {
       MenuItemModel(
           backgroundColor: const Color(0xff6FB1A1),
           label: 'R\$32.587,21',
-          description: 'A receber',
+          description: 'Total',
           image: SvgPicture.asset(
-            iconHeartTickHomeAsset,
+            iconMedicationAsset,
             width: 42,
             height: 42,
             color: Colors.white,

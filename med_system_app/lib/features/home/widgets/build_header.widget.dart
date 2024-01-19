@@ -22,7 +22,7 @@ class _HeaderHomeWidgetState extends State<HeaderHomeWidget> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           SvgPicture.asset(
-            iconHeartTickHomeAsset,
+            iconLogoAsset,
             width: 50,
             height: 50,
             color: Theme.of(context).colorScheme.primary,
