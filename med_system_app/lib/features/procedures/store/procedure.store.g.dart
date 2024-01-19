@@ -45,7 +45,7 @@ mixin _$ProcedureStore on _ProcedureStoreBase, Store {
       AsyncAction('_ProcedureStoreBase.getAllProcedures', context: context);
 
   @override
-  Future<dynamic> getAllProcedures() {
+  Future getAllProcedures() {
     return _$getAllProceduresAsyncAction.run(() => super.getAllProcedures());
   }
 
