@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:med_system_app/core/utils/utils.dart';
 
 class WelcomeWidget extends StatefulWidget {
   const WelcomeWidget({
@@ -30,7 +31,7 @@ class _WelcomeWidgetState extends State<WelcomeWidget> {
                       fontSize: 30,
                     )),
                 TextSpan(
-                    text: '\nEveline 👋',
+                    text: '\n${greet()} 👋',
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary,
                         fontSize: 30,

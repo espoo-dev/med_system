@@ -25,7 +25,7 @@ abstract class _ProcedureStoreBase with Store {
       : _procedureRepository = procedureRepository;
 
   @action
-  getAllProcedures() async {
+  Future getAllProcedures() async {
     procedureList.clear();
     state = ProcedureState.loading;
     var resultProcedures =

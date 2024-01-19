@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:med_system_app/core/theme/icons.dart';
 import 'package:med_system_app/core/widgets/error.widget.dart';
 import 'package:med_system_app/core/widgets/my_app_bar.widget.dart';
 import 'package:med_system_app/features/event_procedures/model/event_procedure.model.dart';
@@ -17,7 +19,7 @@ class EventProceduresPage extends StatefulWidget {
 
 class _EventProceduresPageState extends State<EventProceduresPage> {
   final eventProcedureStore = GetIt.I.get<EventProcedureStore>();
-  List<EventProcedures>? _listEventProcedures;
+  List<EventProcedures>? _listEventProcedures = [];
   final ScrollController _scrollController = ScrollController();
   bool isFab = false;
   @override
@@ -70,7 +72,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
         hideLeading: true,
         image: null,
       ),
-      floatingActionButton: isFab ? buildFAB() : buildExtendedFAB(),
+      floatingActionButton: isFab ? buildFAB() : buildExtendedFAB(context),
       body: RefreshIndicator(
         onRefresh: _refreshProcedures,
         child: Observer(
@@ -82,9 +84,10 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                 eventProcedureStore.getAllEventProcedures(isRefresh: true);
               }));
             }
-            // if (eventProcedureStore.state == EventProcedureState.loading) {
-            //   return const Center(child: CircularProgressIndicator());
-            // }
+            if (eventProcedureStore.state == EventProcedureState.loading &&
+                _listEventProcedures!.isEmpty) {
+              return const Center(child: CircularProgressIndicator());
+            }
             if (eventProcedureStore.eventProcedureList.isEmpty) {
               return const Center(
                   child: Text(
@@ -104,10 +107,24 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                         EventProcedures eventProcedures =
                             _listEventProcedures![index];
                         return ListTile(
-                          leading: CircleAvatar(
-                              child: Text(eventProcedures.id.toString())),
-                          title: Text(eventProcedures.procedure ?? ""),
+                          leading: SvgPicture.asset(
+                            iconWaterDropCoreAsset,
+                            width: 32,
+                            height: 32,
+                            color: const Color(0xFFEC2A58),
+                          ),
+                          title: Text(
+                            eventProcedures.procedure ?? "",
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                           subtitle: Text(eventProcedures.patient ?? ""),
+                          trailing: Icon(
+                            size: 10.0,
+                            Icons.arrow_forward_ios,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                         );
                       } else {
                         return const Center(child: CircularProgressIndicator());
