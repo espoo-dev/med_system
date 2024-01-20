@@ -72,7 +72,8 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
         hideLeading: true,
         image: null,
       ),
-      floatingActionButton: isFab ? buildFAB() : buildExtendedFAB(context),
+      floatingActionButton:
+          isFab ? buildFAB(context) : buildExtendedFAB(context),
       body: RefreshIndicator(
         onRefresh: _refreshProcedures,
         child: Observer(
