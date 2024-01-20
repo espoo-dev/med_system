@@ -1,5 +1,71 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter/services.dart';
+
+class Validator {
+  static String? validate(
+      String validatorKey, dynamic validatorValue, String value) {
+    switch (validatorKey) {
+      case 'required':
+        return RequiredValidator.validate(validatorValue, value);
+      case 'minLength':
+        return MinLengthValidator.validate(validatorValue, value);
+      case 'maxLength':
+        return MaxLengthValidator.validate(validatorValue, value);
+      case 'regex':
+        return RegexValidator.validate(validatorValue, value);
+      case 'matchPasswordWith':
+        return MatchPasswordValidator.validate(validatorValue, value);
+      default:
+        return null;
+    }
+  }
+}
+
+class RequiredValidator {
+  static String? validate(bool validatorValue, String value) {
+    if (validatorValue && value.isEmpty) {
+      return 'Campo obrigatório';
+    }
+    return null;
+  }
+}
+
+class MinLengthValidator {
+  static String? validate(int validatorValue, String value) {
+    if (value.length < validatorValue) {
+      return 'Tamanho mínimo $validatorValue';
+    }
+    return null;
+  }
+}
+
+class MaxLengthValidator {
+  static String? validate(int validatorValue, String value) {
+    if (value.length > validatorValue) {
+      return 'Tamanho máximo $validatorValue';
+    }
+    return null;
+  }
+}
+
+class RegexValidator {
+  static String? validate(String validatorValue, String value) {
+    if (!RegExp(validatorValue).hasMatch(value)) {
+      return 'Formato inválido';
+    }
+    return null;
+  }
+}
+
+class MatchPasswordValidator {
+  static String? validate(String validatorValue, String value) {
+    if (validatorValue != value) {
+      return 'As senhas não conferem';
+    }
+    return null;
+  }
+}
 
 // ignore: must_be_immutable
 class MyTextFormField extends StatefulWidget {
@@ -64,12 +130,12 @@ class _MyTextFormFieldState extends State<MyTextFormField> {
           style: TextStyle(fontSize: widget.fontSize ?? 12),
           validator: (String? value) {
             if (widget.validators == null) return null;
-            // ignore: prefer_typing_uninitialized_variables
-            var error;
-            // ignore: avoid_function_literals_in_foreach_calls
+
+            String? error;
             widget.validators?.entries.forEach((val) {
-              error ??= getError(val.key, val.value, value ?? "");
+              error ??= Validator.validate(val.key, val.value, value ?? "");
             });
+
             return error;
           },
           decoration: InputDecoration(
@@ -94,38 +160,6 @@ class _MyTextFormFieldState extends State<MyTextFormField> {
         ),
       ],
     );
-  }
-
-  getError(String validatorKey, dynamic validatorValue, String value) {
-    switch (validatorKey) {
-      case 'required':
-        if (validatorValue == true && value.isEmpty) {
-          return 'Campo obrigatório';
-        }
-        break;
-      case 'minLength':
-        if (value.length < validatorValue) {
-          return 'Tamanho mínimo $validatorValue';
-        }
-        break;
-      case 'maxLength':
-        if (value.length > validatorValue) {
-          return 'Tamanho máximo $validatorValue';
-        }
-        break;
-      case 'regex':
-        if (!RegExp(validatorValue).hasMatch(value)) {
-          return 'Formato inválido';
-        }
-        break;
-      case 'matchPasswordWith':
-        if (validatorValue != value) {
-          return 'As senhas não conferem';
-        }
-        break;
-      default:
-        return "";
-    }
   }
 
   funcEmpty() {}
