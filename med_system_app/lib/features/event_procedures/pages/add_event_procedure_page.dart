@@ -169,7 +169,6 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                         onTap: () async {
                           _formKey.currentState?.save();
                           if (_formKey.currentState!.validate()) {
-                            debugPrint("validate");
                             addEventProcedureStore.createEventProcedure();
                           }
                         },

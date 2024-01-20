@@ -48,6 +48,7 @@ dependencies:
   freezed_annotation: ^2.4.1
   flutter_mobx: ^2.2.0+1
   dropdown_search: ^5.0.6
+  lottie: ^3.0.0
 
 
 dev_dependencies:
@@ -80,6 +81,7 @@ flutter:
     - assets/images/svg/
     - assets/images/svg/home/
     - assets/images/svg/core/
+    - assets/animations/
     - pubspec.yaml
 
   # To add assets to your application, add an assets section, like this:
