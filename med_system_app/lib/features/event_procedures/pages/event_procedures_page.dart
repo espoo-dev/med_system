@@ -112,7 +112,9 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                             iconWaterDropCoreAsset,
                             width: 32,
                             height: 32,
-                            color: const Color(0xFFEC2A58),
+                            color: eventProcedures.isPaid()
+                                ? const Color(0xFF388E3C)
+                                : const Color(0xFFEC2A58),
                           ),
                           title: Text(
                             eventProcedures.procedure ?? "",

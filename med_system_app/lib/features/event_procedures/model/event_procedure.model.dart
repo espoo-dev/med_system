@@ -71,6 +71,9 @@ class EventProcedures {
     paydAt = json['payd_at'];
     totalAmountCents = json['total_amount_cents'];
   }
+  bool isPaid() {
+    return paydAt != null;
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
