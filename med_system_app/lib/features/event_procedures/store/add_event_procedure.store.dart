@@ -1,6 +1,8 @@
 // ignore: library_private_types_in_public_api
 import 'package:flutter/material.dart';
 import 'package:med_system_app/core/api/network_exceptions.dart';
+import 'package:med_system_app/features/event_procedures/model/add_event_procedure_request.model.dart';
+import 'package:med_system_app/features/event_procedures/repository/event_procedure_repository.dart';
 import 'package:med_system_app/features/health_insurances/model/health_insurances.model.dart';
 import 'package:med_system_app/features/health_insurances/repository/health_insurances_repository.dart';
 import 'package:med_system_app/features/hospitals/model/hospital.model.dart';
@@ -19,11 +21,14 @@ class AddEventProcedureStore = _AddEventProcedureStoreBase
 
 enum AddEventProcedureState { idle, success, error, loading }
 
+enum SaveEventProcedureState { idle, success, error, loading }
+
 abstract class _AddEventProcedureStoreBase with Store {
   final ProcedureRepository _procedureRepository;
   final PatientRepository _patientRepository;
   final HospitalRepository _hospitalRepository;
   final HealthInsurancesRepository _healthInsurancesRepository;
+  final EventProcedureRepository _eventProcedureRepository;
 
   ObservableList<Procedure> procedureList = ObservableList<Procedure>();
   ObservableList<Patient> patientList = ObservableList<Patient>();
@@ -34,12 +39,15 @@ abstract class _AddEventProcedureStoreBase with Store {
   @observable
   AddEventProcedureState state = AddEventProcedureState.idle;
 
+  @observable
+  SaveEventProcedureState saveState = SaveEventProcedureState.idle;
+
   _AddEventProcedureStoreBase(
-    this._procedureRepository,
-    this._patientRepository,
-    this._hospitalRepository,
-    this._healthInsurancesRepository,
-  );
+      this._procedureRepository,
+      this._patientRepository,
+      this._hospitalRepository,
+      this._healthInsurancesRepository,
+      this._eventProcedureRepository);
 
   @observable
   String _errorMessage = "";
@@ -137,7 +145,7 @@ abstract class _AddEventProcedureStoreBase with Store {
 
   @action
   void setAccommodation(String accommodation) {
-    _accommodation = (accommodation == 'Enfermaria') ? 'ward' : 'appartment';
+    _accommodation = (accommodation == 'Enfermaria') ? 'ward' : 'apartment';
   }
 
   @observable
@@ -214,17 +222,27 @@ abstract class _AddEventProcedureStoreBase with Store {
     return isValid;
   }
 
-  createEventProcedure() {
+  @action
+  createEventProcedure() async {
     if (isValidData) {
-      debugPrint("procedure: $_procedureId");
-      debugPrint("patient: $_patientId");
-      debugPrint("hospital: $_hospitalId");
-      debugPrint("health_insurance: $_healthInsuranceId");
-      debugPrint("patient number service: $_patientServiceNumber");
-      debugPrint("accommodation: $_accommodation");
-      debugPrint("create date: $_createdDate");
-      debugPrint("urgency: $_urgency");
-      debugPrint("payd_at: $_paydAt");
+      saveState = SaveEventProcedureState.loading;
+      var registerEventProcedureResult = await _eventProcedureRepository
+          .registerEventProcedure(AddEventProcedureRequestModel(
+              procedureId: _procedureId,
+              patientId: _patientId,
+              hospitalId: _hospitalId,
+              healthInsuranceId: _healthInsuranceId,
+              patientServiceNumber: _patientServiceNumber,
+              date: _createdDate,
+              paydAt: _paydAt,
+              urgency: _urgency,
+              roomType: _accommodation));
+      registerEventProcedureResult?.when(success: (eventProcedure) {
+        saveState = SaveEventProcedureState.success;
+      }, failure: (NetworkExceptions error) {
+        handleError(NetworkExceptions.getErrorMessage(error));
+        saveState = SaveEventProcedureState.error;
+      });
     }
   }
 
@@ -315,5 +333,15 @@ abstract class _AddEventProcedureStoreBase with Store {
     patientList.clear();
     hospitalList.clear();
     healthInsuranceList.clear();
+    _patientId = 0;
+    _accommodation = "";
+    _hospitalId = 0;
+    _procedureId = 0;
+    _urgency = false;
+    _accommodation = "ward";
+    _createdDate = "";
+    _paydAt = "";
+    saveState = SaveEventProcedureState.idle;
+    state = AddEventProcedureState.idle;
   }
 }

@@ -9,15 +9,17 @@ class MyInputDate extends StatefulWidget {
   final Color? textColor;
   DateTime? selectedDate;
   Function? onChanged;
-  MyInputDate(
-      {super.key,
-      @required this.label,
-      selectedDate,
-      this.onChanged,
-      this.labelStyleColor,
-      this.fillColor,
-      this.borderColor,
-      this.textColor});
+
+  MyInputDate({
+    super.key,
+    @required this.label,
+    this.selectedDate,
+    this.onChanged,
+    this.labelStyleColor,
+    this.fillColor,
+    this.borderColor,
+    this.textColor,
+  });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -25,14 +27,10 @@ class MyInputDate extends StatefulWidget {
 }
 
 class _MyInputDateState extends State<MyInputDate> {
-  DateTime getSelectedDate() {
-    return widget.selectedDate!;
-  }
-
   @override
-  initState() {
+  void initState() {
     super.initState();
-    if (widget.onChanged != null) {
+    if (widget.selectedDate != null && widget.onChanged != null) {
       widget.onChanged!(getSelectedDateString());
     }
   }
@@ -40,30 +38,31 @@ class _MyInputDateState extends State<MyInputDate> {
   String getSelectedDateString() {
     if (widget.selectedDate == null) return '';
 
-    String? day = DateTime.now().day.toString();
-
-    String? month = DateTime.now().month.toString();
-
-    String? year = DateTime.now().year.toString();
+    String day = widget.selectedDate!.day.toString();
+    String month = widget.selectedDate!.month.toString();
+    String year = widget.selectedDate!.year.toString();
 
     return '$day/$month/$year';
   }
 
   Future<void> _selectDate(BuildContext context) async {
     final date = await showDatePicker(
-        context: context,
-        helpText: 'Selecione a data',
-        locale: const Locale('pt', 'BR'),
-        initialEntryMode: DatePickerEntryMode.calendar,
-        initialDate: widget.selectedDate ??
-            DateTime(DateTime.now().year, DateTime.now().month, 1),
-        firstDate: DateTime(2001),
-        lastDate: DateTime.now());
+      context: context,
+      helpText: 'Selecione a data',
+      locale: const Locale('pt', 'BR'),
+      initialEntryMode: DatePickerEntryMode.calendar,
+      initialDate: widget.selectedDate ??
+          DateTime(DateTime.now().year, DateTime.now().month, 1),
+      firstDate: DateTime(2001),
+      lastDate: DateTime.now(),
+    );
 
     setState(() {
       if (date != null) {
         widget.selectedDate = date;
-        widget.onChanged!(getSelectedDateString());
+        if (widget.onChanged != null) {
+          widget.onChanged!(getSelectedDateString());
+        }
       }
     });
   }
@@ -85,9 +84,10 @@ class _MyInputDateState extends State<MyInputDate> {
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(
-                width: 1,
-                color: widget.borderColor ??
-                    Theme.of(context).colorScheme.primary),
+              width: 1,
+              color:
+                  widget.borderColor ?? Theme.of(context).colorScheme.primary,
+            ),
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
@@ -96,7 +96,8 @@ class _MyInputDateState extends State<MyInputDate> {
         child: Text(
           getSelectedDateString(),
           style: TextStyle(
-              color: widget.textColor ?? Theme.of(context).colorScheme.primary),
+            color: widget.textColor ?? Theme.of(context).colorScheme.primary,
+          ),
         ),
       ),
     );

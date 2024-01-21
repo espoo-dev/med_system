@@ -33,6 +33,22 @@ mixin _$AddEventProcedureStore on _AddEventProcedureStoreBase, Store {
     });
   }
 
+  late final _$saveStateAtom =
+      Atom(name: '_AddEventProcedureStoreBase.saveState', context: context);
+
+  @override
+  SaveEventProcedureState get saveState {
+    _$saveStateAtom.reportRead();
+    return super.saveState;
+  }
+
+  @override
+  set saveState(SaveEventProcedureState value) {
+    _$saveStateAtom.reportWrite(value, super.saveState, () {
+      super.saveState = value;
+    });
+  }
+
   late final _$_errorMessageAtom =
       Atom(name: '_AddEventProcedureStoreBase._errorMessage', context: context);
 
@@ -195,6 +211,16 @@ mixin _$AddEventProcedureStore on _AddEventProcedureStoreBase, Store {
     });
   }
 
+  late final _$createEventProcedureAsyncAction = AsyncAction(
+      '_AddEventProcedureStoreBase.createEventProcedure',
+      context: context);
+
+  @override
+  Future createEventProcedure() {
+    return _$createEventProcedureAsyncAction
+        .run(() => super.createEventProcedure());
+  }
+
   late final _$fetchAllDataAsyncAction =
       AsyncAction('_AddEventProcedureStoreBase.fetchAllData', context: context);
 
@@ -347,6 +373,7 @@ mixin _$AddEventProcedureStore on _AddEventProcedureStoreBase, Store {
   String toString() {
     return '''
 state: ${state},
+saveState: ${saveState},
 isValidData: ${isValidData}
     ''';
   }
