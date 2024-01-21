@@ -3,16 +3,18 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:med_system_app/core/theme/animations.dart';
+import 'package:med_system_app/core/utils/navigation_utils.dart';
 
 class SuccessPage extends StatelessWidget {
   final String title;
+  final Widget goToPage;
 
-  const SuccessPage({super.key, required this.title});
+  const SuccessPage({super.key, required this.title, required this.goToPage});
 
   @override
   Widget build(BuildContext context) {
     Timer(const Duration(seconds: 3), () {
-      Navigator.of(context).pop();
+      to(context, goToPage);
     });
 
     return Scaffold(

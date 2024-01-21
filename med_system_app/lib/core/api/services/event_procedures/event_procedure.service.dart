@@ -10,4 +10,7 @@ abstract class EventProcedureService extends ChopperService {
 
   @Get(path: 'api/v1/event_procedures')
   Future<Response> getAllEventProcedures(@Query('page') int page);
+
+  @Post(path: 'api/v1/event_procedures')
+  Future<Response> registerEventProcedure(@Body() dynamic body);
 }

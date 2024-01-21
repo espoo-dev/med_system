@@ -53,5 +53,6 @@ void setupServiceLocator() {
             getIt<PatientRepository>(),
             getIt<HospitalRepository>(),
             getIt<HealthInsurancesRepository>(),
+            getIt<EventProcedureRepository>(),
           ));
 }
