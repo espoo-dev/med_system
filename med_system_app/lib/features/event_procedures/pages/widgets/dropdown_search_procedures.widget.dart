@@ -78,6 +78,7 @@ class _DropdownSearchProceduresState extends State<DropdownSearchProcedures> {
         },
         isFilterOnline: true,
         showSearchBox: true,
+        searchDelay: const Duration(seconds: 1),
         itemBuilder: (context, item, isSelected) {
           return Padding(
             padding: const EdgeInsets.all(15),
@@ -89,7 +90,8 @@ class _DropdownSearchProceduresState extends State<DropdownSearchProcedures> {
         },
       ),
       items: widget.procedureList,
-      itemAsString: (Procedure procedure) => procedure.name ?? "",
+      itemAsString: (Procedure procedure) =>
+          "${procedure.code} ${procedure.name}",
       onChanged: widget.onChanged,
       dropdownDecoratorProps: DropDownDecoratorProps(
         dropdownSearchDecoration: InputDecoration(
