@@ -39,11 +39,13 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: SafeArea(
-        child: Stack(
-          children: [
-            _buildPageBody(context),
-          ],
+      child: Scaffold(
+        body: SafeArea(
+          child: Stack(
+            children: [
+              _buildPageBody(context),
+            ],
+          ),
         ),
       ),
     );

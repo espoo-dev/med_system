@@ -11,9 +11,12 @@ Widget buildFAB(BuildContext context) => AnimatedContainer(
         onPressed: () {
           to(context, const AddEventProcedurePage());
         },
-        icon: const Padding(
-          padding: EdgeInsets.only(left: 8.0),
-          child: Icon(Icons.edit),
+        icon: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: Icon(
+            Icons.edit,
+            color: Theme.of(context).colorScheme.primary,
+          ),
         ),
         label: const SizedBox(),
       ),
