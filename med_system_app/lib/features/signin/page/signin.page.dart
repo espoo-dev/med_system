@@ -4,6 +4,9 @@ import 'package:med_system_app/core/utils/navigation_utils.dart';
 import 'package:med_system_app/core/utils/utils.dart';
 import 'package:med_system_app/core/widgets/my_button_widget.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:med_system_app/core/widgets/my_text_form_field.widget.dart';
+import 'package:med_system_app/core/widgets/my_text_form_field_password.widget.dart';
+import 'package:med_system_app/core/widgets/my_toast.widget.dart';
 import 'package:med_system_app/features/home/pages/home_page.dart';
 import 'package:med_system_app/features/signin/store/signin.store.dart';
 import 'package:mobx/mobx.dart';
@@ -16,9 +19,6 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-
   final signInStore = GetIt.I.get<SignInStore>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final List<ReactionDisposer> _disposers = [];
@@ -32,7 +32,10 @@ class _SignInPageState extends State<SignInPage> {
       if (state == SignInState.success) {
         to(context, const HomePage());
       } else if (state == SignInState.error) {
-        showSnack(context, signInStore.errorMessage, Colors.red);
+        CustomToast.show(context,
+            type: ToastType.error,
+            title: "Erro ao tentar realizar o login",
+            description: signInStore.errorMessage);
       }
     }));
   }
@@ -40,9 +43,6 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -50,21 +50,30 @@ class _SignInPageState extends State<SignInPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(labelText: 'Email'),
-                  onChanged: (String value) {
-                    signInStore.changeEmail(_emailController.text);
-                  }),
+              MyTextFormField(
+                fontSize: 16,
+                label: 'E-mail',
+                placeholder: 'Digite seu email',
+                inputType: TextInputType.emailAddress,
+                validators: const {
+                  'required': true,
+                  'minLength': 4,
+                  'regex':
+                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+"
+                },
+                onChanged: signInStore.changeEmail,
+              ),
               const SizedBox(height: 16.0),
-              TextField(
-                  controller: _passwordController,
-                  decoration: const InputDecoration(labelText: 'Senha'),
+              MyTextFormFieldPassword(
+                  label: 'Senha',
+                  placeholder: 'Digite sua senha',
                   obscureText: true,
-                  onChanged: (String value) {
-                    signInStore.changePassword(_passwordController.text);
-                  }),
+                  inputType: TextInputType.text,
+                  validators: const {
+                    'required': true,
+                    'minLength': 4,
+                  },
+                  onChanged: signInStore.changePassword),
               const SizedBox(height: 24.0),
               Center(child: Observer(builder: (_) {
                 return MyButtonWidget(
