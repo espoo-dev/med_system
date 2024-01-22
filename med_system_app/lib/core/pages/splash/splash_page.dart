@@ -49,8 +49,8 @@ class _SplashScreenState extends State<SplashScreenPage> {
                     Center(
                       child: SvgPicture.asset(
                         iconLogoAsset,
-                        width: 50,
-                        height: 50,
+                        width: 150,
+                        height: 150,
                         color: Colors.white,
                       ),
                     ),
