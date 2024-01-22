@@ -11,12 +11,14 @@ Widget buildExtendedFAB(BuildContext context) => AnimatedContainer(
         onPressed: () {
           to(context, const AddEventProcedurePage());
         },
-        icon: const Icon(Icons.edit),
+        icon: Icon(Icons.edit, color: Theme.of(context).colorScheme.primary),
         label: Center(
           child: Text(
             "Novo evento",
             style: TextStyle(
-                fontSize: 15, color: Theme.of(context).colorScheme.primary),
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+                color: Theme.of(context).colorScheme.primary),
           ),
         ),
       ),
