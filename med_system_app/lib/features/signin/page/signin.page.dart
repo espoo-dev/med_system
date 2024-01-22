@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:med_system_app/core/theme/icons.dart';
 import 'package:med_system_app/core/utils/navigation_utils.dart';
-import 'package:med_system_app/core/utils/utils.dart';
 import 'package:med_system_app/core/widgets/my_button_widget.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:med_system_app/core/widgets/my_text_form_field.widget.dart';
@@ -50,6 +51,23 @@ class _SignInPageState extends State<SignInPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Center(
+                child: SvgPicture.asset(
+                  iconHeaderLoginAsset,
+                ),
+              ),
+              const SizedBox(height: 27),
+              const Text("Seu melhor assistente médico",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  )),
+              const SizedBox(height: 10),
+              const Text("Bem-vindo(a)!",
+                  style: TextStyle(
+                    fontSize: 16,
+                  )),
+              const SizedBox(height: 20),
               MyTextFormField(
                 fontSize: 16,
                 label: 'E-mail',
@@ -63,7 +81,7 @@ class _SignInPageState extends State<SignInPage> {
                 },
                 onChanged: signInStore.changeEmail,
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 20),
               MyTextFormFieldPassword(
                   label: 'Senha',
                   placeholder: 'Digite sua senha',

@@ -81,6 +81,7 @@ flutter:
     - assets/images/svg/
     - assets/images/svg/home/
     - assets/images/svg/core/
+    - assets/images/svg/login/
     - assets/animations/
     - pubspec.yaml
 

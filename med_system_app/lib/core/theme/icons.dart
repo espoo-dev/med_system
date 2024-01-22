@@ -9,3 +9,6 @@ const iconHeartTickHomeAsset = "assets/images/svg/home/heart-tick.svg";
 const iconHeartRemoveHomeAsset = "assets/images/svg/home/heart-remove.svg";
 const iconMedicationAsset = "assets/images/svg/home/ic_round-medication.svg";
 const iconMenuHomeAsset = "assets/images/svg/home/menu.svg";
+
+//Login
+const iconHeaderLoginAsset = "assets/images/svg/login/header-login.svg";
