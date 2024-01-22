@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreenPage> {
                         iconLogoAsset,
                         width: 50,
                         height: 50,
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Colors.white,
                       ),
                     ),
                     const Padding(
