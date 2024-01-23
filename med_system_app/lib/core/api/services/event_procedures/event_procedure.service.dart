@@ -13,4 +13,7 @@ abstract class EventProcedureService extends ChopperService {
 
   @Post(path: 'api/v1/event_procedures')
   Future<Response> registerEventProcedure(@Body() dynamic body);
+
+  @Put(path: 'api/v1/event_procedures/{id}')
+  Future<Response> editEventProcedure(@Path('id') id, @Body() dynamic body);
 }
