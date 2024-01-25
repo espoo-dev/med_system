@@ -308,6 +308,42 @@ abstract class _EditEventProcedureStoreBase with Store {
     _errorMessage = reason;
   }
 
+  HealthInsurance? findHealthInsurance(String nameHealthInsurance) {
+    for (var healthInsurance in healthInsuranceList) {
+      if (healthInsurance.name == nameHealthInsurance) {
+        return healthInsurance;
+      }
+    }
+    return null;
+  }
+
+  Hospital? findHospital(String nameHospital) {
+    for (var hospital in hospitalList) {
+      if (hospital.name == nameHospital) {
+        return hospital;
+      }
+    }
+    return null;
+  }
+
+  Patient? findPatient(String namePatient) {
+    for (var patient in patientList) {
+      if (patient.name == namePatient) {
+        return patient;
+      }
+    }
+    return null;
+  }
+
+  Procedure? findProcedure(String nameProcedure) {
+    for (var procedure in procedureList) {
+      if (procedure.name == nameProcedure) {
+        return procedure;
+      }
+    }
+    return null;
+  }
+
   dispose() {
     procedureList.clear();
     patientList.clear();

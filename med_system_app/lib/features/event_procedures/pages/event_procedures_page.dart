@@ -6,9 +6,13 @@ import 'package:med_system_app/core/theme/icons.dart';
 import 'package:med_system_app/core/widgets/error.widget.dart';
 import 'package:med_system_app/core/widgets/my_app_bar.widget.dart';
 import 'package:med_system_app/features/event_procedures/model/event_procedure.model.dart';
+import 'package:med_system_app/features/event_procedures/pages/add_event_procedure_page.dart';
+import 'package:med_system_app/features/event_procedures/pages/edit_event_procedure_page.dart';
 import 'package:med_system_app/features/event_procedures/pages/widgets/ext_fab.widget.dart';
 import 'package:med_system_app/features/event_procedures/pages/widgets/fab.widget.dart';
 import 'package:med_system_app/features/event_procedures/store/event_procedure.store.dart';
+
+import '../../../core/utils/navigation_utils.dart';
 
 class EventProceduresPage extends StatefulWidget {
   const EventProceduresPage({super.key});
@@ -108,6 +112,12 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                         EventProcedures eventProcedures =
                             _listEventProcedures![index];
                         return ListTile(
+                          onTap: () {
+                            to(
+                                context,
+                                EditEventProcedurePage(
+                                    eventProcedures: eventProcedures));
+                          },
                           leading: SvgPicture.asset(
                             iconWaterDropCoreAsset,
                             width: 32,
