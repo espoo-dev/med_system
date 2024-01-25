@@ -5,12 +5,13 @@ class MyRadioGroup extends StatefulWidget {
   final String? initialValue;
 
   const MyRadioGroup({
-    Key? key,
+    super.key,
     required this.onValueChanged,
     this.initialValue,
-  }) : super(key: key);
+  });
 
   @override
+  // ignore: library_private_types_in_public_api
   _MyRadioGroupState createState() => _MyRadioGroupState();
 }
 

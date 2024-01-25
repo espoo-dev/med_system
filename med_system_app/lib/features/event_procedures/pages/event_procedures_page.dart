@@ -6,7 +6,6 @@ import 'package:med_system_app/core/theme/icons.dart';
 import 'package:med_system_app/core/widgets/error.widget.dart';
 import 'package:med_system_app/core/widgets/my_app_bar.widget.dart';
 import 'package:med_system_app/features/event_procedures/model/event_procedure.model.dart';
-import 'package:med_system_app/features/event_procedures/pages/add_event_procedure_page.dart';
 import 'package:med_system_app/features/event_procedures/pages/edit_event_procedure_page.dart';
 import 'package:med_system_app/features/event_procedures/pages/widgets/ext_fab.widget.dart';
 import 'package:med_system_app/features/event_procedures/pages/widgets/fab.widget.dart';
