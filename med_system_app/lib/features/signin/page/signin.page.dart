@@ -44,71 +44,75 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: SvgPicture.asset(
-                  iconHeaderLoginAsset,
-                ),
-              ),
-              const SizedBox(height: 27),
-              const Text("Seu melhor assistente médico",
-                  style: TextStyle(
+      body: ListView(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: SvgPicture.asset(
+                      iconHeaderLoginAsset,
+                    ),
+                  ),
+                  const SizedBox(height: 27),
+                  const Text("Seu melhor assistente médico",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  const SizedBox(height: 10),
+                  const Text("Bem-vindo(a)!",
+                      style: TextStyle(
+                        fontSize: 16,
+                      )),
+                  const SizedBox(height: 20),
+                  MyTextFormField(
                     fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  )),
-              const SizedBox(height: 10),
-              const Text("Bem-vindo(a)!",
-                  style: TextStyle(
-                    fontSize: 16,
-                  )),
-              const SizedBox(height: 20),
-              MyTextFormField(
-                fontSize: 16,
-                label: 'E-mail',
-                placeholder: 'Digite seu email',
-                inputType: TextInputType.emailAddress,
-                validators: const {
-                  'required': true,
-                  'minLength': 4,
-                  'regex':
-                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+"
-                },
-                onChanged: signInStore.changeEmail,
+                    label: 'E-mail',
+                    placeholder: 'Digite seu email',
+                    inputType: TextInputType.emailAddress,
+                    validators: const {
+                      'required': true,
+                      'minLength': 4,
+                      'regex':
+                          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+"
+                    },
+                    onChanged: signInStore.changeEmail,
+                  ),
+                  const SizedBox(height: 20),
+                  MyTextFormFieldPassword(
+                      label: 'Senha',
+                      placeholder: 'Digite sua senha',
+                      obscureText: true,
+                      inputType: TextInputType.text,
+                      validators: const {
+                        'required': true,
+                        'minLength': 4,
+                      },
+                      onChanged: signInStore.changePassword),
+                  const SizedBox(height: 24.0),
+                  Center(child: Observer(builder: (_) {
+                    return MyButtonWidget(
+                      text: 'Entrar',
+                      isLoading: signInStore.signInState == SignInState.loading,
+                      onTap: () async {
+                        _formKey.currentState?.save();
+                        if (_formKey.currentState!.validate()) {
+                          await signInStore.signIn(
+                              signInStore.email, signInStore.password);
+                        }
+                      },
+                    );
+                  })),
+                ],
               ),
-              const SizedBox(height: 20),
-              MyTextFormFieldPassword(
-                  label: 'Senha',
-                  placeholder: 'Digite sua senha',
-                  obscureText: true,
-                  inputType: TextInputType.text,
-                  validators: const {
-                    'required': true,
-                    'minLength': 4,
-                  },
-                  onChanged: signInStore.changePassword),
-              const SizedBox(height: 24.0),
-              Center(child: Observer(builder: (_) {
-                return MyButtonWidget(
-                  text: 'Entrar',
-                  isLoading: signInStore.signInState == SignInState.loading,
-                  onTap: () async {
-                    _formKey.currentState?.save();
-                    if (_formKey.currentState!.validate()) {
-                      await signInStore.signIn(
-                          signInStore.email, signInStore.password);
-                    }
-                  },
-                );
-              })),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

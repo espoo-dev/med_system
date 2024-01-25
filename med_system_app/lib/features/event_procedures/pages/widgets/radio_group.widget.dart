@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 
 class MyRadioGroup extends StatefulWidget {
   final ValueChanged<String> onValueChanged;
+  final String? initialValue;
 
-  const MyRadioGroup({super.key, required this.onValueChanged});
+  const MyRadioGroup({
+    super.key,
+    required this.onValueChanged,
+    this.initialValue,
+  });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -11,7 +16,18 @@ class MyRadioGroup extends StatefulWidget {
 }
 
 class _MyRadioGroupState extends State<MyRadioGroup> {
-  String _selectedValue = 'Enfermaria';
+  late String _selectedValue;
+
+  @override
+  void initState() {
+    super.initState();
+    // Define o valor inicial padrão como "Enfermaria"
+    _selectedValue = 'Enfermaria';
+    // Se o valor inicial for diferente de "ward", define como "Apartamento"
+    if (widget.initialValue != 'ward') {
+      _selectedValue = 'Apartamento';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
