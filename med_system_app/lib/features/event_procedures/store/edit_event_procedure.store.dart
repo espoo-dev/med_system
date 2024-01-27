@@ -1,6 +1,7 @@
 // ignore: library_private_types_in_public_api
 import 'package:flutter/material.dart';
 import 'package:med_system_app/core/api/network_exceptions.dart';
+import 'package:med_system_app/features/event_procedures/model/add_event_procedure_request.model.dart';
 import 'package:med_system_app/features/event_procedures/repository/event_procedure_repository.dart';
 import 'package:med_system_app/features/health_insurances/model/health_insurances.model.dart';
 import 'package:med_system_app/features/health_insurances/repository/health_insurances_repository.dart';
@@ -222,6 +223,32 @@ abstract class _EditEventProcedureStoreBase with Store {
   }
 
   @action
+  editEventProcedure(int eventProcedureId) async {
+    if (isValidData) {
+      saveState = SaveEventProcedureState.loading;
+      var registerEventProcedureResult =
+          await _eventProcedureRepository.editEventProcedure(
+              eventProcedureId,
+              AddEventProcedureRequestModel(
+                  procedureId: _procedureId,
+                  patientId: _patientId,
+                  hospitalId: _hospitalId,
+                  healthInsuranceId: _healthInsuranceId,
+                  patientServiceNumber: _patientServiceNumber,
+                  date: _createdDate,
+                  paydAt: _paydAt,
+                  urgency: _urgency,
+                  roomType: _accommodation));
+      registerEventProcedureResult?.when(success: (eventProcedure) {
+        saveState = SaveEventProcedureState.success;
+      }, failure: (NetworkExceptions error) {
+        handleError(NetworkExceptions.getErrorMessage(error));
+        saveState = SaveEventProcedureState.error;
+      });
+    }
+  }
+
+  @action
   fetchAllData() async {
     try {
       state = EditEventProcedureState.loading;
@@ -246,18 +273,12 @@ abstract class _EditEventProcedureStoreBase with Store {
   }
 
   @action
-  editEventProcedure() {
-    debugPrint(_eventProcedureRepository.toString());
-  }
-
-  @action
   getAllProcedures() async {
     procedureList.clear();
     var resultProcedures =
         await _procedureRepository.getAllProcedures().asObservable();
     resultProcedures?.when(success: (List<Procedure>? listProcedures) {
       procedureList.addAll(listProcedures!);
-      setProcedureId(procedureList.first.id!);
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));
     });
@@ -270,7 +291,6 @@ abstract class _EditEventProcedureStoreBase with Store {
         await _patientRepository.getAllPatients().asObservable();
     resultPatient?.when(success: (List<Patient>? listPatient) {
       patientList.addAll(listPatient!);
-      setPatientId(patientList.first.id!);
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));
     });
@@ -283,7 +303,6 @@ abstract class _EditEventProcedureStoreBase with Store {
         await _hospitalRepository.getAllHospitals().asObservable();
     resultHospital?.when(success: (List<Hospital>? listHospital) {
       hospitalList.addAll(listHospital!);
-      setHospitalId(hospitalList.first.id!);
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));
     });
@@ -298,7 +317,6 @@ abstract class _EditEventProcedureStoreBase with Store {
     resultHealthInsurances?.when(
         success: (List<HealthInsurance>? listHealthInsurances) {
       healthInsuranceList.addAll(listHealthInsurances!);
-      setHealthInsuranceId(healthInsuranceList.first.id!);
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));
     });
@@ -311,6 +329,7 @@ abstract class _EditEventProcedureStoreBase with Store {
   HealthInsurance? findHealthInsurance(String nameHealthInsurance) {
     for (var healthInsurance in healthInsuranceList) {
       if (healthInsurance.name == nameHealthInsurance) {
+        _healthInsuranceId = healthInsurance.id ?? 0;
         return healthInsurance;
       }
     }
@@ -320,6 +339,7 @@ abstract class _EditEventProcedureStoreBase with Store {
   Hospital? findHospital(String nameHospital) {
     for (var hospital in hospitalList) {
       if (hospital.name == nameHospital) {
+        _hospitalId = hospital.id ?? 0;
         return hospital;
       }
     }
@@ -329,6 +349,7 @@ abstract class _EditEventProcedureStoreBase with Store {
   Patient? findPatient(String namePatient) {
     for (var patient in patientList) {
       if (patient.name == namePatient) {
+        _patientId = patient.id ?? 0;
         return patient;
       }
     }
@@ -338,6 +359,7 @@ abstract class _EditEventProcedureStoreBase with Store {
   Procedure? findProcedure(String nameProcedure) {
     for (var procedure in procedureList) {
       if (procedure.name == nameProcedure) {
+        _procedureId = procedure.id ?? 0;
         return procedure;
       }
     }

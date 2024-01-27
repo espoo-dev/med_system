@@ -17,39 +17,42 @@ class SuccessPage extends StatelessWidget {
       to(context, goToPage);
     });
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(left: 30, right: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Center(
-                    child:
-                        Lottie.asset(animationSuccess, height: 250, width: 250),
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  Center(
-                    child: Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 25,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      textAlign: TextAlign.center,
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(left: 30, right: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Center(
+                      child: Lottie.asset(animationSuccess,
+                          height: 250, width: 250),
                     ),
-                  ),
-                ],
+                    const SizedBox(
+                      height: 50,
+                    ),
+                    Center(
+                      child: Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 25,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

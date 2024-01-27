@@ -212,6 +212,16 @@ mixin _$EditEventProcedureStore on _EditEventProcedureStoreBase, Store {
     });
   }
 
+  late final _$editEventProcedureAsyncAction = AsyncAction(
+      '_EditEventProcedureStoreBase.editEventProcedure',
+      context: context);
+
+  @override
+  Future editEventProcedure(int eventProcedureId) {
+    return _$editEventProcedureAsyncAction
+        .run(() => super.editEventProcedure(eventProcedureId));
+  }
+
   late final _$fetchAllDataAsyncAction = AsyncAction(
       '_EditEventProcedureStoreBase.fetchAllData',
       context: context);
@@ -356,17 +366,6 @@ mixin _$EditEventProcedureStore on _EditEventProcedureStoreBase, Store {
         .startAction(name: '_EditEventProcedureStoreBase.setPaydAt');
     try {
       return super.setPaydAt(paydAt);
-    } finally {
-      _$_EditEventProcedureStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  dynamic editEventProcedure() {
-    final _$actionInfo = _$_EditEventProcedureStoreBaseActionController
-        .startAction(name: '_EditEventProcedureStoreBase.editEventProcedure');
-    try {
-      return super.editEventProcedure();
     } finally {
       _$_EditEventProcedureStoreBaseActionController.endAction(_$actionInfo);
     }

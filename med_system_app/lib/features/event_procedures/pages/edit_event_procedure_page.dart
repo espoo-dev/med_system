@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:med_system_app/core/pages/success/success.page.dart';
 import 'package:med_system_app/core/utils/navigation_utils.dart';
+import 'package:med_system_app/core/utils/utils.dart';
 import 'package:med_system_app/core/widgets/error.widget.dart';
 import 'package:med_system_app/core/widgets/my_app_bar.widget.dart';
 import 'package:med_system_app/core/widgets/my_button_widget.dart';
@@ -42,6 +43,8 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
   void initState() {
     super.initState();
     editEventProcedureStore.fetchAllData();
+    editEventProcedureStore.setPatientServiceNumber(
+        widget.eventProcedures.patientServiceNumber ?? "");
   }
 
   @override
@@ -75,27 +78,34 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const MyAppBar(
-        title: 'Editar evento procedimento',
-        hideLeading: true,
-        image: null,
-      ),
-      body: Observer(
-        builder: (BuildContext context) {
-          if (editEventProcedureStore.state == EditEventProcedureState.error) {
-            return Center(
-                child: ErrorRetryWidget(
-                    'Algo deu errado', 'Por favor, tente novamente', () {
-              editEventProcedureStore.fetchAllData();
-            }));
-          }
-          if (editEventProcedureStore.state ==
-              EditEventProcedureState.loading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          return form(context);
-        },
+    return PopScope(
+      canPop: true,
+      child: Scaffold(
+        appBar: MyAppBar(
+          title: 'Editar evento procedimento',
+          hideLeading: true,
+          onPressed: () {
+            to(context, const EventProceduresPage());
+          },
+          image: null,
+        ),
+        body: Observer(
+          builder: (BuildContext context) {
+            if (editEventProcedureStore.state ==
+                EditEventProcedureState.error) {
+              return Center(
+                  child: ErrorRetryWidget(
+                      'Algo deu errado', 'Por favor, tente novamente', () {
+                editEventProcedureStore.fetchAllData();
+              }));
+            }
+            if (editEventProcedureStore.state ==
+                EditEventProcedureState.loading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return form(context);
+          },
+        ),
       ),
     );
   }
@@ -140,7 +150,8 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                         onChanged: editEventProcedureStore.setCreatedDate,
                         label: 'Data',
                         textColor: Theme.of(context).colorScheme.primary,
-                        selectedDate: DateTime.now(),
+                        selectedDate: convertStringToDate(
+                            widget.eventProcedures.date ?? ""),
                       ),
                       const SizedBox(
                         height: 15,
@@ -149,6 +160,8 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                         onChanged: editEventProcedureStore.setPaydAt,
                         label: 'Data Pagamento',
                         textColor: Theme.of(context).colorScheme.primary,
+                        selectedDate: convertStringToDate(
+                            widget.eventProcedures.paydAt ?? ""),
                       ),
                       const SizedBox(
                         height: 15,
@@ -217,7 +230,10 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                           onTap: editEventProcedureStore.isValidData
                               ? () async {
                                   _formKey.currentState?.save();
-                                  if (_formKey.currentState!.validate()) {}
+                                  if (_formKey.currentState!.validate()) {
+                                    editEventProcedureStore.editEventProcedure(
+                                        widget.eventProcedures.id ?? 0);
+                                  }
                                 }
                               : null,
                         );

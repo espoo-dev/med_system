@@ -49,4 +49,29 @@ class EventProcedureRepository {
     }
     return null;
   }
+
+  Future<Result<EventProcedures>?> editEventProcedure(int eventProcedureId,
+      AddEventProcedureRequestModel addEventProcedureRequestModel) async {
+    try {
+      final response = await eventProcedureService.editEventProcedure(
+          eventProcedureId,
+          json.encode(addEventProcedureRequestModel.toJson()));
+
+      if (response.isSuccessful) {
+        EventProcedures? eventProcedureModel =
+            EventProcedures.fromJson(json.decode(response.body));
+
+        return Result.success(eventProcedureModel);
+      } else if (response.statusCode == 422) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.unableToProcess()));
+      } else if (response.statusCode == 500) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.internalServerError()));
+      }
+    } catch (e) {
+      throw Result.failure(NetworkExceptions.getException(e));
+    }
+    return null;
+  }
 }
