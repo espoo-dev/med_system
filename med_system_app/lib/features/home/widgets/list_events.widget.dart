@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:med_system_app/core/theme/icons.dart';
 import 'package:med_system_app/core/utils/navigation_utils.dart';
+import 'package:med_system_app/core/utils/utils.dart';
+import 'package:med_system_app/features/event_procedures/model/event_procedure.model.dart';
+import 'package:med_system_app/features/event_procedures/pages/edit_event_procedure_page.dart';
 import 'package:med_system_app/features/event_procedures/pages/event_procedures_page.dart';
 
 class ListEventsWidget extends StatefulWidget {
-  final List<EventItem> items;
+  final List<EventProcedures> items;
 
   const ListEventsWidget({super.key, required this.items});
 
@@ -30,16 +33,17 @@ class _ListEventsWidgetState extends State<ListEventsWidget> {
                   )),
               const Spacer(),
               InkWell(
-                  onTap: () {
-                    push(context, const EventProceduresPage());
-                  },
-                  child: Text(
-                    'Ver todos',
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: Theme.of(context).colorScheme.primary),
-                  )),
+                onTap: () {
+                  push(context, const EventProceduresPage());
+                },
+                child: Text(
+                  'Ver todos',
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: Theme.of(context).colorScheme.primary),
+                ),
+              ),
             ],
           ),
           const SizedBox(
@@ -51,8 +55,18 @@ class _ListEventsWidgetState extends State<ListEventsWidget> {
               scrollDirection: Axis.vertical,
               itemCount: widget.items.length,
               itemBuilder: (BuildContext context, int index) {
-                EventItem item = widget.items[index];
-                debugPrint(widget.items.length.toString());
+                EventProcedures item = widget.items[index];
+                String iconAsset =
+                    item.isPaid() ? iconCheckCoreAsset : iconCloseCoreAsset;
+
+                Color iconColor = item.isPaid()
+                    ? Theme.of(context).colorScheme.primary
+                    : const Color(0xFFED7290);
+
+                Color textColor = item.isPaid()
+                    ? Theme.of(context).colorScheme.primary
+                    : const Color(0xFFED7290);
+
                 return Padding(
                   padding: const EdgeInsets.only(top: 8, bottom: 8),
                   child: Container(
@@ -65,33 +79,43 @@ class _ListEventsWidgetState extends State<ListEventsWidget> {
                     child: ListTile(
                       title: Row(
                         children: [
-                          Text(item.name,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                              )),
+                          Text(
+                            item.procedure?.toString().truncate() ?? "",
+                            style: TextStyle(
+                              color: textColor,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16,
+                            ),
+                          ),
                           const SizedBox(width: 15),
-                          Text(item.value,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16,
-                              )),
+                          Text(
+                            item.totalAmountCents ?? "",
+                            style: TextStyle(
+                              color: textColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                            ),
+                          ),
                         ],
                       ),
                       leading: SvgPicture.asset(
-                        iconCheckCoreAsset,
+                        iconAsset,
                         width: 18,
                         height: 18,
-                        color: Theme.of(context).colorScheme.primary,
+                        color: iconColor,
                       ),
                       trailing: Icon(
-                        size: 8.0,
                         Icons.arrow_forward_ios,
-                        color: Theme.of(context).colorScheme.primary,
+                        size: 18.0,
+                        color: iconColor,
                       ),
-                      onTap: () {},
+                      onTap: () {
+                        push(
+                            context,
+                            EditEventProcedurePage(
+                              eventProcedures: item,
+                            ));
+                      },
                     ),
                   ),
                 );
@@ -102,14 +126,4 @@ class _ListEventsWidgetState extends State<ListEventsWidget> {
       ),
     );
   }
-}
-
-class EventItem {
-  final String name;
-  final String value;
-
-  const EventItem({
-    required this.name,
-    required this.value,
-  });
 }

@@ -1,5 +1,6 @@
 //Assets core
 const iconCheckCoreAsset = "assets/images/svg/core/check.svg";
+const iconCloseCoreAsset = "assets/images/svg/core/close-circle.svg";
 const iconWaterDropCoreAsset =
     "assets/images/svg/core/ic_baseline-water-drop.svg";
 const iconLogoAsset = "assets/images/svg/core/logo.svg";
