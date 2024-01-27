@@ -26,3 +26,24 @@ String greet() {
     return 'Boa noite!';
   }
 }
+
+DateTime? convertStringToDate(String dateString) {
+  if (dateString.isEmpty) {
+    return null;
+  }
+
+  List<String> dateParts = dateString.split('/');
+  if (dateParts.length != 3) {
+    return null;
+  }
+
+  int? day = int.tryParse(dateParts[0]);
+  int? month = int.tryParse(dateParts[1]);
+  int? year = int.tryParse(dateParts[2]);
+
+  if (day == null || month == null || year == null) {
+    return null;
+  }
+
+  return DateTime(year, month, day);
+}
