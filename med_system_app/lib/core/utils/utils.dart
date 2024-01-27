@@ -47,3 +47,13 @@ DateTime? convertStringToDate(String dateString) {
 
   return DateTime(year, month, day);
 }
+
+extension StringExtension on String {
+  String truncate() {
+    if (length <= 13) {
+      return this;
+    } else {
+      return '${substring(0, 10)}...';
+    }
+  }
+}

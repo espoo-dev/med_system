@@ -7,6 +7,8 @@ import 'package:med_system_app/features/event_procedures/store/edit_event_proced
 import 'package:med_system_app/features/event_procedures/store/event_procedure.store.dart';
 import 'package:med_system_app/features/health_insurances/repository/health_insurances_repository.dart';
 import 'package:med_system_app/features/health_insurances/store/health_insurances.store.dart';
+import 'package:med_system_app/features/home/repository/home_repository.dart';
+import 'package:med_system_app/features/home/store/home.store.dart';
 import 'package:med_system_app/features/hospitals/respository/hospital_repository.dart';
 import 'package:med_system_app/features/hospitals/store/hospital.store.dart';
 import 'package:med_system_app/features/patients/repository/patient_repository.dart';
@@ -32,10 +34,14 @@ void setupServiceLocator() {
   getIt.registerSingleton(ProcedureRepository());
   getIt.registerSingleton(PatientRepository());
   getIt.registerSingleton(HospitalRepository());
+  getIt.registerSingleton(HomeRepository());
   getIt.registerSingleton(HealthInsurancesRepository());
   getIt.registerSingleton(EventProcedureRepository());
 
   // stores
+
+  getIt.registerLazySingleton<HomeStore>(
+      () => HomeStore(getIt<HomeRepository>()));
   getIt.registerLazySingleton<SignInStore>(
       () => SignInStore(getIt<SignInRepository>()));
   getIt.registerLazySingleton<ProcedureStore>(
