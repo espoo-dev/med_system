@@ -17,12 +17,20 @@ final class _$PatientService extends PatientService {
   final definitionType = PatientService;
 
   @override
-  Future<Response<dynamic>> getAllPatients() {
+  Future<Response<dynamic>> getAllPatients(
+    int page,
+    int perPage,
+  ) {
     final Uri $url = Uri.parse('/api/v1/patients');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'page': page,
+      'per_page': perPage,
+    };
     final Request $request = Request(
       'GET',
       $url,
       client.baseUrl,
+      parameters: $params,
     );
     return client.send<dynamic, dynamic>($request);
   }

@@ -21,12 +21,23 @@ abstract class _PatientStoreBase with Store {
   String _errorMessage = "";
   get errorMessage => _errorMessage;
 
+  @observable
+  int _page = 1;
+  get page => _page;
+
   _PatientStoreBase(PatientRepository patientRepository)
       : _patientRepository = patientRepository;
 
   @action
-  getAllPatients() async {
-    patientList.clear();
+  getAllPatients({bool isRefresh = false}) async {
+    if (isRefresh) {
+      _page = 1;
+      patientList.clear();
+    }
+    state = PatientState.loading;
+    if (!isRefresh) {
+      _page++;
+    }
     state = PatientState.loading;
     var resultPatient =
         await _patientRepository.getAllPatients().asObservable();
@@ -43,7 +54,9 @@ abstract class _PatientStoreBase with Store {
     _errorMessage = reason;
   }
 
+  @action
   dispose() {
     patientList.clear();
+    _page = 1;
   }
 }

@@ -6,9 +6,14 @@ import 'package:med_system_app/core/api/network_exceptions.dart';
 import 'package:med_system_app/features/patients/model/patient.model.dart';
 
 class PatientRepository {
-  Future<Result<List<Patient>?>?> getAllPatients() async {
+  Future<Result<List<Patient>?>?> getAllPatients(
+      [int? page, int? perPage]) async {
     try {
-      final response = await patientService.getAllPatients();
+      page ??= 1;
+
+      perPage ??= 3;
+
+      final response = await patientService.getAllPatients(page, perPage);
       if (response.isSuccessful) {
         PatientModel? patientModel =
             PatientModel.fromJson(json.decode(response.body));

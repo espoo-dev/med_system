@@ -41,12 +41,43 @@ mixin _$PatientStore on _PatientStoreBase, Store {
     });
   }
 
+  late final _$_pageAtom =
+      Atom(name: '_PatientStoreBase._page', context: context);
+
+  @override
+  int get _page {
+    _$_pageAtom.reportRead();
+    return super._page;
+  }
+
+  @override
+  set _page(int value) {
+    _$_pageAtom.reportWrite(value, super._page, () {
+      super._page = value;
+    });
+  }
+
   late final _$getAllPatientsAsyncAction =
       AsyncAction('_PatientStoreBase.getAllPatients', context: context);
 
   @override
-  Future getAllPatients() {
-    return _$getAllPatientsAsyncAction.run(() => super.getAllPatients());
+  Future getAllPatients({bool isRefresh = false}) {
+    return _$getAllPatientsAsyncAction
+        .run(() => super.getAllPatients(isRefresh: isRefresh));
+  }
+
+  late final _$_PatientStoreBaseActionController =
+      ActionController(name: '_PatientStoreBase', context: context);
+
+  @override
+  dynamic dispose() {
+    final _$actionInfo = _$_PatientStoreBaseActionController.startAction(
+        name: '_PatientStoreBase.dispose');
+    try {
+      return super.dispose();
+    } finally {
+      _$_PatientStoreBaseActionController.endAction(_$actionInfo);
+    }
   }
 
   @override
