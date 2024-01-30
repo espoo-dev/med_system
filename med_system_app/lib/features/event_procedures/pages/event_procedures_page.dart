@@ -128,11 +128,13 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                                     eventProcedures: eventProcedures));
                           },
                           leading: SvgPicture.asset(
-                            iconWaterDropCoreAsset,
+                            eventProcedures.isPaid()
+                                ? iconCheckCoreAsset
+                                : iconCloseCoreAsset,
                             width: 32,
                             height: 32,
                             color: eventProcedures.isPaid()
-                                ? const Color(0xFF388E3C)
+                                ? Theme.of(context).colorScheme.primary
                                 : const Color(0xFFEC2A58),
                           ),
                           title: Text(
