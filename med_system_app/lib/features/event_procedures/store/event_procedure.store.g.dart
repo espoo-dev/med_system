@@ -57,6 +57,22 @@ mixin _$EventProcedureStore on _EventProcedureStoreBase, Store {
     });
   }
 
+  late final _$_showMonthAtom =
+      Atom(name: '_EventProcedureStoreBase._showMonth', context: context);
+
+  @override
+  bool get _showMonth {
+    _$_showMonthAtom.reportRead();
+    return super._showMonth;
+  }
+
+  @override
+  set _showMonth(bool value) {
+    _$_showMonthAtom.reportWrite(value, super._showMonth, () {
+      super._showMonth = value;
+    });
+  }
+
   late final _$_showUnpaidAtom =
       Atom(name: '_EventProcedureStoreBase._showUnpaid', context: context);
 
@@ -70,6 +86,22 @@ mixin _$EventProcedureStore on _EventProcedureStoreBase, Store {
   set _showUnpaid(bool value) {
     _$_showUnpaidAtom.reportWrite(value, super._showUnpaid, () {
       super._showUnpaid = value;
+    });
+  }
+
+  late final _$_monthAtom =
+      Atom(name: '_EventProcedureStoreBase._month', context: context);
+
+  @override
+  int get _month {
+    _$_monthAtom.reportRead();
+    return super._month;
+  }
+
+  @override
+  set _month(int value) {
+    _$_monthAtom.reportWrite(value, super._month, () {
+      super._month = value;
     });
   }
 
@@ -119,11 +151,22 @@ mixin _$EventProcedureStore on _EventProcedureStoreBase, Store {
       ActionController(name: '_EventProcedureStoreBase', context: context);
 
   @override
-  void updateFilter(bool all, bool paid, bool unpaid) {
+  dynamic updateMonth(int month) {
+    final _$actionInfo = _$_EventProcedureStoreBaseActionController.startAction(
+        name: '_EventProcedureStoreBase.updateMonth');
+    try {
+      return super.updateMonth(month);
+    } finally {
+      _$_EventProcedureStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void updateFilter(bool all, bool paid, bool unpaid, bool month) {
     final _$actionInfo = _$_EventProcedureStoreBaseActionController.startAction(
         name: '_EventProcedureStoreBase.updateFilter');
     try {
-      return super.updateFilter(all, paid, unpaid);
+      return super.updateFilter(all, paid, unpaid, month);
     } finally {
       _$_EventProcedureStoreBaseActionController.endAction(_$actionInfo);
     }

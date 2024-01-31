@@ -10,6 +10,7 @@ import 'package:med_system_app/core/widgets/my_app_bar.widget.dart';
 import 'package:med_system_app/features/event_procedures/model/event_procedure.model.dart';
 import 'package:med_system_app/features/event_procedures/pages/add_event_procedure_page.dart';
 import 'package:med_system_app/features/event_procedures/pages/edit_event_procedure_page.dart';
+import 'package:med_system_app/features/event_procedures/pages/widgets/dialog_filter_months.wdiget.dart';
 import 'package:med_system_app/features/event_procedures/store/event_procedure.store.dart';
 
 import '../../../core/utils/navigation_utils.dart';
@@ -105,9 +106,9 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                         label: const Text('Todos'),
                         selected: eventProcedureStore.showAll!,
                         onSelected: (selected) {
-                          _refreshProcedures();
                           eventProcedureStore.updateFilter(
-                              selected, false, false);
+                              selected, false, false, false);
+                          _refreshProcedures();
                         },
                         showCheckmark: false,
                       ),
@@ -118,9 +119,9 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                         label: const Text('Pagos'),
                         selected: eventProcedureStore.showPaid!,
                         onSelected: (selected) {
-                          _refreshProcedures();
                           eventProcedureStore.updateFilter(
-                              false, selected, false);
+                              false, selected, false, false);
+                          _refreshProcedures();
                         },
                         showCheckmark: false,
                       ),
@@ -131,9 +132,9 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                         label: const Text('Não pagos'),
                         selected: eventProcedureStore.showUnpaid!,
                         onSelected: (selected) {
-                          _refreshProcedures();
                           eventProcedureStore.updateFilter(
-                              false, false, selected);
+                              false, false, selected, false);
+                          _refreshProcedures();
                         },
                         showCheckmark: false,
                       ),
@@ -142,8 +143,16 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                       padding: const EdgeInsets.all(8.0),
                       child: FilterChip(
                         label: const Text('Mês'),
-                        selected: false,
-                        onSelected: (selected) {},
+                        selected: eventProcedureStore.showMonth!,
+                        onSelected: (selected) async {
+                          eventProcedureStore.updateFilter(
+                              false, false, false, true);
+                          int? selectedMonth = await showDialogMonths(context);
+                          if (selectedMonth != null) {
+                            eventProcedureStore.updateMonth(selectedMonth);
+                            _refreshProcedures();
+                          }
+                        },
                         showCheckmark: false,
                       ),
                     ),
