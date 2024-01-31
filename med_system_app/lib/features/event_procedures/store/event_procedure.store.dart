@@ -1,3 +1,4 @@
+import 'package:med_system_app/core/api/api_result.dart';
 import 'package:med_system_app/core/api/network_exceptions.dart';
 import 'package:med_system_app/features/event_procedures/model/event_procedure.model.dart';
 import 'package:med_system_app/features/event_procedures/repository/event_procedure_repository.dart';
@@ -19,6 +20,26 @@ abstract class _EventProcedureStoreBase with Store {
   EventProcedureState state = EventProcedureState.idle;
 
   @observable
+  bool _showAll = true;
+  bool? get showAll => _showAll;
+
+  @observable
+  bool _showPaid = false;
+  bool? get showPaid => _showPaid;
+
+  @observable
+  bool _showUnpaid = false;
+  bool? get showUnpaid => _showUnpaid;
+
+  @action
+  void updateFilter(bool all, bool paid, bool unpaid) {
+    _showAll = all;
+    _showPaid = paid;
+    _showUnpaid = unpaid;
+    _page = 1;
+  }
+
+  @observable
   String _errorMessage = "";
   get errorMessage => _errorMessage;
 
@@ -30,7 +51,11 @@ abstract class _EventProcedureStoreBase with Store {
       : _eventProcedureRepository = eventProcedureRepository;
 
   @action
+  getEventProcedures() {}
+
+  @action
   getAllEventProcedures({bool isRefresh = false}) async {
+    Result<List<EventProcedures>?>? resultEventProcedures;
     if (isRefresh) {
       _page = 1;
       eventProcedureList.clear();
@@ -39,16 +64,30 @@ abstract class _EventProcedureStoreBase with Store {
     if (!isRefresh) {
       _page++;
     }
-    Future.delayed(const Duration(seconds: 3));
-    var resultEventProcedures = await _eventProcedureRepository
-        .getAllEventProcedures(_page)
-        .asObservable();
+    await Future.delayed(const Duration(seconds: 3));
+
+    if (_showPaid) {
+      resultEventProcedures = await _eventProcedureRepository
+          .getAllEventProceduresByPayd(_page, true)
+          .asObservable();
+    } else if (_showUnpaid) {
+      resultEventProcedures = await _eventProcedureRepository
+          .getAllEventProceduresByPayd(_page, false)
+          .asObservable();
+    } else {
+      resultEventProcedures = await _eventProcedureRepository
+          .getAllEventProcedures(_page)
+          .asObservable();
+    }
+
     resultEventProcedures?.when(
-        success: (List<EventProcedures>? listEventProcedures) {
-      handleSuccess(listEventProcedures);
-    }, failure: (NetworkExceptions error) {
-      handleError(NetworkExceptions.getErrorMessage(error));
-    });
+      success: (List<EventProcedures>? listEventProcedures) {
+        handleSuccess(listEventProcedures);
+      },
+      failure: (NetworkExceptions error) {
+        handleError(NetworkExceptions.getErrorMessage(error));
+      },
+    );
   }
 
   handleSuccess(List<EventProcedures>? listEventProcedures) {
@@ -65,5 +104,8 @@ abstract class _EventProcedureStoreBase with Store {
   dispose() {
     eventProcedureList.clear();
     _page = 1;
+    _showAll = true;
+    _showPaid = false;
+    _showUnpaid = false;
   }
 }
