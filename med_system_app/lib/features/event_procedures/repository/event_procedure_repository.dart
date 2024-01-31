@@ -26,6 +26,26 @@ class EventProcedureRepository {
     return null;
   }
 
+  Future<Result<List<EventProcedures>?>?> getAllEventProceduresByPayd(
+      int page, bool payd) async {
+    try {
+      final response =
+          await eventProcedureService.getAllEventProceduresByPaid(page, payd);
+      if (response.isSuccessful) {
+        EventProcedureModel? eventProcedureModel =
+            EventProcedureModel.fromJson(json.decode(response.body));
+
+        return Result.success(eventProcedureModel.eventProceduresList);
+      } else if (response.statusCode == 500) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.internalServerError()));
+      }
+    } catch (e) {
+      throw Result.failure(NetworkExceptions.getException(e));
+    }
+    return null;
+  }
+
   Future<Result<EventProcedures>?> registerEventProcedure(
       AddEventProcedureRequestModel addEventProcedureRequestModel) async {
     try {
