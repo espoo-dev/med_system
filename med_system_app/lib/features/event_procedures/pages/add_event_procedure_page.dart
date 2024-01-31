@@ -73,26 +73,34 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const MyAppBar(
-        title: 'Novo Evento',
-        hideLeading: true,
-        image: null,
-      ),
-      body: Observer(
-        builder: (BuildContext context) {
-          if (addEventProcedureStore.state == AddEventProcedureState.error) {
-            return Center(
-                child: ErrorRetryWidget(
-                    'Algo deu errado', 'Por favor, tente novamente', () {
-              addEventProcedureStore.fetchAllData();
-            }));
-          }
-          if (addEventProcedureStore.state == AddEventProcedureState.loading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          return form(context);
-        },
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) {
+        if (didPop) {}
+        to(context, const EventProceduresPage());
+      },
+      child: Scaffold(
+        appBar: const MyAppBar(
+          title: 'Novo Evento',
+          hideLeading: true,
+          image: null,
+        ),
+        body: Observer(
+          builder: (BuildContext context) {
+            if (addEventProcedureStore.state == AddEventProcedureState.error) {
+              return Center(
+                  child: ErrorRetryWidget(
+                      'Algo deu errado', 'Por favor, tente novamente', () {
+                addEventProcedureStore.fetchAllData();
+              }));
+            }
+            if (addEventProcedureStore.state ==
+                AddEventProcedureState.loading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return form(context);
+          },
+        ),
       ),
     );
   }

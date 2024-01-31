@@ -30,6 +30,25 @@ final class _$EventProcedureService extends EventProcedureService {
   }
 
   @override
+  Future<Response<dynamic>> getAllEventProceduresByPaid(
+    int page,
+    bool payd,
+  ) {
+    final Uri $url = Uri.parse('/api/v1/event_procedures');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'page': page,
+      'payd': payd,
+    };
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
   Future<Response<dynamic>> getLatestEventProcedures(
     int page,
     int perPage,

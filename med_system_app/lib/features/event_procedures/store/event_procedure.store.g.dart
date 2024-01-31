@@ -25,6 +25,54 @@ mixin _$EventProcedureStore on _EventProcedureStoreBase, Store {
     });
   }
 
+  late final _$_showAllAtom =
+      Atom(name: '_EventProcedureStoreBase._showAll', context: context);
+
+  @override
+  bool get _showAll {
+    _$_showAllAtom.reportRead();
+    return super._showAll;
+  }
+
+  @override
+  set _showAll(bool value) {
+    _$_showAllAtom.reportWrite(value, super._showAll, () {
+      super._showAll = value;
+    });
+  }
+
+  late final _$_showPaidAtom =
+      Atom(name: '_EventProcedureStoreBase._showPaid', context: context);
+
+  @override
+  bool get _showPaid {
+    _$_showPaidAtom.reportRead();
+    return super._showPaid;
+  }
+
+  @override
+  set _showPaid(bool value) {
+    _$_showPaidAtom.reportWrite(value, super._showPaid, () {
+      super._showPaid = value;
+    });
+  }
+
+  late final _$_showUnpaidAtom =
+      Atom(name: '_EventProcedureStoreBase._showUnpaid', context: context);
+
+  @override
+  bool get _showUnpaid {
+    _$_showUnpaidAtom.reportRead();
+    return super._showUnpaid;
+  }
+
+  @override
+  set _showUnpaid(bool value) {
+    _$_showUnpaidAtom.reportWrite(value, super._showUnpaid, () {
+      super._showUnpaid = value;
+    });
+  }
+
   late final _$_errorMessageAtom =
       Atom(name: '_EventProcedureStoreBase._errorMessage', context: context);
 
@@ -69,6 +117,28 @@ mixin _$EventProcedureStore on _EventProcedureStoreBase, Store {
 
   late final _$_EventProcedureStoreBaseActionController =
       ActionController(name: '_EventProcedureStoreBase', context: context);
+
+  @override
+  void updateFilter(bool all, bool paid, bool unpaid) {
+    final _$actionInfo = _$_EventProcedureStoreBaseActionController.startAction(
+        name: '_EventProcedureStoreBase.updateFilter');
+    try {
+      return super.updateFilter(all, paid, unpaid);
+    } finally {
+      _$_EventProcedureStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic getEventProcedures() {
+    final _$actionInfo = _$_EventProcedureStoreBaseActionController.startAction(
+        name: '_EventProcedureStoreBase.getEventProcedures');
+    try {
+      return super.getEventProcedures();
+    } finally {
+      _$_EventProcedureStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   dynamic dispose() {
