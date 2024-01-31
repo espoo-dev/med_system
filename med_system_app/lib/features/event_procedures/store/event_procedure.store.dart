@@ -28,14 +28,28 @@ abstract class _EventProcedureStoreBase with Store {
   bool? get showPaid => _showPaid;
 
   @observable
+  bool _showMonth = false;
+  bool? get showMonth => _showMonth;
+
+  @observable
   bool _showUnpaid = false;
   bool? get showUnpaid => _showUnpaid;
 
+  @observable
+  int _month = 0;
+  get month => _month;
+
   @action
-  void updateFilter(bool all, bool paid, bool unpaid) {
+  updateMonth(int month) {
+    _month = month;
+  }
+
+  @action
+  void updateFilter(bool all, bool paid, bool unpaid, bool month) {
     _showAll = all;
     _showPaid = paid;
     _showUnpaid = unpaid;
+    _showMonth = month;
     _page = 1;
   }
 
@@ -74,6 +88,10 @@ abstract class _EventProcedureStoreBase with Store {
       resultEventProcedures = await _eventProcedureRepository
           .getAllEventProceduresByPayd(_page, false)
           .asObservable();
+    } else if (_showMonth && _month != 0) {
+      resultEventProcedures = await _eventProcedureRepository
+          .getAllEventProceduresByMonth(_page, month)
+          .asObservable();
     } else {
       resultEventProcedures = await _eventProcedureRepository
           .getAllEventProcedures(_page)
@@ -107,5 +125,6 @@ abstract class _EventProcedureStoreBase with Store {
     _showAll = true;
     _showPaid = false;
     _showUnpaid = false;
+    _showMonth = false;
   }
 }
