@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:med_system_app/core/utils/navigation_utils.dart';
 import 'package:med_system_app/core/utils/ui.dart';
 import 'package:med_system_app/core/widgets/error.widget.dart';
 import 'package:med_system_app/core/widgets/ext_fab.widget.dart';
 import 'package:med_system_app/core/widgets/fab.widget.dart';
 import 'package:med_system_app/core/widgets/my_app_bar.widget.dart';
 import 'package:med_system_app/features/patients/model/patient.model.dart';
+import 'package:med_system_app/features/patients/pages/edit_patient_page.dart';
 import 'package:med_system_app/features/patients/store/patient.store.dart';
 
 class PatientPage extends StatefulWidget {
@@ -109,7 +111,9 @@ class _PatientPageState extends State<PatientPage> {
                       if (index < _listPatients!.length) {
                         Patient patient = _listPatients![index];
                         return ListTile(
-                          onTap: () {},
+                          onTap: () {
+                            to(context, EditPatientPage(patient: patient));
+                          },
                           title: Text(
                             patient.name ?? "",
                             style: const TextStyle(
