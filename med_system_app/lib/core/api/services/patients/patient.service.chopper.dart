@@ -47,4 +47,20 @@ final class _$PatientService extends PatientService {
     );
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<dynamic>> editPatient(
+    dynamic id,
+    dynamic body,
+  ) {
+    final Uri $url = Uri.parse('/api/v1/patients/${id}');
+    final $body = body;
+    final Request $request = Request(
+      'PUT',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
 }
