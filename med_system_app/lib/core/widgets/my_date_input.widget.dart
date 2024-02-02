@@ -54,7 +54,7 @@ class _MyInputDateState extends State<MyInputDate> {
       initialDate: widget.selectedDate ??
           DateTime(DateTime.now().year, DateTime.now().month, 1),
       firstDate: DateTime(2001),
-      lastDate: DateTime.now(),
+      lastDate: DateTime(DateTime.now().year + 1),
     );
 
     setState(() {
