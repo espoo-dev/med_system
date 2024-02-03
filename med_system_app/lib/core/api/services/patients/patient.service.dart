@@ -16,4 +16,7 @@ abstract class PatientService extends ChopperService {
 
   @Put(path: 'api/v1/patients/{id}')
   Future<Response> editPatient(@Path('id') id, @Body() dynamic body);
+
+  @Delete(path: 'api/v1/patients/{id}')
+  Future<Response> deletePatient(@Path('id') id);
 }
