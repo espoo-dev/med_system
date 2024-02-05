@@ -11,6 +11,7 @@ import 'package:med_system_app/features/home/store/home.store.dart';
 import 'package:med_system_app/features/home/widgets/build_header.widget.dart';
 import 'package:med_system_app/features/home/widgets/build_welcome.widget.dart';
 import 'package:med_system_app/features/home/widgets/list_events.widget.dart';
+import 'package:med_system_app/features/home/widgets/my_drawer.widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -92,6 +93,7 @@ class _HomePageState extends State<HomePage> {
       },
       child: Material(
         child: Scaffold(
+          drawer: const MyDrawer(),
           body: SafeArea(
             child: Stack(
               children: [
