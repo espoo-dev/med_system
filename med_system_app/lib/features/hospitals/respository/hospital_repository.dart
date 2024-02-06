@@ -6,9 +6,13 @@ import 'package:med_system_app/core/api/network_exceptions.dart';
 import 'package:med_system_app/features/hospitals/model/hospital.model.dart';
 
 class HospitalRepository {
-  Future<Result<List<Hospital>?>?> getAllHospitals() async {
+  Future<Result<List<Hospital>?>?> getAllHospitals(
+      [int? page, int? perPage]) async {
     try {
-      final response = await hospitalService.getAllHospitals();
+      page ??= 1;
+
+      perPage ??= 10;
+      final response = await hospitalService.getAllHospitals(page, perPage);
       if (response.isSuccessful) {
         HospitalModel? hospitalModel =
             HospitalModel.fromJson(json.decode(response.body));

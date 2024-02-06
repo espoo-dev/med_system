@@ -8,5 +8,6 @@ abstract class HospitalService extends ChopperService {
   static HospitalService create([ChopperClient? client]) =>
       _$HospitalService(client);
   @Get(path: 'api/v1/hospitals')
-  Future<Response> getAllHospitals();
+  Future<Response> getAllHospitals(
+      @Query('page') int page, @Query('per_page') int perPage);
 }
