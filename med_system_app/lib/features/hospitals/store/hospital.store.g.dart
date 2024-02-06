@@ -41,12 +41,29 @@ mixin _$HospitalStore on _HospitalStoreBase, Store {
     });
   }
 
+  late final _$_pageAtom =
+      Atom(name: '_HospitalStoreBase._page', context: context);
+
+  @override
+  int get _page {
+    _$_pageAtom.reportRead();
+    return super._page;
+  }
+
+  @override
+  set _page(int value) {
+    _$_pageAtom.reportWrite(value, super._page, () {
+      super._page = value;
+    });
+  }
+
   late final _$getAllHospitalsAsyncAction =
       AsyncAction('_HospitalStoreBase.getAllHospitals', context: context);
 
   @override
-  Future getAllHospitals() {
-    return _$getAllHospitalsAsyncAction.run(() => super.getAllHospitals());
+  Future getAllHospitals({bool isRefresh = false}) {
+    return _$getAllHospitalsAsyncAction
+        .run(() => super.getAllHospitals(isRefresh: isRefresh));
   }
 
   @override

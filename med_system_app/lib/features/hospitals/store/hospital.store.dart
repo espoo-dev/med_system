@@ -21,13 +21,23 @@ abstract class _HospitalStoreBase with Store {
   String _errorMessage = "";
   get errorMessage => _errorMessage;
 
+  @observable
+  int _page = 1;
+  get page => _page;
+
   _HospitalStoreBase(HospitalRepository hospitalRepository)
       : _hospitalRepository = hospitalRepository;
 
   @action
-  getAllHospitals() async {
-    hospitalList.clear();
+  getAllHospitals({bool isRefresh = false}) async {
+    if (isRefresh) {
+      _page = 1;
+      hospitalList.clear();
+    }
     state = HospitalState.loading;
+    if (!isRefresh) {
+      _page++;
+    }
     var resultHospital =
         await _hospitalRepository.getAllHospitals().asObservable();
     resultHospital?.when(success: (List<Hospital>? listHospital) {
@@ -45,5 +55,6 @@ abstract class _HospitalStoreBase with Store {
 
   dispose() {
     hospitalList.clear();
+    _page = 1;
   }
 }
