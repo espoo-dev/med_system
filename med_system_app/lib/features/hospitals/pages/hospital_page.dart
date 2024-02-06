@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:med_system_app/core/utils/navigation_utils.dart';
 import 'package:med_system_app/core/utils/ui.dart';
 import 'package:med_system_app/core/widgets/error.widget.dart';
 import 'package:med_system_app/core/widgets/ext_fab.widget.dart';
 import 'package:med_system_app/core/widgets/fab.widget.dart';
 import 'package:med_system_app/core/widgets/my_app_bar.widget.dart';
-import 'package:med_system_app/features/patients/model/patient.model.dart';
-import 'package:med_system_app/features/patients/pages/edit_patient_page.dart';
-import 'package:med_system_app/features/patients/store/patient.store.dart';
+import 'package:med_system_app/features/hospitals/model/hospital.model.dart';
+import 'package:med_system_app/features/hospitals/store/hospital.store.dart';
 
-class PatientPage extends StatefulWidget {
-  const PatientPage({super.key});
+class HospitalPage extends StatefulWidget {
+  const HospitalPage({super.key});
 
   @override
-  State<PatientPage> createState() => _PatientPageState();
+  State<HospitalPage> createState() => _HospitalPageState();
 }
 
-class _PatientPageState extends State<PatientPage> {
-  final _patientStore = GetIt.I.get<PatientStore>();
-  List<Patient>? _listPatients = [];
+class _HospitalPageState extends State<HospitalPage> {
+  final _hostpialStore = GetIt.I.get<HospitalStore>();
+  List<Hospital>? _listHospital = [];
   final ScrollController _scrollController = ScrollController();
   bool isFab = false;
   @override
@@ -31,7 +29,7 @@ class _PatientPageState extends State<PatientPage> {
       inifiteScrolling();
       showFabButton();
     });
-    _patientStore.getAllPatients(isRefresh: true);
+    _hostpialStore.getAllHospitals(isRefresh: true);
   }
 
   showFabButton() {
@@ -49,26 +47,26 @@ class _PatientPageState extends State<PatientPage> {
   inifiteScrolling() {
     var maxScroll = _scrollController.position.maxScrollExtent;
     if (maxScroll == _scrollController.offset) {
-      _patientStore.getAllPatients(isRefresh: false);
+      _hostpialStore.getAllHospitals(isRefresh: false);
     }
   }
 
   Future _refreshProcedures() async {
-    await _patientStore.getAllPatients(isRefresh: true);
+    await _hostpialStore.getAllHospitals(isRefresh: true);
   }
 
   @override
   void dispose() {
     super.dispose();
     _scrollController.dispose();
-    _patientStore.dispose();
+    _hostpialStore.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const MyAppBar(
-        title: 'Pacientes',
+        title: 'Hospitais',
         hideLeading: true,
         image: null,
       ),
@@ -76,45 +74,43 @@ class _PatientPageState extends State<PatientPage> {
           ? buildFAB(context, () {})
           : buildExtendedFAB(
               context,
-              "Novo paciente",
+              "Novo Hospital",
               () {},
             ),
       body: RefreshIndicator(
         onRefresh: _refreshProcedures,
         child: Observer(
           builder: (BuildContext context) {
-            if (_patientStore.state == PatientState.error) {
+            if (_hostpialStore.state == HospitalState.error) {
               return Center(
                   child: ErrorRetryWidget(
                       'Algo deu errado', 'Por favor, tente novamente', () {
-                _patientStore.getAllPatients(isRefresh: true);
+                _hostpialStore.getAllHospitals(isRefresh: true);
               }));
             }
-            if (_patientStore.state == PatientState.loading &&
-                _listPatients!.isEmpty) {
+            if (_hostpialStore.state == HospitalState.loading &&
+                _listHospital!.isEmpty) {
               return const Center(child: CircularProgressIndicator());
             }
-            if (_patientStore.patientList.isEmpty) {
+            if (_hostpialStore.hospitalList.isEmpty) {
               return const Center(
-                  child: Text('Você não possui pacientes cadastrados.'));
+                  child: Text('Você não possui hospitais cadastrados.'));
             }
-            _listPatients = _patientStore.patientList;
+            _listHospital = _hostpialStore.hospitalList;
             return Stack(
               children: [
                 ListView.separated(
                     controller: _scrollController,
-                    itemCount: _patientStore.state == PatientState.loading
-                        ? _listPatients!.length + 1
-                        : _listPatients!.length,
+                    itemCount: _hostpialStore.state == HospitalState.loading
+                        ? _listHospital!.length + 1
+                        : _listHospital!.length,
                     itemBuilder: (BuildContext context, int index) {
-                      if (index < _listPatients!.length) {
-                        Patient patient = _listPatients![index];
+                      if (index < _listHospital!.length) {
+                        Hospital hospital = _listHospital![index];
                         return ListTile(
-                          onTap: () {
-                            to(context, EditPatientPage(patient: patient));
-                          },
+                          onTap: () {},
                           title: Text(
-                            patient.name ?? "",
+                            hospital.name ?? "",
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
@@ -122,9 +118,9 @@ class _PatientPageState extends State<PatientPage> {
                           trailing: IconButton(
                             onPressed: () {
                               showAlert(
-                                title: 'Excluir Paciente',
+                                title: 'Excluir Hospital',
                                 content:
-                                    'Tem certeza que deseja excluir este paciente?',
+                                    'Tem certeza que deseja excluir este hospital?',
                                 textYes: 'Sim',
                                 textNo: 'Não',
                                 onPressedConfirm: () {},
