@@ -7,7 +7,10 @@ import 'package:med_system_app/core/widgets/ext_fab.widget.dart';
 import 'package:med_system_app/core/widgets/fab.widget.dart';
 import 'package:med_system_app/core/widgets/my_app_bar.widget.dart';
 import 'package:med_system_app/features/hospitals/model/hospital.model.dart';
+import 'package:med_system_app/features/hospitals/pages/add_hospital_page.dart';
 import 'package:med_system_app/features/hospitals/store/hospital.store.dart';
+
+import '../../../core/utils/navigation_utils.dart';
 
 class HospitalPage extends StatefulWidget {
   const HospitalPage({super.key});
@@ -21,6 +24,7 @@ class _HospitalPageState extends State<HospitalPage> {
   List<Hospital>? _listHospital = [];
   final ScrollController _scrollController = ScrollController();
   bool isFab = false;
+
   @override
   void initState() {
     super.initState();
@@ -71,11 +75,15 @@ class _HospitalPageState extends State<HospitalPage> {
         image: null,
       ),
       floatingActionButton: isFab
-          ? buildFAB(context, () {})
+          ? buildFAB(context, () {
+              to(context, const AddHospitalPage());
+            })
           : buildExtendedFAB(
               context,
               "Novo Hospital",
-              () {},
+              () {
+                to(context, const AddHospitalPage());
+              },
             ),
       body: RefreshIndicator(
         onRefresh: _refreshProcedures,
