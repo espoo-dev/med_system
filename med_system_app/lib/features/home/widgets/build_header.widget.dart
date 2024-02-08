@@ -3,9 +3,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:med_system_app/core/theme/icons.dart';
 
 class HeaderHomeWidget extends StatefulWidget {
+  final VoidCallback?
+      onMenuPressed; // Parâmetro de função de retorno de chamada
+
   const HeaderHomeWidget({
     super.key,
+    this.onMenuPressed,
   });
+
   @override
   State<HeaderHomeWidget> createState() => _HeaderHomeWidgetState();
 }
@@ -21,22 +26,29 @@ class _HeaderHomeWidgetState extends State<HeaderHomeWidget> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          SvgPicture.asset(
-            iconLogoAsset,
-            width: 50,
-            height: 50,
-            color: Theme.of(context).colorScheme.primary,
-          ),
           Row(
             children: [
               InkWell(
-                onTap: () async {},
+                onTap: () {
+                  if (widget.onMenuPressed != null) {
+                    widget.onMenuPressed!();
+                  }
+                },
                 child: SvgPicture.asset(
                   iconMenuHomeAsset,
                   width: 24,
                   height: 18,
                   color: Theme.of(context).colorScheme.primary,
                 ),
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              SvgPicture.asset(
+                iconLogoAsset,
+                width: 50,
+                height: 50,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ],
           ),

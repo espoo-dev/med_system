@@ -10,6 +10,10 @@ const iconHeartTickHomeAsset = "assets/images/svg/home/heart-tick.svg";
 const iconHeartRemoveHomeAsset = "assets/images/svg/home/heart-remove.svg";
 const iconMedicationAsset = "assets/images/svg/home/ic_round-medication.svg";
 const iconMenuHomeAsset = "assets/images/svg/home/menu.svg";
+const iconMenuPatient = "assets/images/svg/home/patient.svg";
+const iconMenuHospital = "assets/images/svg/home/hospital.svg";
+const iconMenuPlantao = "assets/images/svg/home/plantao.svg";
+const iconMenuConvenio = "assets/images/svg/home/convenio.svg";
 
 //Login
 const iconHeaderLoginAsset = "assets/images/svg/login/header-login.svg";

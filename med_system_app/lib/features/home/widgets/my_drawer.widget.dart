@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:med_system_app/core/theme/icons.dart';
+import 'package:med_system_app/features/hospitals/pages/hospital_page.dart';
 import 'package:med_system_app/features/patients/pages/patient_page.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -18,22 +21,18 @@ class MyDrawer extends StatelessWidget {
           ListTile(
             onTap: () {
               Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const PatientPage()));
             },
             title: const Text(
-              "Home",
+              "Plantões",
               style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
             ),
-            leading: const Icon(
-              Icons.home,
-            ),
-          ),
-          const ListTile(
-            title: Text(
-              "Rate",
-              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-            ),
-            leading: Icon(
-              Icons.star,
+            leading: SvgPicture.asset(
+              iconMenuPlantao,
+              width: 30,
+              height: 30,
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
           ListTile(
@@ -43,20 +42,52 @@ class MyDrawer extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => const PatientPage()));
             },
             title: const Text(
-              "Contact",
+              "Pacientes",
               style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
             ),
-            leading: const Icon(
-              Icons.contact_page,
+            leading: SvgPicture.asset(
+              iconMenuPatient,
+              width: 30,
+              height: 30,
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
-          const ListTile(
-            title: Text(
-              "Share",
+          ListTile(
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const HospitalPage()));
+            },
+            title: const Text(
+              "Hospital",
               style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
             ),
-            leading: Icon(
-              Icons.share,
+            leading: SvgPicture.asset(
+              iconMenuHospital,
+              width: 30,
+              height: 30,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          ListTile(
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const HospitalPage()));
+            },
+            title: const Text(
+              "Convênios",
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+            ),
+            leading: SvgPicture.asset(
+              iconMenuConvenio,
+              width: 30,
+              height: 30,
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
           ListTile(
