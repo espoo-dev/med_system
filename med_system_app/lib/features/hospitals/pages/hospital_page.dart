@@ -115,6 +115,7 @@ class _HospitalPageState extends State<HospitalPage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
+                          subtitle: Text(hospital.address ?? ""),
                           trailing: IconButton(
                             onPressed: () {
                               showAlert(

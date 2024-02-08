@@ -21,6 +21,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   MenuHomeModel menuHomeModel = MenuHomeModel();
   final homeStore = GetIt.I.get<HomeStore>();
   final List<EventProcedures> _listEventProcedures = [];
@@ -52,7 +53,11 @@ class _HomePageState extends State<HomePage> {
           physics: const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics()),
           children: <Widget>[
-            const HeaderHomeWidget(),
+            HeaderHomeWidget(
+              onMenuPressed: () {
+                _scaffoldKey.currentState?.openDrawer();
+              },
+            ),
             const WelcomeWidget(),
             const SizedBox(height: 22),
             HorizontalMenuWidget(
@@ -93,6 +98,7 @@ class _HomePageState extends State<HomePage> {
       },
       child: Material(
         child: Scaffold(
+          key: _scaffoldKey,
           drawer: const MyDrawer(),
           body: SafeArea(
             child: Stack(

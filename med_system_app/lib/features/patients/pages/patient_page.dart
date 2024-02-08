@@ -8,6 +8,7 @@ import 'package:med_system_app/core/widgets/ext_fab.widget.dart';
 import 'package:med_system_app/core/widgets/fab.widget.dart';
 import 'package:med_system_app/core/widgets/my_app_bar.widget.dart';
 import 'package:med_system_app/features/patients/model/patient.model.dart';
+import 'package:med_system_app/features/patients/pages/add_patient_page.dart';
 import 'package:med_system_app/features/patients/pages/edit_patient_page.dart';
 import 'package:med_system_app/features/patients/store/patient.store.dart';
 
@@ -73,11 +74,15 @@ class _PatientPageState extends State<PatientPage> {
         image: null,
       ),
       floatingActionButton: isFab
-          ? buildFAB(context, () {})
+          ? buildFAB(context, () {
+              to(context, const AddPatientPage());
+            })
           : buildExtendedFAB(
               context,
               "Novo paciente",
-              () {},
+              () {
+                to(context, const AddPatientPage());
+              },
             ),
       body: RefreshIndicator(
         onRefresh: _refreshProcedures,
