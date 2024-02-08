@@ -29,6 +29,7 @@ class _EditPatientState extends State<EditPatientPage> {
   @override
   void initState() {
     super.initState();
+    editPatientStore.setNamePatient(editPatientStore.patientName ?? "");
   }
 
   @override
