@@ -34,4 +34,17 @@ final class _$HospitalService extends HospitalService {
     );
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<dynamic>> registerHospital(dynamic body) {
+    final Uri $url = Uri.parse('/api/v1/hospitals');
+    final $body = body;
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
 }
