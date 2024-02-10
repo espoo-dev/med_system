@@ -47,4 +47,20 @@ final class _$HospitalService extends HospitalService {
     );
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<dynamic>> editHospital(
+    dynamic id,
+    dynamic body,
+  ) {
+    final Uri $url = Uri.parse('/api/v1/hospitals/${id}');
+    final $body = body;
+    final Request $request = Request(
+      'PUT',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
 }

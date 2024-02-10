@@ -14,4 +14,7 @@ abstract class HospitalService extends ChopperService {
 
   @Post(path: 'api/v1/hospitals')
   Future<Response> registerHospital(@Body() dynamic body);
+
+  @Put(path: 'api/v1/hospitals/{id}')
+  Future<Response> editHospital(@Path('id') id, @Body() dynamic body);
 }
