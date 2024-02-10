@@ -8,6 +8,7 @@ import 'package:med_system_app/core/widgets/fab.widget.dart';
 import 'package:med_system_app/core/widgets/my_app_bar.widget.dart';
 import 'package:med_system_app/features/hospitals/model/hospital.model.dart';
 import 'package:med_system_app/features/hospitals/pages/add_hospital_page.dart';
+import 'package:med_system_app/features/hospitals/pages/edit_hospital_page.dart';
 import 'package:med_system_app/features/hospitals/store/hospital.store.dart';
 
 import '../../../core/utils/navigation_utils.dart';
@@ -116,7 +117,9 @@ class _HospitalPageState extends State<HospitalPage> {
                       if (index < _listHospital!.length) {
                         Hospital hospital = _listHospital![index];
                         return ListTile(
-                          onTap: () {},
+                          onTap: () {
+                            to(context, EditHospitaltPage(hospital: hospital));
+                          },
                           title: Text(
                             hospital.name ?? "",
                             style: const TextStyle(
