@@ -104,7 +104,7 @@ class _EditHospitalState extends State<EditHospitaltPage> {
                         height: 15,
                       ),
                       MyTextFormField(
-                          initialValue: widget.hospital.name,
+                          initialValue: widget.hospital.address,
                           fontSize: 16,
                           label: 'Nome do endereço',
                           placeholder: 'Digite o nome do endereço',
