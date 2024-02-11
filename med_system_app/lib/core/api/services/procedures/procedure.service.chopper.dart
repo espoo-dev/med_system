@@ -26,4 +26,17 @@ final class _$ProcedureService extends ProcedureService {
     );
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<dynamic>> registerProcedure(dynamic body) {
+    final Uri $url = Uri.parse('/api/v1/procedures');
+    final $body = body;
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
 }
