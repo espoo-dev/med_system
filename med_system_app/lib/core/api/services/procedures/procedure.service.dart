@@ -9,4 +9,7 @@ abstract class ProcedureService extends ChopperService {
       _$ProcedureService(client);
   @Get(path: 'api/v1/procedures')
   Future<Response> getAllProcedures();
+
+  @Post(path: 'api/v1/procedures')
+  Future<Response> registerProcedure(@Body() dynamic body);
 }

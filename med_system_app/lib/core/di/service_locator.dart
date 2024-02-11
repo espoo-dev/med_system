@@ -18,6 +18,7 @@ import 'package:med_system_app/features/patients/store/add_patient.store.dart';
 import 'package:med_system_app/features/patients/store/edit_patient.store.dart';
 import 'package:med_system_app/features/patients/store/patient.store.dart';
 import 'package:med_system_app/features/procedures/repository/procedure_repository.dart';
+import 'package:med_system_app/features/procedures/store/add_procedure.store.dart';
 import 'package:med_system_app/features/procedures/store/procedure.store.dart';
 import 'package:med_system_app/features/signin/repository/signin_repository.dart';
 import 'package:med_system_app/features/signin/store/signin.store.dart';
@@ -82,4 +83,6 @@ void setupServiceLocator() {
       () => AddHospitalStore(getIt<HospitalRepository>()));
   getIt.registerLazySingleton<EditHospitalStore>(
       () => EditHospitalStore(getIt<HospitalRepository>()));
+  getIt.registerLazySingleton<AddProcedureStore>(
+      () => AddProcedureStore(getIt<ProcedureRepository>()));
 }
