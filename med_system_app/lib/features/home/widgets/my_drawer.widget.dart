@@ -5,7 +5,7 @@ import 'package:med_system_app/core/theme/icons.dart';
 import 'package:med_system_app/features/health_insurances/pages/add_health_insurances_page.dart';
 import 'package:med_system_app/features/hospitals/pages/hospital_page.dart';
 import 'package:med_system_app/features/patients/pages/patient_page.dart';
-import 'package:med_system_app/features/procedures/pages/add_procedure_page.dart';
+import 'package:med_system_app/features/procedures/pages/procedures_page.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
@@ -98,7 +98,7 @@ class MyDrawer extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const AddProcedurePage()));
+                      builder: (context) => const ProcedurePage()));
             },
             title: const Text(
               "Procedimentos",
