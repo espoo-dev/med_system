@@ -9,6 +9,7 @@ import 'package:med_system_app/core/widgets/fab.widget.dart';
 import 'package:med_system_app/core/widgets/my_app_bar.widget.dart';
 import 'package:med_system_app/features/procedures/model/procedure.model.dart';
 import 'package:med_system_app/features/procedures/pages/add_procedure_page.dart';
+import 'package:med_system_app/features/procedures/pages/edit_procedure_page.dart';
 import 'package:med_system_app/features/procedures/store/procedure.store.dart';
 
 class ProcedurePage extends StatefulWidget {
@@ -115,7 +116,13 @@ class _ProcedurePageState extends State<ProcedurePage> {
                       if (index < _listProcedure!.length) {
                         Procedure procedure = _listProcedure![index];
                         return ListTile(
-                          onTap: () {},
+                          onTap: () {
+                            to(
+                                context,
+                                EditProcedurePage(
+                                  procedure: procedure,
+                                ));
+                          },
                           title: Text(
                             procedure.name ?? "",
                             style: const TextStyle(

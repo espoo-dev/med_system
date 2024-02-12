@@ -142,7 +142,6 @@ class _MyTextFormFieldState extends State<MyTextFormField> {
             labelText: widget.label,
             labelStyle: const TextStyle(
               fontSize: 16,
-              fontWeight: FontWeight.bold,
             ),
             fillColor: Theme.of(context).colorScheme.primary,
             enabledBorder: OutlineInputBorder(

@@ -51,4 +51,27 @@ class ProcedureRepository {
     }
     return null;
   }
+
+  Future<Result<Procedure>?> editProcedure(
+      int id, AddProcedureRequestModel addProcedureRequestModel) async {
+    try {
+      final response = await procedureService.editProcedure(
+          id, json.encode(addProcedureRequestModel.toJson()));
+
+      if (response.isSuccessful) {
+        Procedure? procedure = Procedure.fromJson(json.decode(response.body));
+
+        return Result.success(procedure);
+      } else if (response.statusCode == 422) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.unableToProcess()));
+      } else if (response.statusCode == 500) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.internalServerError()));
+      }
+    } catch (e) {
+      throw Result.failure(NetworkExceptions.getException(e));
+    }
+    return null;
+  }
 }

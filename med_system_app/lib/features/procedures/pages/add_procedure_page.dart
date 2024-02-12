@@ -8,7 +8,6 @@ import 'package:med_system_app/core/widgets/my_app_bar.widget.dart';
 import 'package:med_system_app/core/widgets/my_button_widget.dart';
 import 'package:med_system_app/core/widgets/my_text_form_field.widget.dart';
 import 'package:med_system_app/core/widgets/my_toast.widget.dart';
-import 'package:med_system_app/features/hospitals/pages/hospital_page.dart';
 import 'package:med_system_app/features/procedures/pages/procedures_page.dart';
 import 'package:med_system_app/features/procedures/store/add_procedure.store.dart';
 import 'package:mobx/mobx.dart';
@@ -67,7 +66,7 @@ class _AddProcedurePageState extends State<AddProcedurePage> {
       canPop: false,
       onPopInvoked: (bool didPop) {
         if (didPop) {}
-        to(context, const HospitalPage());
+        to(context, const ProcedurePage());
       },
       child: Scaffold(
           appBar: const MyAppBar(
@@ -142,7 +141,7 @@ class _AddProcedurePageState extends State<AddProcedurePage> {
                       ),
                       Center(child: Observer(builder: (_) {
                         return MyButtonWidget(
-                          text: 'Cadastrar paciente',
+                          text: 'Cadastrar procedimento',
                           isLoading: addProcedureStore.saveState ==
                               SaveProcedureState.loading,
                           disabledColor: Colors.grey,
