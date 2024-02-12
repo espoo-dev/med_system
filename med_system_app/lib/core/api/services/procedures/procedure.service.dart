@@ -13,4 +13,7 @@ abstract class ProcedureService extends ChopperService {
 
   @Post(path: 'api/v1/procedures')
   Future<Response> registerProcedure(@Body() dynamic body);
+
+  @Put(path: 'api/v1/procedures/{id}')
+  Future<Response> editProcedure(@Path('id') id, @Body() dynamic body);
 }
