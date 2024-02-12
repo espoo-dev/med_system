@@ -40,7 +40,7 @@ abstract class _PatientStoreBase with Store {
     }
     state = PatientState.loading;
     var resultPatient =
-        await _patientRepository.getAllPatients().asObservable();
+        await _patientRepository.getAllPatients(_page).asObservable();
     resultPatient?.when(success: (List<Patient>? listPatient) {
       patientList.addAll(listPatient!);
       state = PatientState.success;

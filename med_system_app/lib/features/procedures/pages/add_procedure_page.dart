@@ -42,7 +42,7 @@ class _AddProcedurePageState extends State<AddProcedurePage> {
             context,
             const SuccessPage(
               title: 'Procedimento criado com sucesso!',
-              goToPage: ProceduresPage(),
+              goToPage: ProcedurePage(),
             ));
       } else if (validationState == SaveProcedureState.error) {
         CustomToast.show(context,

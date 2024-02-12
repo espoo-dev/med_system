@@ -39,7 +39,7 @@ abstract class _HospitalStoreBase with Store {
       _page++;
     }
     var resultHospital =
-        await _hospitalRepository.getAllHospitals().asObservable();
+        await _hospitalRepository.getAllHospitals(_page).asObservable();
     resultHospital?.when(success: (List<Hospital>? listHospital) {
       hospitalList.addAll(listHospital!);
       state = HospitalState.success;

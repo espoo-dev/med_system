@@ -7,9 +7,13 @@ import 'package:med_system_app/features/procedures/model/add_procedure.model.dar
 import 'package:med_system_app/features/procedures/model/procedure.model.dart';
 
 class ProcedureRepository {
-  Future<Result<List<Procedure>?>?> getAllProcedures() async {
+  Future<Result<List<Procedure>?>?> getAllProcedures(
+      [int? page, int? perPage]) async {
     try {
-      final response = await procedureService.getAllProcedures();
+      page ??= 1;
+
+      perPage ??= 10;
+      final response = await procedureService.getAllProcedures(page, perPage);
       if (response.isSuccessful) {
         ProcedureModel? procedureModel =
             ProcedureModel.fromJson(json.decode(response.body));
