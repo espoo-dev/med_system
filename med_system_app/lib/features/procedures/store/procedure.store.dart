@@ -21,15 +21,25 @@ abstract class _ProcedureStoreBase with Store {
   String _errorMessage = "";
   get errorMessage => _errorMessage;
 
+  @observable
+  int _page = 1;
+  get page => _page;
+
   _ProcedureStoreBase(ProcedureRepository procedureRepository)
       : _procedureRepository = procedureRepository;
 
   @action
-  getAllProcedures() async {
-    procedureList.clear();
+  getAllProcedures({bool isRefresh = false}) async {
+    if (isRefresh) {
+      _page = 1;
+      procedureList.clear();
+    }
     state = ProcedureState.loading;
+    if (!isRefresh) {
+      _page++;
+    }
     var resultProcedures =
-        await _procedureRepository.getAllProcedures().asObservable();
+        await _procedureRepository.getAllProcedures(_page).asObservable();
     resultProcedures?.when(success: (List<Procedure>? listProcedures) {
       procedureList.addAll(listProcedures!);
       state = ProcedureState.success;
@@ -45,5 +55,6 @@ abstract class _ProcedureStoreBase with Store {
 
   dispose() {
     procedureList.clear();
+    _page = 1;
   }
 }

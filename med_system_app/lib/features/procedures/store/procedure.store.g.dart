@@ -41,12 +41,29 @@ mixin _$ProcedureStore on _ProcedureStoreBase, Store {
     });
   }
 
+  late final _$_pageAtom =
+      Atom(name: '_ProcedureStoreBase._page', context: context);
+
+  @override
+  int get _page {
+    _$_pageAtom.reportRead();
+    return super._page;
+  }
+
+  @override
+  set _page(int value) {
+    _$_pageAtom.reportWrite(value, super._page, () {
+      super._page = value;
+    });
+  }
+
   late final _$getAllProceduresAsyncAction =
       AsyncAction('_ProcedureStoreBase.getAllProcedures', context: context);
 
   @override
-  Future getAllProcedures() {
-    return _$getAllProceduresAsyncAction.run(() => super.getAllProcedures());
+  Future getAllProcedures({bool isRefresh = false}) {
+    return _$getAllProceduresAsyncAction
+        .run(() => super.getAllProcedures(isRefresh: isRefresh));
   }
 
   @override
