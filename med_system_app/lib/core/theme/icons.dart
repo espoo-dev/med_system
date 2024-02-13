@@ -14,6 +14,7 @@ const iconMenuPatient = "assets/images/svg/home/patient.svg";
 const iconMenuHospital = "assets/images/svg/home/hospital.svg";
 const iconMenuPlantao = "assets/images/svg/home/plantao.svg";
 const iconMenuConvenio = "assets/images/svg/home/convenio.svg";
+const iconMenuProcedure = "assets/images/svg/home/procedure.svg";
 
 //Login
 const iconHeaderLoginAsset = "assets/images/svg/login/header-login.svg";

@@ -63,7 +63,7 @@ class MyDrawer extends StatelessWidget {
                       builder: (context) => const HospitalPage()));
             },
             title: const Text(
-              "Hospital",
+              "Hospitais",
               style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
             ),
             leading: SvgPicture.asset(
@@ -105,7 +105,7 @@ class MyDrawer extends StatelessWidget {
               style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
             ),
             leading: SvgPicture.asset(
-              iconMenuConvenio,
+              iconMenuProcedure,
               width: 30,
               height: 30,
               color: Theme.of(context).colorScheme.primary,
