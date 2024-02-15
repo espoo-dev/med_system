@@ -8,7 +8,8 @@ abstract class HealthInsurancesService extends ChopperService {
   static HealthInsurancesService create([ChopperClient? client]) =>
       _$HealthInsurancesService(client);
   @Get(path: 'api/v1/health_insurances')
-  Future<Response> getAllHealthInsurances();
+  Future<Response> getAllHealthInsurances(
+      @Query('page') int page, @Query('per_page') int perPage);
 
   @Post(path: 'api/v1/health_insurances')
   Future<Response> registerHealthInsurances(@Body() dynamic body);
