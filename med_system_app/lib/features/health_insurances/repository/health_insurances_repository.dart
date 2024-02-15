@@ -7,9 +7,15 @@ import 'package:med_system_app/features/health_insurances/model/add_health_insur
 import 'package:med_system_app/features/health_insurances/model/health_insurances.model.dart';
 
 class HealthInsurancesRepository {
-  Future<Result<List<HealthInsurance>?>?> getAllInsurances() async {
+  Future<Result<List<HealthInsurance>?>?> getAllInsurances(
+      [int? page, int? perPage]) async {
     try {
-      final response = await healthInsurancesService.getAllHealthInsurances();
+      page ??= 1;
+
+      perPage ??= 10;
+
+      final response =
+          await healthInsurancesService.getAllHealthInsurances(page, perPage);
       if (response.isSuccessful) {
         HealthInsuranceModel? healthInsuranceModel =
             HealthInsuranceModel.fromJson(json.decode(response.body));
