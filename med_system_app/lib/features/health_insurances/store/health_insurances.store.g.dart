@@ -41,14 +41,30 @@ mixin _$HealthInsurancesStore on _HealthInsurancesStoreBase, Store {
     });
   }
 
+  late final _$_pageAtom =
+      Atom(name: '_HealthInsurancesStoreBase._page', context: context);
+
+  @override
+  int get _page {
+    _$_pageAtom.reportRead();
+    return super._page;
+  }
+
+  @override
+  set _page(int value) {
+    _$_pageAtom.reportWrite(value, super._page, () {
+      super._page = value;
+    });
+  }
+
   late final _$getAllHealthInsurancesAsyncAction = AsyncAction(
       '_HealthInsurancesStoreBase.getAllHealthInsurances',
       context: context);
 
   @override
-  Future getAllHealthInsurances() {
+  Future getAllHealthInsurances({bool isRefresh = false}) {
     return _$getAllHealthInsurancesAsyncAction
-        .run(() => super.getAllHealthInsurances());
+        .run(() => super.getAllHealthInsurances(isRefresh: isRefresh));
   }
 
   @override
