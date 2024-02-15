@@ -9,6 +9,7 @@ import 'package:med_system_app/core/widgets/fab.widget.dart';
 import 'package:med_system_app/core/widgets/my_app_bar.widget.dart';
 import 'package:med_system_app/features/health_insurances/model/health_insurances.model.dart';
 import 'package:med_system_app/features/health_insurances/pages/add_health_insurances_page.dart';
+import 'package:med_system_app/features/health_insurances/pages/edit_health_insurance_page.dart';
 import 'package:med_system_app/features/health_insurances/store/health_insurances.store.dart';
 
 class HealthInsurancePage extends StatefulWidget {
@@ -116,7 +117,12 @@ class _HealthInsurancePageState extends State<HealthInsurancePage> {
                         HealthInsurance healthInsurance =
                             _listHealthInsurance![index];
                         return ListTile(
-                          onTap: () {},
+                          onTap: () {
+                            to(
+                                context,
+                                EditHealthInsurancePage(
+                                    healthInsurance: healthInsurance));
+                          },
                           title: Text(
                             healthInsurance.name ?? "",
                             style: const TextStyle(

@@ -56,10 +56,10 @@ abstract class _AddHealthInsuranceStoreBase with Store {
     if (isValidData) {
       saveState = SaveHealthInsurancetState.loading;
       var result = await _healthInsurancesRepository
-          .registerPatient(AddHealthInsurancesRequestModel(
+          .registerHealthInsurance(AddHealthInsurancesRequestModel(
         name: _name,
       ));
-      result?.when(success: (patient) {
+      result?.when(success: (healthInsurance) {
         saveState = SaveHealthInsurancetState.success;
       }, failure: (NetworkExceptions error) {
         handleError(NetworkExceptions.getErrorMessage(error));
