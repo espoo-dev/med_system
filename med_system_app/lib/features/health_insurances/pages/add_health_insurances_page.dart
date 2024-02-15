@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
+import 'package:med_system_app/core/pages/success/success.page.dart';
 import 'package:med_system_app/core/utils/navigation_utils.dart';
 import 'package:med_system_app/core/widgets/my_app_bar.widget.dart';
 import 'package:med_system_app/core/widgets/my_button_widget.dart';
 import 'package:med_system_app/core/widgets/my_text_form_field.widget.dart';
+import 'package:med_system_app/core/widgets/my_toast.widget.dart';
+import 'package:med_system_app/features/health_insurances/store/add_health_insurances.store.dart';
+import 'package:med_system_app/features/home/pages/home_page.dart';
 import 'package:med_system_app/features/hospitals/pages/hospital_page.dart';
+import 'package:mobx/mobx.dart';
 
 class AddHealthInsurances extends StatefulWidget {
   const AddHealthInsurances({super.key});
@@ -14,11 +20,35 @@ class AddHealthInsurances extends StatefulWidget {
 }
 
 class _AddHealthInsurancesState extends State<AddHealthInsurances> {
+  final addHealthInsuranceStore = GetIt.I.get<AddHealthInsuranceStore>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final List<ReactionDisposer> _disposers = [];
 
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _disposers.add(reaction<SaveHealthInsurancetState>(
+        (_) => addHealthInsuranceStore.saveState, (validationState) {
+      if (validationState == SaveHealthInsurancetState.success) {
+        to(
+            context,
+            const SuccessPage(
+              title: 'Convênio criado com sucesso!',
+              goToPage: HomePage(),
+            ));
+      } else if (validationState == SaveHealthInsurancetState.error) {
+        CustomToast.show(context,
+            type: ToastType.error,
+            title: "Cadastrar novo convênio",
+            description: "Por favor, preencha os campos.");
+      }
+    }));
   }
 
   @override
@@ -57,6 +87,7 @@ class _AddHealthInsurancesState extends State<AddHealthInsurances> {
                         label: 'Nome do convênio',
                         placeholder: 'Digite o nome do convênio',
                         inputType: TextInputType.text,
+                        onChanged: addHealthInsuranceStore.setName,
                         validators: const {'required': true, 'minLength': 3},
                       ),
                       const SizedBox(
@@ -64,9 +95,19 @@ class _AddHealthInsurancesState extends State<AddHealthInsurances> {
                       ),
                       Center(child: Observer(builder: (_) {
                         return MyButtonWidget(
-                          text: 'Cadastrar Convênio',
+                          text: 'Cadastrar convênio',
+                          isLoading: addHealthInsuranceStore.saveState ==
+                              SaveHealthInsurancetState.loading,
                           disabledColor: Colors.grey,
-                          onTap: () {},
+                          onTap: addHealthInsuranceStore.isValidData
+                              ? () async {
+                                  _formKey.currentState?.save();
+                                  if (_formKey.currentState!.validate()) {
+                                    addHealthInsuranceStore
+                                        .createHealthInsurance();
+                                  }
+                                }
+                              : null,
                         );
                       })),
                       const SizedBox(
