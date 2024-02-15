@@ -7,6 +7,7 @@ import 'package:med_system_app/features/event_procedures/store/edit_event_proced
 import 'package:med_system_app/features/event_procedures/store/event_procedure.store.dart';
 import 'package:med_system_app/features/health_insurances/repository/health_insurances_repository.dart';
 import 'package:med_system_app/features/health_insurances/store/add_health_insurances.store.dart';
+import 'package:med_system_app/features/health_insurances/store/edit_health_insurance.store.dart';
 import 'package:med_system_app/features/health_insurances/store/health_insurances.store.dart';
 import 'package:med_system_app/features/home/repository/home_repository.dart';
 import 'package:med_system_app/features/home/store/home.store.dart';
@@ -92,4 +93,6 @@ void setupServiceLocator() {
 
   getIt.registerLazySingleton<AddHealthInsuranceStore>(
       () => AddHealthInsuranceStore(getIt<HealthInsurancesRepository>()));
+  getIt.registerLazySingleton<EditHealthInsuranceStore>(
+      () => EditHealthInsuranceStore(getIt<HealthInsurancesRepository>()));
 }

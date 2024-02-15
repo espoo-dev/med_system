@@ -31,17 +31,42 @@ class HealthInsurancesRepository {
     return null;
   }
 
-  Future<Result<HealthInsurance>?> registerPatient(
+  Future<Result<HealthInsurance>?> registerHealthInsurance(
       AddHealthInsurancesRequestModel addHealthInsurancesRequestModel) async {
     try {
       final response = await healthInsurancesService.registerHealthInsurances(
           json.encode(addHealthInsurancesRequestModel.toJson()));
 
       if (response.isSuccessful) {
-        HealthInsurance? patient =
+        HealthInsurance? healthInsurance =
             HealthInsurance.fromJson(json.decode(response.body));
 
-        return Result.success(patient);
+        return Result.success(healthInsurance);
+      } else if (response.statusCode == 422) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.unableToProcess()));
+      } else if (response.statusCode == 500) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.internalServerError()));
+      }
+    } catch (e) {
+      throw Result.failure(NetworkExceptions.getException(e));
+    }
+    return null;
+  }
+
+  Future<Result<HealthInsurance>?> editHealthInsurance(int healthInsuranceId,
+      AddHealthInsurancesRequestModel addHealthInsurancesRequestModel) async {
+    try {
+      final response = await healthInsurancesService.editHealthInsurance(
+          healthInsuranceId,
+          json.encode(addHealthInsurancesRequestModel.toJson()));
+
+      if (response.isSuccessful) {
+        HealthInsurance? healthInsurance =
+            HealthInsurance.fromJson(json.decode(response.body));
+
+        return Result.success(healthInsurance);
       } else if (response.statusCode == 422) {
         return Result.failure(NetworkExceptions.getException(
             const NetworkExceptions.unableToProcess()));
