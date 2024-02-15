@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:med_system_app/core/theme/icons.dart';
-import 'package:med_system_app/features/health_insurances/pages/add_health_insurances_page.dart';
+import 'package:med_system_app/features/health_insurances/pages/health_insurances_page.dart';
 import 'package:med_system_app/features/hospitals/pages/hospital_page.dart';
 import 'package:med_system_app/features/patients/pages/patient_page.dart';
 import 'package:med_system_app/features/procedures/pages/procedures_page.dart';
@@ -79,7 +79,7 @@ class MyDrawer extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const AddHealthInsurances()));
+                      builder: (context) => const HealthInsurancePage()));
             },
             title: const Text(
               "Convênios",

@@ -23,14 +23,24 @@ abstract class _HealthInsurancesStoreBase with Store {
   String _errorMessage = "";
   get errorMessage => _errorMessage;
 
+  @observable
+  int _page = 1;
+  get page => _page;
+
   _HealthInsurancesStoreBase(
       HealthInsurancesRepository healthInsurancesRepository)
       : _healthInsurancesRepository = healthInsurancesRepository;
 
   @action
-  getAllHealthInsurances() async {
-    healthInsuranceList.clear();
+  getAllHealthInsurances({bool isRefresh = false}) async {
+    if (isRefresh) {
+      _page = 1;
+      healthInsuranceList.clear();
+    }
     state = HealthInsuranceState.loading;
+    if (!isRefresh) {
+      _page++;
+    }
     var resultHealthInsurances =
         await _healthInsurancesRepository.getAllInsurances().asObservable();
     resultHealthInsurances?.when(
@@ -49,5 +59,6 @@ abstract class _HealthInsurancesStoreBase with Store {
 
   dispose() {
     healthInsuranceList.clear();
+    _page = 1;
   }
 }
