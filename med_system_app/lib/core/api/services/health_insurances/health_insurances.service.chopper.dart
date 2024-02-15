@@ -47,4 +47,20 @@ final class _$HealthInsurancesService extends HealthInsurancesService {
     );
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<dynamic>> editHealthInsurance(
+    dynamic id,
+    dynamic body,
+  ) {
+    final Uri $url = Uri.parse('/api/v1/health_insurances/${id}');
+    final $body = body;
+    final Request $request = Request(
+      'PUT',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
 }

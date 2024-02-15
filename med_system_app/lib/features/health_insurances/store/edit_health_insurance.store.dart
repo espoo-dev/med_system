@@ -4,21 +4,21 @@ import 'package:med_system_app/features/health_insurances/model/add_health_insur
 import 'package:med_system_app/features/health_insurances/repository/health_insurances_repository.dart';
 import 'package:mobx/mobx.dart';
 
-part 'add_health_insurances.store.g.dart';
+part 'edit_health_insurance.store.g.dart';
 
 // ignore: library_private_types_in_public_api
-class AddHealthInsuranceStore = _AddHealthInsuranceStoreBase
-    with _$AddHealthInsuranceStore;
+class EditHealthInsuranceStore = _EditHealthInsuranceStoreBase
+    with _$EditHealthInsuranceStore;
 
 enum SaveHealthInsurancetState { idle, success, error, loading }
 
-abstract class _AddHealthInsuranceStoreBase with Store {
+abstract class _EditHealthInsuranceStoreBase with Store {
   final HealthInsurancesRepository _healthInsurancesRepository;
 
   @observable
   SaveHealthInsurancetState saveState = SaveHealthInsurancetState.idle;
 
-  _AddHealthInsuranceStoreBase(
+  _EditHealthInsuranceStoreBase(
     this._healthInsurancesRepository,
   );
 
@@ -52,13 +52,14 @@ abstract class _AddHealthInsuranceStoreBase with Store {
   }
 
   @action
-  createHealthInsurance() async {
+  editHealthInsurance(int healthInsuranceId) async {
     if (isValidData) {
       saveState = SaveHealthInsurancetState.loading;
-      var result = await _healthInsurancesRepository
-          .registerHealthInsurance(AddHealthInsurancesRequestModel(
-        name: _name,
-      ));
+      var result = await _healthInsurancesRepository.editHealthInsurance(
+          healthInsuranceId,
+          AddHealthInsurancesRequestModel(
+            name: _name,
+          ));
       result?.when(success: (healthInsurance) {
         saveState = SaveHealthInsurancetState.success;
       }, failure: (NetworkExceptions error) {
