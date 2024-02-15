@@ -9,7 +9,6 @@ import 'package:med_system_app/core/widgets/my_text_form_field.widget.dart';
 import 'package:med_system_app/core/widgets/my_toast.widget.dart';
 import 'package:med_system_app/features/health_insurances/pages/health_insurances_page.dart';
 import 'package:med_system_app/features/health_insurances/store/add_health_insurances.store.dart';
-import 'package:med_system_app/features/home/pages/home_page.dart';
 import 'package:mobx/mobx.dart';
 
 class AddHealthInsurances extends StatefulWidget {
