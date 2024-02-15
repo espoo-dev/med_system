@@ -26,4 +26,17 @@ final class _$HealthInsurancesService extends HealthInsurancesService {
     );
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<dynamic>> registerHealthInsurances(dynamic body) {
+    final Uri $url = Uri.parse('/api/v1/health_insurances');
+    final $body = body;
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
 }

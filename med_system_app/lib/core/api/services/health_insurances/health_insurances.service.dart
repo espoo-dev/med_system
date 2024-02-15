@@ -9,4 +9,7 @@ abstract class HealthInsurancesService extends ChopperService {
       _$HealthInsurancesService(client);
   @Get(path: 'api/v1/health_insurances')
   Future<Response> getAllHealthInsurances();
+
+  @Post(path: 'api/v1/health_insurances')
+  Future<Response> registerHealthInsurances(@Body() dynamic body);
 }
