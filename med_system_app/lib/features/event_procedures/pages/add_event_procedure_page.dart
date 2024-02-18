@@ -130,7 +130,7 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                       ),
                       MyTextFormField(
                           fontSize: 16,
-                          label: 'Número de serviço paciente',
+                          label: 'Número de registro',
                           placeholder: 'Digite número de serviço paciente.',
                           inputType: TextInputType.text,
                           validators: const {'required': true, 'minLength': 4},
