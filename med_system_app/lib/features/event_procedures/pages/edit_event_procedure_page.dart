@@ -120,129 +120,138 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
               key: _formKey,
               child: Column(
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      DropdownSearchPatients(
-                          patientList: editEventProcedureStore.patientList,
-                          selectedPatient: editEventProcedureStore.findPatient(
-                              widget.eventProcedures.patient ?? "")!,
-                          onChanged: (Patient? patient) =>
-                              editEventProcedureStore
-                                  .setPatientId(patient?.id ?? 0)),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      MyTextFormField(
-                          initialValue:
-                              widget.eventProcedures.patientServiceNumber,
-                          fontSize: 16,
-                          label: 'Número de serviço paciente',
-                          placeholder: 'Digite número de serviço paciente.',
-                          inputType: TextInputType.text,
-                          validators: const {'required': true, 'minLength': 4},
-                          onChanged:
-                              editEventProcedureStore.setPatientServiceNumber),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      MyInputDate(
-                        onChanged: editEventProcedureStore.setCreatedDate,
-                        label: 'Data',
-                        textColor: Theme.of(context).colorScheme.primary,
-                        selectedDate: convertStringToDate(
-                            widget.eventProcedures.date ?? ""),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      MyInputDate(
-                        onChanged: editEventProcedureStore.setPaydAt,
-                        label: 'Data Pagamento',
-                        textColor: Theme.of(context).colorScheme.primary,
-                        selectedDate: convertStringToDate(
-                            widget.eventProcedures.paydAt ?? ""),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      DropdownSearchProcedures(
-                        procedureList: editEventProcedureStore.procedureList,
-                        selectedProcedure:
-                            editEventProcedureStore.findProcedure(
-                                widget.eventProcedures.procedure ?? "")!,
-                        onChanged: (Procedure? procedure) =>
-                            editEventProcedureStore
-                                .setProcedureId(procedure?.id ?? 0),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      DropdownSearchHospitals(
-                        hospitalList: editEventProcedureStore.hospitalList,
-                        selectedHospital: editEventProcedureStore.findHospital(
-                            widget.eventProcedures.hospital ?? "")!,
-                        onChanged: (Hospital? hospital) =>
-                            editEventProcedureStore
-                                .setHospitalId(hospital?.id ?? 0),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      DropdownHealthInsurances(
-                        healthInsuranceList:
-                            editEventProcedureStore.healthInsuranceList,
-                        selectedHealthInsurance:
-                            editEventProcedureStore.findHealthInsurance(
-                                widget.eventProcedures.healthInsurance ?? "")!,
-                        onChanged: (HealthInsurance? healthInsurance) =>
-                            editEventProcedureStore
-                                .setHealthInsuranceId(healthInsurance?.id ?? 0),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      const Text("Acomodação",
-                          style: TextStyle(
+                  Observer(builder: (_) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        DropdownSearchPatients(
+                            patientList: editEventProcedureStore.patientList,
+                            selectedPatient:
+                                editEventProcedureStore.findPatient(
+                                    widget.eventProcedures.patient ?? "")!,
+                            onChanged: (Patient? patient) =>
+                                editEventProcedureStore
+                                    .setPatientId(patient?.id ?? 0)),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        MyTextFormField(
+                            initialValue:
+                                widget.eventProcedures.patientServiceNumber,
                             fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      MyRadioGroup(
-                          initialValue: widget.eventProcedures.roomType,
-                          onValueChanged: (value) {
-                            editEventProcedureStore.setAccommodation(value);
-                          }),
-                      CustomSwitch(
-                        initialValue: widget.eventProcedures.urgency ?? false,
-                        onChanged: (value) {
-                          editEventProcedureStore.setUrgency(value);
-                        },
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Center(child: Observer(builder: (_) {
-                        return MyButtonWidget(
-                          text: 'Editar evento',
-                          isLoading: editEventProcedureStore.saveState ==
-                              SaveEventProcedureState.loading,
-                          disabledColor: Colors.grey,
-                          onTap: editEventProcedureStore.isValidData
-                              ? () async {
-                                  _formKey.currentState?.save();
-                                  if (_formKey.currentState!.validate()) {
-                                    editEventProcedureStore.editEventProcedure(
-                                        widget.eventProcedures.id ?? 0);
+                            label: 'Número de serviço paciente',
+                            placeholder: 'Digite número de serviço paciente.',
+                            inputType: TextInputType.text,
+                            validators: const {
+                              'required': true,
+                              'minLength': 4
+                            },
+                            onChanged: editEventProcedureStore
+                                .setPatientServiceNumber),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        MyInputDate(
+                          onChanged: editEventProcedureStore.setCreatedDate,
+                          label: 'Data',
+                          textColor: Theme.of(context).colorScheme.primary,
+                          selectedDate: convertStringToDate(
+                              widget.eventProcedures.date ?? ""),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        MyInputDate(
+                          onChanged: editEventProcedureStore.setPaydAt,
+                          label: 'Data Pagamento',
+                          textColor: Theme.of(context).colorScheme.primary,
+                          selectedDate: convertStringToDate(
+                              widget.eventProcedures.paydAt ?? ""),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        DropdownSearchProcedures(
+                          procedureList: editEventProcedureStore.procedureList,
+                          selectedProcedure:
+                              editEventProcedureStore.findProcedure(
+                                  widget.eventProcedures.procedure ?? "")!,
+                          onChanged: (Procedure? procedure) =>
+                              editEventProcedureStore
+                                  .setProcedureId(procedure?.id ?? 0),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        DropdownSearchHospitals(
+                          hospitalList: editEventProcedureStore.hospitalList,
+                          selectedHospital:
+                              editEventProcedureStore.findHospital(
+                                  widget.eventProcedures.hospital ?? "")!,
+                          onChanged: (Hospital? hospital) =>
+                              editEventProcedureStore
+                                  .setHospitalId(hospital?.id ?? 0),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        DropdownHealthInsurances(
+                          healthInsuranceList:
+                              editEventProcedureStore.healthInsuranceList,
+                          selectedHealthInsurance:
+                              editEventProcedureStore.findHealthInsurance(
+                                  widget.eventProcedures.healthInsurance ??
+                                      "")!,
+                          onChanged: (HealthInsurance? healthInsurance) =>
+                              editEventProcedureStore.setHealthInsuranceId(
+                                  healthInsurance?.id ?? 0),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        const Text("Acomodação",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        MyRadioGroup(
+                            initialValue: widget.eventProcedures.roomType,
+                            onValueChanged: (value) {
+                              editEventProcedureStore.setAccommodation(value);
+                            }),
+                        CustomSwitch(
+                          initialValue: widget.eventProcedures.urgency ?? false,
+                          onChanged: (value) {
+                            editEventProcedureStore.setUrgency(value);
+                          },
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Center(child: Observer(builder: (_) {
+                          return MyButtonWidget(
+                            text: 'Editar evento',
+                            isLoading: editEventProcedureStore.saveState ==
+                                SaveEventProcedureState.loading,
+                            disabledColor: Colors.grey,
+                            onTap: editEventProcedureStore.isValidData
+                                ? () async {
+                                    _formKey.currentState?.save();
+                                    if (_formKey.currentState!.validate()) {
+                                      editEventProcedureStore
+                                          .editEventProcedure(
+                                              widget.eventProcedures.id ?? 0);
+                                    }
                                   }
-                                }
-                              : null,
-                        );
-                      })),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                    ],
-                  ),
+                                : null,
+                          );
+                        })),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                      ],
+                    );
+                  })
                 ],
               ),
             ),

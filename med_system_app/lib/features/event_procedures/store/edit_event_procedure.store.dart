@@ -363,7 +363,7 @@ abstract class _EditEventProcedureStoreBase with Store {
         return procedure;
       }
     }
-    return null;
+    return procedureList.first;
   }
 
   dispose() {
