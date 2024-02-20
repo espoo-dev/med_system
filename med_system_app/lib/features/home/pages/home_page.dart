@@ -137,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                         height: 24,
                       ),
                       onPressed: () {
-                        to(context, const PatientPage());
+                        push(context, const PatientPage());
                       },
                     ),
                   ])),
