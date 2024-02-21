@@ -13,18 +13,20 @@ Future<int?> showDialogMonths(BuildContext context) async {
 }
 
 Widget _buildMonthList(BuildContext context) {
-  return Column(
-    mainAxisSize: MainAxisSize.min,
-    children: List.generate(12, (index) {
-      final monthNumber = index + 1;
-      final monthName = _getMonthName(monthNumber);
-      return ListTile(
-        title: Text(monthName),
-        onTap: () {
-          Navigator.pop(context, monthNumber);
-        },
-      );
-    }),
+  return SingleChildScrollView(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(12, (index) {
+        final monthNumber = index + 1;
+        final monthName = _getMonthName(monthNumber);
+        return ListTile(
+          title: Text(monthName),
+          onTap: () {
+            Navigator.pop(context, monthNumber);
+          },
+        );
+      }),
+    ),
   );
 }
 

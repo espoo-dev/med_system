@@ -60,7 +60,7 @@ class _HorizontalMenuWidgetState extends State<HorizontalMenuWidget> {
                                 item.label,
                                 style: const TextStyle(
                                     color: Colors.white,
-                                    fontSize: 16,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
