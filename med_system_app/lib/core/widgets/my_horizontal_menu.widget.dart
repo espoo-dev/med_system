@@ -28,9 +28,10 @@ class _HorizontalMenuWidgetState extends State<HorizontalMenuWidget> {
             itemBuilder: (BuildContext context, int index) {
               MenuItemModel item = widget.menuItems[index];
               return Container(
-                width: MediaQuery.of(context).size.width * 0.28,
+                width: MediaQuery.of(context).size.width * 0.35,
                 height: 150,
-                margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                margin: EdgeInsets.fromLTRB(
+                    20, 0, index == widget.menuItems.length - 1 ? 20 : 0, 0),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: item.backgroundColor,
