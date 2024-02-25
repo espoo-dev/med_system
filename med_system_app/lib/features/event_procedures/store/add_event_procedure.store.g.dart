@@ -195,6 +195,22 @@ mixin _$AddEventProcedureStore on _AddEventProcedureStoreBase, Store {
     });
   }
 
+  late final _$_patientAtom =
+      Atom(name: '_AddEventProcedureStoreBase._patient', context: context);
+
+  @override
+  Patient? get _patient {
+    _$_patientAtom.reportRead();
+    return super._patient;
+  }
+
+  @override
+  set _patient(Patient? value) {
+    _$_patientAtom.reportWrite(value, super._patient, () {
+      super._patient = value;
+    });
+  }
+
   late final _$_paydAtAtom =
       Atom(name: '_AddEventProcedureStoreBase._paydAt', context: context);
 
@@ -353,6 +369,17 @@ mixin _$AddEventProcedureStore on _AddEventProcedureStoreBase, Store {
         .startAction(name: '_AddEventProcedureStoreBase.setCreatedDate');
     try {
       return super.setCreatedDate(createdDate);
+    } finally {
+      _$_AddEventProcedureStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setPatient(Patient patient) {
+    final _$actionInfo = _$_AddEventProcedureStoreBaseActionController
+        .startAction(name: '_AddEventProcedureStoreBase.setPatient');
+    try {
+      return super.setPatient(patient);
     } finally {
       _$_AddEventProcedureStoreBaseActionController.endAction(_$actionInfo);
     }
