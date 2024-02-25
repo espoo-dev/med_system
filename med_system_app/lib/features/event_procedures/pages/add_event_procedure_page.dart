@@ -120,11 +120,9 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                     children: [
                       DropdownSearchPatients(
                           patientList: addEventProcedureStore.patientList,
-                          selectedPatient:
-                              addEventProcedureStore.patientList.first,
+                          selectedPatient: addEventProcedureStore.patient!,
                           onChanged: (Patient? patient) =>
-                              addEventProcedureStore
-                                  .setPatientId(patient?.id ?? 0)),
+                              addEventProcedureStore.setPatient(patient!)),
                       const SizedBox(
                         height: 15,
                       ),

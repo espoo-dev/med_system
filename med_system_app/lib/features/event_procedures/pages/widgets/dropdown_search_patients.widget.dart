@@ -1,5 +1,6 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:med_system_app/core/widgets/my_button_widget.dart';
 import 'package:med_system_app/features/patients/model/patient.model.dart';
 
 class DropdownSearchPatients extends StatefulWidget {
@@ -65,13 +66,27 @@ class _DropdownSearchPatientsState extends State<DropdownSearchPatients> {
           ),
         ),
         emptyBuilder: (context, text) {
-          return const Align(
+          return Align(
             alignment: Alignment.topCenter,
-            child: Text(
-              "Paciente não encontrado",
-              style: TextStyle(
-                color: Colors.black,
-              ),
+            child: Column(
+              children: [
+                const Text(
+                  "Paciente não encontrado",
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: MyButtonWidget(
+                    text: "Adicionar paciente",
+                    onTap: () {
+                      widget.onChanged(Patient(id: null, name: text));
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ],
             ),
           );
         },
