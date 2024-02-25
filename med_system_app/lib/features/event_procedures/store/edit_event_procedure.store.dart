@@ -231,7 +231,7 @@ abstract class _EditEventProcedureStoreBase with Store {
               eventProcedureId,
               AddEventProcedureRequestModel(
                   procedureId: _procedureId,
-                  patientId: _patientId,
+                  patientAttributes: PatientAttributes(id: _patientId),
                   hospitalId: _hospitalId,
                   healthInsuranceId: _healthInsuranceId,
                   patientServiceNumber: _patientServiceNumber,
