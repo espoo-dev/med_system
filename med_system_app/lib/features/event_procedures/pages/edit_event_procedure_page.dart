@@ -130,8 +130,7 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                                 editEventProcedureStore.findPatient(
                                     widget.eventProcedures.patient ?? "")!,
                             onChanged: (Patient? patient) =>
-                                editEventProcedureStore
-                                    .setPatientId(patient?.id ?? 0)),
+                                editEventProcedureStore.setPatient(patient!)),
                         const SizedBox(
                           height: 15,
                         ),
