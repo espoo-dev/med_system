@@ -212,6 +212,22 @@ mixin _$EditEventProcedureStore on _EditEventProcedureStoreBase, Store {
     });
   }
 
+  late final _$_patientAtom =
+      Atom(name: '_EditEventProcedureStoreBase._patient', context: context);
+
+  @override
+  Patient? get _patient {
+    _$_patientAtom.reportRead();
+    return super._patient;
+  }
+
+  @override
+  set _patient(Patient? value) {
+    _$_patientAtom.reportWrite(value, super._patient, () {
+      super._patient = value;
+    });
+  }
+
   late final _$editEventProcedureAsyncAction = AsyncAction(
       '_EditEventProcedureStoreBase.editEventProcedure',
       context: context);
@@ -366,6 +382,17 @@ mixin _$EditEventProcedureStore on _EditEventProcedureStoreBase, Store {
         .startAction(name: '_EditEventProcedureStoreBase.setPaydAt');
     try {
       return super.setPaydAt(paydAt);
+    } finally {
+      _$_EditEventProcedureStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setPatient(Patient patient) {
+    final _$actionInfo = _$_EditEventProcedureStoreBaseActionController
+        .startAction(name: '_EditEventProcedureStoreBase.setPatient');
+    try {
+      return super.setPatient(patient);
     } finally {
       _$_EditEventProcedureStoreBaseActionController.endAction(_$actionInfo);
     }

@@ -63,8 +63,8 @@ abstract class _EditEventProcedureStoreBase with Store {
     _patientId = patientId;
   }
 
-  bool validatePatientId() {
-    if (_patientId == 0) {
+  bool validatePatient() {
+    if (_patient == null) {
       return false;
     }
     return true;
@@ -185,6 +185,20 @@ abstract class _EditEventProcedureStoreBase with Store {
     _paydAt = paydAt;
   }
 
+  @observable
+  Patient? _patient;
+
+  Patient? get patient => _patient;
+
+  @action
+  void setPatient(Patient patient) {
+    // ignore: unnecessary_null_in_if_null_operators
+    _patient = Patient(
+        // ignore: unnecessary_null_in_if_null_operators
+        id: patient.id ?? null,
+        name: patient.name ?? _patient?.name ?? "");
+  }
+
   @computed
   bool get isValidData {
     bool isValid = true;
@@ -199,7 +213,7 @@ abstract class _EditEventProcedureStoreBase with Store {
       isValid = false;
     }
 
-    if (!validatePatientId()) {
+    if (!validatePatient()) {
       debugPrint('Patient ID is not valid');
       isValid = false;
     }
@@ -231,7 +245,8 @@ abstract class _EditEventProcedureStoreBase with Store {
               eventProcedureId,
               AddEventProcedureRequestModel(
                   procedureId: _procedureId,
-                  patientAttributes: PatientAttributes(id: _patientId),
+                  patientAttributes:
+                      PatientAttributes(id: _patient?.id, name: _patient?.name),
                   hospitalId: _hospitalId,
                   healthInsuranceId: _healthInsuranceId,
                   patientServiceNumber: _patientServiceNumber,
@@ -291,6 +306,7 @@ abstract class _EditEventProcedureStoreBase with Store {
         await _patientRepository.getAllPatients().asObservable();
     resultPatient?.when(success: (List<Patient>? listPatient) {
       patientList.addAll(listPatient!);
+      setPatient(patientList.first);
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));
     });
@@ -379,6 +395,7 @@ abstract class _EditEventProcedureStoreBase with Store {
     _accommodation = "ward";
     _createdDate = "";
     _paydAt = "";
+    _patient = null;
     saveState = SaveEventProcedureState.idle;
     state = EditEventProcedureState.idle;
   }
