@@ -126,7 +126,7 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                       children: [
                         DropdownSearchPatients(
                             patientList: editEventProcedureStore.patientList,
-                            selectedPatient:
+                            selectedPatient: editEventProcedureStore.patient ??
                                 editEventProcedureStore.findPatient(
                                     widget.eventProcedures.patient ?? "")!,
                             onChanged: (Patient? patient) =>
