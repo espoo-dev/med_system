@@ -79,6 +79,7 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
+      canPop: false,
       onPopInvoked: (bool didPop) {
         if (didPop) {}
         to(context, const EventProceduresPage());
