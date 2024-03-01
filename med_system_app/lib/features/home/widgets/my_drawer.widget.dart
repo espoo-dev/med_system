@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get_it/get_it.dart';
 import 'package:med_system_app/core/theme/icons.dart';
+import 'package:med_system_app/core/utils/navigation_utils.dart';
 import 'package:med_system_app/features/health_insurances/pages/health_insurances_page.dart';
 import 'package:med_system_app/features/hospitals/pages/hospital_page.dart';
 import 'package:med_system_app/features/patients/pages/patient_page.dart';
 import 'package:med_system_app/features/procedures/pages/procedures_page.dart';
+import 'package:med_system_app/features/signin/page/signin.page.dart';
+import 'package:med_system_app/features/signin/store/signin.store.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final signInStore = GetIt.I.get<SignInStore>();
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -113,7 +118,8 @@ class MyDrawer extends StatelessWidget {
           ),
           ListTile(
             onTap: () {
-              SystemNavigator.pop();
+              signInStore.forceLogout();
+              to(context, const SignInPage());
             },
             title: const Text(
               "Sair",
