@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:med_system_app/core/utils/navigation_utils.dart';
-import 'package:med_system_app/core/utils/ui.dart';
 import 'package:med_system_app/core/widgets/error.widget.dart';
 import 'package:med_system_app/core/widgets/ext_fab.widget.dart';
 import 'package:med_system_app/core/widgets/fab.widget.dart';
@@ -130,26 +129,31 @@ class _ProcedurePageState extends State<ProcedurePage> {
                             ),
                           ),
                           subtitle: Text(procedure.description ?? ""),
-                          trailing: IconButton(
-                            onPressed: () {
-                              showAlert(
-                                title: 'Excluir Procedimento',
-                                content:
-                                    'Tem certeza que deseja excluir este procedimento?',
-                                textYes: 'Sim',
-                                textNo: 'Não',
-                                onPressedConfirm: () {},
-                                onPressedCancel: () {
-                                  Navigator.pop(context);
-                                },
-                                context: context,
-                              );
-                            },
-                            icon: Icon(
-                              Icons.delete,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
+                          trailing: Icon(
+                            size: 10.0,
+                            Icons.arrow_forward_ios,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
+                          // trailing: IconButton(
+                          //   onPressed: () {
+                          //     showAlert(
+                          //       title: 'Excluir Procedimento',
+                          //       content:
+                          //           'Tem certeza que deseja excluir este procedimento?',
+                          //       textYes: 'Sim',
+                          //       textNo: 'Não',
+                          //       onPressedConfirm: () {},
+                          //       onPressedCancel: () {
+                          //         Navigator.pop(context);
+                          //       },
+                          //       context: context,
+                          //     );
+                          //   },
+                          //   icon: Icon(
+                          //     Icons.delete,
+                          //     color: Theme.of(context).colorScheme.primary,
+                          //   ),
+                          // ),
                         );
                       } else {
                         return const Center(child: CircularProgressIndicator());

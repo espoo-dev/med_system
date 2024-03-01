@@ -79,7 +79,10 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: true,
+      onPopInvoked: (bool didPop) {
+        if (didPop) {}
+        to(context, const EventProceduresPage());
+      },
       child: Scaffold(
         appBar: MyAppBar(
           title: 'Editar evento procedimento',
