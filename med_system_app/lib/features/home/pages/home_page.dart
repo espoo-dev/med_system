@@ -10,6 +10,7 @@ import 'package:med_system_app/core/widgets/error.widget.dart';
 import 'package:med_system_app/core/widgets/my_horizontal_menu.widget.dart';
 import 'package:med_system_app/features/event_procedures/model/event_procedure.model.dart';
 import 'package:med_system_app/features/event_procedures/pages/add_event_procedure_page.dart';
+import 'package:med_system_app/features/event_procedures/pages/event_procedures_page.dart';
 import 'package:med_system_app/features/home/model/menu_home.model.dart';
 import 'package:med_system_app/features/home/store/home.store.dart';
 import 'package:med_system_app/features/home/widgets/build_header.widget.dart';
@@ -128,7 +129,9 @@ class _HomePageState extends State<HomePage> {
                         width: 24,
                         height: 24,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        push(context, const EventProceduresPage());
+                      },
                     ),
                     IconButton(
                       icon: SvgPicture.asset(

@@ -20,23 +20,23 @@ class MyDrawer extends StatelessWidget {
             accountName: Text("Olá"),
             accountEmail: Text("Bem-vindo(a)"),
           ),
-          ListTile(
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const PatientPage()));
-            },
-            title: const Text(
-              "Plantões",
-              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-            ),
-            leading: SvgPicture.asset(
-              iconMenuPlantao,
-              width: 30,
-              height: 30,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
+          // ListTile(
+          //   onTap: () {
+          //     Navigator.pop(context);
+          //     Navigator.push(context,
+          //         MaterialPageRoute(builder: (context) => const PatientPage()));
+          //   },
+          //   title: const Text(
+          //     "Plantões",
+          //     style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+          //   ),
+          //   leading: SvgPicture.asset(
+          //     iconMenuPlantao,
+          //     width: 30,
+          //     height: 30,
+          //     color: Theme.of(context).colorScheme.primary,
+          //   ),
+          // ),
           ListTile(
             onTap: () {
               Navigator.pop(context);
