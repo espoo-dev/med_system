@@ -50,6 +50,7 @@ dependencies:
   dropdown_search: ^5.0.6
   lottie: ^3.0.0
   brasil_fields: ^1.4.4
+  flutter_launcher_icons: ^0.13.1
   intl: ^0.18.1
 
 
@@ -67,6 +68,11 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^3.0.1
+flutter_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/icon/logo.png"   
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
