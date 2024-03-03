@@ -1,6 +1,6 @@
 {
-    "name": "med_system_app",
-    "short_name": "med_system_app",
+    "name": "distrito_medico",
+    "short_name": "distrito_medico",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

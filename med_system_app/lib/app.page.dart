@@ -1,12 +1,11 @@
+import 'package:distrito_medico/core/pages/splash/splash_page.dart';
+import 'package:distrito_medico/features/home/pages/home_page.dart';
+import 'package:distrito_medico/features/signin/store/signin.store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:med_system_app/core/pages/splash/splash_page.dart';
-import 'package:med_system_app/features/home/pages/home_page.dart';
-
-import 'package:med_system_app/features/signin/store/signin.store.dart';
 import 'package:mobx/mobx.dart';
 
 class AppPage extends StatelessWidget {

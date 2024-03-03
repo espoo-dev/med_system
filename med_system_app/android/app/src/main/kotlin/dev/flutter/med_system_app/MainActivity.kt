@@ -1,4 +1,4 @@
-package dev.flutter.med_system_app
+package dev.flutter.distrito_medico
 
 import io.flutter.embedding.android.FlutterActivity
 

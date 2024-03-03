@@ -1,6 +1,6 @@
+import 'package:distrito_medico/features/hospitals/model/hospital.model.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
-import 'package:med_system_app/features/hospitals/model/hospital.model.dart';
 
 class DropdownSearchHospitals extends StatefulWidget {
   final List<Hospital> hospitalList;

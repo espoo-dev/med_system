@@ -1,5 +1,5 @@
+import 'package:distrito_medico/core/model/ui/menu_item.model.dart';
 import 'package:flutter/material.dart';
-import 'package:med_system_app/core/model/ui/menu_item.model.dart';
 
 class HorizontalMenuWidget extends StatefulWidget {
   final List<MenuItemModel> menuItems;

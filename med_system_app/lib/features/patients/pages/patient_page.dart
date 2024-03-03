@@ -1,15 +1,15 @@
+import 'package:distrito_medico/core/utils/navigation_utils.dart';
+import 'package:distrito_medico/core/widgets/error.widget.dart';
+import 'package:distrito_medico/core/widgets/ext_fab.widget.dart';
+import 'package:distrito_medico/core/widgets/fab.widget.dart';
+import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
+import 'package:distrito_medico/features/patients/model/patient.model.dart';
+import 'package:distrito_medico/features/patients/pages/add_patient_page.dart';
+import 'package:distrito_medico/features/patients/pages/edit_patient_page.dart';
+import 'package:distrito_medico/features/patients/store/patient.store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:med_system_app/core/utils/navigation_utils.dart';
-import 'package:med_system_app/core/widgets/error.widget.dart';
-import 'package:med_system_app/core/widgets/ext_fab.widget.dart';
-import 'package:med_system_app/core/widgets/fab.widget.dart';
-import 'package:med_system_app/core/widgets/my_app_bar.widget.dart';
-import 'package:med_system_app/features/patients/model/patient.model.dart';
-import 'package:med_system_app/features/patients/pages/add_patient_page.dart';
-import 'package:med_system_app/features/patients/pages/edit_patient_page.dart';
-import 'package:med_system_app/features/patients/store/patient.store.dart';
 
 class PatientPage extends StatefulWidget {
   const PatientPage({super.key});

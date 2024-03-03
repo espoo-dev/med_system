@@ -1,13 +1,13 @@
 import 'package:chopper/chopper.dart';
-import 'package:med_system_app/core/api/interceptors/MyRequest.interceptor.dart';
-import 'package:med_system_app/core/api/interceptors/MyResponse.interceptor.dart';
-import 'package:med_system_app/core/api/services/auth/sign_in.service.dart';
-import 'package:med_system_app/core/api/services/event_procedures/event_procedure.service.dart';
-import 'package:med_system_app/core/api/services/events/events_procedure.service.dart';
-import 'package:med_system_app/core/api/services/health_insurances/health_insurances.service.dart';
-import 'package:med_system_app/core/api/services/hospitals/hospital.service.dart';
-import 'package:med_system_app/core/api/services/patients/patient.service.dart';
-import 'package:med_system_app/core/api/services/procedures/procedure.service.dart';
+import 'package:distrito_medico/core/api/interceptors/MyRequest.interceptor.dart';
+import 'package:distrito_medico/core/api/interceptors/MyResponse.interceptor.dart';
+import 'package:distrito_medico/core/api/services/auth/sign_in.service.dart';
+import 'package:distrito_medico/core/api/services/event_procedures/event_procedure.service.dart';
+import 'package:distrito_medico/core/api/services/events/events_procedure.service.dart';
+import 'package:distrito_medico/core/api/services/health_insurances/health_insurances.service.dart';
+import 'package:distrito_medico/core/api/services/hospitals/hospital.service.dart';
+import 'package:distrito_medico/core/api/services/patients/patient.service.dart';
+import 'package:distrito_medico/core/api/services/procedures/procedure.service.dart';
 
 var customHeaders = {
   'content-type': 'application/json; charset=UTF-8',

@@ -1,7 +1,7 @@
 // ignore: library_private_types_in_public_api
-import 'package:med_system_app/core/api/network_exceptions.dart';
-import 'package:med_system_app/features/health_insurances/model/add_health_insurances_request.model.dart';
-import 'package:med_system_app/features/health_insurances/repository/health_insurances_repository.dart';
+import 'package:distrito_medico/core/api/network_exceptions.dart';
+import 'package:distrito_medico/features/health_insurances/model/add_health_insurances_request.model.dart';
+import 'package:distrito_medico/features/health_insurances/repository/health_insurances_repository.dart';
 import 'package:mobx/mobx.dart';
 
 part 'add_health_insurances.store.g.dart';

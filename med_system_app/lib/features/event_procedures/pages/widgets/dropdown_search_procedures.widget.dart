@@ -1,6 +1,6 @@
+import 'package:distrito_medico/features/procedures/model/procedure.model.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
-import 'package:med_system_app/features/procedures/model/procedure.model.dart';
 
 class DropdownSearchProcedures extends StatefulWidget {
   final List<Procedure> procedureList;

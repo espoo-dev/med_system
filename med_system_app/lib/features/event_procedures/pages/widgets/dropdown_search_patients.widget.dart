@@ -1,7 +1,7 @@
+import 'package:distrito_medico/core/widgets/my_button_widget.dart';
+import 'package:distrito_medico/features/patients/model/patient.model.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
-import 'package:med_system_app/core/widgets/my_button_widget.dart';
-import 'package:med_system_app/features/patients/model/patient.model.dart';
 
 class DropdownSearchPatients extends StatefulWidget {
   final List<Patient> patientList;

@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:chopper/chopper.dart';
-import 'package:med_system_app/core/api/error.model.dart';
+import 'package:distrito_medico/core/api/error.model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 part 'network_exceptions.freezed.dart';
 
 @freezed

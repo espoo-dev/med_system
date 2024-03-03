@@ -1,15 +1,15 @@
+import 'package:distrito_medico/core/utils/navigation_utils.dart';
+import 'package:distrito_medico/core/widgets/error.widget.dart';
+import 'package:distrito_medico/core/widgets/ext_fab.widget.dart';
+import 'package:distrito_medico/core/widgets/fab.widget.dart';
+import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
+import 'package:distrito_medico/features/health_insurances/model/health_insurances.model.dart';
+import 'package:distrito_medico/features/health_insurances/pages/add_health_insurances_page.dart';
+import 'package:distrito_medico/features/health_insurances/pages/edit_health_insurance_page.dart';
+import 'package:distrito_medico/features/health_insurances/store/health_insurances.store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:med_system_app/core/utils/navigation_utils.dart';
-import 'package:med_system_app/core/widgets/error.widget.dart';
-import 'package:med_system_app/core/widgets/ext_fab.widget.dart';
-import 'package:med_system_app/core/widgets/fab.widget.dart';
-import 'package:med_system_app/core/widgets/my_app_bar.widget.dart';
-import 'package:med_system_app/features/health_insurances/model/health_insurances.model.dart';
-import 'package:med_system_app/features/health_insurances/pages/add_health_insurances_page.dart';
-import 'package:med_system_app/features/health_insurances/pages/edit_health_insurance_page.dart';
-import 'package:med_system_app/features/health_insurances/store/health_insurances.store.dart';
 
 class HealthInsurancePage extends StatefulWidget {
   const HealthInsurancePage({super.key});

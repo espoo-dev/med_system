@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:med_system_app/core/api/api.dart';
-import 'package:med_system_app/core/api/api_result.dart';
-import 'package:med_system_app/core/api/network_exceptions.dart';
-import 'package:med_system_app/features/event_procedures/model/add_event_procedure_request.model.dart';
-import 'package:med_system_app/features/event_procedures/model/event_procedure.model.dart';
+import 'package:distrito_medico/core/api/api.dart';
+import 'package:distrito_medico/core/api/api_result.dart';
+import 'package:distrito_medico/core/api/network_exceptions.dart';
+import 'package:distrito_medico/features/event_procedures/model/add_event_procedure_request.model.dart';
+import 'package:distrito_medico/features/event_procedures/model/event_procedure.model.dart';
 
 class EventProcedureRepository {
   Future<Result<List<EventProcedures>?>?> getAllEventProcedures(

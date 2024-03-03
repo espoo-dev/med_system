@@ -1,17 +1,17 @@
+import 'package:distrito_medico/core/theme/icons.dart';
+import 'package:distrito_medico/core/widgets/error.widget.dart';
+import 'package:distrito_medico/core/widgets/ext_fab.widget.dart';
+import 'package:distrito_medico/core/widgets/fab.widget.dart';
+import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
+import 'package:distrito_medico/features/event_procedures/model/event_procedure.model.dart';
+import 'package:distrito_medico/features/event_procedures/pages/add_event_procedure_page.dart';
+import 'package:distrito_medico/features/event_procedures/pages/edit_event_procedure_page.dart';
+import 'package:distrito_medico/features/event_procedures/pages/widgets/dialog_filter_months.wdiget.dart';
+import 'package:distrito_medico/features/event_procedures/store/event_procedure.store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
-import 'package:med_system_app/core/theme/icons.dart';
-import 'package:med_system_app/core/widgets/error.widget.dart';
-import 'package:med_system_app/core/widgets/ext_fab.widget.dart';
-import 'package:med_system_app/core/widgets/fab.widget.dart';
-import 'package:med_system_app/core/widgets/my_app_bar.widget.dart';
-import 'package:med_system_app/features/event_procedures/model/event_procedure.model.dart';
-import 'package:med_system_app/features/event_procedures/pages/add_event_procedure_page.dart';
-import 'package:med_system_app/features/event_procedures/pages/edit_event_procedure_page.dart';
-import 'package:med_system_app/features/event_procedures/pages/widgets/dialog_filter_months.wdiget.dart';
-import 'package:med_system_app/features/event_procedures/store/event_procedure.store.dart';
 
 import '../../../core/utils/navigation_utils.dart';
 
