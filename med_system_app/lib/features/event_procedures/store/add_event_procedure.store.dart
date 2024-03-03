@@ -289,7 +289,7 @@ abstract class _AddEventProcedureStoreBase with Store {
   getAllProcedures() async {
     procedureList.clear();
     var resultProcedures =
-        await _procedureRepository.getAllProcedures().asObservable();
+        await _procedureRepository.getProcedures().asObservable();
     resultProcedures?.when(success: (List<Procedure>? listProcedures) {
       procedureList.addAll(listProcedures!);
       setProcedureId(procedureList.first.id!);
