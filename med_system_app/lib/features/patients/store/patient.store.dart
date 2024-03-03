@@ -1,7 +1,8 @@
-import 'package:med_system_app/core/api/network_exceptions.dart';
-import 'package:med_system_app/features/patients/model/patient.model.dart';
-import 'package:med_system_app/features/patients/repository/patient_repository.dart';
+import 'package:distrito_medico/core/api/network_exceptions.dart';
+import 'package:distrito_medico/features/patients/model/patient.model.dart';
+import 'package:distrito_medico/features/patients/repository/patient_repository.dart';
 import 'package:mobx/mobx.dart';
+
 part 'patient.store.g.dart';
 
 // ignore: library_private_types_in_public_api

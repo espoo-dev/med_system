@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-import 'package:med_system_app/core/api/api.dart';
-import 'package:med_system_app/core/api/api_result.dart';
-import 'package:med_system_app/core/api/error.model.dart';
-import 'package:med_system_app/core/api/network_exceptions.dart';
-import 'package:med_system_app/core/storage/constants/preferences.dart';
-import 'package:med_system_app/core/storage/shared_preference_helper.dart';
-import 'package:med_system_app/features/signin/model/signin_request.model.dart';
-import 'package:med_system_app/features/signin/model/user.model.dart';
+import 'package:distrito_medico/core/api/api.dart';
+import 'package:distrito_medico/core/api/api_result.dart';
+import 'package:distrito_medico/core/api/error.model.dart';
+import 'package:distrito_medico/core/api/network_exceptions.dart';
+import 'package:distrito_medico/core/storage/constants/preferences.dart';
+import 'package:distrito_medico/core/storage/shared_preference_helper.dart';
+import 'package:distrito_medico/features/signin/model/signin_request.model.dart';
+import 'package:distrito_medico/features/signin/model/user.model.dart';
 
 class SignInRepository {
   final SharedPreferenceHelper _sharedPrefsHelper;

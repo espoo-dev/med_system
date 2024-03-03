@@ -1,5 +1,5 @@
+import 'package:distrito_medico/core/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:med_system_app/core/utils/utils.dart';
 
 class WelcomeWidget extends StatefulWidget {
   const WelcomeWidget({

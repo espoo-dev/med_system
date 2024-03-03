@@ -1,14 +1,14 @@
+import 'package:distrito_medico/core/pages/success/success.page.dart';
+import 'package:distrito_medico/core/utils/navigation_utils.dart';
+import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
+import 'package:distrito_medico/core/widgets/my_button_widget.dart';
+import 'package:distrito_medico/core/widgets/my_text_form_field.widget.dart';
+import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
+import 'package:distrito_medico/features/hospitals/pages/hospital_page.dart';
+import 'package:distrito_medico/features/hospitals/store/add_hospital.store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:med_system_app/core/pages/success/success.page.dart';
-import 'package:med_system_app/core/utils/navigation_utils.dart';
-import 'package:med_system_app/core/widgets/my_app_bar.widget.dart';
-import 'package:med_system_app/core/widgets/my_button_widget.dart';
-import 'package:med_system_app/core/widgets/my_text_form_field.widget.dart';
-import 'package:med_system_app/core/widgets/my_toast.widget.dart';
-import 'package:med_system_app/features/hospitals/pages/hospital_page.dart';
-import 'package:med_system_app/features/hospitals/store/add_hospital.store.dart';
 import 'package:mobx/mobx.dart';
 
 class AddHospitalPage extends StatefulWidget {
@@ -32,8 +32,8 @@ class _AddHospitalState extends State<AddHospitalPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _disposers.add(reaction<SaveHospitalState>((_) => addHospitalStore.saveState,
-        (validationState) {
+    _disposers.add(reaction<SaveHospitalState>(
+        (_) => addHospitalStore.saveState, (validationState) {
       if (validationState == SaveHospitalState.success) {
         to(
             context,

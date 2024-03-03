@@ -1,8 +1,8 @@
 // ignore: library_private_types_in_public_api
 
-import 'package:med_system_app/core/api/network_exceptions.dart';
-import 'package:med_system_app/features/procedures/model/add_procedure.model.dart';
-import 'package:med_system_app/features/procedures/repository/procedure_repository.dart';
+import 'package:distrito_medico/core/api/network_exceptions.dart';
+import 'package:distrito_medico/features/procedures/model/add_procedure.model.dart';
+import 'package:distrito_medico/features/procedures/repository/procedure_repository.dart';
 import 'package:mobx/mobx.dart';
 
 part 'add_procedure.store.g.dart';

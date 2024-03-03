@@ -1,6 +1,6 @@
+import 'package:distrito_medico/features/health_insurances/model/health_insurances.model.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
-import 'package:med_system_app/features/health_insurances/model/health_insurances.model.dart';
 
 class DropdownHealthInsurances extends StatefulWidget {
   final List<HealthInsurance> healthInsuranceList;

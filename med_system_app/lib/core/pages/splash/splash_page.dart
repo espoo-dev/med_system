@@ -1,8 +1,9 @@
 import 'dart:async';
+
+import 'package:distrito_medico/core/theme/icons.dart';
+import 'package:distrito_medico/features/signin/page/signin.page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:med_system_app/core/theme/icons.dart';
-import 'package:med_system_app/features/signin/page/signin.page.dart';
 
 class SplashScreenPage extends StatefulWidget {
   const SplashScreenPage({super.key});

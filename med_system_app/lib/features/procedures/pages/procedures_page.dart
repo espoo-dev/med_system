@@ -1,15 +1,15 @@
+import 'package:distrito_medico/core/utils/navigation_utils.dart';
+import 'package:distrito_medico/core/widgets/error.widget.dart';
+import 'package:distrito_medico/core/widgets/ext_fab.widget.dart';
+import 'package:distrito_medico/core/widgets/fab.widget.dart';
+import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
+import 'package:distrito_medico/features/procedures/model/procedure.model.dart';
+import 'package:distrito_medico/features/procedures/pages/add_procedure_page.dart';
+import 'package:distrito_medico/features/procedures/pages/edit_procedure_page.dart';
+import 'package:distrito_medico/features/procedures/store/procedure.store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:med_system_app/core/utils/navigation_utils.dart';
-import 'package:med_system_app/core/widgets/error.widget.dart';
-import 'package:med_system_app/core/widgets/ext_fab.widget.dart';
-import 'package:med_system_app/core/widgets/fab.widget.dart';
-import 'package:med_system_app/core/widgets/my_app_bar.widget.dart';
-import 'package:med_system_app/features/procedures/model/procedure.model.dart';
-import 'package:med_system_app/features/procedures/pages/add_procedure_page.dart';
-import 'package:med_system_app/features/procedures/pages/edit_procedure_page.dart';
-import 'package:med_system_app/features/procedures/store/procedure.store.dart';
 
 class ProcedurePage extends StatefulWidget {
   const ProcedurePage({super.key});

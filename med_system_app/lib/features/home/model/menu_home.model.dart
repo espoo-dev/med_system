@@ -1,7 +1,7 @@
+import 'package:distrito_medico/core/model/ui/menu_item.model.dart';
+import 'package:distrito_medico/core/theme/icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:med_system_app/core/model/ui/menu_item.model.dart';
-import 'package:med_system_app/core/theme/icons.dart';
 
 class MenuHomeModel {
   MenuHomeModel();

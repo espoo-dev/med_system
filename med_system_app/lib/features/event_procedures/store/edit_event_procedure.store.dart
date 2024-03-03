@@ -1,16 +1,16 @@
+import 'package:distrito_medico/core/api/network_exceptions.dart';
+import 'package:distrito_medico/features/event_procedures/model/add_event_procedure_request.model.dart';
+import 'package:distrito_medico/features/event_procedures/repository/event_procedure_repository.dart';
+import 'package:distrito_medico/features/health_insurances/model/health_insurances.model.dart';
+import 'package:distrito_medico/features/health_insurances/repository/health_insurances_repository.dart';
+import 'package:distrito_medico/features/hospitals/model/hospital.model.dart';
+import 'package:distrito_medico/features/hospitals/respository/hospital_repository.dart';
+import 'package:distrito_medico/features/patients/model/patient.model.dart';
+import 'package:distrito_medico/features/patients/repository/patient_repository.dart';
+import 'package:distrito_medico/features/procedures/model/procedure.model.dart';
+import 'package:distrito_medico/features/procedures/repository/procedure_repository.dart';
 // ignore: library_private_types_in_public_api
 import 'package:flutter/material.dart';
-import 'package:med_system_app/core/api/network_exceptions.dart';
-import 'package:med_system_app/features/event_procedures/model/add_event_procedure_request.model.dart';
-import 'package:med_system_app/features/event_procedures/repository/event_procedure_repository.dart';
-import 'package:med_system_app/features/health_insurances/model/health_insurances.model.dart';
-import 'package:med_system_app/features/health_insurances/repository/health_insurances_repository.dart';
-import 'package:med_system_app/features/hospitals/model/hospital.model.dart';
-import 'package:med_system_app/features/hospitals/respository/hospital_repository.dart';
-import 'package:med_system_app/features/patients/model/patient.model.dart';
-import 'package:med_system_app/features/patients/repository/patient_repository.dart';
-import 'package:med_system_app/features/procedures/model/procedure.model.dart';
-import 'package:med_system_app/features/procedures/repository/procedure_repository.dart';
 import 'package:mobx/mobx.dart';
 
 part 'edit_event_procedure.store.g.dart';

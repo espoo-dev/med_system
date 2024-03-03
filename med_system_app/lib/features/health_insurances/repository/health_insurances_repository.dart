@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:med_system_app/core/api/api.dart';
-import 'package:med_system_app/core/api/api_result.dart';
-import 'package:med_system_app/core/api/network_exceptions.dart';
-import 'package:med_system_app/features/health_insurances/model/add_health_insurances_request.model.dart';
-import 'package:med_system_app/features/health_insurances/model/health_insurances.model.dart';
+import 'package:distrito_medico/core/api/api.dart';
+import 'package:distrito_medico/core/api/api_result.dart';
+import 'package:distrito_medico/core/api/network_exceptions.dart';
+import 'package:distrito_medico/features/health_insurances/model/add_health_insurances_request.model.dart';
+import 'package:distrito_medico/features/health_insurances/model/health_insurances.model.dart';
 
 class HealthInsurancesRepository {
   Future<Result<List<HealthInsurance>?>?> getAllInsurances(

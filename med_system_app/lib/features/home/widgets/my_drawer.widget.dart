@@ -1,14 +1,14 @@
+import 'package:distrito_medico/core/theme/icons.dart';
+import 'package:distrito_medico/core/utils/navigation_utils.dart';
+import 'package:distrito_medico/features/health_insurances/pages/health_insurances_page.dart';
+import 'package:distrito_medico/features/hospitals/pages/hospital_page.dart';
+import 'package:distrito_medico/features/patients/pages/patient_page.dart';
+import 'package:distrito_medico/features/procedures/pages/procedures_page.dart';
+import 'package:distrito_medico/features/signin/page/signin.page.dart';
+import 'package:distrito_medico/features/signin/store/signin.store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
-import 'package:med_system_app/core/theme/icons.dart';
-import 'package:med_system_app/core/utils/navigation_utils.dart';
-import 'package:med_system_app/features/health_insurances/pages/health_insurances_page.dart';
-import 'package:med_system_app/features/hospitals/pages/hospital_page.dart';
-import 'package:med_system_app/features/patients/pages/patient_page.dart';
-import 'package:med_system_app/features/procedures/pages/procedures_page.dart';
-import 'package:med_system_app/features/signin/page/signin.page.dart';
-import 'package:med_system_app/features/signin/store/signin.store.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});

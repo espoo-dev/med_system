@@ -1,9 +1,9 @@
 import 'dart:async';
 
+import 'package:distrito_medico/core/theme/animations.dart';
+import 'package:distrito_medico/core/utils/navigation_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:med_system_app/core/theme/animations.dart';
-import 'package:med_system_app/core/utils/navigation_utils.dart';
 
 class SuccessPage extends StatelessWidget {
   final String title;
