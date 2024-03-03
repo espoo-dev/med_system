@@ -6,6 +6,7 @@ part of 'events_procedure.service.dart';
 // ChopperGenerator
 // **************************************************************************
 
+// coverage:ignore-file
 // ignore_for_file: type=lint
 final class _$EventsService extends EventsService {
   _$EventsService([ChopperClient? client]) {
@@ -14,7 +15,7 @@ final class _$EventsService extends EventsService {
   }
 
   @override
-  final definitionType = EventsService;
+  final Type definitionType = EventsService;
 
   @override
   Future<Response<dynamic>> getAllProcedures() {
