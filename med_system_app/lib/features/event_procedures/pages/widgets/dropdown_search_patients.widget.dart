@@ -21,6 +21,19 @@ class DropdownSearchPatients extends StatefulWidget {
 }
 
 class _DropdownSearchPatientsState extends State<DropdownSearchPatients> {
+  final FocusNode _focusNode = FocusNode();
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.requestFocus();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DropdownSearch<Patient>(
@@ -44,6 +57,7 @@ class _DropdownSearchPatientsState extends State<DropdownSearchPatients> {
           ),
         ),
         searchFieldProps: TextFieldProps(
+          focusNode: _focusNode,
           decoration: InputDecoration(
             enabled: true,
             enabledBorder: OutlineInputBorder(
