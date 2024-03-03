@@ -6,7 +6,6 @@ part of 'procedure.service.dart';
 // ChopperGenerator
 // **************************************************************************
 
-// coverage:ignore-file
 // ignore_for_file: type=lint
 final class _$ProcedureService extends ProcedureService {
   _$ProcedureService([ChopperClient? client]) {
@@ -15,7 +14,7 @@ final class _$ProcedureService extends ProcedureService {
   }
 
   @override
-  final Type definitionType = ProcedureService;
+  final definitionType = ProcedureService;
 
   @override
   Future<Response<dynamic>> getAllProcedures(
@@ -32,17 +31,6 @@ final class _$ProcedureService extends ProcedureService {
       $url,
       client.baseUrl,
       parameters: $params,
-    );
-    return client.send<dynamic, dynamic>($request);
-  }
-
-  @override
-  Future<Response<dynamic>> getProcedures() {
-    final Uri $url = Uri.parse('/api/v1/procedures');
-    final Request $request = Request(
-      'GET',
-      $url,
-      client.baseUrl,
     );
     return client.send<dynamic, dynamic>($request);
   }

@@ -6,7 +6,6 @@ part of 'sign_in.service.dart';
 // ChopperGenerator
 // **************************************************************************
 
-// coverage:ignore-file
 // ignore_for_file: type=lint
 final class _$SignInService extends SignInService {
   _$SignInService([ChopperClient? client]) {
@@ -15,7 +14,7 @@ final class _$SignInService extends SignInService {
   }
 
   @override
-  final Type definitionType = SignInService;
+  final definitionType = SignInService;
 
   @override
   Future<Response<dynamic>> signIn(dynamic body) {

@@ -6,7 +6,6 @@ part of 'health_insurances.service.dart';
 // ChopperGenerator
 // **************************************************************************
 
-// coverage:ignore-file
 // ignore_for_file: type=lint
 final class _$HealthInsurancesService extends HealthInsurancesService {
   _$HealthInsurancesService([ChopperClient? client]) {
@@ -15,7 +14,7 @@ final class _$HealthInsurancesService extends HealthInsurancesService {
   }
 
   @override
-  final Type definitionType = HealthInsurancesService;
+  final definitionType = HealthInsurancesService;
 
   @override
   Future<Response<dynamic>> getAllHealthInsurances(
