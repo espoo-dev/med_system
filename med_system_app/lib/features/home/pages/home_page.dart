@@ -104,27 +104,28 @@ class _HomePageState extends State<HomePage> {
           key: _scaffoldKey,
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: Visibility(
-            visible: !(homeStore.state == EventProcedureState.loading ||
-                _listEventProcedures.isEmpty),
-            child: FloatingActionButton(
-              onPressed: () {
-                push(
-                    context,
-                    const AddEventProcedurePage(
-                      backToHome: true,
-                    ));
-              },
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              child: const Icon(
-                Icons.add,
-                color: Colors.white,
+          floatingActionButton: Observer(builder: (BuildContext context) {
+            return Visibility(
+              visible: homeStore.showFloatingActionButton,
+              child: FloatingActionButton(
+                onPressed: () {
+                  push(
+                      context,
+                      const AddEventProcedurePage(
+                        backToHome: true,
+                      ));
+                },
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                child: const Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
               ),
-            ),
-          ),
-          bottomNavigationBar: MyBottomAppBar(
-              visible: !(homeStore.state == EventProcedureState.loading ||
-                  _listEventProcedures.isEmpty)),
+            );
+          }),
+          bottomNavigationBar: Observer(builder: (BuildContext context) {
+            return MyBottomAppBar(visible: homeStore.showBottomAppBar);
+          }),
           drawer: const MyDrawer(),
           body: SafeArea(
             child: Stack(

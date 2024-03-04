@@ -27,6 +27,13 @@ abstract class _HomeStoreBase with Store {
   EventProcedureModel? _eventProcedureModel;
   get eventProcedureModel => _eventProcedureModel;
 
+  @computed
+  bool get showBottomAppBar =>
+      state == EventProcedureState.success && eventProcedureList.isNotEmpty;
+  @computed
+  bool get showFloatingActionButton =>
+      state == EventProcedureState.success && eventProcedureList.isNotEmpty;
+
   _HomeStoreBase(HomeRepository homeRepository)
       : _homeRepository = homeRepository;
 
