@@ -15,6 +15,7 @@ import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown
 import 'package:distrito_medico/features/event_procedures/pages/widgets/radio_group.widget.dart';
 import 'package:distrito_medico/features/event_procedures/store/add_event_procedure.store.dart';
 import 'package:distrito_medico/features/health_insurances/model/health_insurances.model.dart';
+import 'package:distrito_medico/features/home/pages/home_page.dart';
 import 'package:distrito_medico/features/hospitals/model/hospital.model.dart';
 import 'package:distrito_medico/features/patients/model/patient.model.dart';
 import 'package:distrito_medico/features/procedures/model/procedure.model.dart';
@@ -24,7 +25,9 @@ import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 
 class AddEventProcedurePage extends StatefulWidget {
-  const AddEventProcedurePage({super.key});
+  final bool backToHome;
+
+  const AddEventProcedurePage({super.key, this.backToHome = false});
 
   @override
   State<AddEventProcedurePage> createState() => _AddEventProcedureState();
@@ -77,7 +80,11 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
       canPop: false,
       onPopInvoked: (bool didPop) {
         if (didPop) {}
-        to(context, const EventProceduresPage());
+        if (widget.backToHome) {
+          to(context, const HomePage());
+        } else {
+          to(context, const EventProceduresPage());
+        }
       },
       child: Scaffold(
         appBar: const MyAppBar(
@@ -120,7 +127,8 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                     children: [
                       DropdownSearchPatients(
                           patientList: addEventProcedureStore.patientList,
-                          selectedPatient: addEventProcedureStore.patient!,
+                          selectedPatient:
+                              addEventProcedureStore.patient ?? Patient(),
                           onChanged: (Patient? patient) =>
                               addEventProcedureStore.setPatient(patient!)),
                       const SizedBox(
@@ -156,8 +164,7 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                       ),
                       DropdownSearchProcedures(
                         procedureList: addEventProcedureStore.procedureList,
-                        selectedProcedure:
-                            addEventProcedureStore.procedureList.first,
+                        selectedProcedure: Procedure(),
                         onChanged: (Procedure? procedure) =>
                             addEventProcedureStore
                                 .setProcedureId(procedure?.id ?? 0),
@@ -167,8 +174,7 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                       ),
                       DropdownSearchHospitals(
                         hospitalList: addEventProcedureStore.hospitalList,
-                        selectedHospital:
-                            addEventProcedureStore.hospitalList.first,
+                        selectedHospital: Hospital(),
                         onChanged: (Hospital? hospital) =>
                             addEventProcedureStore
                                 .setHospitalId(hospital?.id ?? 0),
@@ -179,8 +185,7 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                       DropdownHealthInsurances(
                         healthInsuranceList:
                             addEventProcedureStore.healthInsuranceList,
-                        selectedHealthInsurance:
-                            addEventProcedureStore.healthInsuranceList.first,
+                        selectedHealthInsurance: HealthInsurance(),
                         onChanged: (HealthInsurance? healthInsurance) =>
                             addEventProcedureStore
                                 .setHealthInsuranceId(healthInsurance?.id ?? 0),

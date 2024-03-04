@@ -304,8 +304,10 @@ abstract class _AddEventProcedureStoreBase with Store {
     var resultPatient =
         await _patientRepository.getAllPatients().asObservable();
     resultPatient?.when(success: (List<Patient>? listPatient) {
-      patientList.addAll(listPatient!);
-      setPatient(patientList.first);
+      if (listPatient!.isNotEmpty) {
+        patientList.addAll(listPatient);
+        setPatient(patientList.first);
+      }
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));
     });
