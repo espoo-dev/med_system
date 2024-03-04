@@ -306,7 +306,6 @@ abstract class _AddEventProcedureStoreBase with Store {
     resultPatient?.when(success: (List<Patient>? listPatient) {
       if (listPatient!.isNotEmpty) {
         patientList.addAll(listPatient);
-        setPatient(patientList.first);
       }
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));
@@ -358,6 +357,7 @@ abstract class _AddEventProcedureStoreBase with Store {
     _accommodation = "ward";
     _createdDate = "";
     _paydAt = "";
+    _patient = null;
     _patient = null;
     saveState = SaveEventProcedureState.idle;
     state = AddEventProcedureState.idle;

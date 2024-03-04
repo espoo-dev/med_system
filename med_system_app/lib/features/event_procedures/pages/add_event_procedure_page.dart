@@ -71,6 +71,7 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
     for (var disposer in _disposers) {
       disposer();
     }
+    addEventProcedureStore.dispose();
     super.dispose();
   }
 
