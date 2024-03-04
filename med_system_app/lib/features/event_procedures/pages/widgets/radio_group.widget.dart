@@ -7,7 +7,7 @@ class MyRadioGroup extends StatefulWidget {
   const MyRadioGroup({
     super.key,
     required this.onValueChanged,
-    this.initialValue,
+    this.initialValue = 'ward',
   });
 
   @override
@@ -23,6 +23,7 @@ class _MyRadioGroupState extends State<MyRadioGroup> {
     super.initState();
     // Define o valor inicial padrão como "Enfermaria"
     _selectedValue = 'Enfermaria';
+
     // Se o valor inicial for diferente de "ward", define como "Apartamento"
     if (widget.initialValue != 'ward') {
       _selectedValue = 'Apartamento';

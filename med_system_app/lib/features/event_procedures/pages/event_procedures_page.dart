@@ -247,12 +247,12 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                                       : const Color(0xFFEC2A58),
                                 ),
                                 title: Text(
-                                  eventProcedures.procedure ?? "",
+                                  eventProcedures.patient ?? "",
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                subtitle: Text(eventProcedures.patient ?? ""),
+                                subtitle: Text(eventProcedures.procedure ?? ""),
                                 trailing: Icon(
                                   size: 10.0,
                                   Icons.arrow_forward_ios,
