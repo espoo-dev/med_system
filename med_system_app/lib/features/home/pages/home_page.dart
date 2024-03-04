@@ -105,8 +105,7 @@ class _HomePageState extends State<HomePage> {
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           floatingActionButton: Visibility(
-            visible: !(homeStore.state == EventProcedureState.loading ||
-                _listEventProcedures.isEmpty),
+            visible: true,
             child: FloatingActionButton(
               onPressed: () {
                 push(
@@ -122,9 +121,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          bottomNavigationBar: MyBottomAppBar(
-              visible: !(homeStore.state == EventProcedureState.loading ||
-                  _listEventProcedures.isEmpty)),
+          bottomNavigationBar: const MyBottomAppBar(visible: true),
           drawer: const MyDrawer(),
           body: SafeArea(
             child: Stack(
