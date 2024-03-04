@@ -9,6 +9,7 @@ import 'package:distrito_medico/features/event_procedures/pages/add_event_proced
 import 'package:distrito_medico/features/event_procedures/pages/edit_event_procedure_page.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/dialog_filter_months.wdiget.dart';
 import 'package:distrito_medico/features/event_procedures/store/event_procedure.store.dart';
+import 'package:distrito_medico/features/home/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
@@ -76,202 +77,214 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const MyAppBar(
-        title: 'Eventos Procedimentos',
-        hideLeading: true,
-        image: null,
-      ),
-      floatingActionButton: isFab
-          ? buildFAB(context, () {
-              to(context, const AddEventProcedurePage());
-            })
-          : buildExtendedFAB(
-              context,
-              "Novo evento",
-              () {
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) {
+        if (didPop) {}
+        to(context, const HomePage());
+      },
+      child: Scaffold(
+        appBar: const MyAppBar(
+          title: 'Eventos Procedimentos',
+          hideLeading: true,
+          image: null,
+        ),
+        floatingActionButton: isFab
+            ? buildFAB(context, () {
                 to(context, const AddEventProcedurePage());
-              },
-            ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Observer(builder: (_) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: FilterChip(
-                        label: const Text('Todos'),
-                        selected: eventProcedureStore.showAll!,
-                        onSelected: (selected) {
-                          eventProcedureStore.updateFilter(
-                              selected, false, false, false);
-                          _refreshProcedures();
-                        },
-                        showCheckmark: false,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: FilterChip(
-                        label: const Text('Pagos'),
-                        selected: eventProcedureStore.showPaid!,
-                        onSelected: (selected) {
-                          eventProcedureStore.updateFilter(
-                              false, selected, false, false);
-                          _refreshProcedures();
-                        },
-                        showCheckmark: false,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: FilterChip(
-                        label: const Text('Não pagos'),
-                        selected: eventProcedureStore.showUnpaid!,
-                        onSelected: (selected) {
-                          eventProcedureStore.updateFilter(
-                              false, false, selected, false);
-                          _refreshProcedures();
-                        },
-                        showCheckmark: false,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: FilterChip(
-                        label: const Text('Mês'),
-                        selected: eventProcedureStore.showMonth!,
-                        onSelected: (selected) async {
-                          eventProcedureStore.updateFilter(
-                              false, false, false, true);
-                          int? selectedMonth = await showDialogMonths(context);
-                          if (selectedMonth != null) {
-                            eventProcedureStore.updateMonth(selectedMonth);
-                            _refreshProcedures();
-                          }
-                        },
-                        showCheckmark: false,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }),
-          Expanded(
-            child: RefreshIndicator(
-              onRefresh: _refreshProcedures,
-              child: Observer(
-                builder: (BuildContext context) {
-                  if (eventProcedureStore.state == EventProcedureState.error) {
-                    return Center(
-                        child: ErrorRetryWidget(
-                            'Algo deu errado', 'Por favor, tente novamente',
-                            () {
-                      eventProcedureStore.getAllEventProcedures(
-                          isRefresh: true);
-                    }));
-                  }
-                  if (eventProcedureStore.state ==
-                          EventProcedureState.loading &&
-                      _listEventProcedures!.isEmpty) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  if (eventProcedureStore.eventProcedureList.isEmpty) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(left: 30, right: 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Center(
-                                child: Lottie.asset(animationEventProcedure,
-                                    height: 250, width: 250),
-                              ),
-                              const SizedBox(
-                                height: 50,
-                              ),
-                              const Center(
-                                child: Text(
-                                  'Você não possui eventos procedimentos cadastrados.',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    );
-                  }
-                  _listEventProcedures = eventProcedureStore.eventProcedureList;
-                  return Stack(
-                    children: [
-                      ListView.separated(
-                          controller: _scrollController,
-                          itemCount: eventProcedureStore.state ==
-                                  EventProcedureState.loading
-                              ? _listEventProcedures!.length + 1
-                              : _listEventProcedures!.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            if (index < _listEventProcedures!.length) {
-                              EventProcedures eventProcedures =
-                                  _listEventProcedures![index];
-                              return ListTile(
-                                onTap: () {
-                                  to(
-                                      context,
-                                      EditEventProcedurePage(
-                                          eventProcedures: eventProcedures));
-                                },
-                                leading: SvgPicture.asset(
-                                  eventProcedures.isPaid()
-                                      ? iconCheckCoreAsset
-                                      : iconCloseCoreAsset,
-                                  width: 32,
-                                  height: 32,
-                                  color: eventProcedures.isPaid()
-                                      ? Theme.of(context).colorScheme.primary
-                                      : const Color(0xFFEC2A58),
-                                ),
-                                title: Text(
-                                  eventProcedures.patient ?? "",
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                subtitle: Text(eventProcedures.procedure ?? ""),
-                                trailing: Icon(
-                                  size: 10.0,
-                                  Icons.arrow_forward_ios,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              );
-                            } else {
-                              return const Center(
-                                  child: CircularProgressIndicator());
-                            }
-                          },
-                          separatorBuilder: (_, __) => const Divider()),
-                    ],
-                  );
+              })
+            : buildExtendedFAB(
+                context,
+                "Novo evento",
+                () {
+                  to(context, const AddEventProcedurePage());
                 },
               ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Observer(builder: (_) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: FilterChip(
+                          label: const Text('Todos'),
+                          selected: eventProcedureStore.showAll!,
+                          onSelected: (selected) {
+                            eventProcedureStore.updateFilter(
+                                selected, false, false, false);
+                            _refreshProcedures();
+                          },
+                          showCheckmark: false,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: FilterChip(
+                          label: const Text('Pagos'),
+                          selected: eventProcedureStore.showPaid!,
+                          onSelected: (selected) {
+                            eventProcedureStore.updateFilter(
+                                false, selected, false, false);
+                            _refreshProcedures();
+                          },
+                          showCheckmark: false,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: FilterChip(
+                          label: const Text('Não pagos'),
+                          selected: eventProcedureStore.showUnpaid!,
+                          onSelected: (selected) {
+                            eventProcedureStore.updateFilter(
+                                false, false, selected, false);
+                            _refreshProcedures();
+                          },
+                          showCheckmark: false,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: FilterChip(
+                          label: const Text('Mês'),
+                          selected: eventProcedureStore.showMonth!,
+                          onSelected: (selected) async {
+                            eventProcedureStore.updateFilter(
+                                false, false, false, true);
+                            int? selectedMonth =
+                                await showDialogMonths(context);
+                            if (selectedMonth != null) {
+                              eventProcedureStore.updateMonth(selectedMonth);
+                              _refreshProcedures();
+                            }
+                          },
+                          showCheckmark: false,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: _refreshProcedures,
+                child: Observer(
+                  builder: (BuildContext context) {
+                    if (eventProcedureStore.state ==
+                        EventProcedureState.error) {
+                      return Center(
+                          child: ErrorRetryWidget(
+                              'Algo deu errado', 'Por favor, tente novamente',
+                              () {
+                        eventProcedureStore.getAllEventProcedures(
+                            isRefresh: true);
+                      }));
+                    }
+                    if (eventProcedureStore.state ==
+                            EventProcedureState.loading &&
+                        _listEventProcedures!.isEmpty) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (eventProcedureStore.eventProcedureList.isEmpty) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(left: 30, right: 20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Center(
+                                  child: Lottie.asset(animationEventProcedure,
+                                      height: 250, width: 250),
+                                ),
+                                const SizedBox(
+                                  height: 50,
+                                ),
+                                const Center(
+                                  child: Text(
+                                    'Você não possui eventos procedimentos cadastrados.',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+                    _listEventProcedures =
+                        eventProcedureStore.eventProcedureList;
+                    return Stack(
+                      children: [
+                        ListView.separated(
+                            controller: _scrollController,
+                            itemCount: eventProcedureStore.state ==
+                                    EventProcedureState.loading
+                                ? _listEventProcedures!.length + 1
+                                : _listEventProcedures!.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              if (index < _listEventProcedures!.length) {
+                                EventProcedures eventProcedures =
+                                    _listEventProcedures![index];
+                                return ListTile(
+                                  onTap: () {
+                                    to(
+                                        context,
+                                        EditEventProcedurePage(
+                                            eventProcedures: eventProcedures));
+                                  },
+                                  leading: SvgPicture.asset(
+                                    eventProcedures.isPaid()
+                                        ? iconCheckCoreAsset
+                                        : iconCloseCoreAsset,
+                                    width: 32,
+                                    height: 32,
+                                    color: eventProcedures.isPaid()
+                                        ? Theme.of(context).colorScheme.primary
+                                        : const Color(0xFFEC2A58),
+                                  ),
+                                  title: Text(
+                                    eventProcedures.patient ?? "",
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  subtitle:
+                                      Text(eventProcedures.procedure ?? ""),
+                                  trailing: Icon(
+                                    size: 10.0,
+                                    Icons.arrow_forward_ios,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                );
+                              } else {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              }
+                            },
+                            separatorBuilder: (_, __) => const Divider()),
+                      ],
+                    );
+                  },
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
