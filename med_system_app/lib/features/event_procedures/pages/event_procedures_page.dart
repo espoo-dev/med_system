@@ -1,3 +1,4 @@
+import 'package:distrito_medico/core/theme/animations.dart';
 import 'package:distrito_medico/core/theme/icons.dart';
 import 'package:distrito_medico/core/widgets/error.widget.dart';
 import 'package:distrito_medico/core/widgets/ext_fab.widget.dart';
@@ -12,11 +13,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../core/utils/navigation_utils.dart';
 
 class EventProceduresPage extends StatefulWidget {
-  const EventProceduresPage({super.key});
+  final bool backToHome;
+
+  const EventProceduresPage({super.key, this.backToHome = false});
 
   @override
   State<EventProceduresPage> createState() => _EventProceduresPageState();
@@ -181,9 +185,36 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                     return const Center(child: CircularProgressIndicator());
                   }
                   if (eventProcedureStore.eventProcedureList.isEmpty) {
-                    return const Center(
-                        child: Text(
-                            'Você não possui eventos procedimentos cadastrados.'));
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(left: 30, right: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Center(
+                                child: Lottie.asset(animationEventProcedure,
+                                    height: 250, width: 250),
+                              ),
+                              const SizedBox(
+                                height: 50,
+                              ),
+                              const Center(
+                                child: Text(
+                                  'Você não possui eventos procedimentos cadastrados.',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
                   }
                   _listEventProcedures = eventProcedureStore.eventProcedureList;
                   return Stack(
