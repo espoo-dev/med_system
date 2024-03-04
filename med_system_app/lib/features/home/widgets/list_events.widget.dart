@@ -114,6 +114,7 @@ class _ListEventsWidgetState extends State<ListEventsWidget> {
                             context,
                             EditEventProcedurePage(
                               eventProcedures: item,
+                              backToHome: true,
                             ));
                       },
                     ),
