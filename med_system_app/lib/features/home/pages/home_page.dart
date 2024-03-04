@@ -1,22 +1,20 @@
-import 'package:distrito_medico/core/theme/icons.dart';
 import 'package:distrito_medico/core/utils/navigation_utils.dart';
 import 'package:distrito_medico/core/utils/ui.dart';
 import 'package:distrito_medico/core/widgets/error.widget.dart';
 import 'package:distrito_medico/core/widgets/my_horizontal_menu.widget.dart';
 import 'package:distrito_medico/features/event_procedures/model/event_procedure.model.dart';
 import 'package:distrito_medico/features/event_procedures/pages/add_event_procedure_page.dart';
-import 'package:distrito_medico/features/event_procedures/pages/event_procedures_page.dart';
 import 'package:distrito_medico/features/home/model/menu_home.model.dart';
+import 'package:distrito_medico/features/home/pages/empty_events_procedures_page.dart';
 import 'package:distrito_medico/features/home/store/home.store.dart';
 import 'package:distrito_medico/features/home/widgets/build_header.widget.dart';
 import 'package:distrito_medico/features/home/widgets/build_welcome.widget.dart';
 import 'package:distrito_medico/features/home/widgets/list_events.widget.dart';
+import 'package:distrito_medico/features/home/widgets/my_app_bar.widget.dart';
 import 'package:distrito_medico/features/home/widgets/my_drawer.widget.dart';
-import 'package:distrito_medico/features/patients/pages/patient_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 
 class HomePage extends StatefulWidget {
@@ -52,8 +50,7 @@ class _HomePageState extends State<HomePage> {
         return const Center(child: CircularProgressIndicator());
       }
       if (homeStore.eventProcedureList.isEmpty) {
-        return const Center(
-            child: Text('Você não possui eventos procedimentos cadastrados.'));
+        return const EmptyPageEventsProcedure();
       }
       return ListView(
           physics: const BouncingScrollPhysics(
@@ -107,43 +104,27 @@ class _HomePageState extends State<HomePage> {
           key: _scaffoldKey,
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              push(context, const AddEventProcedurePage());
-            },
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            child: const Icon(
-              Icons.add,
-              color: Colors.white,
+          floatingActionButton: Visibility(
+            visible: !(homeStore.state == EventProcedureState.loading ||
+                _listEventProcedures.isEmpty),
+            child: FloatingActionButton(
+              onPressed: () {
+                push(
+                    context,
+                    const AddEventProcedurePage(
+                      backToHome: true,
+                    ));
+              },
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              child: const Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
             ),
           ),
-          bottomNavigationBar: BottomAppBar(
-              notchMargin: 5.0,
-              shape: const CircularNotchedRectangle(),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    IconButton(
-                      icon: SvgPicture.asset(
-                        iconMenuPlantao,
-                        width: 24,
-                        height: 24,
-                      ),
-                      onPressed: () {
-                        push(context, const EventProceduresPage());
-                      },
-                    ),
-                    IconButton(
-                      icon: SvgPicture.asset(
-                        iconMenuPatient,
-                        width: 24,
-                        height: 24,
-                      ),
-                      onPressed: () {
-                        push(context, const PatientPage());
-                      },
-                    ),
-                  ])),
+          bottomNavigationBar: MyBottomAppBar(
+              visible: !(homeStore.state == EventProcedureState.loading ||
+                  _listEventProcedures.isEmpty)),
           drawer: const MyDrawer(),
           body: SafeArea(
             child: Stack(
