@@ -396,6 +396,7 @@ abstract class _EditEventProcedureStoreBase with Store {
     _createdDate = "";
     _paydAt = "";
     _patient = null;
+    _patient = null;
     saveState = SaveEventProcedureState.idle;
     state = EditEventProcedureState.idle;
   }

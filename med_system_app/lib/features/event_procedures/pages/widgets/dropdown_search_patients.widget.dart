@@ -93,7 +93,6 @@ class _DropdownSearchPatientsState extends State<DropdownSearchPatients> {
         isFilterOnline: true,
         showSearchBox: true,
         searchDelay: const Duration(milliseconds: 200),
-        interceptCallBacks: true,
         itemBuilder: (context, item, isSelected) {
           return Padding(
             padding: const EdgeInsets.all(15),

@@ -17,6 +17,7 @@ import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown
 import 'package:distrito_medico/features/event_procedures/pages/widgets/radio_group.widget.dart';
 import 'package:distrito_medico/features/event_procedures/store/edit_event_procedure.store.dart';
 import 'package:distrito_medico/features/health_insurances/model/health_insurances.model.dart';
+import 'package:distrito_medico/features/home/pages/home_page.dart';
 import 'package:distrito_medico/features/hospitals/model/hospital.model.dart';
 import 'package:distrito_medico/features/patients/model/patient.model.dart';
 import 'package:distrito_medico/features/procedures/model/procedure.model.dart';
@@ -26,8 +27,11 @@ import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 
 class EditEventProcedurePage extends StatefulWidget {
+  final bool backToHome;
+
   final EventProcedures eventProcedures;
-  const EditEventProcedurePage({super.key, required this.eventProcedures});
+  const EditEventProcedurePage(
+      {super.key, required this.eventProcedures, this.backToHome = false});
 
   @override
   State<EditEventProcedurePage> createState() => _EditEventProcedureState();
@@ -73,6 +77,7 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
     for (var disposer in _disposers) {
       disposer();
     }
+    editEventProcedureStore.dispose();
     super.dispose();
   }
 
@@ -82,7 +87,11 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
       canPop: false,
       onPopInvoked: (bool didPop) {
         if (didPop) {}
-        to(context, const EventProceduresPage());
+        if (widget.backToHome) {
+          to(context, const HomePage());
+        } else {
+          to(context, const EventProceduresPage());
+        }
       },
       child: Scaffold(
         appBar: MyAppBar(
