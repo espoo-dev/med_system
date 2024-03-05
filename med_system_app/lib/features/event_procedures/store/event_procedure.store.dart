@@ -123,9 +123,9 @@ abstract class _EventProcedureStoreBase with Store {
   dispose() {
     eventProcedureList.clear();
     _page = 1;
-    _showAll = true;
+    _showAll = false;
     _showPaid = false;
     _showUnpaid = false;
-    _showMonth = false;
+    _showMonth = true;
   }
 }
