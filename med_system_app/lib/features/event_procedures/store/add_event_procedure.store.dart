@@ -266,17 +266,18 @@ abstract class _AddEventProcedureStoreBase with Store {
     try {
       state = AddEventProcedureState.loading;
 
-      // Fetch all procedures
-      await getAllProcedures();
+      await Future.wait([
+        // Fetch all procedures
+        getAllProcedures(),
+        // Fetch all patients
+        getAllPatients(),
 
-      // Fetch all patients
-      await getAllPatients();
+        // Fetch all hospitals
+        getAllHospitals(),
 
-      // Fetch all hospitals
-      await getAllHospitals();
-
-      // Fetch all health insurances
-      await getAllHealthInsurances();
+        // Fetch all health insurances
+        getAllHealthInsurances()
+      ]);
 
       state = AddEventProcedureState.success;
     } catch (error) {
@@ -286,7 +287,7 @@ abstract class _AddEventProcedureStoreBase with Store {
   }
 
   @action
-  getAllProcedures() async {
+  Future getAllProcedures() async {
     procedureList.clear();
     var resultProcedures =
         await _procedureRepository.getProcedures().asObservable();
@@ -299,7 +300,7 @@ abstract class _AddEventProcedureStoreBase with Store {
   }
 
   @action
-  getAllPatients() async {
+  Future getAllPatients() async {
     patientList.clear();
     var resultPatient =
         await _patientRepository.getAllPatients().asObservable();
@@ -313,7 +314,7 @@ abstract class _AddEventProcedureStoreBase with Store {
   }
 
   @action
-  getAllHospitals() async {
+  Future getAllHospitals() async {
     hospitalList.clear();
     var resultHospital =
         await _hospitalRepository.getAllHospitals().asObservable();
@@ -326,7 +327,7 @@ abstract class _AddEventProcedureStoreBase with Store {
   }
 
   @action
-  getAllHealthInsurances() async {
+  Future getAllHealthInsurances() async {
     healthInsuranceList.clear();
 
     var resultHealthInsurances =
