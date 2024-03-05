@@ -21,7 +21,7 @@ abstract class _EventProcedureStoreBase with Store {
   EventProcedureState state = EventProcedureState.idle;
 
   @observable
-  bool _showAll = true;
+  bool _showAll = false;
   bool? get showAll => _showAll;
 
   @observable
@@ -29,7 +29,7 @@ abstract class _EventProcedureStoreBase with Store {
   bool? get showPaid => _showPaid;
 
   @observable
-  bool _showMonth = false;
+  bool _showMonth = true;
   bool? get showMonth => _showMonth;
 
   @observable
@@ -37,7 +37,7 @@ abstract class _EventProcedureStoreBase with Store {
   bool? get showUnpaid => _showUnpaid;
 
   @observable
-  int _month = 0;
+  int _month = DateTime.now().month;
   get month => _month;
 
   @action

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-Future<int?> showDialogMonths(BuildContext context) async {
+Future<int?> showDialogMonths(BuildContext context, {int? initialMonth}) async {
   return showDialog<int>(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
         title: const Text('Escolha o Mês'),
-        content: _buildMonthList(context),
+        content: _buildMonthList(context, initialMonth),
       );
     },
   );
 }
 
-Widget _buildMonthList(BuildContext context) {
+Widget _buildMonthList(BuildContext context, int? initialMonth) {
   return SingleChildScrollView(
     child: Column(
       mainAxisSize: MainAxisSize.min,
@@ -20,10 +20,21 @@ Widget _buildMonthList(BuildContext context) {
         final monthNumber = index + 1;
         final monthName = _getMonthName(monthNumber);
         return ListTile(
-          title: Text(monthName),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(monthName),
+              if (initialMonth == monthNumber)
+                Icon(
+                  Icons.check,
+                  color: Theme.of(context).primaryColor,
+                ),
+            ],
+          ),
           onTap: () {
             Navigator.pop(context, monthNumber);
           },
+          selected: initialMonth == monthNumber,
         );
       }),
     ),

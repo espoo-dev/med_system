@@ -114,6 +114,24 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: FilterChip(
+                          label: const Text('Mês'),
+                          selected: eventProcedureStore.showMonth!,
+                          onSelected: (selected) async {
+                            eventProcedureStore.updateFilter(
+                                false, false, false, true);
+                            int? selectedMonth = await showDialogMonths(context,
+                                initialMonth: eventProcedureStore.month);
+                            if (selectedMonth != null) {
+                              eventProcedureStore.updateMonth(selectedMonth);
+                              _refreshProcedures();
+                            }
+                          },
+                          showCheckmark: false,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: FilterChip(
                           label: const Text('Todos'),
                           selected: eventProcedureStore.showAll!,
                           onSelected: (selected) {
@@ -146,24 +164,6 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                             eventProcedureStore.updateFilter(
                                 false, false, selected, false);
                             _refreshProcedures();
-                          },
-                          showCheckmark: false,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FilterChip(
-                          label: const Text('Mês'),
-                          selected: eventProcedureStore.showMonth!,
-                          onSelected: (selected) async {
-                            eventProcedureStore.updateFilter(
-                                false, false, false, true);
-                            int? selectedMonth =
-                                await showDialogMonths(context);
-                            if (selectedMonth != null) {
-                              eventProcedureStore.updateMonth(selectedMonth);
-                              _refreshProcedures();
-                            }
                           },
                           showCheckmark: false,
                         ),
