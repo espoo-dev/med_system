@@ -250,7 +250,7 @@ mixin _$AddEventProcedureStore on _AddEventProcedureStoreBase, Store {
       context: context);
 
   @override
-  Future getAllProcedures() {
+  Future<dynamic> getAllProcedures() {
     return _$getAllProceduresAsyncAction.run(() => super.getAllProcedures());
   }
 
@@ -259,7 +259,7 @@ mixin _$AddEventProcedureStore on _AddEventProcedureStoreBase, Store {
       context: context);
 
   @override
-  Future getAllPatients() {
+  Future<dynamic> getAllPatients() {
     return _$getAllPatientsAsyncAction.run(() => super.getAllPatients());
   }
 
@@ -268,7 +268,7 @@ mixin _$AddEventProcedureStore on _AddEventProcedureStoreBase, Store {
       context: context);
 
   @override
-  Future getAllHospitals() {
+  Future<dynamic> getAllHospitals() {
     return _$getAllHospitalsAsyncAction.run(() => super.getAllHospitals());
   }
 
@@ -277,7 +277,7 @@ mixin _$AddEventProcedureStore on _AddEventProcedureStoreBase, Store {
       context: context);
 
   @override
-  Future getAllHealthInsurances() {
+  Future<dynamic> getAllHealthInsurances() {
     return _$getAllHealthInsurancesAsyncAction
         .run(() => super.getAllHealthInsurances());
   }
