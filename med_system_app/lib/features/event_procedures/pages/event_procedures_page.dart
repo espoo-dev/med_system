@@ -18,10 +18,14 @@ import 'package:lottie/lottie.dart';
 
 import '../../../core/utils/navigation_utils.dart';
 
+enum InitialFilter { paid, unpaid }
+
 class EventProceduresPage extends StatefulWidget {
   final bool backToHome;
+  final InitialFilter? initialFilter;
 
-  const EventProceduresPage({super.key, this.backToHome = false});
+  const EventProceduresPage(
+      {super.key, this.backToHome = false, this.initialFilter});
 
   @override
   State<EventProceduresPage> createState() => _EventProceduresPageState();
@@ -41,7 +45,18 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
       inifiteScrolling();
       showFabButton();
     });
+    setInitialFilter();
     eventProcedureStore.getAllEventProcedures(isRefresh: true);
+  }
+
+  void setInitialFilter() {
+    if (widget.initialFilter != null) {
+      if (widget.initialFilter == InitialFilter.paid) {
+        eventProcedureStore.updateFilter(false, true, false, false);
+      } else {
+        eventProcedureStore.updateFilter(false, false, true, false);
+      }
+    }
   }
 
   showFabButton() {
