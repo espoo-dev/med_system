@@ -72,7 +72,7 @@ class _DropdownSearchProceduresState extends State<DropdownSearchProcedures> {
               Icons.search_rounded,
               size: 20,
             ),
-            hintText: "Ex: Cesariana (feto único ou múltiplo)",
+            hintText: "Nome procedimento ou código",
             hintStyle: const TextStyle(fontSize: 13),
           ),
           style: const TextStyle(
