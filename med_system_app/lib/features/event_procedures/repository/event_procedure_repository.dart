@@ -8,9 +8,13 @@ import 'package:distrito_medico/features/event_procedures/model/event_procedure.
 
 class EventProcedureRepository {
   Future<Result<List<EventProcedures>?>?> getAllEventProcedures(
-      int page) async {
+      [int? page, int? perPage]) async {
     try {
-      final response = await eventProcedureService.getAllEventProcedures(page);
+      page ??= 1;
+
+      perPage ??= 10;
+      final response =
+          await eventProcedureService.getAllEventProcedures(page, perPage);
       if (response.isSuccessful) {
         EventProcedureModel? eventProcedureModel =
             EventProcedureModel.fromJson(json.decode(response.body));
@@ -27,10 +31,15 @@ class EventProcedureRepository {
   }
 
   Future<Result<List<EventProcedures>?>?> getAllEventProceduresByMonth(
-      int page, int month) async {
+      [int? page, int? perPage, int? month]) async {
     try {
-      final response =
-          await eventProcedureService.getAllEventProceduresByMonth(page, month);
+      page ??= 1;
+
+      perPage ??= 10;
+      month ??= DateTime.now().month;
+
+      final response = await eventProcedureService.getAllEventProceduresByMonth(
+          page, perPage, month);
       if (response.isSuccessful) {
         EventProcedureModel? eventProcedureModel =
             EventProcedureModel.fromJson(json.decode(response.body));
@@ -47,10 +56,14 @@ class EventProcedureRepository {
   }
 
   Future<Result<List<EventProcedures>?>?> getAllEventProceduresByPayd(
-      int page, bool payd) async {
+      [int? page, int? perPage, bool payd = false]) async {
     try {
-      final response =
-          await eventProcedureService.getAllEventProceduresByPaid(page, payd);
+      page ??= 1;
+
+      perPage ??= 10;
+
+      final response = await eventProcedureService.getAllEventProceduresByPaid(
+          page, perPage, payd);
       if (response.isSuccessful) {
         EventProcedureModel? eventProcedureModel =
             EventProcedureModel.fromJson(json.decode(response.body));
