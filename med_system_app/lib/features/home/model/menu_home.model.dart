@@ -57,7 +57,14 @@ class MenuHomeModel {
             height: 42,
             color: Colors.white,
           ),
-          action: () {}),
+          action: () {
+            push(
+                context,
+                const EventProceduresPage(
+                  backToHome: true,
+                  initialFilter: InitialFilter.all,
+                ));
+          }),
     ];
     return menufinancial;
   }
