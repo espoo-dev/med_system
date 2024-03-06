@@ -26,7 +26,7 @@ class _ListEventsWidgetState extends State<ListEventsWidget> {
         children: <Widget>[
           Row(
             children: [
-              const Text("Últimos Eventos",
+              const Text("Últimos procedimentos",
                   style: TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: 18,

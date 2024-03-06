@@ -18,7 +18,7 @@ import 'package:lottie/lottie.dart';
 
 import '../../../core/utils/navigation_utils.dart';
 
-enum InitialFilter { paid, unpaid }
+enum InitialFilter { paid, unpaid, all }
 
 class EventProceduresPage extends StatefulWidget {
   final bool backToHome;
@@ -53,8 +53,10 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
     if (widget.initialFilter != null) {
       if (widget.initialFilter == InitialFilter.paid) {
         eventProcedureStore.updateFilter(false, true, false, false);
-      } else {
+      } else if (widget.initialFilter == InitialFilter.unpaid) {
         eventProcedureStore.updateFilter(false, false, true, false);
+      } else {
+        eventProcedureStore.updateFilter(true, false, false, false);
       }
     }
   }
@@ -100,7 +102,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
       },
       child: Scaffold(
         appBar: const MyAppBar(
-          title: 'Eventos Procedimentos',
+          title: 'Procedimentos',
           hideLeading: true,
           image: null,
         ),
@@ -110,7 +112,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
               })
             : buildExtendedFAB(
                 context,
-                "Novo evento",
+                "Novo procedimento",
                 () {
                   to(context, const AddEventProcedurePage());
                 },
@@ -160,7 +162,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: FilterChip(
-                          label: const Text('Pagos'),
+                          label: const Text('Recebidos'),
                           selected: eventProcedureStore.showPaid!,
                           onSelected: (selected) {
                             eventProcedureStore.updateFilter(
@@ -173,7 +175,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: FilterChip(
-                          label: const Text('Não pagos'),
+                          label: const Text('A Receber'),
                           selected: eventProcedureStore.showUnpaid!,
                           onSelected: (selected) {
                             eventProcedureStore.updateFilter(

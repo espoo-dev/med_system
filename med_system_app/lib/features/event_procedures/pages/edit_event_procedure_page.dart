@@ -60,13 +60,13 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
         to(
             context,
             const SuccessPage(
-              title: 'Evento editado com sucesso!',
+              title: 'Procedimento editado com sucesso!',
               goToPage: EventProceduresPage(),
             ));
       } else if (validationState == SaveEventProcedureState.error) {
         CustomToast.show(context,
             type: ToastType.error,
-            title: "Editar evento",
+            title: "Editar procedimento",
             description: "Por favor, preencha os campos.");
       }
     }));
@@ -95,7 +95,7 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
       },
       child: Scaffold(
         appBar: MyAppBar(
-          title: 'Editar evento procedimento',
+          title: 'Editar procedimento',
           hideLeading: true,
           onPressed: () {
             to(context, const EventProceduresPage());
@@ -242,7 +242,7 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                         ),
                         Center(child: Observer(builder: (_) {
                           return MyButtonWidget(
-                            text: 'Editar evento',
+                            text: 'Editar procedimento',
                             isLoading: editEventProcedureStore.saveState ==
                                 SaveEventProcedureState.loading,
                             disabledColor: Colors.grey,

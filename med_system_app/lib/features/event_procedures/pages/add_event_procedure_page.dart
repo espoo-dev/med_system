@@ -89,7 +89,7 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
       },
       child: Scaffold(
         appBar: const MyAppBar(
-          title: 'Novo Evento',
+          title: 'Novo Procedimento',
           hideLeading: true,
           image: null,
         ),
@@ -213,7 +213,7 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                       ),
                       Center(child: Observer(builder: (_) {
                         return MyButtonWidget(
-                          text: 'Cadastrar evento',
+                          text: 'Cadastrar procedimento',
                           isLoading: addEventProcedureStore.saveState ==
                               SaveEventProcedureState.loading,
                           disabledColor: Colors.grey,
