@@ -18,9 +18,15 @@ final class _$EventProcedureService extends EventProcedureService {
   final Type definitionType = EventProcedureService;
 
   @override
-  Future<Response<dynamic>> getAllEventProcedures(int page) {
+  Future<Response<dynamic>> getAllEventProcedures(
+    int page,
+    int perPage,
+  ) {
     final Uri $url = Uri.parse('/api/v1/event_procedures');
-    final Map<String, dynamic> $params = <String, dynamic>{'page': page};
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'page': page,
+      'per_page': perPage,
+    };
     final Request $request = Request(
       'GET',
       $url,
@@ -33,11 +39,13 @@ final class _$EventProcedureService extends EventProcedureService {
   @override
   Future<Response<dynamic>> getAllEventProceduresByPaid(
     int page,
+    int perPage,
     bool payd,
   ) {
     final Uri $url = Uri.parse('/api/v1/event_procedures');
     final Map<String, dynamic> $params = <String, dynamic>{
       'page': page,
+      'per_page': perPage,
       'payd': payd,
     };
     final Request $request = Request(
@@ -52,11 +60,13 @@ final class _$EventProcedureService extends EventProcedureService {
   @override
   Future<Response<dynamic>> getAllEventProceduresByMonth(
     int page,
+    int perPage,
     int month,
   ) {
     final Uri $url = Uri.parse('/api/v1/event_procedures');
     final Map<String, dynamic> $params = <String, dynamic>{
       'page': page,
+      'per_page': perPage,
       'month': month,
     };
     final Request $request = Request(

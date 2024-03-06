@@ -83,15 +83,15 @@ abstract class _EventProcedureStoreBase with Store {
 
     if (_showPaid) {
       resultEventProcedures = await _eventProcedureRepository
-          .getAllEventProceduresByPayd(_page, true)
+          .getAllEventProceduresByPayd(_page, 10, true)
           .asObservable();
     } else if (_showUnpaid) {
       resultEventProcedures = await _eventProcedureRepository
-          .getAllEventProceduresByPayd(_page, false)
+          .getAllEventProceduresByPayd(_page, 10, false)
           .asObservable();
     } else if (_showMonth && _month != 0) {
       resultEventProcedures = await _eventProcedureRepository
-          .getAllEventProceduresByMonth(_page, month)
+          .getAllEventProceduresByMonth(_page, 10, month)
           .asObservable();
     } else {
       resultEventProcedures = await _eventProcedureRepository
