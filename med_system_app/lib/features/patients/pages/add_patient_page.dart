@@ -55,6 +55,7 @@ class _AddPatientState extends State<AddPatientPage> {
     for (var disposer in _disposers) {
       disposer();
     }
+    addPatientStore.dispose();
     super.dispose();
   }
 

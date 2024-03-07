@@ -51,6 +51,20 @@ abstract class _PatientStoreBase with Store {
     });
   }
 
+  @action
+  deletePatient(int patientId) async {
+    state = PatientState.loading;
+    var registerPatientResult =
+        await _patientRepository.deletePatient(patientId);
+    registerPatientResult?.when(success: (patient) {
+      getAllPatients(isRefresh: true);
+      state = PatientState.success;
+    }, failure: (NetworkExceptions error) {
+      handleError(NetworkExceptions.getErrorMessage(error));
+      state = PatientState.error;
+    });
+  }
+
   handleError(String reason) {
     _errorMessage = reason;
   }

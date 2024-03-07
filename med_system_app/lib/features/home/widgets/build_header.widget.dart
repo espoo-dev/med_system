@@ -38,7 +38,10 @@ class _HeaderHomeWidgetState extends State<HeaderHomeWidget> {
                   iconMenuHomeAsset,
                   width: 24,
                   height: 18,
-                  color: Theme.of(context).colorScheme.primary,
+                  colorFilter: ColorFilter.mode(
+                    Theme.of(context).colorScheme.primary,
+                    BlendMode.srcIn,
+                  ),
                 ),
               ),
               const SizedBox(
@@ -48,7 +51,10 @@ class _HeaderHomeWidgetState extends State<HeaderHomeWidget> {
                 iconLogoAsset,
                 width: 50,
                 height: 50,
-                color: Theme.of(context).colorScheme.primary,
+                colorFilter: ColorFilter.mode(
+                  Theme.of(context).colorScheme.primary,
+                  BlendMode.srcIn,
+                ),
               ),
             ],
           ),

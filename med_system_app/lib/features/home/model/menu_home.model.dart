@@ -16,7 +16,10 @@ class MenuHomeModel {
             iconHeartTickHomeAsset,
             width: 42,
             height: 42,
-            color: Colors.white,
+            colorFilter: const ColorFilter.mode(
+              Colors.white,
+              BlendMode.srcIn,
+            ),
           ),
           backgroundColor: const Color(0xff45B3CB),
           label: totalPayd,
@@ -37,7 +40,10 @@ class MenuHomeModel {
             iconHeartRemoveHomeAsset,
             width: 42,
             height: 42,
-            color: Colors.white,
+            colorFilter: const ColorFilter.mode(
+              Colors.white,
+              BlendMode.srcIn,
+            ),
           ),
           action: () {
             push(
@@ -55,7 +61,10 @@ class MenuHomeModel {
             iconMedicationAsset,
             width: 42,
             height: 42,
-            color: Colors.white,
+            colorFilter: const ColorFilter.mode(
+              Colors.white,
+              BlendMode.srcIn,
+            ),
           ),
           action: () {
             push(

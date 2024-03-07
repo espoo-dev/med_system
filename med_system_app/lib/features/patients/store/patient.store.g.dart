@@ -66,6 +66,14 @@ mixin _$PatientStore on _PatientStoreBase, Store {
         .run(() => super.getAllPatients(isRefresh: isRefresh));
   }
 
+  late final _$deletePatientAsyncAction =
+      AsyncAction('_PatientStoreBase.deletePatient', context: context);
+
+  @override
+  Future deletePatient(int patientId) {
+    return _$deletePatientAsyncAction.run(() => super.deletePatient(patientId));
+  }
+
   late final _$_PatientStoreBaseActionController =
       ActionController(name: '_PatientStoreBase', context: context);
 

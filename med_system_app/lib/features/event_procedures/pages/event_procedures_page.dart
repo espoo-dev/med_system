@@ -269,9 +269,14 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                                         : iconCloseCoreAsset,
                                     width: 32,
                                     height: 32,
-                                    color: eventProcedures.isPaid()
-                                        ? Theme.of(context).colorScheme.primary
-                                        : const Color(0xFFEC2A58),
+                                    colorFilter: ColorFilter.mode(
+                                      eventProcedures.isPaid()
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                          : const Color(0xFFEC2A58),
+                                      BlendMode.srcIn,
+                                    ),
                                   ),
                                   title: Text(
                                     eventProcedures.patient ?? "",

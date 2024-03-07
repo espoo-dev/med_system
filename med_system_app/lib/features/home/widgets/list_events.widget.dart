@@ -98,12 +98,13 @@ class _ListEventsWidgetState extends State<ListEventsWidget> {
                           ),
                         ],
                       ),
-                      leading: SvgPicture.asset(
-                        iconAsset,
-                        width: 18,
-                        height: 18,
-                        color: iconColor,
-                      ),
+                      leading: SvgPicture.asset(iconAsset,
+                          width: 18,
+                          height: 18,
+                          colorFilter: ColorFilter.mode(
+                            iconColor,
+                            BlendMode.srcIn,
+                          )),
                       trailing: Icon(
                         Icons.arrow_forward_ios,
                         size: 18.0,
