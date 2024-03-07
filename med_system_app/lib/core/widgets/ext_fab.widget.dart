@@ -5,7 +5,7 @@ Widget buildExtendedFAB(
   return AnimatedContainer(
     duration: const Duration(milliseconds: 200),
     curve: Curves.linear,
-    width: 150,
+    width: 200,
     height: 50,
     child: FloatingActionButton.extended(
       onPressed: () {
