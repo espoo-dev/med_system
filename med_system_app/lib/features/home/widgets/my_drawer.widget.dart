@@ -56,7 +56,10 @@ class MyDrawer extends StatelessWidget {
               iconMenuPatient,
               width: 30,
               height: 30,
-              color: Theme.of(context).colorScheme.primary,
+              colorFilter: ColorFilter.mode(
+                Theme.of(context).colorScheme.primary,
+                BlendMode.srcIn,
+              ),
             ),
           ),
           ListTile(
@@ -75,7 +78,10 @@ class MyDrawer extends StatelessWidget {
               iconMenuHospital,
               width: 30,
               height: 30,
-              color: Theme.of(context).colorScheme.primary,
+              colorFilter: ColorFilter.mode(
+                Theme.of(context).colorScheme.primary,
+                BlendMode.srcIn,
+              ),
             ),
           ),
           ListTile(
@@ -94,7 +100,10 @@ class MyDrawer extends StatelessWidget {
               iconMenuConvenio,
               width: 30,
               height: 30,
-              color: Theme.of(context).colorScheme.primary,
+              colorFilter: ColorFilter.mode(
+                Theme.of(context).colorScheme.primary,
+                BlendMode.srcIn,
+              ),
             ),
           ),
           ListTile(
@@ -109,12 +118,13 @@ class MyDrawer extends StatelessWidget {
               "Procedimentos",
               style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
             ),
-            leading: SvgPicture.asset(
-              iconMenuProcedure,
-              width: 30,
-              height: 30,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+            leading: SvgPicture.asset(iconMenuProcedure,
+                width: 30,
+                height: 30,
+                colorFilter: ColorFilter.mode(
+                  Theme.of(context).colorScheme.primary,
+                  BlendMode.srcIn,
+                )),
           ),
           ListTile(
             onTap: () {

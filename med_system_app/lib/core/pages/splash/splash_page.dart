@@ -52,7 +52,10 @@ class _SplashScreenState extends State<SplashScreenPage> {
                         iconLogoAsset,
                         width: 150,
                         height: 150,
-                        color: Colors.white,
+                        colorFilter: const ColorFilter.mode(
+                          Colors.white,
+                          BlendMode.srcIn,
+                        ),
                       ),
                     ),
                     const Padding(

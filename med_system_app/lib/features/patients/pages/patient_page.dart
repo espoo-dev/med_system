@@ -1,4 +1,5 @@
 import 'package:distrito_medico/core/utils/navigation_utils.dart';
+import 'package:distrito_medico/core/utils/ui.dart';
 import 'package:distrito_medico/core/widgets/error.widget.dart';
 import 'package:distrito_medico/core/widgets/ext_fab.widget.dart';
 import 'package:distrito_medico/core/widgets/fab.widget.dart';
@@ -98,7 +99,8 @@ class _PatientPageState extends State<PatientPage> {
                 _listPatients!.isEmpty) {
               return const Center(child: CircularProgressIndicator());
             }
-            if (_patientStore.patientList.isEmpty) {
+            if (_patientStore.patientList.isEmpty &&
+                _patientStore.state == PatientState.success) {
               return const Center(
                   child: Text('Você não possui pacientes cadastrados.'));
             }
@@ -123,31 +125,33 @@ class _PatientPageState extends State<PatientPage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          trailing: Icon(
-                            size: 10.0,
-                            Icons.arrow_forward_ios,
-                            color: Theme.of(context).colorScheme.primary,
+                          trailing: Visibility(
+                            visible: patient.deletable ?? false,
+                            child: IconButton(
+                              onPressed: () {
+                                showAlert(
+                                  title: 'Excluir Paciente',
+                                  content:
+                                      'Tem certeza que deseja excluir este paciente?',
+                                  textYes: 'Sim',
+                                  textNo: 'Não',
+                                  onPressedConfirm: () {
+                                    _patientStore
+                                        .deletePatient(patient.id ?? 0);
+                                    Navigator.pop(context);
+                                  },
+                                  onPressedCancel: () {
+                                    Navigator.pop(context);
+                                  },
+                                  context: context,
+                                );
+                              },
+                              icon: Icon(
+                                Icons.delete,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
                           ),
-                          // trailing: IconButton(
-                          //   onPressed: () {
-                          //     showAlert(
-                          //       title: 'Excluir Paciente',
-                          //       content:
-                          //           'Tem certeza que deseja excluir este paciente?',
-                          //       textYes: 'Sim',
-                          //       textNo: 'Não',
-                          //       onPressedConfirm: () {},
-                          //       onPressedCancel: () {
-                          //         Navigator.pop(context);
-                          //       },
-                          //       context: context,
-                          //     );
-                          //   },
-                          //   icon: Icon(
-                          //     Icons.delete,
-                          //     color: Theme.of(context).colorScheme.primary,
-                          //   ),
-                          // ),
                         );
                       } else {
                         return const Center(child: CircularProgressIndicator());
