@@ -328,7 +328,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                                     endActionPane: ActionPane(
                                       dismissible: DismissiblePane(
                                         onDismissed: () =>
-                                            _onDismissed(index, Actions.pay),
+                                            _onDismissed(index, Actions.delete),
                                       ),
                                       motion: const BehindMotion(),
                                       children: [
