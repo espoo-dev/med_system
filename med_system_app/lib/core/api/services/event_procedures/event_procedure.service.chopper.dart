@@ -125,4 +125,31 @@ final class _$EventProcedureService extends EventProcedureService {
     );
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<dynamic>> editPaymentEventProcedure(
+    dynamic id,
+    dynamic body,
+  ) {
+    final Uri $url = Uri.parse('/api/v1/event_procedures/${id}');
+    final $body = body;
+    final Request $request = Request(
+      'PUT',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> deleteEventProcedure(dynamic id) {
+    final Uri $url = Uri.parse('/api/v1/event_procedures/${id}');
+    final Request $request = Request(
+      'DELETE',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
 }
