@@ -18,21 +18,16 @@ jobs:
         with:
           flutter-version: '2.10.0'
 
-      - name: Install dependencies
-        run: flutter pub get
-        working-directory: ${{ github.workspace }}
-
-      - name: Build APK
-        run: flutter build apk --release
-        working-directory: ${{ github.workspace }}
-
-      - name: Find APK
+      - name: Install dependencies and build APK
         run: |
-          apk_path=$(find ${{ github.workspace }} -path "**/app-release.apk")
+          cd ${{ github.workspace }}
+          flutter pub get
+          flutter build apk --release
+          apk_path=$(find . -path "**/app-release.apk")
           echo "::set-output name=apk_path::$apk_path"
 
       - name: Upload APK
         uses: actions/upload-artifact@v2
         with:
           name: app-release
-          path: ${{ steps.find.outputs.apk_path }}
+          path: ${{ steps.build.outputs.apk_path }}
