@@ -10,6 +10,8 @@ class PatientStore = _PatientStoreBase with _$PatientStore;
 
 enum PatientState { idle, success, error, loading }
 
+enum DeletePatientState { idle, success, error, loading }
+
 abstract class _PatientStoreBase with Store {
   final PatientRepository _patientRepository;
 
@@ -17,6 +19,8 @@ abstract class _PatientStoreBase with Store {
 
   @observable
   PatientState state = PatientState.idle;
+  @observable
+  DeletePatientState deletePatientState = DeletePatientState.idle;
 
   @observable
   String _errorMessage = "";
@@ -57,11 +61,12 @@ abstract class _PatientStoreBase with Store {
     var registerPatientResult =
         await _patientRepository.deletePatient(patientId);
     registerPatientResult?.when(success: (patient) {
+      deletePatientState = DeletePatientState.success;
       getAllPatients(isRefresh: true);
-      state = PatientState.success;
+      deletePatientState = DeletePatientState.success;
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));
-      state = PatientState.error;
+      deletePatientState = DeletePatientState.error;
     });
   }
 
