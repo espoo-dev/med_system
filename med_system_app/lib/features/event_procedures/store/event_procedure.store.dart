@@ -1,5 +1,6 @@
 import 'package:distrito_medico/core/api/api_result.dart';
 import 'package:distrito_medico/core/api/network_exceptions.dart';
+import 'package:distrito_medico/features/event_procedures/model/edit_payment_procedure_request.model.dart';
 import 'package:distrito_medico/features/event_procedures/model/event_procedure.model.dart';
 import 'package:distrito_medico/features/event_procedures/repository/event_procedure_repository.dart';
 import 'package:mobx/mobx.dart';
@@ -11,6 +12,10 @@ class EventProcedureStore = _EventProcedureStoreBase with _$EventProcedureStore;
 
 enum EventProcedureState { idle, success, error, loading }
 
+enum EditEventProcedureState { idle, success, error, loading }
+
+enum DeleteEventProcedureState { idle, success, error, loading }
+
 abstract class _EventProcedureStoreBase with Store {
   final EventProcedureRepository _eventProcedureRepository;
 
@@ -19,6 +24,11 @@ abstract class _EventProcedureStoreBase with Store {
 
   @observable
   EventProcedureState state = EventProcedureState.idle;
+  @observable
+  EditEventProcedureState editState = EditEventProcedureState.idle;
+
+  @observable
+  DeleteEventProcedureState deleteSate = DeleteEventProcedureState.idle;
 
   @observable
   bool _showAll = false;
@@ -117,6 +127,40 @@ abstract class _EventProcedureStoreBase with Store {
   handleError(String reason) {
     _errorMessage = reason;
     state = EventProcedureState.error;
+  }
+
+  @action
+  deleteEventProcedure(int eventProcedureId) async {
+    var deleteResult =
+        await _eventProcedureRepository.deleteEventProcedure(eventProcedureId);
+    deleteResult?.when(success: (patient) {
+      deleteSate = DeleteEventProcedureState.success;
+    }, failure: (NetworkExceptions error) {
+      handleError(NetworkExceptions.getErrorMessage(error));
+      deleteSate = DeleteEventProcedureState.error;
+    });
+  }
+
+  @action
+  editPaymentEventProcedure(int eventProcedureId) async {
+    var editResult = await _eventProcedureRepository.editPaymentEventProcedure(
+        eventProcedureId,
+        EditPaymentEventProcedureModel(paydAt: getCurrentDate()));
+    editResult?.when(success: (eventProcedure) {
+      editState = EditEventProcedureState.success;
+      getAllEventProcedures(isRefresh: true);
+    }, failure: (NetworkExceptions error) {
+      editState = EditEventProcedureState.error;
+      handleError(NetworkExceptions.getErrorMessage(error));
+    });
+  }
+
+  String getCurrentDate() {
+    DateTime currentDate = DateTime.now();
+    String day = currentDate.day.toString().padLeft(2, '0');
+    String month = currentDate.month.toString().padLeft(2, '0');
+    String year = currentDate.year.toString();
+    return '$day/$month/$year';
   }
 
   @action

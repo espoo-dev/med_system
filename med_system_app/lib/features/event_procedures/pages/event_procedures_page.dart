@@ -4,6 +4,7 @@ import 'package:distrito_medico/core/widgets/error.widget.dart';
 import 'package:distrito_medico/core/widgets/ext_fab.widget.dart';
 import 'package:distrito_medico/core/widgets/fab.widget.dart';
 import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
+import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
 import 'package:distrito_medico/features/event_procedures/model/event_procedure.model.dart';
 import 'package:distrito_medico/features/event_procedures/pages/add_event_procedure_page.dart';
 import 'package:distrito_medico/features/event_procedures/pages/edit_event_procedure_page.dart';
@@ -12,13 +13,17 @@ import 'package:distrito_medico/features/event_procedures/store/event_procedure.
 import 'package:distrito_medico/features/home/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lottie/lottie.dart';
+import 'package:mobx/mobx.dart';
 
 import '../../../core/utils/navigation_utils.dart';
 
 enum InitialFilter { paid, unpaid, all }
+
+enum Actions { pay, delete }
 
 class EventProceduresPage extends StatefulWidget {
   final bool backToHome;
@@ -36,6 +41,51 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
   List<EventProcedures>? _listEventProcedures = [];
   final ScrollController _scrollController = ScrollController();
   bool isFab = false;
+  final List<ReactionDisposer> _disposers = [];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _disposers.add(reaction<EditEventProcedureState>(
+        (_) => eventProcedureStore.editState, (validationState) {
+      if (validationState == EditEventProcedureState.success) {
+        CustomToast.show(context,
+            type: ToastType.success,
+            title: "Edição de procedimento",
+            description: "Procedimento editado com sucesso!");
+      } else if (validationState == EditEventProcedureState.error) {
+        CustomToast.show(context,
+            type: ToastType.error,
+            title: "Edição de procedimeto",
+            description: "Ocorreu um erro ao tentar editar procedimento.");
+      }
+    }));
+    _disposers.add(reaction<DeleteEventProcedureState>(
+        (_) => eventProcedureStore.deleteSate, (validationState) {
+      if (validationState == DeleteEventProcedureState.success) {
+        CustomToast.show(context,
+            type: ToastType.success,
+            title: "Exclusão de procedimento",
+            description: "Procedimento excluído com sucesso!");
+      } else if (validationState == DeleteEventProcedureState.error) {
+        CustomToast.show(context,
+            type: ToastType.error,
+            title: "Exclusão de procedimeto",
+            description: "Ocorreu um erro ao tentar excluir procedimento.");
+      }
+    }));
+  }
+
+  @override
+  void dispose() {
+    for (var disposer in _disposers) {
+      disposer();
+    }
+    eventProcedureStore.dispose();
+    _scrollController.dispose();
+    eventProcedureStore.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -83,13 +133,6 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
   Future _refreshProcedures() async {
     debugPrint('refreshProcedures');
     await eventProcedureStore.getAllEventProcedures(isRefresh: true);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _scrollController.dispose();
-    eventProcedureStore.dispose();
   }
 
   @override
@@ -246,59 +289,105 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                         eventProcedureStore.eventProcedureList;
                     return Stack(
                       children: [
-                        ListView.separated(
-                            controller: _scrollController,
-                            itemCount: eventProcedureStore.state ==
-                                    EventProcedureState.loading
-                                ? _listEventProcedures!.length + 1
-                                : _listEventProcedures!.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              if (index < _listEventProcedures!.length) {
-                                EventProcedures eventProcedures =
-                                    _listEventProcedures![index];
-                                return ListTile(
-                                  onTap: () {
-                                    to(
-                                        context,
-                                        EditEventProcedurePage(
-                                            eventProcedures: eventProcedures));
-                                  },
-                                  leading: SvgPicture.asset(
-                                    eventProcedures.isPaid()
-                                        ? iconCheckCoreAsset
-                                        : iconCloseCoreAsset,
-                                    width: 32,
-                                    height: 32,
-                                    colorFilter: ColorFilter.mode(
-                                      eventProcedures.isPaid()
-                                          ? Theme.of(context)
-                                              .colorScheme
-                                              .primary
-                                          : const Color(0xFFEC2A58),
-                                      BlendMode.srcIn,
+                        SlidableAutoCloseBehavior(
+                          closeWhenOpened: true,
+                          child: ListView.separated(
+                              controller: _scrollController,
+                              itemCount: eventProcedureStore.state ==
+                                      EventProcedureState.loading
+                                  ? _listEventProcedures!.length + 1
+                                  : _listEventProcedures!.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                if (index < _listEventProcedures!.length) {
+                                  EventProcedures eventProcedures =
+                                      _listEventProcedures![index];
+                                  return Slidable(
+                                    key: ValueKey(_listEventProcedures?.length),
+                                    startActionPane: !eventProcedures.isPaid()
+                                        ? ActionPane(
+                                            dismissible: DismissiblePane(
+                                              onDismissed: () => _onDismissed(
+                                                  index, Actions.pay),
+                                            ),
+                                            motion: const StretchMotion(),
+                                            children: [
+                                              SlidableAction(
+                                                backgroundColor:
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
+                                                icon: Icons.check,
+                                                label: 'Pagar',
+                                                onPressed: (context) =>
+                                                    _onDismissed(
+                                                        index, Actions.pay),
+                                              )
+                                            ],
+                                          )
+                                        : null,
+                                    endActionPane: ActionPane(
+                                      dismissible: DismissiblePane(
+                                        onDismissed: () =>
+                                            _onDismissed(index, Actions.pay),
+                                      ),
+                                      motion: const BehindMotion(),
+                                      children: [
+                                        SlidableAction(
+                                          backgroundColor: Colors.red,
+                                          icon: Icons.delete,
+                                          label: 'Deletar',
+                                          onPressed: (context) => _onDismissed(
+                                              index, Actions.delete),
+                                        )
+                                      ],
                                     ),
-                                  ),
-                                  title: Text(
-                                    eventProcedures.patient ?? "",
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                    child: ListTile(
+                                      onTap: () {
+                                        to(
+                                            context,
+                                            EditEventProcedurePage(
+                                                eventProcedures:
+                                                    eventProcedures));
+                                      },
+                                      leading: SvgPicture.asset(
+                                        eventProcedures.isPaid()
+                                            ? iconCheckCoreAsset
+                                            : iconCloseCoreAsset,
+                                        width: 32,
+                                        height: 32,
+                                        colorFilter: ColorFilter.mode(
+                                          eventProcedures.isPaid()
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                              : const Color(0xFFEC2A58),
+                                          BlendMode.srcIn,
+                                        ),
+                                      ),
+                                      title: Text(
+                                        eventProcedures.patient ?? "",
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      subtitle:
+                                          Text(eventProcedures.procedure ?? ""),
+                                      trailing: Icon(
+                                        size: 10.0,
+                                        Icons.arrow_forward_ios,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      ),
                                     ),
-                                  ),
-                                  subtitle:
-                                      Text(eventProcedures.procedure ?? ""),
-                                  trailing: Icon(
-                                    size: 10.0,
-                                    Icons.arrow_forward_ios,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                );
-                              } else {
-                                return const Center(
-                                    child: CircularProgressIndicator());
-                              }
-                            },
-                            separatorBuilder: (_, __) => const Divider()),
+                                  );
+                                } else {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                }
+                              },
+                              separatorBuilder: (_, __) => const Divider()),
+                        ),
                       ],
                     );
                   },
@@ -309,5 +398,20 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
         ),
       ),
     );
+  }
+
+  void _onDismissed(int index, Actions action) {
+    EventProcedures eventProcedures = _listEventProcedures![index];
+    setState(() {
+      _listEventProcedures?.removeAt(index);
+    });
+    switch (action) {
+      case Actions.delete:
+        eventProcedureStore.deleteEventProcedure(eventProcedures.id ?? 0);
+        break;
+      case Actions.pay:
+        eventProcedureStore.editPaymentEventProcedure(eventProcedures.id ?? 0);
+        break;
+    }
   }
 }
