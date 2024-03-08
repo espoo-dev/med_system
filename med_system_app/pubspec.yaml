@@ -52,6 +52,7 @@ dependencies:
   brasil_fields: ^1.4.4
   flutter_launcher_icons: ^0.13.1
   intl: ^0.18.1
+  flutter_slidable: ^3.0.1
 
 
 dev_dependencies:

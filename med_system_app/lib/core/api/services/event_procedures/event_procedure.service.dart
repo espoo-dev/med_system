@@ -31,4 +31,11 @@ abstract class EventProcedureService extends ChopperService {
 
   @Put(path: 'api/v1/event_procedures/{id}')
   Future<Response> editEventProcedure(@Path('id') id, @Body() dynamic body);
+
+  @Put(path: 'api/v1/event_procedures/{id}')
+  Future<Response> editPaymentEventProcedure(
+      @Path('id') id, @Body() dynamic body);
+
+  @Delete(path: 'api/v1/event_procedures/{id}')
+  Future<Response> deleteEventProcedure(@Path('id') id);
 }

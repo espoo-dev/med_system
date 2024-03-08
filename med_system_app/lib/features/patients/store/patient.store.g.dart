@@ -25,6 +25,22 @@ mixin _$PatientStore on _PatientStoreBase, Store {
     });
   }
 
+  late final _$deletePatientStateAtom =
+      Atom(name: '_PatientStoreBase.deletePatientState', context: context);
+
+  @override
+  DeletePatientState get deletePatientState {
+    _$deletePatientStateAtom.reportRead();
+    return super.deletePatientState;
+  }
+
+  @override
+  set deletePatientState(DeletePatientState value) {
+    _$deletePatientStateAtom.reportWrite(value, super.deletePatientState, () {
+      super.deletePatientState = value;
+    });
+  }
+
   late final _$_errorMessageAtom =
       Atom(name: '_PatientStoreBase._errorMessage', context: context);
 
@@ -91,7 +107,8 @@ mixin _$PatientStore on _PatientStoreBase, Store {
   @override
   String toString() {
     return '''
-state: ${state}
+state: ${state},
+deletePatientState: ${deletePatientState}
     ''';
   }
 }

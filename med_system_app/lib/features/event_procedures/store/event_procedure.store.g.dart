@@ -25,6 +25,38 @@ mixin _$EventProcedureStore on _EventProcedureStoreBase, Store {
     });
   }
 
+  late final _$editStateAtom =
+      Atom(name: '_EventProcedureStoreBase.editState', context: context);
+
+  @override
+  EditEventProcedureState get editState {
+    _$editStateAtom.reportRead();
+    return super.editState;
+  }
+
+  @override
+  set editState(EditEventProcedureState value) {
+    _$editStateAtom.reportWrite(value, super.editState, () {
+      super.editState = value;
+    });
+  }
+
+  late final _$deleteSateAtom =
+      Atom(name: '_EventProcedureStoreBase.deleteSate', context: context);
+
+  @override
+  DeleteEventProcedureState get deleteSate {
+    _$deleteSateAtom.reportRead();
+    return super.deleteSate;
+  }
+
+  @override
+  set deleteSate(DeleteEventProcedureState value) {
+    _$deleteSateAtom.reportWrite(value, super.deleteSate, () {
+      super.deleteSate = value;
+    });
+  }
+
   late final _$_showAllAtom =
       Atom(name: '_EventProcedureStoreBase._showAll', context: context);
 
@@ -147,6 +179,26 @@ mixin _$EventProcedureStore on _EventProcedureStoreBase, Store {
         .run(() => super.getAllEventProcedures(isRefresh: isRefresh));
   }
 
+  late final _$deleteEventProcedureAsyncAction = AsyncAction(
+      '_EventProcedureStoreBase.deleteEventProcedure',
+      context: context);
+
+  @override
+  Future deleteEventProcedure(int eventProcedureId) {
+    return _$deleteEventProcedureAsyncAction
+        .run(() => super.deleteEventProcedure(eventProcedureId));
+  }
+
+  late final _$editPaymentEventProcedureAsyncAction = AsyncAction(
+      '_EventProcedureStoreBase.editPaymentEventProcedure',
+      context: context);
+
+  @override
+  Future editPaymentEventProcedure(int eventProcedureId) {
+    return _$editPaymentEventProcedureAsyncAction
+        .run(() => super.editPaymentEventProcedure(eventProcedureId));
+  }
+
   late final _$_EventProcedureStoreBaseActionController =
       ActionController(name: '_EventProcedureStoreBase', context: context);
 
@@ -197,7 +249,9 @@ mixin _$EventProcedureStore on _EventProcedureStoreBase, Store {
   @override
   String toString() {
     return '''
-state: ${state}
+state: ${state},
+editState: ${editState},
+deleteSate: ${deleteSate}
     ''';
   }
 }
