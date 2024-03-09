@@ -271,7 +271,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                                 ),
                                 const Center(
                                   child: Text(
-                                    'Você não possui eventos procedimentos cadastrados.',
+                                    'Procedimento(s) não encontrado(s).',
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.w600,
