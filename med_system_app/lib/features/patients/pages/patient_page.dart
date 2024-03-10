@@ -1,4 +1,5 @@
 import 'package:distrito_medico/core/utils/navigation_utils.dart';
+import 'package:distrito_medico/core/utils/ui.dart';
 import 'package:distrito_medico/core/widgets/error.widget.dart';
 import 'package:distrito_medico/core/widgets/ext_fab.widget.dart';
 import 'package:distrito_medico/core/widgets/fab.widget.dart';
@@ -148,24 +149,38 @@ class _PatientPageState extends State<PatientPage> {
                           Patient patient = _listPatients![index];
                           return Slidable(
                             key: ValueKey(_listPatients?.length),
-                            endActionPane: patient.deletable!
-                                ? ActionPane(
-                                    dismissible: DismissiblePane(
-                                      onDismissed: () =>
-                                          _onDismissed(index, Actions.delete),
-                                    ),
-                                    motion: const BehindMotion(),
-                                    children: [
-                                      SlidableAction(
-                                        backgroundColor: Colors.red,
-                                        icon: Icons.delete,
-                                        label: 'Deletar',
-                                        onPressed: (context) =>
-                                            _onDismissed(index, Actions.delete),
-                                      )
-                                    ],
-                                  )
-                                : null,
+                            endActionPane: ActionPane(
+                              motion: const BehindMotion(),
+                              children: [
+                                SlidableAction(
+                                    backgroundColor: Colors.red,
+                                    icon: Icons.delete,
+                                    label: 'Deletar',
+                                    onPressed: (context) {
+                                      if (patient.deletable == true) {
+                                        showAlert(
+                                          context: context,
+                                          title: 'Excluir Paciente',
+                                          content:
+                                              'Tem certeza que deseja excluir este paciente?',
+                                          textYes: 'Sim',
+                                          textNo: 'Não',
+                                          onPressedConfirm: () {
+                                            _patientStore.deletePatient(
+                                                patient.id ?? 0, index);
+                                          },
+                                          onPressedCancel: () {},
+                                        );
+                                      } else {
+                                        CustomToast.show(context,
+                                            type: ToastType.error,
+                                            title: "Exclusão de paciente",
+                                            description:
+                                                "Paciente tem procedimento vinculado.");
+                                      }
+                                    })
+                              ],
+                            ),
                             child: ListTile(
                               onTap: () {
                                 to(context, EditPatientPage(patient: patient));
@@ -191,17 +206,5 @@ class _PatientPageState extends State<PatientPage> {
         ),
       ),
     );
-  }
-
-  void _onDismissed(int index, Actions action) {
-    Patient patient = _listPatients![index];
-    setState(() {
-      _listPatients?.removeAt(index);
-    });
-    switch (action) {
-      case Actions.delete:
-        _patientStore.deletePatient(patient.id ?? 0);
-        break;
-    }
   }
 }
