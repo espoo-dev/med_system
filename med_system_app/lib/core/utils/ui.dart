@@ -9,19 +9,28 @@ showAlert({
   required VoidCallback onPressedCancel,
   required BuildContext context,
 }) {
+  GlobalKey<State> dialogKey = GlobalKey<State>();
+
   showDialog<void>(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
+        key: dialogKey,
         title: Text(title),
         content: Text(content),
         actions: <Widget>[
           TextButton(
-            onPressed: onPressedCancel,
+            onPressed: () {
+              onPressedCancel();
+              Navigator.of(context).pop();
+            },
             child: Text(textNo),
           ),
           ElevatedButton(
-            onPressed: onPressedConfirm,
+            onPressed: () {
+              onPressedConfirm();
+              Navigator.of(context).pop();
+            },
             child: Text(textYes),
           ),
         ],

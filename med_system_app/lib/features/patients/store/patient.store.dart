@@ -56,13 +56,12 @@ abstract class _PatientStoreBase with Store {
   }
 
   @action
-  deletePatient(int patientId) async {
-    state = PatientState.loading;
+  deletePatient(int patientId, int index) async {
+    deletePatientState = DeletePatientState.loading;
     var registerPatientResult =
         await _patientRepository.deletePatient(patientId);
     registerPatientResult?.when(success: (patient) {
-      deletePatientState = DeletePatientState.success;
-      getAllPatients(isRefresh: true);
+      patientList.removeAt(index);
       deletePatientState = DeletePatientState.success;
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));

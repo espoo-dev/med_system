@@ -86,8 +86,9 @@ mixin _$PatientStore on _PatientStoreBase, Store {
       AsyncAction('_PatientStoreBase.deletePatient', context: context);
 
   @override
-  Future deletePatient(int patientId) {
-    return _$deletePatientAsyncAction.run(() => super.deletePatient(patientId));
+  Future deletePatient(int patientId, int index) {
+    return _$deletePatientAsyncAction
+        .run(() => super.deletePatient(patientId, index));
   }
 
   late final _$_PatientStoreBaseActionController =
