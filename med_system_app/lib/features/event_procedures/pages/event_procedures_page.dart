@@ -1,5 +1,6 @@
 import 'package:distrito_medico/core/theme/animations.dart';
 import 'package:distrito_medico/core/theme/icons.dart';
+import 'package:distrito_medico/core/utils/ui.dart';
 import 'package:distrito_medico/core/widgets/error.widget.dart';
 import 'package:distrito_medico/core/widgets/ext_fab.widget.dart';
 import 'package:distrito_medico/core/widgets/fab.widget.dart';
@@ -305,40 +306,51 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                                     key: ValueKey(_listEventProcedures?.length),
                                     startActionPane: !eventProcedures.isPaid()
                                         ? ActionPane(
-                                            dismissible: DismissiblePane(
-                                              onDismissed: () => _onDismissed(
-                                                  index, Actions.pay),
-                                            ),
                                             motion: const StretchMotion(),
                                             children: [
                                               SlidableAction(
-                                                backgroundColor:
-                                                    Theme.of(context)
-                                                        .colorScheme
-                                                        .primary,
-                                                icon: Icons.check,
-                                                label: 'Pagar',
-                                                onPressed: (context) =>
-                                                    _onDismissed(
-                                                        index, Actions.pay),
-                                              )
+                                                  backgroundColor:
+                                                      Theme.of(context)
+                                                          .colorScheme
+                                                          .primary,
+                                                  icon: Icons.check,
+                                                  label: 'Pagar',
+                                                  onPressed: (context) {
+                                                    eventProcedureStore
+                                                        .editPaymentEventProcedure(
+                                                            eventProcedures
+                                                                    .id ??
+                                                                0,
+                                                            index);
+                                                  })
                                             ],
                                           )
                                         : null,
                                     endActionPane: ActionPane(
-                                      dismissible: DismissiblePane(
-                                        onDismissed: () =>
-                                            _onDismissed(index, Actions.delete),
-                                      ),
                                       motion: const BehindMotion(),
                                       children: [
                                         SlidableAction(
-                                          backgroundColor: Colors.red,
-                                          icon: Icons.delete,
-                                          label: 'Deletar',
-                                          onPressed: (context) => _onDismissed(
-                                              index, Actions.delete),
-                                        )
+                                            backgroundColor: Colors.red,
+                                            icon: Icons.delete,
+                                            label: 'Deletar',
+                                            onPressed: (context) {
+                                              showAlert(
+                                                context: context,
+                                                title: 'Excluir Procedimento',
+                                                content:
+                                                    'Tem certeza que deseja excluir este procedimento?',
+                                                textYes: 'Sim',
+                                                textNo: 'Não',
+                                                onPressedConfirm: () {
+                                                  eventProcedureStore
+                                                      .deleteEventProcedure(
+                                                          eventProcedures.id ??
+                                                              0,
+                                                          index);
+                                                },
+                                                onPressedCancel: () {},
+                                              );
+                                            })
                                       ],
                                     ),
                                     child: ListTile(
@@ -398,20 +410,5 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
         ),
       ),
     );
-  }
-
-  void _onDismissed(int index, Actions action) {
-    EventProcedures eventProcedures = _listEventProcedures![index];
-    setState(() {
-      _listEventProcedures?.removeAt(index);
-    });
-    switch (action) {
-      case Actions.delete:
-        eventProcedureStore.deleteEventProcedure(eventProcedures.id ?? 0);
-        break;
-      case Actions.pay:
-        eventProcedureStore.editPaymentEventProcedure(eventProcedures.id ?? 0);
-        break;
-    }
   }
 }
