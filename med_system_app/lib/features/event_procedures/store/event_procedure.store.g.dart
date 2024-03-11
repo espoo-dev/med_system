@@ -184,9 +184,9 @@ mixin _$EventProcedureStore on _EventProcedureStoreBase, Store {
       context: context);
 
   @override
-  Future deleteEventProcedure(int eventProcedureId) {
+  Future deleteEventProcedure(int eventProcedureId, dynamic index) {
     return _$deleteEventProcedureAsyncAction
-        .run(() => super.deleteEventProcedure(eventProcedureId));
+        .run(() => super.deleteEventProcedure(eventProcedureId, index));
   }
 
   late final _$editPaymentEventProcedureAsyncAction = AsyncAction(
@@ -194,9 +194,9 @@ mixin _$EventProcedureStore on _EventProcedureStoreBase, Store {
       context: context);
 
   @override
-  Future editPaymentEventProcedure(int eventProcedureId) {
+  Future editPaymentEventProcedure(int eventProcedureId, dynamic index) {
     return _$editPaymentEventProcedureAsyncAction
-        .run(() => super.editPaymentEventProcedure(eventProcedureId));
+        .run(() => super.editPaymentEventProcedure(eventProcedureId, index));
   }
 
   late final _$_EventProcedureStoreBaseActionController =
