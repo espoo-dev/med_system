@@ -130,10 +130,12 @@ abstract class _EventProcedureStoreBase with Store {
   }
 
   @action
-  deleteEventProcedure(int eventProcedureId) async {
+  deleteEventProcedure(int eventProcedureId, index) async {
+    deleteSate = DeleteEventProcedureState.loading;
     var deleteResult =
         await _eventProcedureRepository.deleteEventProcedure(eventProcedureId);
     deleteResult?.when(success: (patient) {
+      eventProcedureList.removeAt(index);
       deleteSate = DeleteEventProcedureState.success;
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));
@@ -142,13 +144,15 @@ abstract class _EventProcedureStoreBase with Store {
   }
 
   @action
-  editPaymentEventProcedure(int eventProcedureId) async {
+  editPaymentEventProcedure(int eventProcedureId, index) async {
+    editState = EditEventProcedureState.loading;
     var editResult = await _eventProcedureRepository.editPaymentEventProcedure(
         eventProcedureId,
         EditPaymentEventProcedureModel(paydAt: getCurrentDate()));
     editResult?.when(success: (eventProcedure) {
+      eventProcedureList[index] =
+          eventProcedureList[index].copyWith(paydAt: getCurrentDate());
       editState = EditEventProcedureState.success;
-      getAllEventProcedures(isRefresh: true);
     }, failure: (NetworkExceptions error) {
       editState = EditEventProcedureState.error;
       handleError(NetworkExceptions.getErrorMessage(error));

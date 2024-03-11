@@ -45,6 +45,34 @@ class EventProcedures {
   String? paydAt;
   String? totalAmountCents;
 
+  EventProcedures copyWith({
+    int? id,
+    String? procedure,
+    String? patient,
+    String? hospital,
+    String? healthInsurance,
+    String? patientServiceNumber,
+    String? date,
+    String? roomType,
+    bool? urgency,
+    String? paydAt,
+    String? totalAmountCents,
+  }) {
+    return EventProcedures(
+      id: id ?? this.id,
+      procedure: procedure ?? this.procedure,
+      patient: patient ?? this.patient,
+      hospital: hospital ?? this.hospital,
+      healthInsurance: healthInsurance ?? this.healthInsurance,
+      patientServiceNumber: patientServiceNumber ?? this.patientServiceNumber,
+      date: date ?? this.date,
+      roomType: roomType ?? this.roomType,
+      urgency: urgency ?? this.urgency,
+      paydAt: paydAt ?? this.paydAt,
+      totalAmountCents: totalAmountCents ?? this.totalAmountCents,
+    );
+  }
+
   EventProcedures(
       {this.id,
       this.procedure,
