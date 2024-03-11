@@ -293,7 +293,6 @@ abstract class _AddEventProcedureStoreBase with Store {
         await _procedureRepository.getProcedures().asObservable();
     resultProcedures?.when(success: (List<Procedure>? listProcedures) {
       procedureList.addAll(listProcedures!);
-      setProcedureId(procedureList.first.id!);
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));
     });
@@ -320,7 +319,6 @@ abstract class _AddEventProcedureStoreBase with Store {
         await _hospitalRepository.getAllHospitals().asObservable();
     resultHospital?.when(success: (List<Hospital>? listHospital) {
       hospitalList.addAll(listHospital!);
-      setHospitalId(hospitalList.first.id!);
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));
     });
@@ -335,7 +333,6 @@ abstract class _AddEventProcedureStoreBase with Store {
     resultHealthInsurances?.when(
         success: (List<HealthInsurance>? listHealthInsurances) {
       healthInsuranceList.addAll(listHealthInsurances!);
-      setHealthInsuranceId(healthInsuranceList.first.id!);
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));
     });
