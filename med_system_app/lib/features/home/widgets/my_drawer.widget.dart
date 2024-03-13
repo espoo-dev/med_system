@@ -21,9 +21,10 @@ class MyDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const UserAccountsDrawerHeader(
-            accountName: Text("Olá"),
-            accountEmail: Text("Bem-vindo(a)"),
+          UserAccountsDrawerHeader(
+            accountName: const Text("Olá"),
+            accountEmail:
+                Text(signInStore.currentUser?.resourceOwner?.email ?? ""),
           ),
           // ListTile(
           //   onTap: () {
