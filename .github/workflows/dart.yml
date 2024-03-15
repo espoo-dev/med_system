@@ -35,6 +35,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      - name: Show Current Directory
+        run: pwd
+
       - name: Navigate to Project Directory
         run: cd med_system_app
 
