@@ -1,15 +1,15 @@
 class EditPaymentEventProcedureModel {
-  String? paydAt;
+  bool? payd;
 
-  EditPaymentEventProcedureModel({this.paydAt});
+  EditPaymentEventProcedureModel({this.payd});
 
   EditPaymentEventProcedureModel.fromJson(Map<String, dynamic> json) {
-    paydAt = json['payd_at'];
+    payd = json['payd'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['payd_at'] = paydAt;
+    data['payd'] = payd;
     return data;
   }
 }

@@ -173,13 +173,19 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                         const SizedBox(
                           height: 15,
                         ),
-                        MyInputDate(
-                          onChanged: editEventProcedureStore.setPaydAt,
-                          label: 'Data Pagamento',
-                          textColor: Theme.of(context).colorScheme.primary,
-                          selectedDate: convertStringToDate(
-                              widget.eventProcedures.paydAt ?? ""),
-                        ),
+                        const Text("Pago",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        Checkbox(
+                            value: widget.eventProcedures.payd,
+                            onChanged: (bool? value) {
+                              editEventProcedureStore.setPayd(value!);
+                              setState(() {
+                                widget.eventProcedures.payd = value;
+                              });
+                            }),
                         const SizedBox(
                           height: 15,
                         ),

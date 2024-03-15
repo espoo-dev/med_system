@@ -176,13 +176,13 @@ abstract class _EditEventProcedureStoreBase with Store {
   }
 
   @observable
-  String _paydAt = '';
+  bool _payd = false;
 
-  String? get paydAt => _paydAt;
+  bool? get payd => _payd;
 
   @action
-  void setPaydAt(String paydAt) {
-    _paydAt = paydAt;
+  void setPayd(bool payd) {
+    _payd = payd;
   }
 
   @observable
@@ -251,7 +251,7 @@ abstract class _EditEventProcedureStoreBase with Store {
                   healthInsuranceId: _healthInsuranceId,
                   patientServiceNumber: _patientServiceNumber,
                   date: _createdDate,
-                  paydAt: _paydAt,
+                  payd: _payd,
                   urgency: _urgency,
                   roomType: _accommodation));
       registerEventProcedureResult?.when(success: (eventProcedure) {
@@ -394,7 +394,7 @@ abstract class _EditEventProcedureStoreBase with Store {
     _urgency = false;
     _accommodation = "ward";
     _createdDate = "";
-    _paydAt = "";
+    _payd = false;
     _patient = null;
     _patient = null;
     saveState = SaveEventProcedureState.idle;

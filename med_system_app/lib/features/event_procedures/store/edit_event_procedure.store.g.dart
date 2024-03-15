@@ -196,19 +196,19 @@ mixin _$EditEventProcedureStore on _EditEventProcedureStoreBase, Store {
     });
   }
 
-  late final _$_paydAtAtom =
-      Atom(name: '_EditEventProcedureStoreBase._paydAt', context: context);
+  late final _$_paydAtom =
+      Atom(name: '_EditEventProcedureStoreBase._payd', context: context);
 
   @override
-  String get _paydAt {
-    _$_paydAtAtom.reportRead();
-    return super._paydAt;
+  bool get _payd {
+    _$_paydAtom.reportRead();
+    return super._payd;
   }
 
   @override
-  set _paydAt(String value) {
-    _$_paydAtAtom.reportWrite(value, super._paydAt, () {
-      super._paydAt = value;
+  set _payd(bool value) {
+    _$_paydAtom.reportWrite(value, super._payd, () {
+      super._payd = value;
     });
   }
 
@@ -377,11 +377,11 @@ mixin _$EditEventProcedureStore on _EditEventProcedureStoreBase, Store {
   }
 
   @override
-  void setPaydAt(String paydAt) {
+  void setPayd(bool payd) {
     final _$actionInfo = _$_EditEventProcedureStoreBaseActionController
-        .startAction(name: '_EditEventProcedureStoreBase.setPaydAt');
+        .startAction(name: '_EditEventProcedureStoreBase.setPayd');
     try {
-      return super.setPaydAt(paydAt);
+      return super.setPayd(payd);
     } finally {
       _$_EditEventProcedureStoreBaseActionController.endAction(_$actionInfo);
     }
