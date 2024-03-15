@@ -3,7 +3,8 @@ name: Build and Publish Release
 on:
   push:
     branches:
-      - main
+      - main 
+
 jobs:
   generate-release-notes:
     runs-on: ubuntu-latest
@@ -12,13 +13,16 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Identify Last Merged Branch
+      - name: Find Last Merged Branch
+        id: last_merged_branch
         run: |
-          last_merged_branch=$(git branch --merged | grep -v "\*")
-          echo "Last merged branch: $last_merged_branch" >> release_notes.txt
+          git fetch origin main
+          last_merged_branch=$(git log --merges --first-parent --format="%H %d" $(git rev-parse origin/main)..HEAD | grep -E 'origin/(main|master)' | cut -d' ' -f2 | sed -e 's/.*origin\///' | head -n1)
+          echo "::set-output name=branch::$last_merged_branch"
 
       - name: Extract Commits from Last Merged Branch
         run: |
+          last_merged_branch=${{ steps.last_merged_branch.outputs.branch }}
           commits=$(git log --pretty=format:"%h - %an: %s" ${last_merged_branch})
           echo "Commits from last merged branch:" >> release_notes.txt
           echo "${commits}" >> release_notes.txt
@@ -34,7 +38,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.16.9'
+          flutter-version: '3.16.9' 
 
       - name: Build APK
         run: flutter build apk --release
