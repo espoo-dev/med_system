@@ -1,0 +1,46 @@
+name: Build and Publish Release
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  generate-release-notes:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Identify Last Merged Branch
+        run: |
+          last_merged_branch=$(git branch --merged | grep -v "\*")
+          echo "Last merged branch: $last_merged_branch" >> release_notes.txt
+
+      - name: Extract Commits from Last Merged Branch
+        run: |
+          commits=$(git log --pretty=format:"%h - %an: %s" ${last_merged_branch})
+          echo "Commits from last merged branch:" >> release_notes.txt
+          echo "${commits}" >> release_notes.txt
+
+  build-apk:
+    needs: generate-release-notes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.16.9'
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Publish APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-release
+          path: build/app/outputs/flutter-apk/app-release.apk
