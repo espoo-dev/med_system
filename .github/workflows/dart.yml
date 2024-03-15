@@ -36,7 +36,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Navigate to Project Directory
-        run: cd /home/runner/work/med_system/med_system
+        run: cd /home/runner/work/med_system/med_system/med_system_app
 
       - name: List Files in Project Directory
         run: ls -la
