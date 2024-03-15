@@ -147,11 +147,10 @@ abstract class _EventProcedureStoreBase with Store {
   editPaymentEventProcedure(int eventProcedureId, index) async {
     editState = EditEventProcedureState.loading;
     var editResult = await _eventProcedureRepository.editPaymentEventProcedure(
-        eventProcedureId,
-        EditPaymentEventProcedureModel(paydAt: getCurrentDate()));
+        eventProcedureId, EditPaymentEventProcedureModel(payd: true));
     editResult?.when(success: (eventProcedure) {
       eventProcedureList[index] =
-          eventProcedureList[index].copyWith(paydAt: getCurrentDate());
+          eventProcedureList[index].copyWith(payd: true);
       editState = EditEventProcedureState.success;
     }, failure: (NetworkExceptions error) {
       editState = EditEventProcedureState.error;

@@ -57,13 +57,13 @@ class _ListEventsWidgetState extends State<ListEventsWidget> {
               itemBuilder: (BuildContext context, int index) {
                 EventProcedures item = widget.items[index];
                 String iconAsset =
-                    item.isPaid() ? iconCheckCoreAsset : iconCloseCoreAsset;
+                    item.payd! ? iconCheckCoreAsset : iconCloseCoreAsset;
 
-                Color iconColor = item.isPaid()
+                Color iconColor = item.payd!
                     ? Theme.of(context).colorScheme.primary
                     : const Color(0xFFED7290);
 
-                Color textColor = item.isPaid()
+                Color textColor = item.payd!
                     ? Theme.of(context).colorScheme.primary
                     : const Color(0xFFED7290);
 
