@@ -3,7 +3,7 @@ name: Build and Publish Release
 on:
   push:
     branches:
-      - main 
+      - main # ajuste de acordo com o nome do seu branch principal
 
 jobs:
   generate-release-notes:
@@ -36,7 +36,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Navigate to Project Directory
-        run: cd med_system_app
+        run: cd ${{ github.workspace }}/med_system_app
 
       - name: List Files in Project Directory
         run: ls -la
@@ -44,7 +44,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.16.9'
+          flutter-version: '3.16.9' # ajuste de acordo com a versão do Flutter que você está usando
 
       - name: Build APK
         run: flutter build apk --release
@@ -53,4 +53,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: app-release
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: ${{ github.workspace }}/med_system_app/build/app/outputs/flutter-apk/app-release.apk
