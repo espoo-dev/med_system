@@ -304,7 +304,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                                       _listEventProcedures![index];
                                   return Slidable(
                                     key: ValueKey(_listEventProcedures?.length),
-                                    startActionPane: !eventProcedures.isPaid()
+                                    startActionPane: !eventProcedures.payd!
                                         ? ActionPane(
                                             motion: const StretchMotion(),
                                             children: [
@@ -362,13 +362,13 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                                                     eventProcedures));
                                       },
                                       leading: SvgPicture.asset(
-                                        eventProcedures.isPaid()
+                                        eventProcedures.payd!
                                             ? iconCheckCoreAsset
                                             : iconCloseCoreAsset,
                                         width: 32,
                                         height: 32,
                                         colorFilter: ColorFilter.mode(
-                                          eventProcedures.isPaid()
+                                          eventProcedures.payd!
                                               ? Theme.of(context)
                                                   .colorScheme
                                                   .primary

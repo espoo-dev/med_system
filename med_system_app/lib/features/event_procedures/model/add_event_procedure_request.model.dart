@@ -5,6 +5,7 @@ class AddEventProcedureRequestModel {
   String? patientServiceNumber;
   String? date;
   String? paydAt;
+  bool? payd;
   bool? urgency;
   String? roomType;
   PatientAttributes? patientAttributes;
@@ -16,6 +17,7 @@ class AddEventProcedureRequestModel {
       this.patientServiceNumber,
       this.date,
       this.paydAt,
+      this.payd,
       this.urgency,
       this.roomType,
       this.patientAttributes});
@@ -27,6 +29,7 @@ class AddEventProcedureRequestModel {
     patientServiceNumber = json['patient_service_number'];
     date = json['date'];
     paydAt = json['payd_at'];
+    payd = json['payd'];
     urgency = json['urgency'];
     roomType = json['room_type'];
     patientAttributes = json['patient_attributes'] != null
@@ -42,6 +45,7 @@ class AddEventProcedureRequestModel {
     data['patient_service_number'] = patientServiceNumber;
     data['date'] = date;
     data['payd_at'] = paydAt;
+    data['payd'] = payd;
     data['urgency'] = urgency;
     data['room_type'] = roomType;
     if (patientAttributes != null) {

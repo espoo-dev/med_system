@@ -43,6 +43,7 @@ class EventProcedures {
   String? roomType;
   bool? urgency;
   String? paydAt;
+  bool? payd;
   String? totalAmountCents;
 
   EventProcedures copyWith({
@@ -56,6 +57,7 @@ class EventProcedures {
     String? roomType,
     bool? urgency,
     String? paydAt,
+    bool? payd,
     String? totalAmountCents,
   }) {
     return EventProcedures(
@@ -69,6 +71,7 @@ class EventProcedures {
       roomType: roomType ?? this.roomType,
       urgency: urgency ?? this.urgency,
       paydAt: paydAt ?? this.paydAt,
+      payd: payd ?? this.payd,
       totalAmountCents: totalAmountCents ?? this.totalAmountCents,
     );
   }
@@ -84,6 +87,7 @@ class EventProcedures {
       this.roomType,
       this.urgency,
       this.paydAt,
+      this.payd,
       this.totalAmountCents});
 
   EventProcedures.fromJson(Map<String, dynamic> json) {
@@ -97,10 +101,8 @@ class EventProcedures {
     roomType = json['room_type'];
     urgency = json['urgency'];
     paydAt = json['payd_at'];
+    payd = json['payd'];
     totalAmountCents = json['total_amount_cents'];
-  }
-  bool isPaid() {
-    return paydAt != null;
   }
 
   Map<String, dynamic> toJson() {
@@ -115,6 +117,7 @@ class EventProcedures {
     data['room_type'] = roomType;
     data['urgency'] = urgency;
     data['payd_at'] = paydAt;
+    data['payd'] = payd;
     data['total_amount_cents'] = totalAmountCents;
     return data;
   }

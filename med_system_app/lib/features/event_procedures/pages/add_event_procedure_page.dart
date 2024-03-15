@@ -36,7 +36,6 @@ class AddEventProcedurePage extends StatefulWidget {
 class _AddEventProcedureState extends State<AddEventProcedurePage> {
   final addEventProcedureStore = GetIt.I.get<AddEventProcedureStore>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   final List<ReactionDisposer> _disposers = [];
 
   @override
@@ -155,11 +154,16 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                       const SizedBox(
                         height: 15,
                       ),
-                      MyInputDate(
-                        onChanged: addEventProcedureStore.setPaydAt,
-                        label: 'Data Pagamento',
-                        textColor: Theme.of(context).colorScheme.primary,
-                      ),
+                      const Text("Pago",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      Checkbox(
+                          value: addEventProcedureStore.payd,
+                          onChanged: (bool? value) {
+                            addEventProcedureStore.setPayd(value!);
+                          }),
                       const SizedBox(
                         height: 15,
                       ),
