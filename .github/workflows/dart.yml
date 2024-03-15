@@ -35,11 +35,8 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Show Current Directory
-        run: pwd
-
       - name: Navigate to Project Directory
-        run: cd med_system_app
+        run: cd /home/runner/work/med_system/med_system
 
       - name: List Files in Project Directory
         run: ls -la
@@ -56,4 +53,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: app-release
-          path: med_system_app/build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
