@@ -1,5 +1,4 @@
 import 'package:distrito_medico/core/utils/navigation_utils.dart';
-import 'package:distrito_medico/core/utils/ui.dart';
 import 'package:distrito_medico/core/widgets/error.widget.dart';
 import 'package:distrito_medico/core/widgets/my_horizontal_menu.widget.dart';
 import 'package:distrito_medico/features/event_procedures/model/event_procedure.model.dart';
@@ -13,7 +12,6 @@ import 'package:distrito_medico/features/home/widgets/list_events.widget.dart';
 import 'package:distrito_medico/features/home/widgets/my_app_bar.widget.dart';
 import 'package:distrito_medico/features/home/widgets/my_drawer.widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
@@ -79,60 +77,38 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (bool didPop) {
-        if (didPop) {
-          return;
-        }
-        showAlert(
-            title: 'Você tem certeza?',
-            content: 'Deseja fechar o aplicativo',
-            textYes: 'Sim, quero sair',
-            textNo: 'Não',
-            onPressedConfirm: () {
-              Navigator.pop(context);
-              SystemNavigator.pop();
-            },
-            onPressedCancel: () {
-              Navigator.pop(context);
-            },
-            context: context);
-      },
-      child: Material(
-        child: Scaffold(
-          key: _scaffoldKey,
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: Observer(builder: (BuildContext context) {
-            return Visibility(
-              visible: homeStore.showFloatingActionButton,
-              child: FloatingActionButton(
-                onPressed: () {
-                  push(
-                      context,
-                      const AddEventProcedurePage(
-                        backToHome: true,
-                      ));
-                },
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                child: const Icon(
-                  Icons.add,
-                  color: Colors.white,
-                ),
+    return Material(
+      child: Scaffold(
+        key: _scaffoldKey,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: Observer(builder: (BuildContext context) {
+          return Visibility(
+            visible: homeStore.showFloatingActionButton,
+            child: FloatingActionButton(
+              onPressed: () {
+                push(
+                    context,
+                    const AddEventProcedurePage(
+                      backToHome: true,
+                    ));
+              },
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              child: const Icon(
+                Icons.add,
+                color: Colors.white,
               ),
-            );
-          }),
-          bottomNavigationBar: Observer(builder: (BuildContext context) {
-            return MyBottomAppBar(visible: homeStore.showBottomAppBar);
-          }),
-          drawer: const MyDrawer(),
-          body: SafeArea(
-            child: Stack(
-              children: [
-                _buildPageBody(context),
-              ],
             ),
+          );
+        }),
+        bottomNavigationBar: Observer(builder: (BuildContext context) {
+          return MyBottomAppBar(visible: homeStore.showBottomAppBar);
+        }),
+        drawer: const MyDrawer(),
+        body: SafeArea(
+          child: Stack(
+            children: [
+              _buildPageBody(context),
+            ],
           ),
         ),
       ),
