@@ -8,7 +8,7 @@ import 'package:distrito_medico/features/event_procedures/model/edit_payment_pro
 import 'package:distrito_medico/features/event_procedures/model/event_procedure.model.dart';
 
 class EventProcedureRepository {
-  Future<Result<List<EventProcedures>?>?> getAllEventProcedures(
+  Future<Result<EventProcedureModel?>?> getAllEventProcedures(
       [int? page, int? perPage]) async {
     try {
       page ??= 1;
@@ -20,7 +20,7 @@ class EventProcedureRepository {
         EventProcedureModel? eventProcedureModel =
             EventProcedureModel.fromJson(json.decode(response.body));
 
-        return Result.success(eventProcedureModel.eventProceduresList);
+        return Result.success(eventProcedureModel);
       } else if (response.statusCode == 500) {
         return Result.failure(NetworkExceptions.getException(
             const NetworkExceptions.internalServerError()));
@@ -31,7 +31,7 @@ class EventProcedureRepository {
     return null;
   }
 
-  Future<Result<List<EventProcedures>?>?> getAllEventProceduresByMonth(
+  Future<Result<EventProcedureModel?>?> getAllEventProceduresByMonth(
       [int? page, int? perPage, int? month]) async {
     try {
       page ??= 1;
@@ -45,7 +45,7 @@ class EventProcedureRepository {
         EventProcedureModel? eventProcedureModel =
             EventProcedureModel.fromJson(json.decode(response.body));
 
-        return Result.success(eventProcedureModel.eventProceduresList);
+        return Result.success(eventProcedureModel);
       } else if (response.statusCode == 500) {
         return Result.failure(NetworkExceptions.getException(
             const NetworkExceptions.internalServerError()));
@@ -56,7 +56,7 @@ class EventProcedureRepository {
     return null;
   }
 
-  Future<Result<List<EventProcedures>?>?> getAllEventProceduresByPayd(
+  Future<Result<EventProcedureModel?>?> getAllEventProceduresByPayd(
       [int? page, int? perPage, bool payd = false]) async {
     try {
       page ??= 1;
@@ -69,7 +69,7 @@ class EventProcedureRepository {
         EventProcedureModel? eventProcedureModel =
             EventProcedureModel.fromJson(json.decode(response.body));
 
-        return Result.success(eventProcedureModel.eventProceduresList);
+        return Result.success(eventProcedureModel);
       } else if (response.statusCode == 500) {
         return Result.failure(NetworkExceptions.getException(
             const NetworkExceptions.internalServerError()));

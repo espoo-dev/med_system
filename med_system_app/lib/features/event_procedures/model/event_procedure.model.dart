@@ -1,8 +1,8 @@
 class EventProcedureModel {
   List<EventProcedures>? eventProceduresList;
-  String? total;
-  String? totalPayd;
-  String? totalUnpayd;
+  String? total = "";
+  String? totalPayd = "";
+  String? totalUnpayd = "";
 
   EventProcedureModel(
       {this.eventProceduresList, this.total, this.totalPayd, this.totalUnpayd});
