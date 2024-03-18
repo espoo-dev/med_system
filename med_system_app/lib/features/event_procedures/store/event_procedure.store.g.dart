@@ -169,6 +169,23 @@ mixin _$EventProcedureStore on _EventProcedureStoreBase, Store {
     });
   }
 
+  late final _$_eventProcedureModelAtom = Atom(
+      name: '_EventProcedureStoreBase._eventProcedureModel', context: context);
+
+  @override
+  EventProcedureModel? get _eventProcedureModel {
+    _$_eventProcedureModelAtom.reportRead();
+    return super._eventProcedureModel;
+  }
+
+  @override
+  set _eventProcedureModel(EventProcedureModel? value) {
+    _$_eventProcedureModelAtom.reportWrite(value, super._eventProcedureModel,
+        () {
+      super._eventProcedureModel = value;
+    });
+  }
+
   late final _$getAllEventProceduresAsyncAction = AsyncAction(
       '_EventProcedureStoreBase.getAllEventProcedures',
       context: context);

@@ -72,6 +72,10 @@ abstract class _EventProcedureStoreBase with Store {
   int _page = 1;
   get page => _page;
 
+  @observable
+  EventProcedureModel? _eventProcedureModel = EventProcedureModel();
+  get eventProcedureModel => _eventProcedureModel;
+
   _EventProcedureStoreBase(EventProcedureRepository eventProcedureRepository)
       : _eventProcedureRepository = eventProcedureRepository;
 
@@ -80,7 +84,7 @@ abstract class _EventProcedureStoreBase with Store {
 
   @action
   getAllEventProcedures({bool isRefresh = false}) async {
-    Result<List<EventProcedures>?>? resultEventProcedures;
+    Result<EventProcedureModel?>? resultEventProcedures;
     if (isRefresh) {
       _page = 1;
       eventProcedureList.clear();
@@ -110,8 +114,9 @@ abstract class _EventProcedureStoreBase with Store {
     }
 
     resultEventProcedures?.when(
-      success: (List<EventProcedures>? listEventProcedures) {
-        handleSuccess(listEventProcedures);
+      success: (EventProcedureModel? eventProcedureModel) {
+        _eventProcedureModel = eventProcedureModel;
+        handleSuccess(eventProcedureModel?.eventProceduresList);
       },
       failure: (NetworkExceptions error) {
         handleError(NetworkExceptions.getErrorMessage(error));
@@ -174,5 +179,6 @@ abstract class _EventProcedureStoreBase with Store {
     _showPaid = false;
     _showUnpaid = false;
     _showMonth = true;
+    _eventProcedureModel = null;
   }
 }

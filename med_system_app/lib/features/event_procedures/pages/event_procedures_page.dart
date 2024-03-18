@@ -9,6 +9,7 @@ import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
 import 'package:distrito_medico/features/event_procedures/model/event_procedure.model.dart';
 import 'package:distrito_medico/features/event_procedures/pages/add_event_procedure_page.dart';
 import 'package:distrito_medico/features/event_procedures/pages/edit_event_procedure_page.dart';
+import 'package:distrito_medico/features/event_procedures/pages/widgets/bottom_bar_widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/dialog_filter_months.wdiget.dart';
 import 'package:distrito_medico/features/event_procedures/store/event_procedure.store.dart';
 import 'package:distrito_medico/features/home/pages/home_page.dart';
@@ -150,6 +151,14 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
           hideLeading: true,
           image: null,
         ),
+        bottomNavigationBar: Observer(builder: (_) {
+          return BottomAppBarContent(
+            total: eventProcedureStore.eventProcedureModel?.total ?? "",
+            totalUnpayd:
+                eventProcedureStore.eventProcedureModel?.totalUnpayd ?? "",
+            totalPayd: eventProcedureStore.eventProcedureModel?.totalPayd ?? "",
+          );
+        }),
         floatingActionButton: isFab
             ? buildFAB(context, () {
                 to(context, const AddEventProcedurePage());
@@ -173,7 +182,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(6.0),
                         child: FilterChip(
                           label: const Text('Mês'),
                           selected: eventProcedureStore.showMonth!,
@@ -191,7 +200,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(6.0),
                         child: FilterChip(
                           label: const Text('Todos'),
                           selected: eventProcedureStore.showAll!,
@@ -204,7 +213,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(6.0),
                         child: FilterChip(
                           label: const Text('Recebidos'),
                           selected: eventProcedureStore.showPaid!,
@@ -217,7 +226,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(6.0),
                         child: FilterChip(
                           label: const Text('A Receber'),
                           selected: eventProcedureStore.showUnpaid!,
@@ -234,6 +243,15 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                 ),
               );
             }),
+            // Observer(builder: (_) {
+            //   return BottomAppBarContent(
+            //     total: eventProcedureStore.eventProcedureModel?.total ?? "",
+            //     totalUnpayd:
+            //         eventProcedureStore.eventProcedureModel?.totalUnpayd ?? "",
+            //     totalPayd:
+            //         eventProcedureStore.eventProcedureModel?.totalPayd ?? "",
+            //   );
+            // }),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: _refreshProcedures,
@@ -382,15 +400,30 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      subtitle:
-                                          Text(eventProcedures.procedure ?? ""),
-                                      trailing: Icon(
-                                        size: 10.0,
-                                        Icons.arrow_forward_ios,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
+                                      subtitle: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              eventProcedures.procedure ?? ""),
+                                          Text(eventProcedures.date ?? "",
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 12,
+                                              )),
+                                        ],
                                       ),
+                                      trailing: Text(
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary),
+                                          eventProcedures.totalAmountCents ??
+                                              ""),
                                     ),
                                   );
                                 } else {
