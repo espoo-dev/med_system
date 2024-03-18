@@ -182,7 +182,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(6.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: FilterChip(
                           label: const Text('Mês'),
                           selected: eventProcedureStore.showMonth!,
@@ -200,7 +200,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(6.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: FilterChip(
                           label: const Text('Todos'),
                           selected: eventProcedureStore.showAll!,
@@ -213,7 +213,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(6.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: FilterChip(
                           label: const Text('Recebidos'),
                           selected: eventProcedureStore.showPaid!,
@@ -226,7 +226,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(6.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: FilterChip(
                           label: const Text('A Receber'),
                           selected: eventProcedureStore.showUnpaid!,
