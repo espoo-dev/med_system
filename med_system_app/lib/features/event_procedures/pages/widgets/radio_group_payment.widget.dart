@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class MyRadioGroup extends StatefulWidget {
+class MyRadioGroupPayment extends StatefulWidget {
   final ValueChanged<String> onValueChanged;
   final String? initialValue;
 
-  const MyRadioGroup({
+  const MyRadioGroupPayment({
     super.key,
     required this.onValueChanged,
-    this.initialValue = 'ward',
+    this.initialValue = 'convenio',
   });
 
   @override
@@ -15,17 +15,15 @@ class MyRadioGroup extends StatefulWidget {
   _MyRadioGroupState createState() => _MyRadioGroupState();
 }
 
-class _MyRadioGroupState extends State<MyRadioGroup> {
+class _MyRadioGroupState extends State<MyRadioGroupPayment> {
   late String _selectedValue;
 
   @override
   void initState() {
     super.initState();
-
-    _selectedValue = 'Enfermaria';
-
-    if (widget.initialValue != 'ward') {
-      _selectedValue = 'Apartamento';
+    _selectedValue = 'Convênio';
+    if (widget.initialValue != 'convenio') {
+      _selectedValue = 'Outros';
     }
   }
 
@@ -37,7 +35,7 @@ class _MyRadioGroupState extends State<MyRadioGroup> {
         Row(
           children: [
             Radio(
-              value: 'Enfermaria',
+              value: 'Convênio',
               groupValue: _selectedValue,
               onChanged: (value) {
                 setState(() {
@@ -46,9 +44,9 @@ class _MyRadioGroupState extends State<MyRadioGroup> {
                 widget.onValueChanged(_selectedValue);
               },
             ),
-            const Text('Enfermaria'),
+            const Text('Convênio'),
             Radio(
-              value: 'Apartamento',
+              value: 'Outros',
               groupValue: _selectedValue,
               onChanged: (value) {
                 setState(() {
@@ -57,7 +55,7 @@ class _MyRadioGroupState extends State<MyRadioGroup> {
                 widget.onValueChanged(_selectedValue);
               },
             ),
-            const Text('Apartamento'),
+            const Text('Outros'),
           ],
         ),
       ],

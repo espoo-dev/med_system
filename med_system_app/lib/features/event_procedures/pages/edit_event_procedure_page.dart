@@ -15,6 +15,7 @@ import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown
 import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown_search_patients.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown_search_procedures.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/radio_group.widget.dart';
+import 'package:distrito_medico/features/event_procedures/pages/widgets/radio_group_payment.widget.dart';
 import 'package:distrito_medico/features/event_procedures/store/edit_event_procedure.store.dart';
 import 'package:distrito_medico/features/health_insurances/model/health_insurances.model.dart';
 import 'package:distrito_medico/features/home/pages/home_page.dart';
@@ -187,6 +188,15 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                                 widget.eventProcedures.payd = value;
                               });
                             }),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        const Text("Pagamento",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        MyRadioGroupPayment(onValueChanged: (value) {}),
                         const SizedBox(
                           height: 15,
                         ),
