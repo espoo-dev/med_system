@@ -48,6 +48,14 @@ DateTime? convertStringToDate(String dateString) {
   return DateTime(year, month, day);
 }
 
+double stringToDouble(String value) {
+  try {
+    return double.parse(value);
+  } catch (e) {
+    return 0.0;
+  }
+}
+
 extension StringExtension on String {
   String truncate() {
     if (length <= 13) {
