@@ -45,21 +45,22 @@ class EventProcedures {
   String? paydAt;
   bool? payd;
   String? totalAmountCents;
+  String? payment;
 
-  EventProcedures copyWith({
-    int? id,
-    String? procedure,
-    String? patient,
-    String? hospital,
-    String? healthInsurance,
-    String? patientServiceNumber,
-    String? date,
-    String? roomType,
-    bool? urgency,
-    String? paydAt,
-    bool? payd,
-    String? totalAmountCents,
-  }) {
+  EventProcedures copyWith(
+      {int? id,
+      String? procedure,
+      String? patient,
+      String? hospital,
+      String? healthInsurance,
+      String? patientServiceNumber,
+      String? date,
+      String? roomType,
+      bool? urgency,
+      String? paydAt,
+      bool? payd,
+      String? totalAmountCents,
+      String? payment}) {
     return EventProcedures(
       id: id ?? this.id,
       procedure: procedure ?? this.procedure,
@@ -73,6 +74,7 @@ class EventProcedures {
       paydAt: paydAt ?? this.paydAt,
       payd: payd ?? this.payd,
       totalAmountCents: totalAmountCents ?? this.totalAmountCents,
+      payment: payment ?? this.payment,
     );
   }
 
@@ -88,7 +90,8 @@ class EventProcedures {
       this.urgency,
       this.paydAt,
       this.payd,
-      this.totalAmountCents});
+      this.totalAmountCents,
+      this.payment});
 
   EventProcedures.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -102,6 +105,7 @@ class EventProcedures {
     urgency = json['urgency'];
     paydAt = json['payd_at'];
     payd = json['payd'];
+    payment = json['payment'];
     totalAmountCents = json['total_amount_cents'];
   }
 
@@ -118,6 +122,7 @@ class EventProcedures {
     data['urgency'] = urgency;
     data['payd_at'] = paydAt;
     data['payd'] = payd;
+    data['payment'] = payment;
     data['total_amount_cents'] = totalAmountCents;
     return data;
   }

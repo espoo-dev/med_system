@@ -149,6 +149,16 @@ abstract class _EditEventProcedureStoreBase with Store {
   }
 
   @observable
+  String _payment = 'health_insurance';
+
+  String? get payment => _payment;
+
+  @action
+  void setPayment(String payment) {
+    _payment = (payment == 'Convênio') ? 'health_insurance' : 'others';
+  }
+
+  @observable
   bool _urgency = false;
 
   bool? get urgency => _urgency;
@@ -253,6 +263,7 @@ abstract class _EditEventProcedureStoreBase with Store {
                   date: _createdDate,
                   payd: _payd,
                   urgency: _urgency,
+                  payment: _payment,
                   roomType: _accommodation));
       registerEventProcedureResult?.when(success: (eventProcedure) {
         saveState = SaveEventProcedureState.success;
@@ -264,7 +275,7 @@ abstract class _EditEventProcedureStoreBase with Store {
   }
 
   @action
-  fetchAllData() async {
+  fetchAllData(String namePatient) async {
     try {
       state = EditEventProcedureState.loading;
 
@@ -272,7 +283,7 @@ abstract class _EditEventProcedureStoreBase with Store {
       await getAllProcedures();
 
       // Fetch all patients
-      await getAllPatients();
+      await getAllPatients(namePatient);
 
       // Fetch all hospitals
       await getAllHospitals();
@@ -300,13 +311,13 @@ abstract class _EditEventProcedureStoreBase with Store {
   }
 
   @action
-  getAllPatients() async {
+  getAllPatients(String namePatient) async {
     patientList.clear();
     var resultPatient =
         await _patientRepository.getAllPatients().asObservable();
     resultPatient?.when(success: (List<Patient>? listPatient) {
       patientList.addAll(listPatient!);
-      setPatient(patientList.first);
+      setPatient(findPatient(namePatient) ?? patientList.first);
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));
     });
@@ -393,6 +404,7 @@ abstract class _EditEventProcedureStoreBase with Store {
     _procedureId = 0;
     _urgency = false;
     _accommodation = "ward";
+    _payment = "health_insurance";
     _createdDate = "";
     _payd = false;
     _patient = null;

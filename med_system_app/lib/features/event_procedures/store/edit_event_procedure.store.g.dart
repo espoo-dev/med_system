@@ -164,6 +164,22 @@ mixin _$EditEventProcedureStore on _EditEventProcedureStoreBase, Store {
     });
   }
 
+  late final _$_paymentAtom =
+      Atom(name: '_EditEventProcedureStoreBase._payment', context: context);
+
+  @override
+  String get _payment {
+    _$_paymentAtom.reportRead();
+    return super._payment;
+  }
+
+  @override
+  set _payment(String value) {
+    _$_paymentAtom.reportWrite(value, super._payment, () {
+      super._payment = value;
+    });
+  }
+
   late final _$_urgencyAtom =
       Atom(name: '_EditEventProcedureStoreBase._urgency', context: context);
 
@@ -243,8 +259,8 @@ mixin _$EditEventProcedureStore on _EditEventProcedureStoreBase, Store {
       context: context);
 
   @override
-  Future fetchAllData() {
-    return _$fetchAllDataAsyncAction.run(() => super.fetchAllData());
+  Future fetchAllData(String namePatient) {
+    return _$fetchAllDataAsyncAction.run(() => super.fetchAllData(namePatient));
   }
 
   late final _$getAllProceduresAsyncAction = AsyncAction(
@@ -261,8 +277,9 @@ mixin _$EditEventProcedureStore on _EditEventProcedureStoreBase, Store {
       context: context);
 
   @override
-  Future getAllPatients() {
-    return _$getAllPatientsAsyncAction.run(() => super.getAllPatients());
+  Future getAllPatients(String namePatient) {
+    return _$getAllPatientsAsyncAction
+        .run(() => super.getAllPatients(namePatient));
   }
 
   late final _$getAllHospitalsAsyncAction = AsyncAction(
@@ -349,6 +366,17 @@ mixin _$EditEventProcedureStore on _EditEventProcedureStoreBase, Store {
         .startAction(name: '_EditEventProcedureStoreBase.setAccommodation');
     try {
       return super.setAccommodation(accommodation);
+    } finally {
+      _$_EditEventProcedureStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setPayment(String payment) {
+    final _$actionInfo = _$_EditEventProcedureStoreBaseActionController
+        .startAction(name: '_EditEventProcedureStoreBase.setPayment');
+    try {
+      return super.setPayment(payment);
     } finally {
       _$_EditEventProcedureStoreBaseActionController.endAction(_$actionInfo);
     }
