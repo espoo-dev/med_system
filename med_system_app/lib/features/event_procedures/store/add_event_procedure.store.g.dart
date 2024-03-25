@@ -163,6 +163,22 @@ mixin _$AddEventProcedureStore on _AddEventProcedureStoreBase, Store {
     });
   }
 
+  late final _$_paymentAtom =
+      Atom(name: '_AddEventProcedureStoreBase._payment', context: context);
+
+  @override
+  String get _payment {
+    _$_paymentAtom.reportRead();
+    return super._payment;
+  }
+
+  @override
+  set _payment(String value) {
+    _$_paymentAtom.reportWrite(value, super._payment, () {
+      super._payment = value;
+    });
+  }
+
   late final _$_urgencyAtom =
       Atom(name: '_AddEventProcedureStoreBase._urgency', context: context);
 
@@ -347,6 +363,17 @@ mixin _$AddEventProcedureStore on _AddEventProcedureStoreBase, Store {
         .startAction(name: '_AddEventProcedureStoreBase.setAccommodation');
     try {
       return super.setAccommodation(accommodation);
+    } finally {
+      _$_AddEventProcedureStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setPayment(String payment) {
+    final _$actionInfo = _$_AddEventProcedureStoreBaseActionController
+        .startAction(name: '_AddEventProcedureStoreBase.setPayment');
+    try {
+      return super.setPayment(payment);
     } finally {
       _$_AddEventProcedureStoreBaseActionController.endAction(_$actionInfo);
     }

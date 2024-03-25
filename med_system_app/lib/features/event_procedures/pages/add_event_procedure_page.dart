@@ -166,7 +166,7 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                       Checkbox(
                           value: addEventProcedureStore.payd,
                           onChanged: (bool? value) {
-                            addEventProcedureStore.setPayd(value!);
+                            addEventProcedureStore.setPayd(value ?? false);
                           }),
                       const SizedBox(
                         height: 15,
@@ -176,7 +176,9 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           )),
-                      MyRadioGroupPayment(onValueChanged: (value) {}),
+                      MyRadioGroupPayment(onValueChanged: (value) {
+                        addEventProcedureStore.setPayment(value);
+                      }),
                       const SizedBox(
                         height: 15,
                       ),
