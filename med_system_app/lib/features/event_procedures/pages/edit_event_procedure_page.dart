@@ -47,7 +47,7 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
   @override
   void initState() {
     super.initState();
-    editEventProcedureStore.fetchAllData();
+    editEventProcedureStore.fetchAllData(widget.eventProcedures.patient ?? "");
     editEventProcedureStore.setPatientServiceNumber(
         widget.eventProcedures.patientServiceNumber ?? "");
     editEventProcedureStore.setPayd(widget.eventProcedures.payd ?? false);
@@ -111,7 +111,8 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
               return Center(
                   child: ErrorRetryWidget(
                       'Algo deu errado', 'Por favor, tente novamente', () {
-                editEventProcedureStore.fetchAllData();
+                editEventProcedureStore
+                    .fetchAllData(widget.eventProcedures.patient ?? "");
               }));
             }
             if (editEventProcedureStore.state ==
@@ -181,12 +182,9 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                               fontWeight: FontWeight.bold,
                             )),
                         Checkbox(
-                            value: widget.eventProcedures.payd,
+                            value: editEventProcedureStore.payd,
                             onChanged: (bool? value) {
-                              editEventProcedureStore.setPayd(value!);
-                              setState(() {
-                                widget.eventProcedures.payd = value;
-                              });
+                              editEventProcedureStore.setPayd(value ?? false);
                             }),
                         const SizedBox(
                           height: 15,
@@ -196,7 +194,11 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             )),
-                        MyRadioGroupPayment(onValueChanged: (value) {}),
+                        MyRadioGroupPayment(
+                            initialValue: widget.eventProcedures.payment,
+                            onValueChanged: (value) {
+                              editEventProcedureStore.setPayment(value);
+                            }),
                         const SizedBox(
                           height: 15,
                         ),

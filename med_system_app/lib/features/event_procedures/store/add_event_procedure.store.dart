@@ -149,6 +149,16 @@ abstract class _AddEventProcedureStoreBase with Store {
   }
 
   @observable
+  String _payment = 'health_insurance';
+
+  String? get payment => _payment;
+
+  @action
+  void setPayment(String payment) {
+    _payment = (payment == 'Convênio') ? 'health_insurance' : 'others';
+  }
+
+  @observable
   bool _urgency = false;
 
   bool? get urgency => _urgency;
@@ -251,6 +261,7 @@ abstract class _AddEventProcedureStoreBase with Store {
               date: _createdDate,
               payd: _payd,
               urgency: _urgency,
+              payment: _payment,
               roomType: _accommodation));
       registerEventProcedureResult?.when(success: (eventProcedure) {
         saveState = SaveEventProcedureState.success;
@@ -353,6 +364,7 @@ abstract class _AddEventProcedureStoreBase with Store {
     _procedureId = 0;
     _urgency = false;
     _accommodation = "ward";
+    _payment = "health_insurance";
     _createdDate = "";
     _payd = false;
     _patient = null;

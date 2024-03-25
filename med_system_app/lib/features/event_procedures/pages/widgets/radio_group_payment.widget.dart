@@ -7,22 +7,22 @@ class MyRadioGroupPayment extends StatefulWidget {
   const MyRadioGroupPayment({
     super.key,
     required this.onValueChanged,
-    this.initialValue = 'convenio',
+    this.initialValue = 'health_insurance',
   });
 
   @override
   // ignore: library_private_types_in_public_api
-  _MyRadioGroupState createState() => _MyRadioGroupState();
+  _MyRadioGroupPayentState createState() => _MyRadioGroupPayentState();
 }
 
-class _MyRadioGroupState extends State<MyRadioGroupPayment> {
+class _MyRadioGroupPayentState extends State<MyRadioGroupPayment> {
   late String _selectedValue;
 
   @override
   void initState() {
     super.initState();
     _selectedValue = 'Convênio';
-    if (widget.initialValue != 'convenio') {
+    if (widget.initialValue != 'health_insurance') {
       _selectedValue = 'Outros';
     }
   }
