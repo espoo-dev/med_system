@@ -314,7 +314,7 @@ abstract class _EditEventProcedureStoreBase with Store {
   getAllPatients(String namePatient) async {
     patientList.clear();
     var resultPatient =
-        await _patientRepository.getAllPatients().asObservable();
+        await _patientRepository.getAllPatients(1, 500).asObservable();
     resultPatient?.when(success: (List<Patient>? listPatient) {
       patientList.addAll(listPatient!);
       setPatient(findPatient(namePatient) ?? patientList.first);
