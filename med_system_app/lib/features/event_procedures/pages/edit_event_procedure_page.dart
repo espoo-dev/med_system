@@ -176,44 +176,6 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                         const SizedBox(
                           height: 15,
                         ),
-                        const Text("Pago",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            )),
-                        Checkbox(
-                            value: editEventProcedureStore.payd,
-                            onChanged: (bool? value) {
-                              editEventProcedureStore.setPayd(value ?? false);
-                            }),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        const Text("Pagamento",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            )),
-                        MyRadioGroupPayment(
-                            initialValue: widget.eventProcedures.payment,
-                            onValueChanged: (value) {
-                              editEventProcedureStore.setPayment(value);
-                            }),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        DropdownSearchProcedures(
-                          procedureList: editEventProcedureStore.procedureList,
-                          selectedProcedure:
-                              editEventProcedureStore.findProcedure(
-                                  widget.eventProcedures.procedure ?? "")!,
-                          onChanged: (Procedure? procedure) =>
-                              editEventProcedureStore
-                                  .setProcedureId(procedure?.id ?? 0),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
                         DropdownSearchHospitals(
                           hospitalList: editEventProcedureStore.hospitalList,
                           selectedHospital:
@@ -223,6 +185,14 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                               editEventProcedureStore
                                   .setHospitalId(hospital?.id ?? 0),
                         ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        MyRadioGroupPayment(
+                            initialValue: widget.eventProcedures.payment,
+                            onValueChanged: (value) {
+                              editEventProcedureStore.setPayment(value);
+                            }),
                         const SizedBox(
                           height: 15,
                         ),
@@ -236,6 +206,18 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                           onChanged: (HealthInsurance? healthInsurance) =>
                               editEventProcedureStore.setHealthInsuranceId(
                                   healthInsurance?.id ?? 0),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        DropdownSearchProcedures(
+                          procedureList: editEventProcedureStore.procedureList,
+                          selectedProcedure:
+                              editEventProcedureStore.findProcedure(
+                                  widget.eventProcedures.procedure ?? "")!,
+                          onChanged: (Procedure? procedure) =>
+                              editEventProcedureStore
+                                  .setProcedureId(procedure?.id ?? 0),
                         ),
                         const SizedBox(
                           height: 15,
@@ -256,6 +238,19 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                             editEventProcedureStore.setUrgency(value);
                           },
                         ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        const Text("Pago",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        Checkbox(
+                            value: editEventProcedureStore.payd,
+                            onChanged: (bool? value) {
+                              editEventProcedureStore.setPayd(value ?? false);
+                            }),
                         const SizedBox(
                           height: 15,
                         ),
