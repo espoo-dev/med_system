@@ -155,43 +155,6 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                       const SizedBox(
                         height: 15,
                       ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      const Text("Pago",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      Checkbox(
-                          value: addEventProcedureStore.payd,
-                          onChanged: (bool? value) {
-                            addEventProcedureStore.setPayd(value ?? false);
-                          }),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      const Text("Pagamento",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      MyRadioGroupPayment(onValueChanged: (value) {
-                        addEventProcedureStore.setPayment(value);
-                      }),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      DropdownSearchProcedures(
-                        procedureList: addEventProcedureStore.procedureList,
-                        selectedProcedure: Procedure(),
-                        onChanged: (Procedure? procedure) =>
-                            addEventProcedureStore
-                                .setProcedureId(procedure?.id ?? 0),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
                       DropdownSearchHospitals(
                         hospitalList: addEventProcedureStore.hospitalList,
                         selectedHospital: Hospital(),
@@ -199,6 +162,12 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                             addEventProcedureStore
                                 .setHospitalId(hospital?.id ?? 0),
                       ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      MyRadioGroupPayment(onValueChanged: (value) {
+                        addEventProcedureStore.setPayment(value);
+                      }),
                       const SizedBox(
                         height: 15,
                       ),
@@ -213,6 +182,16 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                       const SizedBox(
                         height: 15,
                       ),
+                      DropdownSearchProcedures(
+                        procedureList: addEventProcedureStore.procedureList,
+                        selectedProcedure: Procedure(),
+                        onChanged: (Procedure? procedure) =>
+                            addEventProcedureStore
+                                .setProcedureId(procedure?.id ?? 0),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
                       const Text("Acomodação",
                           style: TextStyle(
                             fontSize: 16,
@@ -221,6 +200,9 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                       MyRadioGroup(onValueChanged: (value) {
                         addEventProcedureStore.setAccommodation(value);
                       }),
+                      const SizedBox(
+                        height: 15,
+                      ),
                       CustomSwitch(
                         initialValue: false,
                         onChanged: (value) {
@@ -230,6 +212,16 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                       const SizedBox(
                         height: 15,
                       ),
+                      const Text("Pago",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      Checkbox(
+                          value: addEventProcedureStore.payd,
+                          onChanged: (bool? value) {
+                            addEventProcedureStore.setPayd(value ?? false);
+                          }),
                       Center(child: Observer(builder: (_) {
                         return MyButtonWidget(
                           text: 'Cadastrar procedimento',
