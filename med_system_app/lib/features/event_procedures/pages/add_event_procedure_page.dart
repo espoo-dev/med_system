@@ -204,6 +204,7 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                         height: 15,
                       ),
                       CustomSwitch(
+                        labelText: "Urgência",
                         initialValue: false,
                         onChanged: (value) {
                           addEventProcedureStore.setUrgency(value);
@@ -212,16 +213,13 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                       const SizedBox(
                         height: 15,
                       ),
-                      const Text("Pago",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      Checkbox(
-                          value: addEventProcedureStore.payd,
-                          onChanged: (bool? value) {
-                            addEventProcedureStore.setPayd(value ?? false);
-                          }),
+                      CustomSwitch(
+                        labelText: "Pago",
+                        initialValue: addEventProcedureStore.payd ?? false,
+                        onChanged: (value) {
+                          addEventProcedureStore.setPayd(value);
+                        },
+                      ),
                       Center(child: Observer(builder: (_) {
                         return MyButtonWidget(
                           text: 'Cadastrar procedimento',

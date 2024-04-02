@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class CustomSwitch extends StatefulWidget {
   final bool initialValue;
   final ValueChanged<bool>? onChanged;
+  final String labelText;
 
   const CustomSwitch({
     super.key,
     required this.initialValue,
     required this.onChanged,
+    required this.labelText,
   });
 
   @override
@@ -29,11 +31,13 @@ class _CustomSwitchState extends State<CustomSwitch> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        const Text("Urgência",
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            )),
+        Text(
+          widget.labelText,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         Switch(
           value: switchValue,
           onChanged: (value) {
