@@ -233,6 +233,7 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                               editEventProcedureStore.setAccommodation(value);
                             }),
                         CustomSwitch(
+                          labelText: "Urgência",
                           initialValue: widget.eventProcedures.urgency ?? false,
                           onChanged: (value) {
                             editEventProcedureStore.setUrgency(value);
@@ -241,16 +242,13 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                         const SizedBox(
                           height: 15,
                         ),
-                        const Text("Pago",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            )),
-                        Checkbox(
-                            value: editEventProcedureStore.payd,
-                            onChanged: (bool? value) {
-                              editEventProcedureStore.setPayd(value ?? false);
-                            }),
+                        CustomSwitch(
+                          labelText: "Pago",
+                          initialValue: editEventProcedureStore.payd ?? false,
+                          onChanged: (value) {
+                            editEventProcedureStore.setPayd(value);
+                          },
+                        ),
                         const SizedBox(
                           height: 15,
                         ),
