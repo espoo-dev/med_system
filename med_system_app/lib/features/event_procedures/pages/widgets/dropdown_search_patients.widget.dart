@@ -64,6 +64,7 @@ class _DropdownSearchPatientsState extends State<DropdownSearchPatients> {
           style: const TextStyle(
             color: Colors.black,
           ),
+          enableInteractiveSelection: true,
         ),
         emptyBuilder: (context, text) {
           return Align(
