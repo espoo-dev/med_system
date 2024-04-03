@@ -1,4 +1,5 @@
 import 'package:distrito_medico/core/api/network_exceptions.dart';
+import 'package:distrito_medico/core/utils/utils.dart';
 import 'package:distrito_medico/features/event_procedures/model/add_event_procedure_request.model.dart';
 import 'package:distrito_medico/features/event_procedures/repository/event_procedure_repository.dart';
 import 'package:distrito_medico/features/health_insurances/model/health_insurances.model.dart';
@@ -65,6 +66,20 @@ abstract class _AddEventProcedureStoreBase with Store {
 
   bool validatePatient() {
     if (_patient == null) {
+      return false;
+    }
+    return true;
+  }
+
+  bool validateProcedure() {
+    if (_procedure == null) {
+      return false;
+    }
+    return true;
+  }
+
+  bool validateHealthInsurance() {
+    if (_healthInsurance == null) {
       return false;
     }
     return true;
@@ -200,6 +215,38 @@ abstract class _AddEventProcedureStoreBase with Store {
   }
 
   @observable
+  Procedure? _procedure;
+
+  Procedure? get procedure => _procedure;
+
+  @action
+  void setProcedure(Procedure procedure) {
+    // ignore: unnecessary_null_in_if_null_operators
+    _procedure = Procedure(
+        // ignore: unnecessary_null_in_if_null_operators
+        id: procedure.id ?? null,
+        name: procedure.name ?? _procedure?.name ?? "",
+        code: procedure.code ?? _procedure?.name ?? "",
+        description: procedure.description ?? _procedure?.description ?? "",
+        amountCents: procedure.amountCents ?? _procedure?.amountCents ?? "");
+  }
+
+  @observable
+  HealthInsurance? _healthInsurance;
+
+  HealthInsurance? get healthInsurance => _healthInsurance;
+
+  @action
+  void setHealthInsurance(HealthInsurance healthInsurance) {
+    // ignore: unnecessary_null_in_if_null_operators
+    _healthInsurance = HealthInsurance(
+      // ignore: unnecessary_null_in_if_null_operators
+      id: healthInsurance.id ?? null,
+      name: healthInsurance.name ?? _healthInsurance?.name ?? "",
+    );
+  }
+
+  @observable
   bool _payd = false;
 
   bool? get payd => _payd;
@@ -228,7 +275,7 @@ abstract class _AddEventProcedureStoreBase with Store {
       isValid = false;
     }
 
-    if (!validateProcedureId()) {
+    if (!validateProcedure()) {
       debugPrint('Procedure ID is not valid');
       isValid = false;
     }
@@ -238,7 +285,7 @@ abstract class _AddEventProcedureStoreBase with Store {
       isValid = false;
     }
 
-    if (!validateHealthInsuranceIdId()) {
+    if (!validateHealthInsurance()) {
       debugPrint('Health Insurance ID is not valid');
       isValid = false;
     }
@@ -252,11 +299,20 @@ abstract class _AddEventProcedureStoreBase with Store {
       saveState = SaveEventProcedureState.loading;
       var registerEventProcedureResult = await _eventProcedureRepository
           .registerEventProcedure(AddEventProcedureRequestModel(
-              procedureId: _procedureId,
+              procedureAttributes: ProcedureAttributes(
+                  id: _procedure?.id,
+                  name: _procedure?.name,
+                  code: _procedure?.code,
+                  amountCents: parseInt(_procedure?.amountCents ?? ""),
+                  description: _procedure?.description,
+                  custom: true),
               patientAttributes:
                   PatientAttributes(id: _patient?.id, name: _patient?.name),
               hospitalId: _hospitalId,
-              healthInsuranceId: _healthInsuranceId,
+              healthInsuranceAttributes: HealthInsuranceAttributes(
+                  id: _healthInsurance?.id,
+                  name: _healthInsurance?.name,
+                  custom: true),
               patientServiceNumber: _patientServiceNumber,
               date: _createdDate,
               payd: _payd,
@@ -369,6 +425,8 @@ abstract class _AddEventProcedureStoreBase with Store {
     _payd = false;
     _patient = null;
     _patient = null;
+    _procedure = null;
+    _healthInsurance = null;
     saveState = SaveEventProcedureState.idle;
     state = AddEventProcedureState.idle;
   }
