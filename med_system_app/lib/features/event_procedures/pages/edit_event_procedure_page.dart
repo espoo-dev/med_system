@@ -47,7 +47,10 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
   @override
   void initState() {
     super.initState();
-    editEventProcedureStore.fetchAllData(widget.eventProcedures.patient ?? "");
+    editEventProcedureStore.fetchAllData(
+        widget.eventProcedures.patient ?? "",
+        widget.eventProcedures.procedure ?? "",
+        widget.eventProcedures.healthInsurance ?? "");
     editEventProcedureStore.setPatientServiceNumber(
         widget.eventProcedures.patientServiceNumber ?? "");
     editEventProcedureStore.setPayd(widget.eventProcedures.payd ?? false);
@@ -111,8 +114,10 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
               return Center(
                   child: ErrorRetryWidget(
                       'Algo deu errado', 'Por favor, tente novamente', () {
-                editEventProcedureStore
-                    .fetchAllData(widget.eventProcedures.patient ?? "");
+                editEventProcedureStore.fetchAllData(
+                    widget.eventProcedures.patient ?? "",
+                    widget.eventProcedures.procedure ?? "",
+                    widget.eventProcedures.healthInsurance ?? "");
               }));
             }
             if (editEventProcedureStore.state ==
@@ -200,12 +205,13 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                           healthInsuranceList:
                               editEventProcedureStore.healthInsuranceList,
                           selectedHealthInsurance:
-                              editEventProcedureStore.findHealthInsurance(
-                                  widget.eventProcedures.healthInsurance ??
-                                      "")!,
+                              editEventProcedureStore.healthInsurance ??
+                                  editEventProcedureStore.findHealthInsurance(
+                                      widget.eventProcedures.healthInsurance ??
+                                          "")!,
                           onChanged: (HealthInsurance? healthInsurance) =>
-                              editEventProcedureStore.setHealthInsuranceId(
-                                  healthInsurance?.id ?? 0),
+                              editEventProcedureStore
+                                  .setHealthInsurance(healthInsurance!),
                         ),
                         const SizedBox(
                           height: 15,
@@ -213,11 +219,11 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                         DropdownSearchProcedures(
                           procedureList: editEventProcedureStore.procedureList,
                           selectedProcedure:
-                              editEventProcedureStore.findProcedure(
-                                  widget.eventProcedures.procedure ?? "")!,
+                              editEventProcedureStore.procedure ??
+                                  editEventProcedureStore.findProcedure(
+                                      widget.eventProcedures.procedure ?? "")!,
                           onChanged: (Procedure? procedure) =>
-                              editEventProcedureStore
-                                  .setProcedureId(procedure?.id ?? 0),
+                              editEventProcedureStore.setProcedure(procedure!),
                         ),
                         const SizedBox(
                           height: 15,

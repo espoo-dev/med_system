@@ -65,3 +65,10 @@ extension StringExtension on String {
     }
   }
 }
+
+int parseInt(String text) {
+  String cleanedText = text.replaceAll(RegExp('[^0-9]'), '');
+  int value = int.tryParse(cleanedText) ?? 0;
+
+  return value;
+}

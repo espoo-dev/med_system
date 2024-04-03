@@ -244,6 +244,38 @@ mixin _$EditEventProcedureStore on _EditEventProcedureStoreBase, Store {
     });
   }
 
+  late final _$_procedureAtom =
+      Atom(name: '_EditEventProcedureStoreBase._procedure', context: context);
+
+  @override
+  Procedure? get _procedure {
+    _$_procedureAtom.reportRead();
+    return super._procedure;
+  }
+
+  @override
+  set _procedure(Procedure? value) {
+    _$_procedureAtom.reportWrite(value, super._procedure, () {
+      super._procedure = value;
+    });
+  }
+
+  late final _$_healthInsuranceAtom = Atom(
+      name: '_EditEventProcedureStoreBase._healthInsurance', context: context);
+
+  @override
+  HealthInsurance? get _healthInsurance {
+    _$_healthInsuranceAtom.reportRead();
+    return super._healthInsurance;
+  }
+
+  @override
+  set _healthInsurance(HealthInsurance? value) {
+    _$_healthInsuranceAtom.reportWrite(value, super._healthInsurance, () {
+      super._healthInsurance = value;
+    });
+  }
+
   late final _$editEventProcedureAsyncAction = AsyncAction(
       '_EditEventProcedureStoreBase.editEventProcedure',
       context: context);
@@ -259,8 +291,10 @@ mixin _$EditEventProcedureStore on _EditEventProcedureStoreBase, Store {
       context: context);
 
   @override
-  Future fetchAllData(String namePatient) {
-    return _$fetchAllDataAsyncAction.run(() => super.fetchAllData(namePatient));
+  Future fetchAllData(
+      String namePatient, String nameProcedure, String nameHealthInsurance) {
+    return _$fetchAllDataAsyncAction.run(() =>
+        super.fetchAllData(namePatient, nameProcedure, nameHealthInsurance));
   }
 
   late final _$getAllProceduresAsyncAction = AsyncAction(
@@ -268,8 +302,9 @@ mixin _$EditEventProcedureStore on _EditEventProcedureStoreBase, Store {
       context: context);
 
   @override
-  Future getAllProcedures() {
-    return _$getAllProceduresAsyncAction.run(() => super.getAllProcedures());
+  Future getAllProcedures(String nameProcedure) {
+    return _$getAllProceduresAsyncAction
+        .run(() => super.getAllProcedures(nameProcedure));
   }
 
   late final _$getAllPatientsAsyncAction = AsyncAction(
@@ -296,9 +331,9 @@ mixin _$EditEventProcedureStore on _EditEventProcedureStoreBase, Store {
       context: context);
 
   @override
-  Future getAllHealthInsurances() {
+  Future getAllHealthInsurances(String nameHealthInsurance) {
     return _$getAllHealthInsurancesAsyncAction
-        .run(() => super.getAllHealthInsurances());
+        .run(() => super.getAllHealthInsurances(nameHealthInsurance));
   }
 
   late final _$_EditEventProcedureStoreBaseActionController =
@@ -421,6 +456,28 @@ mixin _$EditEventProcedureStore on _EditEventProcedureStoreBase, Store {
         .startAction(name: '_EditEventProcedureStoreBase.setPatient');
     try {
       return super.setPatient(patient);
+    } finally {
+      _$_EditEventProcedureStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setProcedure(Procedure procedure) {
+    final _$actionInfo = _$_EditEventProcedureStoreBaseActionController
+        .startAction(name: '_EditEventProcedureStoreBase.setProcedure');
+    try {
+      return super.setProcedure(procedure);
+    } finally {
+      _$_EditEventProcedureStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setHealthInsurance(HealthInsurance healthInsurance) {
+    final _$actionInfo = _$_EditEventProcedureStoreBaseActionController
+        .startAction(name: '_EditEventProcedureStoreBase.setHealthInsurance');
+    try {
+      return super.setHealthInsurance(healthInsurance);
     } finally {
       _$_EditEventProcedureStoreBaseActionController.endAction(_$actionInfo);
     }
