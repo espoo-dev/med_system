@@ -1,4 +1,5 @@
 import 'package:distrito_medico/core/api/network_exceptions.dart';
+import 'package:distrito_medico/core/utils/utils.dart';
 import 'package:distrito_medico/features/event_procedures/model/add_event_procedure_request.model.dart';
 import 'package:distrito_medico/features/event_procedures/repository/event_procedure_repository.dart';
 import 'package:distrito_medico/features/health_insurances/model/health_insurances.model.dart';
@@ -209,6 +210,52 @@ abstract class _EditEventProcedureStoreBase with Store {
         name: patient.name ?? _patient?.name ?? "");
   }
 
+  @observable
+  Procedure? _procedure;
+
+  Procedure? get procedure => _procedure;
+
+  @action
+  void setProcedure(Procedure procedure) {
+    // ignore: unnecessary_null_in_if_null_operators
+    _procedure = Procedure(
+        // ignore: unnecessary_null_in_if_null_operators
+        id: procedure.id ?? null,
+        name: procedure.name ?? _procedure?.name ?? "",
+        code: procedure.code ?? _procedure?.name ?? "",
+        description: procedure.description ?? _procedure?.description ?? "",
+        amountCents: procedure.amountCents ?? _procedure?.amountCents ?? "");
+  }
+
+  @observable
+  HealthInsurance? _healthInsurance;
+
+  HealthInsurance? get healthInsurance => _healthInsurance;
+
+  @action
+  void setHealthInsurance(HealthInsurance healthInsurance) {
+    // ignore: unnecessary_null_in_if_null_operators
+    _healthInsurance = HealthInsurance(
+      // ignore: unnecessary_null_in_if_null_operators
+      id: healthInsurance.id ?? null,
+      name: healthInsurance.name ?? _healthInsurance?.name ?? "",
+    );
+  }
+
+  bool validateProcedure() {
+    if (_procedure == null) {
+      return false;
+    }
+    return true;
+  }
+
+  bool validateHealthInsurance() {
+    if (_healthInsurance == null) {
+      return false;
+    }
+    return true;
+  }
+
   @computed
   bool get isValidData {
     bool isValid = true;
@@ -228,7 +275,7 @@ abstract class _EditEventProcedureStoreBase with Store {
       isValid = false;
     }
 
-    if (!validateProcedureId()) {
+    if (!validateProcedure()) {
       debugPrint('Procedure ID is not valid');
       isValid = false;
     }
@@ -238,7 +285,7 @@ abstract class _EditEventProcedureStoreBase with Store {
       isValid = false;
     }
 
-    if (!validateHealthInsuranceIdId()) {
+    if (!validateHealthInsurance()) {
       debugPrint('Health Insurance ID is not valid');
       isValid = false;
     }
@@ -254,11 +301,20 @@ abstract class _EditEventProcedureStoreBase with Store {
           await _eventProcedureRepository.editEventProcedure(
               eventProcedureId,
               AddEventProcedureRequestModel(
-                  procedureId: _procedureId,
+                  procedureAttributes: ProcedureAttributes(
+                      id: _procedure?.id,
+                      name: _procedure?.name,
+                      code: _procedure?.code,
+                      amountCents: parseInt(_procedure?.amountCents ?? ""),
+                      description: _procedure?.description,
+                      custom: true),
                   patientAttributes:
                       PatientAttributes(id: _patient?.id, name: _patient?.name),
                   hospitalId: _hospitalId,
-                  healthInsuranceId: _healthInsuranceId,
+                  healthInsuranceAttributes: HealthInsuranceAttributes(
+                      id: _healthInsurance?.id,
+                      name: _healthInsurance?.name,
+                      custom: true),
                   patientServiceNumber: _patientServiceNumber,
                   date: _createdDate,
                   payd: _payd,
@@ -275,12 +331,13 @@ abstract class _EditEventProcedureStoreBase with Store {
   }
 
   @action
-  fetchAllData(String namePatient) async {
+  fetchAllData(String namePatient, String nameProcedure,
+      String nameHealthInsurance) async {
     try {
       state = EditEventProcedureState.loading;
 
       // Fetch all procedures
-      await getAllProcedures();
+      await getAllProcedures(nameProcedure);
 
       // Fetch all patients
       await getAllPatients(namePatient);
@@ -289,7 +346,7 @@ abstract class _EditEventProcedureStoreBase with Store {
       await getAllHospitals();
 
       // Fetch all health insurances
-      await getAllHealthInsurances();
+      await getAllHealthInsurances(nameHealthInsurance);
 
       state = EditEventProcedureState.success;
     } catch (error) {
@@ -299,12 +356,13 @@ abstract class _EditEventProcedureStoreBase with Store {
   }
 
   @action
-  getAllProcedures() async {
+  getAllProcedures(String nameProcedure) async {
     procedureList.clear();
     var resultProcedures =
         await _procedureRepository.getProcedures().asObservable();
     resultProcedures?.when(success: (List<Procedure>? listProcedures) {
       procedureList.addAll(listProcedures!);
+      setProcedure(findProcedure(nameProcedure) ?? procedureList.first);
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));
     });
@@ -327,7 +385,7 @@ abstract class _EditEventProcedureStoreBase with Store {
   getAllHospitals() async {
     hospitalList.clear();
     var resultHospital =
-        await _hospitalRepository.getAllHospitals().asObservable();
+        await _hospitalRepository.getAllHospitals(1, 500).asObservable();
     resultHospital?.when(success: (List<Hospital>? listHospital) {
       hospitalList.addAll(listHospital!);
     }, failure: (NetworkExceptions error) {
@@ -336,14 +394,17 @@ abstract class _EditEventProcedureStoreBase with Store {
   }
 
   @action
-  getAllHealthInsurances() async {
+  getAllHealthInsurances(String nameHealthInsurance) async {
     healthInsuranceList.clear();
 
-    var resultHealthInsurances =
-        await _healthInsurancesRepository.getAllInsurances().asObservable();
+    var resultHealthInsurances = await _healthInsurancesRepository
+        .getAllInsurances(1, 500)
+        .asObservable();
     resultHealthInsurances?.when(
         success: (List<HealthInsurance>? listHealthInsurances) {
       healthInsuranceList.addAll(listHealthInsurances!);
+      setHealthInsurance(findHealthInsurance(nameHealthInsurance) ??
+          healthInsuranceList.first);
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));
     });
@@ -409,6 +470,8 @@ abstract class _EditEventProcedureStoreBase with Store {
     _payd = false;
     _patient = null;
     _patient = null;
+    _procedure = null;
+    _healthInsurance = null;
     saveState = SaveEventProcedureState.idle;
     state = EditEventProcedureState.idle;
   }

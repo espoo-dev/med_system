@@ -174,20 +174,22 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                       DropdownHealthInsurances(
                         healthInsuranceList:
                             addEventProcedureStore.healthInsuranceList,
-                        selectedHealthInsurance: HealthInsurance(),
+                        selectedHealthInsurance:
+                            addEventProcedureStore.healthInsurance ??
+                                HealthInsurance(),
                         onChanged: (HealthInsurance? healthInsurance) =>
                             addEventProcedureStore
-                                .setHealthInsuranceId(healthInsurance?.id ?? 0),
+                                .setHealthInsurance(healthInsurance!),
                       ),
                       const SizedBox(
                         height: 15,
                       ),
                       DropdownSearchProcedures(
                         procedureList: addEventProcedureStore.procedureList,
-                        selectedProcedure: Procedure(),
+                        selectedProcedure:
+                            addEventProcedureStore.procedure ?? Procedure(),
                         onChanged: (Procedure? procedure) =>
-                            addEventProcedureStore
-                                .setProcedureId(procedure?.id ?? 0),
+                            addEventProcedureStore.setProcedure(procedure!),
                       ),
                       const SizedBox(
                         height: 15,

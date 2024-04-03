@@ -227,6 +227,38 @@ mixin _$AddEventProcedureStore on _AddEventProcedureStoreBase, Store {
     });
   }
 
+  late final _$_procedureAtom =
+      Atom(name: '_AddEventProcedureStoreBase._procedure', context: context);
+
+  @override
+  Procedure? get _procedure {
+    _$_procedureAtom.reportRead();
+    return super._procedure;
+  }
+
+  @override
+  set _procedure(Procedure? value) {
+    _$_procedureAtom.reportWrite(value, super._procedure, () {
+      super._procedure = value;
+    });
+  }
+
+  late final _$_healthInsuranceAtom = Atom(
+      name: '_AddEventProcedureStoreBase._healthInsurance', context: context);
+
+  @override
+  HealthInsurance? get _healthInsurance {
+    _$_healthInsuranceAtom.reportRead();
+    return super._healthInsurance;
+  }
+
+  @override
+  set _healthInsurance(HealthInsurance? value) {
+    _$_healthInsuranceAtom.reportWrite(value, super._healthInsurance, () {
+      super._healthInsurance = value;
+    });
+  }
+
   late final _$_paydAtom =
       Atom(name: '_AddEventProcedureStoreBase._payd', context: context);
 
@@ -407,6 +439,28 @@ mixin _$AddEventProcedureStore on _AddEventProcedureStoreBase, Store {
         .startAction(name: '_AddEventProcedureStoreBase.setPatient');
     try {
       return super.setPatient(patient);
+    } finally {
+      _$_AddEventProcedureStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setProcedure(Procedure procedure) {
+    final _$actionInfo = _$_AddEventProcedureStoreBaseActionController
+        .startAction(name: '_AddEventProcedureStoreBase.setProcedure');
+    try {
+      return super.setProcedure(procedure);
+    } finally {
+      _$_AddEventProcedureStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setHealthInsurance(HealthInsurance healthInsurance) {
+    final _$actionInfo = _$_AddEventProcedureStoreBaseActionController
+        .startAction(name: '_AddEventProcedureStoreBase.setHealthInsurance');
+    try {
+      return super.setHealthInsurance(healthInsurance);
     } finally {
       _$_AddEventProcedureStoreBaseActionController.endAction(_$actionInfo);
     }
