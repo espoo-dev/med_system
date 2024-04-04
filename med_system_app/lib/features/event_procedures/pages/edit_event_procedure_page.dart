@@ -201,52 +201,84 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                         const SizedBox(
                           height: 15,
                         ),
-                        DropdownHealthInsurances(
-                          healthInsuranceList:
-                              editEventProcedureStore.healthInsuranceList,
-                          selectedHealthInsurance:
-                              editEventProcedureStore.healthInsurance ??
-                                  editEventProcedureStore.findHealthInsurance(
-                                      widget.eventProcedures.healthInsurance ??
-                                          "")!,
-                          onChanged: (HealthInsurance? healthInsurance) =>
-                              editEventProcedureStore
-                                  .setHealthInsurance(healthInsurance!),
+                        Visibility(
+                          visible: !editEventProcedureStore.isOtherPayment,
+                          child: Column(
+                            children: [
+                              DropdownHealthInsurances(
+                                healthInsuranceList:
+                                    editEventProcedureStore.healthInsuranceList,
+                                selectedHealthInsurance: editEventProcedureStore
+                                        .healthInsurance ??
+                                    editEventProcedureStore.findHealthInsurance(
+                                        widget.eventProcedures
+                                                .healthInsurance ??
+                                            "")!,
+                                onChanged: (HealthInsurance? healthInsurance) =>
+                                    editEventProcedureStore
+                                        .setHealthInsurance(healthInsurance!),
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                            ],
+                          ),
                         ),
-                        const SizedBox(
-                          height: 15,
+                        Visibility(
+                          visible: !editEventProcedureStore.isOtherPayment,
+                          child: Column(
+                            children: [
+                              DropdownSearchProcedures(
+                                procedureList:
+                                    editEventProcedureStore.procedureList,
+                                selectedProcedure:
+                                    editEventProcedureStore.procedure ??
+                                        editEventProcedureStore.findProcedure(
+                                            widget.eventProcedures.procedure ??
+                                                "")!,
+                                onChanged: (Procedure? procedure) =>
+                                    editEventProcedureStore
+                                        .setProcedure(procedure!),
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                            ],
+                          ),
                         ),
-                        DropdownSearchProcedures(
-                          procedureList: editEventProcedureStore.procedureList,
-                          selectedProcedure:
-                              editEventProcedureStore.procedure ??
-                                  editEventProcedureStore.findProcedure(
-                                      widget.eventProcedures.procedure ?? "")!,
-                          onChanged: (Procedure? procedure) =>
-                              editEventProcedureStore.setProcedure(procedure!),
+                        Visibility(
+                          visible: !editEventProcedureStore.isOtherPayment,
+                          child: const Text("Acomodação",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              )),
                         ),
-                        const SizedBox(
-                          height: 15,
+                        Visibility(
+                          visible: !editEventProcedureStore.isOtherPayment,
+                          child: MyRadioGroup(
+                              initialValue: widget.eventProcedures.roomType,
+                              onValueChanged: (value) {
+                                editEventProcedureStore.setAccommodation(value);
+                              }),
                         ),
-                        const Text("Acomodação",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            )),
-                        MyRadioGroup(
-                            initialValue: widget.eventProcedures.roomType,
-                            onValueChanged: (value) {
-                              editEventProcedureStore.setAccommodation(value);
-                            }),
-                        CustomSwitch(
-                          labelText: "Urgência",
-                          initialValue: widget.eventProcedures.urgency ?? false,
-                          onChanged: (value) {
-                            editEventProcedureStore.setUrgency(value);
-                          },
-                        ),
-                        const SizedBox(
-                          height: 15,
+                        Visibility(
+                          visible: !editEventProcedureStore.isOtherPayment,
+                          child: Column(
+                            children: [
+                              CustomSwitch(
+                                labelText: "Urgência",
+                                initialValue:
+                                    widget.eventProcedures.urgency ?? false,
+                                onChanged: (value) {
+                                  editEventProcedureStore.setUrgency(value);
+                                },
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                            ],
+                          ),
                         ),
                         CustomSwitch(
                           labelText: "Pago",
