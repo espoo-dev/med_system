@@ -123,127 +123,149 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
               key: _formKey,
               child: Column(
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      DropdownSearchPatients(
-                          patientList: addEventProcedureStore.patientList,
-                          selectedPatient:
-                              addEventProcedureStore.patient ?? Patient(),
-                          onChanged: (Patient? patient) =>
-                              addEventProcedureStore.setPatient(patient!)),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      MyTextFormField(
-                          fontSize: 16,
-                          label: 'Número de registro',
-                          placeholder: 'Digite número de serviço paciente.',
-                          inputType: TextInputType.text,
-                          validators: const {'required': true, 'minLength': 4},
-                          onChanged:
-                              addEventProcedureStore.setPatientServiceNumber),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      MyInputDate(
-                        onChanged: addEventProcedureStore.setCreatedDate,
-                        label: 'Data',
-                        textColor: Theme.of(context).colorScheme.primary,
-                        selectedDate: DateTime.now(),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      DropdownSearchHospitals(
-                        hospitalList: addEventProcedureStore.hospitalList,
-                        selectedHospital: Hospital(),
-                        onChanged: (Hospital? hospital) =>
-                            addEventProcedureStore
-                                .setHospitalId(hospital?.id ?? 0),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      MyRadioGroupPayment(onValueChanged: (value) {
-                        addEventProcedureStore.setPayment(value);
-                      }),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      DropdownHealthInsurances(
-                        healthInsuranceList:
-                            addEventProcedureStore.healthInsuranceList,
-                        selectedHealthInsurance:
-                            addEventProcedureStore.healthInsurance ??
-                                HealthInsurance(),
-                        onChanged: (HealthInsurance? healthInsurance) =>
-                            addEventProcedureStore
-                                .setHealthInsurance(healthInsurance!),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      DropdownSearchProcedures(
-                        procedureList: addEventProcedureStore.procedureList,
-                        selectedProcedure:
-                            addEventProcedureStore.procedure ?? Procedure(),
-                        onChanged: (Procedure? procedure) =>
-                            addEventProcedureStore.setProcedure(procedure!),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      const Text("Acomodação",
-                          style: TextStyle(
+                  Observer(builder: (_) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        DropdownSearchPatients(
+                            patientList: addEventProcedureStore.patientList,
+                            selectedPatient:
+                                addEventProcedureStore.patient ?? Patient(),
+                            onChanged: (Patient? patient) =>
+                                addEventProcedureStore.setPatient(patient!)),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        MyTextFormField(
                             fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      MyRadioGroup(onValueChanged: (value) {
-                        addEventProcedureStore.setAccommodation(value);
-                      }),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      CustomSwitch(
-                        labelText: "Urgência",
-                        initialValue: false,
-                        onChanged: (value) {
-                          addEventProcedureStore.setUrgency(value);
-                        },
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      CustomSwitch(
-                        labelText: "Pago",
-                        initialValue: addEventProcedureStore.payd ?? false,
-                        onChanged: (value) {
-                          addEventProcedureStore.setPayd(value);
-                        },
-                      ),
-                      Center(child: Observer(builder: (_) {
-                        return MyButtonWidget(
-                          text: 'Cadastrar procedimento',
-                          isLoading: addEventProcedureStore.saveState ==
-                              SaveEventProcedureState.loading,
-                          disabledColor: Colors.grey,
-                          onTap: addEventProcedureStore.isValidData
-                              ? () async {
-                                  _formKey.currentState?.save();
-                                  if (_formKey.currentState!.validate()) {
+                            label: 'Número de registro',
+                            placeholder: 'Digite número de serviço paciente.',
+                            inputType: TextInputType.text,
+                            validators: const {
+                              'required': true,
+                              'minLength': 4
+                            },
+                            onChanged:
+                                addEventProcedureStore.setPatientServiceNumber),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        MyInputDate(
+                          onChanged: addEventProcedureStore.setCreatedDate,
+                          label: 'Data',
+                          textColor: Theme.of(context).colorScheme.primary,
+                          selectedDate: DateTime.now(),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        DropdownSearchHospitals(
+                          hospitalList: addEventProcedureStore.hospitalList,
+                          selectedHospital: Hospital(),
+                          onChanged: (Hospital? hospital) =>
+                              addEventProcedureStore
+                                  .setHospitalId(hospital?.id ?? 0),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        MyRadioGroupPayment(onValueChanged: (value) {
+                          addEventProcedureStore.setPayment(value);
+                        }),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Visibility(
+                          visible: !addEventProcedureStore.isOtherPayment,
+                          child: Column(
+                            children: [
+                              DropdownHealthInsurances(
+                                healthInsuranceList:
+                                    addEventProcedureStore.healthInsuranceList,
+                                selectedHealthInsurance:
+                                    addEventProcedureStore.healthInsurance ??
+                                        HealthInsurance(),
+                                onChanged: (HealthInsurance? healthInsurance) =>
                                     addEventProcedureStore
-                                        .createEventProcedure();
+                                        .setHealthInsurance(healthInsurance!),
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Visibility(
+                          visible: !addEventProcedureStore.isOtherPayment,
+                          child: Column(
+                            children: [
+                              DropdownSearchProcedures(
+                                procedureList:
+                                    addEventProcedureStore.procedureList,
+                                selectedProcedure:
+                                    addEventProcedureStore.procedure ??
+                                        Procedure(),
+                                onChanged: (Procedure? procedure) =>
+                                    addEventProcedureStore
+                                        .setProcedure(procedure!),
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Visibility(
+                          visible: !addEventProcedureStore.isOtherPayment,
+                          child: const Text("Acomodação",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              )),
+                        ),
+                        Visibility(
+                          visible: !addEventProcedureStore.isOtherPayment,
+                          child: Column(
+                            children: [
+                              MyRadioGroup(onValueChanged: (value) {
+                                addEventProcedureStore.setAccommodation(value);
+                              }),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                            ],
+                          ),
+                        ),
+                        CustomSwitch(
+                          labelText: "Pago",
+                          initialValue: addEventProcedureStore.payd ?? false,
+                          onChanged: (value) {
+                            addEventProcedureStore.setPayd(value);
+                          },
+                        ),
+                        Center(child: Observer(builder: (_) {
+                          return MyButtonWidget(
+                            text: 'Cadastrar procedimento',
+                            isLoading: addEventProcedureStore.saveState ==
+                                SaveEventProcedureState.loading,
+                            disabledColor: Colors.grey,
+                            onTap: addEventProcedureStore.isValidData
+                                ? () async {
+                                    _formKey.currentState?.save();
+                                    if (_formKey.currentState!.validate()) {
+                                      addEventProcedureStore
+                                          .createEventProcedure();
+                                    }
                                   }
-                                }
-                              : null,
-                        );
-                      })),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                    ],
-                  ),
+                                : null,
+                          );
+                        })),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                      ],
+                    );
+                  }),
                 ],
               ),
             ),

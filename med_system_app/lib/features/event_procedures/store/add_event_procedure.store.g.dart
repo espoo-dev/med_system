@@ -9,6 +9,13 @@ part of 'add_event_procedure.store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$AddEventProcedureStore on _AddEventProcedureStoreBase, Store {
+  Computed<bool>? _$isOtherPaymentComputed;
+
+  @override
+  bool get isOtherPayment =>
+      (_$isOtherPaymentComputed ??= Computed<bool>(() => super.isOtherPayment,
+              name: '_AddEventProcedureStoreBase.isOtherPayment'))
+          .value;
   Computed<bool>? _$isValidDataComputed;
 
   @override
@@ -482,6 +489,7 @@ mixin _$AddEventProcedureStore on _AddEventProcedureStoreBase, Store {
     return '''
 state: ${state},
 saveState: ${saveState},
+isOtherPayment: ${isOtherPayment},
 isValidData: ${isValidData}
     ''';
   }
