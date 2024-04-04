@@ -173,6 +173,9 @@ abstract class _AddEventProcedureStoreBase with Store {
     _payment = (payment == 'Convênio') ? 'health_insurance' : 'others';
   }
 
+  @computed
+  bool get isOtherPayment => _payment == 'others';
+
   @observable
   bool _urgency = false;
 
@@ -316,9 +319,9 @@ abstract class _AddEventProcedureStoreBase with Store {
               patientServiceNumber: _patientServiceNumber,
               date: _createdDate,
               payd: _payd,
-              urgency: _urgency,
+              urgency: isOtherPayment ? null : _urgency,
               payment: _payment,
-              roomType: _accommodation));
+              roomType: isOtherPayment ? null : _accommodation));
       registerEventProcedureResult?.when(success: (eventProcedure) {
         saveState = SaveEventProcedureState.success;
       }, failure: (NetworkExceptions error) {
