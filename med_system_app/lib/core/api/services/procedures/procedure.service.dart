@@ -14,6 +14,9 @@ abstract class ProcedureService extends ChopperService {
   @Get(path: 'api/v1/procedures')
   Future<Response> getProcedures();
 
+  @Get(path: 'api/v1/procedures')
+  Future<Response> getProceduresByCustom(@Query('custom') bool custom);
+
   @Post(path: 'api/v1/procedures')
   Future<Response> registerProcedure(@Body() dynamic body);
 

@@ -11,6 +11,9 @@ abstract class HealthInsurancesService extends ChopperService {
   Future<Response> getAllHealthInsurances(
       @Query('page') int page, @Query('per_page') int perPage);
 
+  @Get(path: 'api/v1/health_insurances')
+  Future<Response> getAllHealthInsurancesByCustom(@Query('custom') bool custom);
+
   @Post(path: 'api/v1/health_insurances')
   Future<Response> registerHealthInsurances(@Body() dynamic body);
 
