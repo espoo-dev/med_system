@@ -48,6 +48,19 @@ final class _$ProcedureService extends ProcedureService {
   }
 
   @override
+  Future<Response<dynamic>> getProceduresByCustom(bool custom) {
+    final Uri $url = Uri.parse('/api/v1/procedures');
+    final Map<String, dynamic> $params = <String, dynamic>{'custom': custom};
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
   Future<Response<dynamic>> registerProcedure(dynamic body) {
     final Uri $url = Uri.parse('/api/v1/procedures');
     final $body = body;

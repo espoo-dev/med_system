@@ -37,6 +37,19 @@ final class _$HealthInsurancesService extends HealthInsurancesService {
   }
 
   @override
+  Future<Response<dynamic>> getAllHealthInsurancesByCustom(bool custom) {
+    final Uri $url = Uri.parse('/api/v1/health_insurances');
+    final Map<String, dynamic> $params = <String, dynamic>{'custom': custom};
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
   Future<Response<dynamic>> registerHealthInsurances(dynamic body) {
     final Uri $url = Uri.parse('/api/v1/health_insurances');
     final $body = body;
