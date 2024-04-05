@@ -47,6 +47,24 @@ class ProcedureRepository {
     return null;
   }
 
+  Future<Result<List<Procedure>?>?> getProceduresByCustom(bool custom) async {
+    try {
+      final response = await procedureService.getProceduresByCustom(custom);
+      if (response.isSuccessful) {
+        ProcedureModel? procedureModel =
+            ProcedureModel.fromJson(json.decode(response.body));
+
+        return Result.success(procedureModel.procedureList);
+      } else if (response.statusCode == 500) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.internalServerError()));
+      }
+    } catch (e) {
+      throw Result.failure(NetworkExceptions.getException(e));
+    }
+    return null;
+  }
+
   Future<Result<Procedure>?> registerProcedure(
       AddProcedureRequestModel addProcedureRequestModel) async {
     try {

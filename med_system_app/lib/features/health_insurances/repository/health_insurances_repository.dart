@@ -55,6 +55,26 @@ class HealthInsurancesRepository {
     return null;
   }
 
+  Future<Result<List<HealthInsurance>?>?> getAllInsurancesByCustom(
+      bool custom) async {
+    try {
+      final response =
+          await healthInsurancesService.getAllHealthInsurancesByCustom(custom);
+      if (response.isSuccessful) {
+        HealthInsuranceModel? healthInsuranceModel =
+            HealthInsuranceModel.fromJson(json.decode(response.body));
+
+        return Result.success(healthInsuranceModel.healthInsurancesList);
+      } else if (response.statusCode == 500) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.internalServerError()));
+      }
+    } catch (e) {
+      throw Result.failure(NetworkExceptions.getException(e));
+    }
+    return null;
+  }
+
   Future<Result<HealthInsurance>?> editHealthInsurance(int healthInsuranceId,
       AddHealthInsurancesRequestModel addHealthInsurancesRequestModel) async {
     try {
