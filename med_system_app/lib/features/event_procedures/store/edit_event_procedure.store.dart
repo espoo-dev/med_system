@@ -359,6 +359,18 @@ abstract class _EditEventProcedureStoreBase with Store {
   }
 
   @action
+  Future getAllProceduresByCustom() async {
+    procedureList.clear();
+    var resultProcedures =
+        await _procedureRepository.getProceduresByCustom(true).asObservable();
+    resultProcedures?.when(success: (List<Procedure>? listProcedures) {
+      procedureList.addAll(listProcedures!);
+    }, failure: (NetworkExceptions error) {
+      handleError(NetworkExceptions.getErrorMessage(error));
+    });
+  }
+
+  @action
   getAllProcedures(String nameProcedure) async {
     procedureList.clear();
     var resultProcedures =
