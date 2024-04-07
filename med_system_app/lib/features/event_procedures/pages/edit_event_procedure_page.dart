@@ -54,6 +54,7 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
     editEventProcedureStore.setPatientServiceNumber(
         widget.eventProcedures.patientServiceNumber ?? "");
     editEventProcedureStore.setPayd(widget.eventProcedures.payd ?? false);
+    editEventProcedureStore.setPayment(widget.eventProcedures.payment ?? "");
   }
 
   @override
