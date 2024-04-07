@@ -32,9 +32,12 @@ abstract class _EditEventProcedureStoreBase with Store {
   final EventProcedureRepository _eventProcedureRepository;
 
   ObservableList<Procedure> procedureList = ObservableList<Procedure>();
+  ObservableList<Procedure> procedureListOthers = ObservableList<Procedure>();
   ObservableList<Patient> patientList = ObservableList<Patient>();
   ObservableList<Hospital> hospitalList = ObservableList<Hospital>();
   ObservableList<HealthInsurance> healthInsuranceList =
+      ObservableList<HealthInsurance>();
+  ObservableList<HealthInsurance> healthInsuranceListOthers =
       ObservableList<HealthInsurance>();
 
   @observable
@@ -156,7 +159,9 @@ abstract class _EditEventProcedureStoreBase with Store {
 
   @action
   void setPayment(String payment) {
-    _payment = (payment == 'Convênio') ? 'health_insurance' : 'others';
+    _payment = (payment == 'Convênio' || payment == "health_insurance")
+        ? 'health_insurance'
+        : 'others';
   }
 
   @computed
@@ -231,6 +236,39 @@ abstract class _EditEventProcedureStoreBase with Store {
   }
 
   @observable
+  Procedure? _procedureOthers;
+  Procedure? get procedureOther => _procedureOthers;
+
+  @action
+  void setProcedureOther(Procedure procedure) {
+    // ignore: unnecessary_null_in_if_null_operators
+    _procedureOthers = Procedure(
+        // ignore: unnecessary_null_in_if_null_operators
+        id: procedure.id ?? null,
+        name: procedure.name ?? _procedureOthers?.name ?? "",
+        code: procedure.code ?? _procedureOthers?.name ?? "",
+        description:
+            procedure.description ?? _procedureOthers?.description ?? "",
+        amountCents:
+            procedure.amountCents ?? _procedureOthers?.amountCents ?? "");
+  }
+
+  @observable
+  HealthInsurance? _healthInsuranceOther;
+
+  HealthInsurance? get healthInsuranceOther => _healthInsuranceOther;
+
+  @action
+  void setHealthInsuranceOther(HealthInsurance healthInsurance) {
+    // ignore: unnecessary_null_in_if_null_operators
+    _healthInsuranceOther = HealthInsurance(
+      // ignore: unnecessary_null_in_if_null_operators
+      id: healthInsurance.id ?? null,
+      name: healthInsurance.name ?? _healthInsuranceOther?.name ?? "",
+    );
+  }
+
+  @observable
   HealthInsurance? _healthInsurance;
 
   HealthInsurance? get healthInsurance => _healthInsurance;
@@ -259,6 +297,20 @@ abstract class _EditEventProcedureStoreBase with Store {
     return true;
   }
 
+  bool validateProcedureOther() {
+    if (_procedureOthers == null) {
+      return false;
+    }
+    return true;
+  }
+
+  bool validateHealthInsuranceOther() {
+    if (_healthInsuranceOther == null) {
+      return false;
+    }
+    return true;
+  }
+
   @computed
   bool get isValidData {
     bool isValid = true;
@@ -278,19 +330,31 @@ abstract class _EditEventProcedureStoreBase with Store {
       isValid = false;
     }
 
-    if (!validateProcedure()) {
-      debugPrint('Procedure ID is not valid');
-      isValid = false;
-    }
-
     if (!validatePatientServiceNumber()) {
       debugPrint('Patient Service Number is not valid');
       isValid = false;
     }
 
-    if (!validateHealthInsurance()) {
-      debugPrint('Health Insurance ID is not valid');
-      isValid = false;
+    if (isOtherPayment) {
+      if (!validateProcedureOther()) {
+        debugPrint('Procedure other is not valid');
+        isValid = false;
+      }
+
+      if (!validateHealthInsuranceOther()) {
+        debugPrint('Health Insurance other is not valid');
+        isValid = false;
+      }
+    } else {
+      if (!validateProcedure()) {
+        debugPrint('Procedure  is not valid');
+        isValid = false;
+      }
+
+      if (!validateHealthInsurance()) {
+        debugPrint('Health Insurance  is not valid');
+        isValid = false;
+      }
     }
 
     return isValid;
@@ -305,19 +369,33 @@ abstract class _EditEventProcedureStoreBase with Store {
               eventProcedureId,
               AddEventProcedureRequestModel(
                   procedureAttributes: ProcedureAttributes(
-                      id: _procedure?.id,
-                      name: _procedure?.name,
-                      code: _procedure?.code,
-                      amountCents: parseInt(_procedure?.amountCents ?? ""),
-                      description: _procedure?.description,
-                      custom: true),
+                      id: isOtherPayment
+                          ? _procedureOthers?.id
+                          : _procedure?.id,
+                      name: isOtherPayment
+                          ? _procedureOthers?.name
+                          : _procedure?.name,
+                      code: isOtherPayment
+                          ? _procedureOthers?.code
+                          : _procedure?.code,
+                      amountCents: isOtherPayment
+                          ? parseInt(_procedureOthers?.amountCents ?? "")
+                          : parseInt(_procedure?.amountCents ?? ""),
+                      description: isOtherPayment
+                          ? _procedureOthers?.description
+                          : _procedure?.description,
+                      custom: isOtherPayment ? true : false),
                   patientAttributes:
                       PatientAttributes(id: _patient?.id, name: _patient?.name),
                   hospitalId: _hospitalId,
                   healthInsuranceAttributes: HealthInsuranceAttributes(
-                      id: _healthInsurance?.id,
-                      name: _healthInsurance?.name,
-                      custom: true),
+                      id: isOtherPayment
+                          ? _healthInsuranceOther?.id
+                          : _healthInsurance?.id,
+                      name: isOtherPayment
+                          ? _healthInsuranceOther?.name
+                          : _healthInsurance?.name,
+                      custom: isOtherPayment ? true : false),
                   patientServiceNumber: _patientServiceNumber,
                   date: _createdDate,
                   payd: _payd,
@@ -339,17 +417,25 @@ abstract class _EditEventProcedureStoreBase with Store {
     try {
       state = EditEventProcedureState.loading;
 
-      // Fetch all procedures
-      await getAllProcedures(nameProcedure);
+      await Future.wait([
+        // Fetch all procedures
 
-      // Fetch all patients
-      await getAllPatients(namePatient);
+        getAllProceduresByCustom(nameProcedure),
 
-      // Fetch all hospitals
-      await getAllHospitals();
+        getAllProcedures(nameProcedure),
 
-      // Fetch all health insurances
-      await getAllHealthInsurances(nameHealthInsurance);
+        // Fetch all patients
+        getAllPatients(namePatient),
+
+        // Fetch all hospitals
+        getAllHospitals(),
+
+        // Fetch all health insurances
+
+        getAllHealthInsurancesByCustom(nameHealthInsurance),
+
+        getAllHealthInsurances(nameHealthInsurance),
+      ]);
 
       state = EditEventProcedureState.success;
     } catch (error) {
@@ -359,32 +445,64 @@ abstract class _EditEventProcedureStoreBase with Store {
   }
 
   @action
-  Future getAllProceduresByCustom() async {
-    procedureList.clear();
+  Future getAllProceduresByCustom(String nameProcedure) async {
+    procedureListOthers.clear();
     var resultProcedures =
         await _procedureRepository.getProceduresByCustom(true).asObservable();
     resultProcedures?.when(success: (List<Procedure>? listProcedures) {
-      procedureList.addAll(listProcedures!);
+      procedureListOthers.addAll(listProcedures!);
+      if (isOtherPayment) {
+        setProcedureOther(
+            findProcedureCustom(nameProcedure) ?? procedureListOthers.first);
+      } else {
+        setProcedure(Procedure());
+      }
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));
     });
   }
 
   @action
-  getAllProcedures(String nameProcedure) async {
+  Future getAllHealthInsurancesByCustom(String nameHealthInsurance) async {
+    healthInsuranceListOthers.clear();
+
+    var resultHealthInsurances = await _healthInsurancesRepository
+        .getAllInsurancesByCustom(true)
+        .asObservable();
+    resultHealthInsurances?.when(
+        success: (List<HealthInsurance>? listHealthInsurances) {
+      healthInsuranceListOthers.addAll(listHealthInsurances!);
+      if (isOtherPayment) {
+        setHealthInsuranceOther(
+            findHealthInsuranceCustom(nameHealthInsurance) ??
+                healthInsuranceListOthers.first);
+      } else {
+        setHealthInsurance(HealthInsurance());
+      }
+    }, failure: (NetworkExceptions error) {
+      handleError(NetworkExceptions.getErrorMessage(error));
+    });
+  }
+
+  @action
+  Future getAllProcedures(String nameProcedure) async {
     procedureList.clear();
     var resultProcedures =
         await _procedureRepository.getProcedures().asObservable();
     resultProcedures?.when(success: (List<Procedure>? listProcedures) {
       procedureList.addAll(listProcedures!);
-      setProcedure(findProcedure(nameProcedure) ?? procedureList.first);
+      if (!isOtherPayment) {
+        setProcedure(findProcedure(nameProcedure) ?? procedureList.first);
+      } else {
+        setProcedureOther(Procedure());
+      }
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));
     });
   }
 
   @action
-  getAllPatients(String namePatient) async {
+  Future getAllPatients(String namePatient) async {
     patientList.clear();
     var resultPatient =
         await _patientRepository.getAllPatients(1, 500).asObservable();
@@ -397,7 +515,7 @@ abstract class _EditEventProcedureStoreBase with Store {
   }
 
   @action
-  getAllHospitals() async {
+  Future getAllHospitals() async {
     hospitalList.clear();
     var resultHospital =
         await _hospitalRepository.getAllHospitals(1, 500).asObservable();
@@ -409,7 +527,7 @@ abstract class _EditEventProcedureStoreBase with Store {
   }
 
   @action
-  getAllHealthInsurances(String nameHealthInsurance) async {
+  Future getAllHealthInsurances(String nameHealthInsurance) async {
     healthInsuranceList.clear();
 
     var resultHealthInsurances = await _healthInsurancesRepository
@@ -418,8 +536,12 @@ abstract class _EditEventProcedureStoreBase with Store {
     resultHealthInsurances?.when(
         success: (List<HealthInsurance>? listHealthInsurances) {
       healthInsuranceList.addAll(listHealthInsurances!);
-      setHealthInsurance(findHealthInsurance(nameHealthInsurance) ??
-          healthInsuranceList.first);
+      if (!isOtherPayment) {
+        setHealthInsurance(findHealthInsurance(nameHealthInsurance) ??
+            healthInsuranceList.first);
+      } else {
+        setHealthInsuranceOther(HealthInsurance());
+      }
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));
     });
@@ -430,13 +552,31 @@ abstract class _EditEventProcedureStoreBase with Store {
   }
 
   HealthInsurance? findHealthInsurance(String nameHealthInsurance) {
+    if (isOtherPayment) {
+      return HealthInsurance();
+    }
+
     for (var healthInsurance in healthInsuranceList) {
       if (healthInsurance.name == nameHealthInsurance) {
         _healthInsuranceId = healthInsurance.id ?? 0;
         return healthInsurance;
       }
     }
-    return null;
+    return HealthInsurance();
+  }
+
+  HealthInsurance? findHealthInsuranceCustom(String nameHealthInsurance) {
+    if (!isOtherPayment) {
+      return HealthInsurance();
+    }
+
+    for (var healthInsurance in healthInsuranceListOthers) {
+      if (healthInsurance.name == nameHealthInsurance) {
+        _healthInsuranceId = healthInsurance.id ?? 0;
+        return healthInsurance;
+      }
+    }
+    return HealthInsurance();
   }
 
   Hospital? findHospital(String nameHospital) {
@@ -460,13 +600,30 @@ abstract class _EditEventProcedureStoreBase with Store {
   }
 
   Procedure? findProcedure(String nameProcedure) {
+    if (isOtherPayment) {
+      return Procedure();
+    }
+
     for (var procedure in procedureList) {
       if (procedure.name == nameProcedure) {
         _procedureId = procedure.id ?? 0;
         return procedure;
       }
     }
-    return procedureList.first;
+    return Procedure();
+  }
+
+  Procedure? findProcedureCustom(String nameProcedure) {
+    if (!isOtherPayment) {
+      return Procedure();
+    }
+    for (var procedure in procedureListOthers) {
+      if (procedure.name == nameProcedure) {
+        _procedureId = procedure.id ?? 0;
+        return procedure;
+      }
+    }
+    return Procedure();
   }
 
   dispose() {
@@ -483,6 +640,10 @@ abstract class _EditEventProcedureStoreBase with Store {
     _payment = "health_insurance";
     _createdDate = "";
     _payd = false;
+    healthInsuranceListOthers.clear();
+    procedureListOthers.clear();
+    _procedureOthers = null;
+    _healthInsuranceOther = null;
     _patient = null;
     _patient = null;
     _procedure = null;
