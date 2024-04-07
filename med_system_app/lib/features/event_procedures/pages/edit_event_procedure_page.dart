@@ -11,11 +11,14 @@ import 'package:distrito_medico/features/event_procedures/model/event_procedure.
 import 'package:distrito_medico/features/event_procedures/pages/event_procedures_page.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/custom_switch.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown_search_health_insurances.widget.dart';
+import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown_search_health_insurances_others.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown_search_hospitals.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown_search_patients.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown_search_procedures.widget.dart';
+import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown_search_procedures_others.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/radio_group.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/radio_group_payment.widget.dart';
+import 'package:distrito_medico/features/event_procedures/pages/widgets/triangle_widget.dart';
 import 'package:distrito_medico/features/event_procedures/store/edit_event_procedure.store.dart';
 import 'package:distrito_medico/features/health_insurances/model/health_insurances.model.dart';
 import 'package:distrito_medico/features/home/pages/home_page.dart';
@@ -47,6 +50,7 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
   @override
   void initState() {
     super.initState();
+    editEventProcedureStore.setPayment(widget.eventProcedures.payment ?? "");
     editEventProcedureStore.fetchAllData(
         widget.eventProcedures.patient ?? "",
         widget.eventProcedures.procedure ?? "",
@@ -54,7 +58,6 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
     editEventProcedureStore.setPatientServiceNumber(
         widget.eventProcedures.patientServiceNumber ?? "");
     editEventProcedureStore.setPayd(widget.eventProcedures.payd ?? false);
-    editEventProcedureStore.setPayment(widget.eventProcedures.payment ?? "");
   }
 
   @override
@@ -277,6 +280,102 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                               ),
                               const SizedBox(
                                 height: 15,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Visibility(
+                          visible: editEventProcedureStore.isOtherPayment,
+                          child: Stack(
+                            children: [
+                              Card(
+                                margin: const EdgeInsets.only(top: 8.0),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                      DropdownSearchProceduresOthers(
+                                        procedureList: editEventProcedureStore
+                                            .procedureListOthers,
+                                        selectedProcedure:
+                                            editEventProcedureStore
+                                                    .procedureOther ??
+                                                editEventProcedureStore
+                                                    .findProcedureCustom(widget
+                                                            .eventProcedures
+                                                            .procedure ??
+                                                        "")!,
+                                        onChanged: (Procedure? procedure) =>
+                                            editEventProcedureStore
+                                                .setProcedureOther(procedure!),
+                                      ),
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                      DropdownHealthInsurancesOthers(
+                                        healthInsuranceList:
+                                            editEventProcedureStore
+                                                .healthInsuranceListOthers,
+                                        selectedHealthInsurance:
+                                            editEventProcedureStore
+                                                    .healthInsuranceOther ??
+                                                editEventProcedureStore
+                                                    .findHealthInsuranceCustom(
+                                                        widget.eventProcedures
+                                                                .healthInsurance ??
+                                                            "")!,
+                                        onChanged: (HealthInsurance?
+                                                healthInsurance) =>
+                                            editEventProcedureStore
+                                                .setHealthInsuranceOther(
+                                                    healthInsurance!),
+                                      ),
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    SizedBox(
+                                      height: 8.0,
+                                      width: 5.0,
+                                      child: CustomPaint(
+                                        painter: TrianglePainter(),
+                                      ),
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          borderRadius: const BorderRadius.only(
+                                              topRight: Radius.circular(6.0),
+                                              bottomLeft:
+                                                  Radius.circular(6.0))),
+                                      width: 120.0,
+                                      height: 30.0,
+                                      child: const Center(
+                                        child: Text(
+                                          'Outros',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
