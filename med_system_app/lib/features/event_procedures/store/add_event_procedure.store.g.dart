@@ -250,6 +250,40 @@ mixin _$AddEventProcedureStore on _AddEventProcedureStoreBase, Store {
     });
   }
 
+  late final _$_procedureOthersAtom = Atom(
+      name: '_AddEventProcedureStoreBase._procedureOthers', context: context);
+
+  @override
+  Procedure? get _procedureOthers {
+    _$_procedureOthersAtom.reportRead();
+    return super._procedureOthers;
+  }
+
+  @override
+  set _procedureOthers(Procedure? value) {
+    _$_procedureOthersAtom.reportWrite(value, super._procedureOthers, () {
+      super._procedureOthers = value;
+    });
+  }
+
+  late final _$_healthInsuranceOtherAtom = Atom(
+      name: '_AddEventProcedureStoreBase._healthInsuranceOther',
+      context: context);
+
+  @override
+  HealthInsurance? get _healthInsuranceOther {
+    _$_healthInsuranceOtherAtom.reportRead();
+    return super._healthInsuranceOther;
+  }
+
+  @override
+  set _healthInsuranceOther(HealthInsurance? value) {
+    _$_healthInsuranceOtherAtom.reportWrite(value, super._healthInsuranceOther,
+        () {
+      super._healthInsuranceOther = value;
+    });
+  }
+
   late final _$_healthInsuranceAtom = Atom(
       name: '_AddEventProcedureStoreBase._healthInsurance', context: context);
 
@@ -307,6 +341,26 @@ mixin _$AddEventProcedureStore on _AddEventProcedureStoreBase, Store {
   @override
   Future<dynamic> getAllProcedures() {
     return _$getAllProceduresAsyncAction.run(() => super.getAllProcedures());
+  }
+
+  late final _$getAllProceduresByCustomAsyncAction = AsyncAction(
+      '_AddEventProcedureStoreBase.getAllProceduresByCustom',
+      context: context);
+
+  @override
+  Future<dynamic> getAllProceduresByCustom() {
+    return _$getAllProceduresByCustomAsyncAction
+        .run(() => super.getAllProceduresByCustom());
+  }
+
+  late final _$getAllHealthInsurancesByCustomAsyncAction = AsyncAction(
+      '_AddEventProcedureStoreBase.getAllHealthInsurancesByCustom',
+      context: context);
+
+  @override
+  Future<dynamic> getAllHealthInsurancesByCustom() {
+    return _$getAllHealthInsurancesByCustomAsyncAction
+        .run(() => super.getAllHealthInsurancesByCustom());
   }
 
   late final _$getAllPatientsAsyncAction = AsyncAction(
@@ -457,6 +511,29 @@ mixin _$AddEventProcedureStore on _AddEventProcedureStoreBase, Store {
         .startAction(name: '_AddEventProcedureStoreBase.setProcedure');
     try {
       return super.setProcedure(procedure);
+    } finally {
+      _$_AddEventProcedureStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setProcedureOther(Procedure procedure) {
+    final _$actionInfo = _$_AddEventProcedureStoreBaseActionController
+        .startAction(name: '_AddEventProcedureStoreBase.setProcedureOther');
+    try {
+      return super.setProcedureOther(procedure);
+    } finally {
+      _$_AddEventProcedureStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setHealthInsuranceOther(HealthInsurance healthInsurance) {
+    final _$actionInfo =
+        _$_AddEventProcedureStoreBaseActionController.startAction(
+            name: '_AddEventProcedureStoreBase.setHealthInsuranceOther');
+    try {
+      return super.setHealthInsuranceOther(healthInsurance);
     } finally {
       _$_AddEventProcedureStoreBaseActionController.endAction(_$actionInfo);
     }
