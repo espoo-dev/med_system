@@ -163,7 +163,7 @@ class _DropdownSearchProceduresState
         },
         isFilterOnline: true,
         showSearchBox: true,
-        searchDelay: const Duration(seconds: 1),
+        searchDelay: const Duration(milliseconds: 200),
         itemBuilder: (context, item, isSelected) {
           return Padding(
             padding: const EdgeInsets.all(15),
