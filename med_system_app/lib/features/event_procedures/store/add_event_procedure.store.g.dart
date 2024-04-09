@@ -234,6 +234,22 @@ mixin _$AddEventProcedureStore on _AddEventProcedureStoreBase, Store {
     });
   }
 
+  late final _$_hospitalAtom =
+      Atom(name: '_AddEventProcedureStoreBase._hospital', context: context);
+
+  @override
+  Hospital? get _hospital {
+    _$_hospitalAtom.reportRead();
+    return super._hospital;
+  }
+
+  @override
+  set _hospital(Hospital? value) {
+    _$_hospitalAtom.reportWrite(value, super._hospital, () {
+      super._hospital = value;
+    });
+  }
+
   late final _$_procedureAtom =
       Atom(name: '_AddEventProcedureStoreBase._procedure', context: context);
 
@@ -500,6 +516,17 @@ mixin _$AddEventProcedureStore on _AddEventProcedureStoreBase, Store {
         .startAction(name: '_AddEventProcedureStoreBase.setPatient');
     try {
       return super.setPatient(patient);
+    } finally {
+      _$_AddEventProcedureStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setHospital(Hospital hospital) {
+    final _$actionInfo = _$_AddEventProcedureStoreBaseActionController
+        .startAction(name: '_AddEventProcedureStoreBase.setHospital');
+    try {
+      return super.setHospital(hospital);
     } finally {
       _$_AddEventProcedureStoreBaseActionController.endAction(_$actionInfo);
     }
