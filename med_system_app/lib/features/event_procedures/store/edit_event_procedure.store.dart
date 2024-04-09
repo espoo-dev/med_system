@@ -246,7 +246,7 @@ abstract class _EditEventProcedureStoreBase with Store {
         // ignore: unnecessary_null_in_if_null_operators
         id: procedure.id ?? null,
         name: procedure.name ?? _procedureOthers?.name ?? "",
-        code: procedure.code ?? _procedureOthers?.name ?? "",
+        //code: procedure.code ?? _procedureOthers?.code ?? "",
         description:
             procedure.description ?? _procedureOthers?.description ?? "",
         amountCents:
@@ -375,9 +375,7 @@ abstract class _EditEventProcedureStoreBase with Store {
                       name: isOtherPayment
                           ? _procedureOthers?.name
                           : _procedure?.name,
-                      code: isOtherPayment
-                          ? _procedureOthers?.code
-                          : _procedure?.code,
+                      code: isOtherPayment ? null : _procedure?.code,
                       amountCents: isOtherPayment
                           ? parseInt(_procedureOthers?.amountCents ?? "")
                           : parseInt(_procedure?.amountCents ?? ""),

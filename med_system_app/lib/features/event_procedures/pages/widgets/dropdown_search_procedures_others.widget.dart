@@ -43,7 +43,6 @@ class _DropdownSearchProceduresState
   Widget build(BuildContext context) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-    late String code;
     late String description;
     late String amountCents;
     return DropdownSearch<Procedure>(
@@ -100,19 +99,6 @@ class _DropdownSearchProceduresState
                   children: [
                     MyTextFormField(
                       fontSize: 16,
-                      label: 'Código do procedimento',
-                      placeholder: 'Digite o código do procedimento',
-                      inputType: TextInputType.text,
-                      onChanged: (value) {
-                        code = value;
-                      },
-                      validators: const {'required': true, 'minLength': 3},
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    MyTextFormField(
-                      fontSize: 16,
                       label: 'Digite a descrição',
                       placeholder: 'Digite a descrição do procedimento',
                       inputType: TextInputType.text,
@@ -148,7 +134,7 @@ class _DropdownSearchProceduresState
                                 id: null,
                                 name: text,
                                 description: description,
-                                code: code,
+                                code: null,
                                 amountCents: amountCents));
                             Navigator.pop(context);
                           }
