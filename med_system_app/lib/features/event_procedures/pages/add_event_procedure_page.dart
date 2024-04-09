@@ -163,12 +163,12 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                           height: 15,
                         ),
                         DropdownSearchHospitals(
-                          hospitalList: addEventProcedureStore.hospitalList,
-                          selectedHospital: Hospital(),
-                          onChanged: (Hospital? hospital) =>
-                              addEventProcedureStore
-                                  .setHospitalId(hospital?.id ?? 0),
-                        ),
+                            hospitalList: addEventProcedureStore.hospitalList,
+                            selectedHospital:
+                                addEventProcedureStore.hospital ?? Hospital(),
+                            onChanged: (Hospital? hospital) {
+                              addEventProcedureStore.setHospital(hospital!);
+                            }),
                         const SizedBox(
                           height: 15,
                         ),

@@ -237,6 +237,23 @@ abstract class _AddEventProcedureStoreBase with Store {
   }
 
   @observable
+  Hospital? _hospital;
+
+  Hospital? get hospital => _hospital;
+
+  @action
+  void setHospital(Hospital hospital) {
+    setHospitalId(hospital.id ?? 0);
+
+    // ignore: unnecessary_null_in_if_null_operators
+    _hospital = Hospital(
+        // ignore: unnecessary_null_in_if_null_operators
+        id: hospital.id ?? null,
+        name: hospital.name ?? _hospital?.name ?? "",
+        address: hospital.address ?? _hospital?.address ?? "");
+  }
+
+  @observable
   Procedure? _procedure;
 
   Procedure? get procedure => _procedure;
@@ -536,6 +553,7 @@ abstract class _AddEventProcedureStoreBase with Store {
     _patient = null;
     _procedure = null;
     _healthInsurance = null;
+    _hospital = null;
     _procedureOthers = null;
     _healthInsuranceOther = null;
     saveState = SaveEventProcedureState.idle;
