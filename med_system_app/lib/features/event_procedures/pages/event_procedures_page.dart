@@ -408,11 +408,26 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                                               maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
                                               eventProcedures.procedure ?? ""),
-                                          Text(eventProcedures.date ?? "",
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12,
-                                              )),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                  eventProcedures
+                                                          .healthInsurance ??
+                                                      "",
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
+                                                  )),
+                                              const SizedBox(
+                                                width: 15,
+                                              ),
+                                              Text(eventProcedures.date ?? "",
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
+                                                  )),
+                                            ],
+                                          ),
                                         ],
                                       ),
                                       trailing: Text(
