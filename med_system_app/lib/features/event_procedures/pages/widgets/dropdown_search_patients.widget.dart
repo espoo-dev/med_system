@@ -44,28 +44,28 @@ class _DropdownSearchPatientsState extends State<DropdownSearchPatients> {
           ),
         ),
         searchFieldProps: TextFieldProps(
-          decoration: InputDecoration(
-            enabled: true,
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              borderSide: const BorderSide(style: BorderStyle.solid),
+            decoration: InputDecoration(
+              enabled: true,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: const BorderSide(style: BorderStyle.solid),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: const BorderSide(style: BorderStyle.solid),
+              ),
+              prefixIcon: const Icon(
+                Icons.search_rounded,
+                size: 20,
+              ),
+              hintText: "Ex: Roberto",
+              hintStyle: const TextStyle(fontSize: 13),
             ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              borderSide: const BorderSide(style: BorderStyle.solid),
+            style: const TextStyle(
+              color: Colors.black,
             ),
-            prefixIcon: const Icon(
-              Icons.search_rounded,
-              size: 20,
-            ),
-            hintText: "Ex: Roberto",
-            hintStyle: const TextStyle(fontSize: 13),
-          ),
-          style: const TextStyle(
-            color: Colors.black,
-          ),
-          enableInteractiveSelection: true,
-        ),
+            enableInteractiveSelection: true,
+            keyboardType: TextInputType.text),
         emptyBuilder: (context, text) {
           return Align(
             alignment: Alignment.topCenter,
