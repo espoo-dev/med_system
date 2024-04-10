@@ -99,8 +99,8 @@ class _DropdownSearchProceduresState
                   children: [
                     MyTextFormField(
                       fontSize: 16,
-                      label: 'Digite a descrição',
-                      placeholder: 'Digite a descrição do procedimento',
+                      label: 'Digite observação',
+                      placeholder: 'Digite a observação do procedimento',
                       inputType: TextInputType.text,
                       onChanged: (value) {
                         description = value;
