@@ -34,6 +34,7 @@ class _DropdownHealthInsurancesState
       },
       selectedItem: widget.selectedHealthInsurance,
       popupProps: PopupProps.dialog(
+        dialogProps: const DialogProps(backgroundColor: Colors.white),
         title: const Padding(
           padding: EdgeInsets.all(16.0),
           child: Text(

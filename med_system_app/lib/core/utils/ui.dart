@@ -15,6 +15,8 @@ showAlert({
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: Colors.white,
         key: dialogKey,
         title: Text(title),
         content: Text(content),

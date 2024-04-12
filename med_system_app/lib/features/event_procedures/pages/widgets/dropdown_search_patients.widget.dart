@@ -32,6 +32,7 @@ class _DropdownSearchPatientsState extends State<DropdownSearchPatients> {
       },
       selectedItem: widget.selectedPatient,
       popupProps: PopupProps.dialog(
+        dialogProps: const DialogProps(backgroundColor: Colors.white),
         title: const Padding(
           padding: EdgeInsets.all(16.0),
           child: Text(

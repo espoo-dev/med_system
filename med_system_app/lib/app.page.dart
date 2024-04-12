@@ -31,6 +31,7 @@ class AppPage extends StatelessWidget {
       supportedLocales: const [Locale('pt', 'BR')],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        dialogBackgroundColor: Colors.white,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         fontFamily: 'Nunito',
         useMaterial3: true,
