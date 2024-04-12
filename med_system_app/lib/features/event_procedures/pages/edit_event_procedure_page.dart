@@ -289,6 +289,8 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                           child: Stack(
                             children: [
                               Card(
+                                elevation: 10,
+                                surfaceTintColor: Colors.white,
                                 margin: const EdgeInsets.only(top: 8.0),
                                 child: Padding(
                                   padding: const EdgeInsets.all(10.0),
@@ -379,6 +381,9 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                               ),
                             ],
                           ),
+                        ),
+                        const SizedBox(
+                          height: 5,
                         ),
                         CustomSwitch(
                           labelText: "Pago",

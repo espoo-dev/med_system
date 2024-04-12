@@ -46,6 +46,12 @@ class _MyInputDateState extends State<MyInputDate> {
   }
 
   Future<void> _selectDate(BuildContext context) async {
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme.copyWith(
+        primary: Theme.of(context).colorScheme.primary,
+        onPrimary: Colors.white,
+        onBackground: Colors.white,
+        surfaceTint: Colors.white);
     final date = await showDatePicker(
       context: context,
       helpText: 'Selecione a data',
@@ -55,6 +61,12 @@ class _MyInputDateState extends State<MyInputDate> {
           DateTime(DateTime.now().year, DateTime.now().month, 1),
       firstDate: DateTime(2001),
       lastDate: DateTime(DateTime.now().year + 1),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: theme.copyWith(colorScheme: colorScheme),
+          child: child ?? Container(),
+        );
+      },
     );
 
     setState(() {
