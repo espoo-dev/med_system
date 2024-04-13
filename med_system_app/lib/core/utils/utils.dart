@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 showSnack(BuildContext context, String message, Color? color) {
   final snackBar = SnackBar(
@@ -71,4 +72,15 @@ int parseInt(String text) {
   int value = int.tryParse(cleanedText) ?? 0;
 
   return value;
+}
+
+String getMonthName() {
+  final dateFormat = DateFormat.MMMM('pt_BR');
+  final currentDate = DateTime.now();
+  return dateFormat.format(currentDate);
+}
+
+int getMonthNumber() {
+  final currentDate = DateTime.now();
+  return currentDate.month;
 }
