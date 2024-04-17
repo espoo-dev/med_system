@@ -555,6 +555,28 @@ mixin _$AddEventProcedureStore on _AddEventProcedureStoreBase, Store {
   }
 
   @override
+  void setAmountCents(String amountCents) {
+    final _$actionInfo = _$_AddEventProcedureStoreBaseActionController
+        .startAction(name: '_AddEventProcedureStoreBase.setAmountCents');
+    try {
+      return super.setAmountCents(amountCents);
+    } finally {
+      _$_AddEventProcedureStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setDescription(String description) {
+    final _$actionInfo = _$_AddEventProcedureStoreBaseActionController
+        .startAction(name: '_AddEventProcedureStoreBase.setDescription');
+    try {
+      return super.setDescription(description);
+    } finally {
+      _$_AddEventProcedureStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setHealthInsuranceOther(HealthInsurance healthInsurance) {
     final _$actionInfo =
         _$_AddEventProcedureStoreBaseActionController.startAction(

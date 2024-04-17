@@ -25,7 +25,9 @@ import 'package:distrito_medico/features/home/pages/home_page.dart';
 import 'package:distrito_medico/features/hospitals/model/hospital.model.dart';
 import 'package:distrito_medico/features/patients/model/patient.model.dart';
 import 'package:distrito_medico/features/procedures/model/procedure.model.dart';
+import 'package:distrito_medico/features/procedures/util/real_input_format.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
@@ -319,6 +321,50 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                                       ),
                                       const SizedBox(
                                         height: 15,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          MyTextFormField(
+                                            fontSize: 16,
+                                            label: 'Digite observação',
+                                            placeholder:
+                                                'Digite a observação do procedimento',
+                                            inputType: TextInputType.text,
+                                            onChanged: (value) {
+                                              editEventProcedureStore
+                                                  .setDescription(value);
+                                            },
+                                            validators: const {
+                                              'required': true,
+                                              'minLength': 3
+                                            },
+                                          ),
+                                          const SizedBox(
+                                            height: 15,
+                                          ),
+                                          MyTextFormField(
+                                            fontSize: 16,
+                                            label: 'Digite o valor',
+                                            placeholder:
+                                                'Digite o valor do procimento',
+                                            inputType: TextInputType.number,
+                                            inputFormatters: [
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly,
+                                              RealInputFormatter(moeda: true),
+                                            ],
+                                            onChanged: (value) {
+                                              editEventProcedureStore
+                                                  .setAmountCents(value);
+                                            },
+                                            validators: const {
+                                              'required': true,
+                                              'minLength': 3
+                                            },
+                                          ),
+                                        ],
                                       ),
                                       DropdownHealthInsurancesOthers(
                                         healthInsuranceList:

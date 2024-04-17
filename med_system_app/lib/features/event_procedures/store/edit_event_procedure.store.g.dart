@@ -545,6 +545,28 @@ mixin _$EditEventProcedureStore on _EditEventProcedureStoreBase, Store {
   }
 
   @override
+  void setAmountCents(String amountCents) {
+    final _$actionInfo = _$_EditEventProcedureStoreBaseActionController
+        .startAction(name: '_EditEventProcedureStoreBase.setAmountCents');
+    try {
+      return super.setAmountCents(amountCents);
+    } finally {
+      _$_EditEventProcedureStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setDescription(String description) {
+    final _$actionInfo = _$_EditEventProcedureStoreBaseActionController
+        .startAction(name: '_EditEventProcedureStoreBase.setDescription');
+    try {
+      return super.setDescription(description);
+    } finally {
+      _$_EditEventProcedureStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setHealthInsuranceOther(HealthInsurance healthInsurance) {
     final _$actionInfo =
         _$_EditEventProcedureStoreBaseActionController.startAction(
