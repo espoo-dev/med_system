@@ -276,16 +276,20 @@ abstract class _AddEventProcedureStoreBase with Store {
 
   @action
   void setProcedureOther(Procedure procedure) {
-    // ignore: unnecessary_null_in_if_null_operators
     _procedureOthers = Procedure(
         // ignore: unnecessary_null_in_if_null_operators
-        id: procedure.id ?? null,
-        name: procedure.name ?? _procedureOthers?.name ?? "",
-        code: null,
-        description:
-            procedure.description ?? _procedureOthers?.description ?? "",
-        amountCents:
-            procedure.amountCents ?? _procedureOthers?.amountCents ?? "");
+        id: null,
+        name: procedure.name ?? _procedureOthers?.name ?? "");
+  }
+
+  @action
+  void setAmountCents(String amountCents) {
+    _procedureOthers = _procedureOthers?.copyWith(amountCents: amountCents);
+  }
+
+  @action
+  void setDescription(String description) {
+    _procedureOthers = _procedureOthers?.copyWith(description: description);
   }
 
   @observable

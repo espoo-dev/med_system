@@ -19,8 +19,13 @@ class Procedure {
   String? description;
   String? amountCents;
 
-  Procedure(
-      {this.id, this.name, this.code, this.description, this.amountCents});
+  Procedure({
+    this.id,
+    this.name,
+    this.code,
+    this.description,
+    this.amountCents,
+  });
 
   Procedure.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -38,5 +43,21 @@ class Procedure {
     data['description'] = description;
     data['amount_cents'] = amountCents;
     return data;
+  }
+
+  Procedure copyWith({
+    int? id,
+    String? name,
+    String? code,
+    String? description,
+    String? amountCents,
+  }) {
+    return Procedure(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      code: code ?? this.code,
+      description: description ?? this.description,
+      amountCents: amountCents ?? this.amountCents,
+    );
   }
 }

@@ -1,10 +1,7 @@
 import 'package:distrito_medico/core/widgets/my_button_widget.dart';
-import 'package:distrito_medico/core/widgets/my_text_form_field.widget.dart';
 import 'package:distrito_medico/features/procedures/model/procedure.model.dart';
-import 'package:distrito_medico/features/procedures/util/real_input_format.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class DropdownSearchProceduresOthers extends StatefulWidget {
   final List<Procedure> procedureList;
@@ -41,10 +38,6 @@ class _DropdownSearchProceduresState
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-    late String description;
-    late String amountCents;
     return DropdownSearch<Procedure>(
       dropdownButtonProps: DropdownButtonProps(
         color: Theme.of(context).colorScheme.primary,
@@ -93,57 +86,15 @@ class _DropdownSearchProceduresState
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    MyTextFormField(
-                      fontSize: 16,
-                      label: 'Digite observação',
-                      placeholder: 'Digite a observação do procedimento',
-                      inputType: TextInputType.text,
-                      onChanged: (value) {
-                        description = value;
-                      },
-                      validators: const {'required': true, 'minLength': 3},
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    MyTextFormField(
-                      fontSize: 16,
-                      label: 'Digite o valor',
-                      placeholder: 'Digite o valor do procimento',
-                      inputType: TextInputType.number,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        RealInputFormatter(moeda: true),
-                      ],
-                      onChanged: (value) {
-                        amountCents = value;
-                      },
-                      validators: const {'required': true, 'minLength': 3},
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: MyButtonWidget(
-                        text: "Adicionar Procedimento",
-                        onTap: () {
-                          if (formKey.currentState!.validate()) {
-                            widget.onChanged(Procedure(
-                                id: null,
-                                name: text,
-                                description: description,
-                                code: null,
-                                amountCents: amountCents));
-                            Navigator.pop(context);
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+              child: MyButtonWidget(
+                text: "Adicionar Procedimento",
+                onTap: () {
+                  widget.onChanged(Procedure(
+                    id: null,
+                    name: text,
+                  ));
+                  Navigator.pop(context);
+                },
               ),
             ),
           );
