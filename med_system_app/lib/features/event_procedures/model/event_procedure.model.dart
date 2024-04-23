@@ -46,6 +46,8 @@ class EventProcedures {
   bool? payd;
   String? totalAmountCents;
   String? payment;
+  String? procedureValue;
+  String? precedureDescription;
 
   EventProcedures copyWith(
       {int? id,
@@ -60,7 +62,9 @@ class EventProcedures {
       String? paydAt,
       bool? payd,
       String? totalAmountCents,
-      String? payment}) {
+      String? payment,
+      String? procedureValue,
+      String? precedureDescription}) {
     return EventProcedures(
       id: id ?? this.id,
       procedure: procedure ?? this.procedure,
@@ -75,6 +79,8 @@ class EventProcedures {
       payd: payd ?? this.payd,
       totalAmountCents: totalAmountCents ?? this.totalAmountCents,
       payment: payment ?? this.payment,
+      procedureValue: procedureValue ?? this.procedureValue,
+      precedureDescription: precedureDescription ?? this.precedureDescription,
     );
   }
 
@@ -91,7 +97,9 @@ class EventProcedures {
       this.paydAt,
       this.payd,
       this.totalAmountCents,
-      this.payment});
+      this.payment,
+      this.procedureValue,
+      this.precedureDescription});
 
   EventProcedures.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -107,6 +115,8 @@ class EventProcedures {
     payd = json['payd'];
     payment = json['payment'];
     totalAmountCents = json['total_amount_cents'];
+    procedureValue = json['precedure_value'];
+    precedureDescription = json['precedure_description'];
   }
 
   Map<String, dynamic> toJson() {
@@ -124,6 +134,8 @@ class EventProcedures {
     data['payd'] = payd;
     data['payment'] = payment;
     data['total_amount_cents'] = totalAmountCents;
+    data['precedure_value'] = procedureValue;
+    data['precedure_description'] = precedureDescription;
     return data;
   }
 }

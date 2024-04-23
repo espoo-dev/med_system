@@ -327,6 +327,8 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           MyTextFormField(
+                                            initialValue: widget.eventProcedures
+                                                .precedureDescription,
                                             fontSize: 16,
                                             label: 'Digite observação',
                                             placeholder:
@@ -345,6 +347,8 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                                             height: 15,
                                           ),
                                           MyTextFormField(
+                                            initialValue: widget
+                                                .eventProcedures.procedureValue,
                                             fontSize: 16,
                                             label: 'Digite o valor',
                                             placeholder:
