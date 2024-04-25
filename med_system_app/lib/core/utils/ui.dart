@@ -44,3 +44,7 @@ showAlert({
 Color hexToColor(String code) {
   return Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
 }
+
+Size getScreenSize(BuildContext context) {
+  return MediaQuery.of(context).size;
+}
