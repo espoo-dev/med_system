@@ -84,3 +84,9 @@ int getMonthNumber() {
   final currentDate = DateTime.now();
   return currentDate.month;
 }
+
+String formatCurrency(double amount) {
+  final NumberFormat formatter =
+      NumberFormat.currency(locale: 'en_US', symbol: '\$');
+  return formatter.format(amount);
+}
