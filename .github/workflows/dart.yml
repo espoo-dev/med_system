@@ -27,50 +27,50 @@ jobs:
           channel: 'stable'
 
       - name: Get Flutter Dependencies
-        run: flutter pub get
+        run: cd med_system_app && flutter pub get
 
       - name: Format Flutter Code
-        run: flutter format --set-exit-if-changed .
+        run: cd med_system_app && flutter format --set-exit-if-changed .
 
       - name: Analyze Dart Code
-        run: flutter analyze .
+        run: cd med_system_app && flutter analyze .
 
       - name: Run Widget Tests
-        run: flutter test
+        run: cd med_system_app && flutter test
 
       - name: Build Android APK
-        run: flutter build apk
+        run: cd med_system_app && flutter build apk
 
       - name: Upload Android APK
         uses: actions/upload-artifact@v2
         with:
           name: release-apk
-          path: build/app/outputs/apk/release/app-release.apk
+          path: med_system_app/build/app/outputs/apk/release/app-release.apk
 
       - name: Update CocoaPods Specs
         run: pod repo update
         working-directory: ios
 
       - name: Build iOS IPA
-        run: flutter build ios --release --no-codesign
+        run: cd med_system_app && flutter build ios --release --no-codesign
 
       - name: Create Payload Directory
         run: mkdir Payload
-        working-directory: ios/build/iphoneos
+        working-directory: med_system_app/ios/build/iphoneos
 
       - name: Move iOS App to Payload
         run: mv Runner.app/ Payload
-        working-directory: ios/build/iphoneos
+        working-directory: med_system_app/ios/build/iphoneos
 
       - name: Zip iOS Output
         run: zip -qq -r -9 FlutterIpaExport.ipa Payload
-        working-directory: ios/build/iphoneos
+        working-directory: med_system_app/ios/build/iphoneos
 
       - name: Upload iOS IPA
         uses: actions/upload-artifact@v2
         with:
           name: release-ipa
-          path: ios/build/iphoneos/FlutterIpaExport.ipa
+          path: med_system_app/ios/build/iphoneos/FlutterIpaExport.ipa
 
       - name: Change Directory back to root
         run: cd ..
