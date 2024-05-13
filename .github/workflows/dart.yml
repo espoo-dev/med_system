@@ -40,34 +40,33 @@ jobs:
         with:
           name: release-apk
           path: med_system_app/build/app/outputs/apk/release/app-release.apk
+  build-ios:
+    name: 🎉 iOS Build
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
 
-      - name: Update CocoaPods Specs
-        run: pod repo update
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          architecture: x64
+
+      - run: cd med_system_app && flutter pub get
+
+      - run: pod repo update
         working-directory: med_system_app/ios
 
-      - name: Build iOS IPA
-        run: cd med_system_app && flutter build ios --release --no-codesign
+      - run: cd med_system_app && flutter build ios --release --no-codesign
 
-      - name: Create Payload Directory
-        run: mkdir Payload
-        working-directory: med_system_app/ios/build/iphoneos
+      - run: mkdir Payload
+        working-directory: med_system_app/build/ios/iphoneos
 
-      - name: Move iOS App to Payload
-        run: mv Runner.app/ Payload
-        working-directory: med_system_app/ios/build/iphoneos
+      - run: mv Runner.app/ Payload
+        working-directory: med_system_app/build/ios/iphoneos
 
-      - name: Zip iOS Output
+      - name: Zip output
         run: zip -qq -r -9 FlutterIpaExport.ipa Payload
-        working-directory: med_system_app/ios/build/iphoneos
-
-      - name: Upload iOS IPA
-        uses: actions/upload-artifact@v2
-        with:
-          name: release-ipa
-          path: med_system_app/ios/build/iphoneos/FlutterIpaExport.ipa
-
-      - name: Change Directory back to root
-        run: cd ..
+        working-directory: med_system_app/build/ios/iphoneos
 
       - name: Create GitHub Release
         id: create_release
