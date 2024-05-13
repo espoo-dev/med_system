@@ -1,0 +1,42 @@
+name: Build iOS IPA
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-ios:
+    name: 🎉 iOS Build
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          architecture: x64
+
+      - name: Get Flutter Dependencies
+        run: cd med_system_app && flutter pub get
+
+      - name: Update CocoaPods
+        run: pod repo update
+        working-directory: med_system_app/ios
+
+      - name: Build iOS IPA
+        run: cd med_system_app && flutter build ios --release --no-codesign
+
+      - name: Create Payload Directory
+        run: mkdir Payload
+        working-directory: med_system_app/build/ios/iphoneos
+
+      - name: Move Runner.app to Payload Directory
+        run: mv Runner.app/ Payload
+        working-directory: med_system_app/build/ios/iphoneos
+
+      - name: Zip IPA Output
+        run: zip -qq -r -9 FlutterIpaExport.ipa Payload
+        working-directory: med_system_app/build/ios/iphoneos
