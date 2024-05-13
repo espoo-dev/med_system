@@ -25,7 +25,7 @@ jobs:
       - run: cd med_system_app && mkdir Payload
         working-directory: med_system_app/build/ios/iphoneos
 
-      - run: cd med_system_app && mv Runner.app/ Payload
+      - run: mv Runner.app/ Payload
         working-directory: med_system_app/build/ios/iphoneos
 
       - name: Zip output
