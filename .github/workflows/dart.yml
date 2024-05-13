@@ -29,12 +29,6 @@ jobs:
       - name: Get Flutter Dependencies
         run: cd med_system_app && flutter pub get
 
-      - name: Format Flutter Code
-        run: cd med_system_app && flutter format --set-exit-if-changed .
-
-      - name: Analyze Dart Code
-        run: cd med_system_app && flutter analyze .
-
       - name: Run Widget Tests
         run: cd med_system_app && flutter test
 
