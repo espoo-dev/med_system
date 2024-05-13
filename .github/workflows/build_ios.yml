@@ -2,9 +2,9 @@ name: iOS-ipa-build
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
 
 jobs:
   build-ios:
@@ -42,4 +42,4 @@ jobs:
           file: med_system_app/build/ios/iphoneos/FlutterIpaExport.ipa
           tag: v1.0.${{ github.run_number }}
           overwrite: true
-          body: "This is first release"
+          body: "${{ github.event.commits }}"
