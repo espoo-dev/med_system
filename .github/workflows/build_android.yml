@@ -1,42 +1,42 @@
-name: Build Android APK
+# name: Build Android APK
 
-on:
-  push:
-    branches:
-      - main
+# on:
+#   push:
+#     branches:
+#       - main
 
-jobs:
-  build:
-    name: 🚀 Build Android APK
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+# jobs:
+#   build:
+#     name: 🚀 Build Android APK
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout Repository
+#         uses: actions/checkout@v2
 
-      - name: Change Directory to med_system_app
-        run: cd med_system_app
+#       - name: Change Directory to med_system_app
+#         run: cd med_system_app
 
-      - name: Setup Java
-        uses: actions/setup-java@v1
-        with:
-          java-version: '12.x'
+#       - name: Setup Java
+#         uses: actions/setup-java@v1
+#         with:
+#           java-version: '12.x'
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v1
-        with:
-          channel: 'stable'
+#       - name: Setup Flutter
+#         uses: subosito/flutter-action@v1
+#         with:
+#           channel: 'stable'
 
-      - name: Get Flutter Dependencies
-        run: cd med_system_app && flutter pub get
+#       - name: Get Flutter Dependencies
+#         run: cd med_system_app && flutter pub get
 
-      - name: Run Widget Tests
-        run: cd med_system_app && flutter test
+#       - name: Run Widget Tests
+#         run: cd med_system_app && flutter test
 
-      - name: Build Android APK
-        run: cd med_system_app && flutter build apk
+#       - name: Build Android APK
+#         run: cd med_system_app && flutter build apk
 
-      - name: Upload Android APK
-        uses: actions/upload-artifact@v2
-        with:
-          name: release-apk
-          path: med_system_app/build/app/outputs/apk/release/app-release.apk
+#       - name: Upload Android APK
+#         uses: actions/upload-artifact@v2
+#         with:
+#           name: release-apk
+#           path: med_system_app/build/app/outputs/apk/release/app-release.apk
