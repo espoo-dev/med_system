@@ -40,3 +40,12 @@ jobs:
       - name: Zip IPA Output
         run: zip -qq -r -9 FlutterIpaExport.ipa Payload
         working-directory: med_system_app/build/ios/iphoneos
+
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: med_system_app/build/ios/iphoneos/FlutterIpaExport.ipa
+          tag: v1.0.${{ github.run_number }}
+          overwrite: true
+          body: "This is first release"
