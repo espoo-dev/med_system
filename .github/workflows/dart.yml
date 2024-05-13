@@ -43,7 +43,7 @@ jobs:
 
       - name: Update CocoaPods Specs
         run: pod repo update
-        working-directory: ios
+        working-directory: med_system_app/ios
 
       - name: Build iOS IPA
         run: cd med_system_app && flutter build ios --release --no-codesign
