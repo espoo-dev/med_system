@@ -244,7 +244,9 @@ abstract class _EditEventProcedureStoreBase with Store {
     _procedureOthers = Procedure(
         // ignore: unnecessary_null_in_if_null_operators
         id: null,
-        name: procedure.name ?? _procedureOthers?.name ?? "");
+        name: procedure.name ?? _procedureOthers?.name ?? "",
+        description:
+            procedure.description ?? _procedureOthers?.description ?? "");
   }
 
   @action
@@ -258,7 +260,7 @@ abstract class _EditEventProcedureStoreBase with Store {
   }
 
   @observable
-  HealthInsurance? _healthInsuranceOther;
+  HealthInsurance? _healthInsuranceOther = HealthInsurance();
 
   HealthInsurance? get healthInsuranceOther => _healthInsuranceOther;
 
@@ -273,7 +275,7 @@ abstract class _EditEventProcedureStoreBase with Store {
   }
 
   @observable
-  HealthInsurance? _healthInsurance;
+  HealthInsurance? _healthInsurance = HealthInsurance();
 
   HealthInsurance? get healthInsurance => _healthInsurance;
 
@@ -479,7 +481,7 @@ abstract class _EditEventProcedureStoreBase with Store {
             findHealthInsuranceCustom(nameHealthInsurance) ??
                 healthInsuranceListOthers.first);
       } else {
-        setHealthInsurance(HealthInsurance());
+        // setHealthInsurance(HealthInsurance());
       }
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));
@@ -542,7 +544,7 @@ abstract class _EditEventProcedureStoreBase with Store {
         setHealthInsurance(findHealthInsurance(nameHealthInsurance) ??
             healthInsuranceList.first);
       } else {
-        setHealthInsuranceOther(HealthInsurance());
+        //setHealthInsuranceOther(HealthInsurance());
       }
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));
