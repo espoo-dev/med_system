@@ -60,6 +60,7 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
     editEventProcedureStore.setPatientServiceNumber(
         widget.eventProcedures.patientServiceNumber ?? "");
     editEventProcedureStore.setPayd(widget.eventProcedures.payd ?? false);
+    editEventProcedureStore.setUrgency(widget.eventProcedures.urgency ?? false);
   }
 
   @override
@@ -275,7 +276,7 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                               CustomSwitch(
                                 labelText: "Urgência",
                                 initialValue:
-                                    widget.eventProcedures.urgency ?? false,
+                                    editEventProcedureStore.urgency ?? false,
                                 onChanged: (value) {
                                   editEventProcedureStore.setUrgency(value);
                                 },
