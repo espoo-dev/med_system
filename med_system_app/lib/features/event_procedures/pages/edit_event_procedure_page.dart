@@ -61,6 +61,8 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
         widget.eventProcedures.patientServiceNumber ?? "");
     editEventProcedureStore.setPayd(widget.eventProcedures.payd ?? false);
     editEventProcedureStore.setUrgency(widget.eventProcedures.urgency ?? false);
+    editEventProcedureStore
+        .setAccommodation(widget.eventProcedures.roomType ?? "");
   }
 
   @override
@@ -264,7 +266,8 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                         Visibility(
                           visible: !editEventProcedureStore.isOtherPayment,
                           child: MyRadioGroup(
-                              initialValue: widget.eventProcedures.roomType,
+                              initialValue:
+                                  editEventProcedureStore.accommodation,
                               onValueChanged: (value) {
                                 editEventProcedureStore.setAccommodation(value);
                               }),
