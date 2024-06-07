@@ -149,7 +149,7 @@ abstract class _EditEventProcedureStoreBase with Store {
 
   @action
   void setAccommodation(String accommodation) {
-    _accommodation = (accommodation == 'Enfermaria') ? 'ward' : 'apartment';
+    _accommodation = (accommodation == 'ward') ? 'ward' : 'apartment';
   }
 
   @observable

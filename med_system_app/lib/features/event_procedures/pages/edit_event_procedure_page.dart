@@ -266,8 +266,7 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                         Visibility(
                           visible: !editEventProcedureStore.isOtherPayment,
                           child: MyRadioGroup(
-                              initialValue:
-                                  editEventProcedureStore.accommodation,
+                              initialValue: widget.eventProcedures.roomType,
                               onValueChanged: (value) {
                                 editEventProcedureStore.setAccommodation(value);
                               }),

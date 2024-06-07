@@ -22,10 +22,10 @@ class _MyRadioGroupState extends State<MyRadioGroup> {
   void initState() {
     super.initState();
 
-    _selectedValue = 'Enfermaria';
+    _selectedValue = 'ward';
 
     if (widget.initialValue != 'ward') {
-      _selectedValue = 'Apartamento';
+      _selectedValue = 'apartment';
     }
   }
 
@@ -37,7 +37,7 @@ class _MyRadioGroupState extends State<MyRadioGroup> {
         Row(
           children: [
             Radio(
-              value: 'Enfermaria',
+              value: 'ward',
               groupValue: _selectedValue,
               onChanged: (value) {
                 setState(() {
@@ -48,7 +48,7 @@ class _MyRadioGroupState extends State<MyRadioGroup> {
             ),
             const Text('Enfermaria'),
             Radio(
-              value: 'Apartamento',
+              value: 'apartment',
               groupValue: _selectedValue,
               onChanged: (value) {
                 setState(() {
