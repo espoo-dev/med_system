@@ -50,7 +50,7 @@ class _EditProcedurePageState extends State<EditProcedurePage> {
         CustomToast.show(context,
             type: ToastType.error,
             title: "Editar Procedimento",
-            description: "Por favor, preencha os campos.");
+            description: "Ocorreu um erro ao tentar editar.");
       }
     }));
   }
@@ -158,6 +158,12 @@ class _EditProcedurePageState extends State<EditProcedurePage> {
                                   if (_formKey.currentState!.validate()) {
                                     editProcedureStore.editProcedure(
                                         widget.procedure.id ?? 0);
+                                  } else {
+                                    CustomToast.show(context,
+                                        type: ToastType.error,
+                                        title: "Editar Procedimento",
+                                        description:
+                                            "Por favor, preencha os campos.");
                                   }
                                 }
                               : null,

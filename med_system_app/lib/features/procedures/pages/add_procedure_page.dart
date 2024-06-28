@@ -47,7 +47,7 @@ class _AddProcedurePageState extends State<AddProcedurePage> {
         CustomToast.show(context,
             type: ToastType.error,
             title: "Cadastrar novo Procedimento",
-            description: "Por favor, preencha os campos.");
+            description: "Ocorreu um erro ao tentar cadastrar.");
       }
     }));
   }
@@ -150,6 +150,12 @@ class _AddProcedurePageState extends State<AddProcedurePage> {
                                   _formKey.currentState?.save();
                                   if (_formKey.currentState!.validate()) {
                                     addProcedureStore.createProcedure();
+                                  } else {
+                                    CustomToast.show(context,
+                                        type: ToastType.error,
+                                        title: "Cadastrar novo Procedimento",
+                                        description:
+                                            "Por favor, preencha os campos.");
                                   }
                                 }
                               : null,

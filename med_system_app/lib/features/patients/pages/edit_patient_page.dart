@@ -48,7 +48,7 @@ class _EditPatientState extends State<EditPatientPage> {
         CustomToast.show(context,
             type: ToastType.error,
             title: "Editar paciente",
-            description: "Por favor, preencha os campos.");
+            description: "Ocorreu um erro ao tentar editar.");
       }
     }));
   }
@@ -115,6 +115,12 @@ class _EditPatientState extends State<EditPatientPage> {
                                   if (_formKey.currentState!.validate()) {
                                     editPatientStore
                                         .editPatient(widget.patient.id ?? 0);
+                                  } else {
+                                    CustomToast.show(context,
+                                        type: ToastType.error,
+                                        title: "Editar paciente",
+                                        description:
+                                            "Por favor, preencha os campos.");
                                   }
                                 }
                               : null,

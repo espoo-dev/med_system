@@ -12,7 +12,7 @@ class PatientRepository {
     try {
       page ??= 1;
 
-      perPage ??= 10;
+      perPage ??= 10000;
 
       final response = await patientService.getAllPatients(page, perPage);
       if (response.isSuccessful) {

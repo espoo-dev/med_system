@@ -66,7 +66,7 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
         CustomToast.show(context,
             type: ToastType.error,
             title: "Cadastrar novo evento",
-            description: "Por favor, preencha os campos.");
+            description: "Ocorreu um erro ao tentar cadastrar novo evento.");
       }
     }));
   }
@@ -417,6 +417,12 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                                     if (_formKey.currentState!.validate()) {
                                       addEventProcedureStore
                                           .createEventProcedure();
+                                    } else {
+                                      CustomToast.show(context,
+                                          type: ToastType.error,
+                                          title: "Cadastrar novo evento",
+                                          description:
+                                              "Por favor, preencha os campos.");
                                     }
                                   }
                                 : null,

@@ -45,7 +45,7 @@ class _AddHealthInsurancesState extends State<AddHealthInsurances> {
         CustomToast.show(context,
             type: ToastType.error,
             title: "Cadastrar novo convênio",
-            description: "Por favor, preencha os campos.");
+            description: "Ocorreu um erro ao tentar cadastrar.");
       }
     }));
   }
@@ -104,6 +104,12 @@ class _AddHealthInsurancesState extends State<AddHealthInsurances> {
                                   if (_formKey.currentState!.validate()) {
                                     addHealthInsuranceStore
                                         .createHealthInsurance();
+                                  } else {
+                                    CustomToast.show(context,
+                                        type: ToastType.error,
+                                        title: "Cadastrar novo convênio",
+                                        description:
+                                            "Por favor, preencha os campos.");
                                   }
                                 }
                               : null,
