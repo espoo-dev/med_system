@@ -13,7 +13,7 @@ class HospitalRepository {
     try {
       page ??= 1;
 
-      perPage ??= 10;
+      perPage ??= 10000;
       final response = await hospitalService.getAllHospitals(page, perPage);
       if (response.isSuccessful) {
         HospitalModel? hospitalModel =

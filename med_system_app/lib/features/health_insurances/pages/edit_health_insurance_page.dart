@@ -48,7 +48,7 @@ class _EditHealthInsuranceState extends State<EditHealthInsurancePage> {
         CustomToast.show(context,
             type: ToastType.error,
             title: "Editar convênio",
-            description: "Por favor, preencha os campos.");
+            description: " Ocorreu um erro ao tentar editar.");
       }
     }));
   }
@@ -116,6 +116,12 @@ class _EditHealthInsuranceState extends State<EditHealthInsurancePage> {
                                     editHealthInsuranceStore
                                         .editHealthInsurance(
                                             widget.healthInsurance.id ?? 0);
+                                  } else {
+                                    CustomToast.show(context,
+                                        type: ToastType.error,
+                                        title: "Editar convênio",
+                                        description:
+                                            "Por favor, preencha os campos.");
                                   }
                                 }
                               : null,

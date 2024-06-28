@@ -45,7 +45,7 @@ class _AddHospitalState extends State<AddHospitalPage> {
         CustomToast.show(context,
             type: ToastType.error,
             title: "Cadastrar novo hospital",
-            description: "Por favor, preencha os campos.");
+            description: "Ocorreu um erro ao tentar cadastrar.");
       }
     }));
   }
@@ -117,6 +117,12 @@ class _AddHospitalState extends State<AddHospitalPage> {
                                   _formKey.currentState?.save();
                                   if (_formKey.currentState!.validate()) {
                                     addHospitalStore.createHospital();
+                                  } else {
+                                    CustomToast.show(context,
+                                        type: ToastType.error,
+                                        title: "Cadastrar novo hospital",
+                                        description:
+                                            "Por favor, preencha os campos.");
                                   }
                                 }
                               : null,

@@ -44,8 +44,8 @@ class _AddPatientState extends State<AddPatientPage> {
       } else if (validationState == SavePatientState.error) {
         CustomToast.show(context,
             type: ToastType.error,
-            title: "Cadastrar novo paciente",
-            description: "Por favor, preencha os campos.");
+            title: "Cadastrar novo Pacinete",
+            description: "Ocorreu um erro ao tentar cadastrar.");
       }
     }));
   }
@@ -111,6 +111,12 @@ class _AddPatientState extends State<AddPatientPage> {
                                   _formKey.currentState?.save();
                                   if (_formKey.currentState!.validate()) {
                                     addPatientStore.createPatient();
+                                  } else {
+                                    CustomToast.show(context,
+                                        type: ToastType.error,
+                                        title: "Cadastrar novo paciente",
+                                        description:
+                                            "Por favor, preencha os campos.");
                                   }
                                 }
                               : null,

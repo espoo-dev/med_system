@@ -81,7 +81,7 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
         CustomToast.show(context,
             type: ToastType.error,
             title: "Editar procedimento",
-            description: "Por favor, preencha os campos.");
+            description: "Ocorreu um erro ao tentar editar novo evento.");
       }
     }));
   }
@@ -459,6 +459,12 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                                       editEventProcedureStore
                                           .editEventProcedure(
                                               widget.eventProcedures.id ?? 0);
+                                    } else {
+                                      CustomToast.show(context,
+                                          type: ToastType.error,
+                                          title: "Editar evento",
+                                          description:
+                                              "Por favor, preencha os campos.");
                                     }
                                   }
                                 : null,

@@ -48,7 +48,7 @@ class _EditHospitalState extends State<EditHospitaltPage> {
         CustomToast.show(context,
             type: ToastType.error,
             title: "Editar Hospital",
-            description: "Por favor, preencha os campos.");
+            description: "Ocorreu um erro ao tentar editar.");
       }
     }));
   }
@@ -126,6 +126,12 @@ class _EditHospitalState extends State<EditHospitaltPage> {
                                   if (_formKey.currentState!.validate()) {
                                     editHospitalStore
                                         .editHospital(widget.hospital.id ?? 0);
+                                  } else {
+                                    CustomToast.show(context,
+                                        type: ToastType.error,
+                                        title: "Editar hospital",
+                                        description:
+                                            "Por favor, preencha os campos.");
                                   }
                                 }
                               : null,

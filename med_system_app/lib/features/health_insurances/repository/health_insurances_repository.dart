@@ -12,7 +12,7 @@ class HealthInsurancesRepository {
     try {
       page ??= 1;
 
-      perPage ??= 10;
+      perPage ??= 10000;
 
       final response =
           await healthInsurancesService.getAllHealthInsurances(page, perPage);
