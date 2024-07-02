@@ -350,6 +350,8 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                                             height: 15,
                                           ),
                                           MyTextFormField(
+                                            initialValue: widget
+                                                .eventProcedures.procedureValue,
                                             fontSize: 16,
                                             label: 'Digite o valor',
                                             placeholder:

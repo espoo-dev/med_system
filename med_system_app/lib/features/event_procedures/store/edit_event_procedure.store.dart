@@ -246,7 +246,9 @@ abstract class _EditEventProcedureStoreBase with Store {
         id: null,
         name: procedure.name ?? _procedureOthers?.name ?? "",
         description:
-            procedure.description ?? _procedureOthers?.description ?? "");
+            procedure.description ?? _procedureOthers?.description ?? "",
+        amountCents:
+            procedure.amountCents ?? _procedureOthers?.amountCents ?? "");
   }
 
   @action
