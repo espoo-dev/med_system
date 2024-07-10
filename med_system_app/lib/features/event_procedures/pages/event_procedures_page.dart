@@ -94,7 +94,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
     super.initState();
     debugPrint('initstate');
     _scrollController.addListener(() {
-      inifiteScrolling();
+      infiniteScrolling();
       showFabButton();
     });
     setInitialFilter();
@@ -124,13 +124,27 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
       });
     }
   }
-
-  inifiteScrolling() {
-    var maxScroll = _scrollController.position.maxScrollExtent;
-    if (maxScroll == _scrollController.offset) {
+  void infiniteScrolling() {
+    if (_scrollController.position.maxScrollExtent == _scrollController.position.pixels &&
+        !(eventProcedureStore.state == EventProcedureState.loading)) {
       eventProcedureStore.getAllEventProcedures(isRefresh: false);
     }
   }
+  // void infiniteScrolling() {
+  //   if (_scrollController.position.atEdge) {
+  //     bool isBottom = _scrollController.position.pixels == _scrollController.position.maxScrollExtent;
+  //     if (isBottom) {
+  //       eventProcedureStore.getAllEventProcedures(isRefresh: false);
+  //     }
+  //   }
+  // }
+
+  // inifiteScrolling() {
+  //   var maxScroll = _scrollController.position.maxScrollExtent;
+  //   if (maxScroll == _scrollController.offset) {
+  //     eventProcedureStore.getAllEventProcedures(isRefresh: false);
+  //   }
+  // }
 
   Future _refreshProcedures() async {
     debugPrint('refreshProcedures');
