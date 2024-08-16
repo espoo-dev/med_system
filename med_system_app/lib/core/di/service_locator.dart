@@ -13,6 +13,8 @@ import 'package:distrito_medico/features/hospitals/respository/hospital_reposito
 import 'package:distrito_medico/features/hospitals/store/add_hospital.store.dart';
 import 'package:distrito_medico/features/hospitals/store/edit_hospital.store.dart';
 import 'package:distrito_medico/features/hospitals/store/hospital.store.dart';
+import 'package:distrito_medico/features/medical_shifts/repository/medical_shift_repository.dart';
+import 'package:distrito_medico/features/medical_shifts/store/add_medical_shift.store.dart';
 import 'package:distrito_medico/features/patients/repository/patient_repository.dart';
 import 'package:distrito_medico/features/patients/store/add_patient.store.dart';
 import 'package:distrito_medico/features/patients/store/edit_patient.store.dart';
@@ -45,6 +47,7 @@ void setupServiceLocator() {
   getIt.registerSingleton(HomeRepository());
   getIt.registerSingleton(HealthInsurancesRepository());
   getIt.registerSingleton(EventProcedureRepository());
+  getIt.registerSingleton(MedicalShiftRepository());
 
   // stores
 
@@ -95,4 +98,6 @@ void setupServiceLocator() {
       () => AddHealthInsuranceStore(getIt<HealthInsurancesRepository>()));
   getIt.registerLazySingleton<EditHealthInsuranceStore>(
       () => EditHealthInsuranceStore(getIt<HealthInsurancesRepository>()));
+  getIt.registerLazySingleton<AddMedicalShiftStore>(
+      () => AddMedicalShiftStore(getIt<MedicalShiftRepository>()));
 }
