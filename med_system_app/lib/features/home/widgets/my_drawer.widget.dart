@@ -2,6 +2,7 @@ import 'package:distrito_medico/core/theme/icons.dart';
 import 'package:distrito_medico/core/utils/navigation_utils.dart';
 import 'package:distrito_medico/features/health_insurances/pages/health_insurances_page.dart';
 import 'package:distrito_medico/features/hospitals/pages/hospital_page.dart';
+import 'package:distrito_medico/features/medical_shifts/pages/medical_shifts_page.dart';
 import 'package:distrito_medico/features/patients/pages/patient_page.dart';
 import 'package:distrito_medico/features/procedures/pages/procedures_page.dart';
 import 'package:distrito_medico/features/signin/page/signin.page.dart';
@@ -26,23 +27,26 @@ class MyDrawer extends StatelessWidget {
             accountEmail:
                 Text(signInStore.currentUser?.resourceOwner?.email ?? ""),
           ),
-          // ListTile(
-          //   onTap: () {
-          //     Navigator.pop(context);
-          //     Navigator.push(context,
-          //         MaterialPageRoute(builder: (context) => const PatientPage()));
-          //   },
-          //   title: const Text(
-          //     "Plantões",
-          //     style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-          //   ),
-          //   leading: SvgPicture.asset(
-          //     iconMenuPlantao,
-          //     width: 30,
-          //     height: 30,
-          //     color: Theme.of(context).colorScheme.primary,
-          //   ),
-          // ),
+          ListTile(
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const MedicalShiftsPage()));
+            },
+            title: const Text(
+              "Plantões",
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+            ),
+            leading: SvgPicture.asset(iconMenuPlantao,
+                width: 30,
+                height: 30,
+                colorFilter: ColorFilter.mode(
+                  Theme.of(context).colorScheme.primary,
+                  BlendMode.srcIn,
+                )),
+          ),
           ListTile(
             onTap: () {
               Navigator.pop(context);
