@@ -122,4 +122,15 @@ final class _$MedicalShiftService extends MedicalShiftService {
     );
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<dynamic>> deleteEventMedicalShifts(dynamic id) {
+    final Uri $url = Uri.parse('/api/v1/medical_shifts/${id}');
+    final Request $request = Request(
+      'DELETE',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
 }

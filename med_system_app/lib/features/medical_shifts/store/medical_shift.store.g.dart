@@ -195,6 +195,16 @@ mixin _$MedicalShiftStore on _MedicalShiftStoreBase, Store {
         .run(() => super.getAllMedicalShifts(isRefresh: isRefresh));
   }
 
+  late final _$deleteMedicalShiftAsyncAction = AsyncAction(
+      '_MedicalShiftStoreBase.deleteMedicalShift',
+      context: context);
+
+  @override
+  Future deleteMedicalShift(int medicalShiftId, dynamic index) {
+    return _$deleteMedicalShiftAsyncAction
+        .run(() => super.deleteMedicalShift(medicalShiftId, index));
+  }
+
   late final _$editPaymentMedicalShiftAsyncAction = AsyncAction(
       '_MedicalShiftStoreBase.editPaymentMedicalShift',
       context: context);
