@@ -1,13 +1,13 @@
 import 'package:distrito_medico/core/theme/animations.dart';
 import 'package:distrito_medico/core/theme/icons.dart';
 import 'package:distrito_medico/core/utils/ui.dart';
+import 'package:distrito_medico/core/widgets/bottom_bar_widget.dart';
+import 'package:distrito_medico/core/widgets/dialog_filter_months.wdiget.dart';
 import 'package:distrito_medico/core/widgets/error.widget.dart';
 import 'package:distrito_medico/core/widgets/ext_fab.widget.dart';
 import 'package:distrito_medico/core/widgets/fab.widget.dart';
 import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
 import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
-import 'package:distrito_medico/features/event_procedures/pages/widgets/bottom_bar_widget.dart';
-import 'package:distrito_medico/features/event_procedures/pages/widgets/dialog_filter_months.wdiget.dart';
 import 'package:distrito_medico/features/home/pages/home_page.dart';
 import 'package:distrito_medico/features/medical_shifts/model/medical_shift.model.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/add_medical_shift_page.dart';

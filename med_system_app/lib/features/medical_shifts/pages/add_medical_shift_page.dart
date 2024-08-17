@@ -6,7 +6,7 @@ import 'package:distrito_medico/core/widgets/my_date_input.widget.dart';
 import 'package:distrito_medico/core/widgets/my_text_form_field.widget.dart';
 import 'package:distrito_medico/core/widgets/my_time_input.widget.dart';
 import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
-import 'package:distrito_medico/features/event_procedures/pages/widgets/custom_switch.widget.dart';
+import 'package:distrito_medico/core/widgets/custom_switch.widget.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/medical_shifts_page.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/widgets/radio_group_workload.widget.dart';
 import 'package:distrito_medico/features/medical_shifts/store/add_medical_shift.store.dart';

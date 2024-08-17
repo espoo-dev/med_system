@@ -7,7 +7,7 @@ import 'package:distrito_medico/core/widgets/my_date_input.widget.dart';
 import 'package:distrito_medico/core/widgets/my_text_form_field.widget.dart';
 import 'package:distrito_medico/core/widgets/my_time_input.widget.dart';
 import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
-import 'package:distrito_medico/features/event_procedures/pages/widgets/custom_switch.widget.dart';
+import 'package:distrito_medico/core/widgets/custom_switch.widget.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/medical_shifts_page.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/widgets/radio_group_workload.widget.dart';
 import 'package:distrito_medico/features/medical_shifts/store/edit_medical_shift.store.dart';
@@ -200,18 +200,5 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
         ),
       ],
     );
-  }
-
-  TimeOfDay? stringToTimeOfDay(String timeString) {
-    final parts = timeString.split(':');
-    if (parts.length == 2) {
-      final hour = int.tryParse(parts[0]);
-      final minute = int.tryParse(parts[1]);
-
-      if (hour != null && minute != null) {
-        return TimeOfDay(hour: hour, minute: minute);
-      }
-    }
-    return null;
   }
 }

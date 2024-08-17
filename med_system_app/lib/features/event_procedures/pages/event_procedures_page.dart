@@ -1,6 +1,8 @@
 import 'package:distrito_medico/core/theme/animations.dart';
 import 'package:distrito_medico/core/theme/icons.dart';
 import 'package:distrito_medico/core/utils/ui.dart';
+import 'package:distrito_medico/core/widgets/bottom_bar_widget.dart';
+import 'package:distrito_medico/core/widgets/dialog_filter_months.wdiget.dart';
 import 'package:distrito_medico/core/widgets/error.widget.dart';
 import 'package:distrito_medico/core/widgets/ext_fab.widget.dart';
 import 'package:distrito_medico/core/widgets/fab.widget.dart';
@@ -9,8 +11,6 @@ import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
 import 'package:distrito_medico/features/event_procedures/model/event_procedure.model.dart';
 import 'package:distrito_medico/features/event_procedures/pages/add_event_procedure_page.dart';
 import 'package:distrito_medico/features/event_procedures/pages/edit_event_procedure_page.dart';
-import 'package:distrito_medico/features/event_procedures/pages/widgets/bottom_bar_widget.dart';
-import 'package:distrito_medico/features/event_procedures/pages/widgets/dialog_filter_months.wdiget.dart';
 import 'package:distrito_medico/features/event_procedures/store/event_procedure.store.dart';
 import 'package:distrito_medico/features/home/pages/home_page.dart';
 import 'package:flutter/material.dart';
@@ -124,8 +124,10 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
       });
     }
   }
+
   void infiniteScrolling() {
-    if (_scrollController.position.maxScrollExtent == _scrollController.position.pixels &&
+    if (_scrollController.position.maxScrollExtent ==
+            _scrollController.position.pixels &&
         !(eventProcedureStore.state == EventProcedureState.loading)) {
       eventProcedureStore.getAllEventProcedures(isRefresh: false);
     }
