@@ -354,8 +354,7 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
                                             children: [
                                               Text(
                                                   medicalShiftModel
-                                                          .shiftDescription ??
-                                                      "",
+                                                      .shiftDescription,
                                                   style: TextStyle(
                                                     color: Theme.of(context)
                                                         .colorScheme
