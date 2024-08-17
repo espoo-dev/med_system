@@ -81,7 +81,7 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
         CustomToast.show(context,
             type: ToastType.error,
             title: "Editar procedimento",
-            description: "Ocorreu um erro ao tentar editar novo evento.");
+            description: "Ocorreu um erro ao tentar editar evento.");
       }
     }));
   }
