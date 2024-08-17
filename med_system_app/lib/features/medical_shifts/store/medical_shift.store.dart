@@ -1,5 +1,6 @@
 import 'package:distrito_medico/core/api/api_result.dart';
 import 'package:distrito_medico/core/api/network_exceptions.dart';
+import 'package:distrito_medico/features/medical_shifts/model/edit_payment_medical_shift_request.model.dart';
 import 'package:distrito_medico/features/medical_shifts/model/medical_shift.model.dart';
 import 'package:distrito_medico/features/medical_shifts/model/medical_shift_list.model.dart';
 import 'package:distrito_medico/features/medical_shifts/repository/medical_shift_repository.dart';
@@ -7,6 +8,7 @@ import 'package:mobx/mobx.dart';
 
 part 'medical_shift.store.g.dart';
 
+// ignore: library_private_types_in_public_api
 class MedicalShiftStore = _MedicalShiftStoreBase with _$MedicalShiftStore;
 
 enum MedicalShiftState { idle, success, error, loading }
@@ -148,19 +150,19 @@ abstract class _MedicalShiftStoreBase with Store {
   //   });
   // }
 
-  // @action
-  // editPaymentMedicalShift(int medicalShiftId, index) async {
-  //   editState = EditMedicalShiftState.loading;
-  //   var editResult = await _medicalShiftRepository.editPaymentMedicalShift(
-  //       medicalShiftId, EditPaymentMedicalShiftRequestModel(paid: true));
-  //   editResult?.when(success: (medicalShift) {
-  //     medicalShiftList[index] = medicalShiftList[index].copyWith(paid: true);
-  //     editState = EditMedicalShiftState.success;
-  //   }, failure: (NetworkExceptions error) {
-  //     editState = EditMedicalShiftState.error;
-  //     handleError(NetworkExceptions.getErrorMessage(error));
-  //   });
-  // }
+  @action
+  editPaymentMedicalShift(int medicalShiftId, index) async {
+    editState = EditMedicalShiftState.loading;
+    var editResult = await _medicalShiftRepository.editPaymentMedicalShift(
+        medicalShiftId, EditPaymentMedicalShiftModel(payd: true));
+    editResult?.when(success: (medicalShift) {
+      medicalShiftList[index] = medicalShiftList[index].copyWith(payd: true);
+      editState = EditMedicalShiftState.success;
+    }, failure: (NetworkExceptions error) {
+      editState = EditMedicalShiftState.error;
+      handleError(NetworkExceptions.getErrorMessage(error));
+    });
+  }
 
   String getCurrentDate() {
     DateTime currentDate = DateTime.now();

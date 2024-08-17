@@ -5,11 +5,13 @@ import 'package:distrito_medico/core/widgets/error.widget.dart';
 import 'package:distrito_medico/core/widgets/ext_fab.widget.dart';
 import 'package:distrito_medico/core/widgets/fab.widget.dart';
 import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
+import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/bottom_bar_widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/dialog_filter_months.wdiget.dart';
 import 'package:distrito_medico/features/home/pages/home_page.dart';
 import 'package:distrito_medico/features/medical_shifts/model/medical_shift.model.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/add_medical_shift_page.dart';
+import 'package:distrito_medico/features/medical_shifts/pages/edit_medical_shift_page.dart';
 import 'package:distrito_medico/features/medical_shifts/store/medical_shift.store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -42,6 +44,24 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
   final ScrollController _scrollController = ScrollController();
   bool isFab = false;
   final List<ReactionDisposer> _disposers = [];
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _disposers.add(reaction<EditMedicalShiftState>(
+        (_) => medicalShiftStore.editState, (validationState) {
+      if (validationState == EditMedicalShiftState.success) {
+        CustomToast.show(context,
+            type: ToastType.success,
+            title: "Edição de plantão",
+            description: "Plantão editado com sucesso!");
+      } else if (validationState == EditMedicalShiftState.error) {
+        CustomToast.show(context,
+            type: ToastType.error,
+            title: "Edição de plantão",
+            description: "Ocorreu um erro ao tentar editar plantão.");
+      }
+    }));
+  }
 
   @override
   void dispose() {
@@ -286,7 +306,12 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
                                                   icon: Icons.check,
                                                   label: 'Pagar',
                                                   onPressed: (context) {
-                                                    // pagar plantão
+                                                    medicalShiftStore
+                                                        .editPaymentMedicalShift(
+                                                            medicalShiftModel
+                                                                    .id ??
+                                                                0,
+                                                            index);
                                                   })
                                             ],
                                           )
@@ -314,7 +339,11 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
                                     ),
                                     child: ListTile(
                                       onTap: () {
-                                        //Editar plantao
+                                        to(
+                                            context,
+                                            EditMedicalShiftPage(
+                                                medicalShift:
+                                                    medicalShiftModel));
                                       },
                                       leading: SvgPicture.asset(
                                         medicalShiftModel.payd!

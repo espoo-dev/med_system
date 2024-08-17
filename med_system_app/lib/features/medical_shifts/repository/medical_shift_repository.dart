@@ -4,6 +4,7 @@ import 'package:distrito_medico/core/api/api.dart';
 import 'package:distrito_medico/core/api/api_result.dart';
 import 'package:distrito_medico/core/api/network_exceptions.dart';
 import 'package:distrito_medico/features/medical_shifts/model/add_medical_shift.model.dart';
+import 'package:distrito_medico/features/medical_shifts/model/edit_payment_medical_shift_request.model.dart';
 import 'package:distrito_medico/features/medical_shifts/model/medical_shift.model.dart';
 import 'package:distrito_medico/features/medical_shifts/model/medical_shift_list.model.dart';
 
@@ -85,6 +86,54 @@ class MedicalShiftRepository {
     try {
       final response = await medicalShiftService.registerMedicalShift(
           json.encode(addMedicalShiftRequestModel.toJson()));
+
+      if (response.isSuccessful) {
+        MedicalShiftModel? medicalShiftModel =
+            MedicalShiftModel.fromJson(json.decode(response.body));
+
+        return Result.success(medicalShiftModel);
+      } else if (response.statusCode == 422) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.unableToProcess()));
+      } else if (response.statusCode == 500) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.internalServerError()));
+      }
+    } catch (e) {
+      throw Result.failure(NetworkExceptions.getException(e));
+    }
+    return null;
+  }
+
+  Future<Result<MedicalShiftModel>?> editMedicalShift(int medicalShiftId,
+      AddMedicalShiftRequestModel addMedicalShiftRequestModel) async {
+    try {
+      final response = await medicalShiftService.editMedicalShift(
+          medicalShiftId, json.encode(addMedicalShiftRequestModel.toJson()));
+
+      if (response.isSuccessful) {
+        MedicalShiftModel? medicalShiftModel =
+            MedicalShiftModel.fromJson(json.decode(response.body));
+
+        return Result.success(medicalShiftModel);
+      } else if (response.statusCode == 422) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.unableToProcess()));
+      } else if (response.statusCode == 500) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.internalServerError()));
+      }
+    } catch (e) {
+      throw Result.failure(NetworkExceptions.getException(e));
+    }
+    return null;
+  }
+
+  Future<Result<MedicalShiftModel>?> editPaymentMedicalShift(int medicalShiftId,
+      EditPaymentMedicalShiftModel editPaymentMedicalShiftModel) async {
+    try {
+      final response = await medicalShiftService.editPaymentMedicalShift(
+          medicalShiftId, json.encode(editPaymentMedicalShiftModel.toJson()));
 
       if (response.isSuccessful) {
         MedicalShiftModel? medicalShiftModel =

@@ -195,6 +195,16 @@ mixin _$MedicalShiftStore on _MedicalShiftStoreBase, Store {
         .run(() => super.getAllMedicalShifts(isRefresh: isRefresh));
   }
 
+  late final _$editPaymentMedicalShiftAsyncAction = AsyncAction(
+      '_MedicalShiftStoreBase.editPaymentMedicalShift',
+      context: context);
+
+  @override
+  Future editPaymentMedicalShift(int medicalShiftId, dynamic index) {
+    return _$editPaymentMedicalShiftAsyncAction
+        .run(() => super.editPaymentMedicalShift(medicalShiftId, index));
+  }
+
   late final _$_MedicalShiftStoreBaseActionController =
       ActionController(name: '_MedicalShiftStoreBase', context: context);
 
