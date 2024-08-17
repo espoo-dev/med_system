@@ -28,6 +28,19 @@ String greet() {
   }
 }
 
+TimeOfDay? stringToTimeOfDay(String timeString) {
+  final parts = timeString.split(':');
+  if (parts.length == 2) {
+    final hour = int.tryParse(parts[0]);
+    final minute = int.tryParse(parts[1]);
+
+    if (hour != null && minute != null) {
+      return TimeOfDay(hour: hour, minute: minute);
+    }
+  }
+  return null;
+}
+
 DateTime? convertStringToDate(String dateString) {
   if (dateString.isEmpty) {
     return null;
