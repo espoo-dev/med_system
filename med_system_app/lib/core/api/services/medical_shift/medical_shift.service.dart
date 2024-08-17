@@ -31,4 +31,7 @@ abstract class MedicalShiftService extends ChopperService {
 
   @Put(path: 'api/v1/medical_shifts/{id}')
   Future<Response> editMedicalShift(@Path('id') id, @Body() dynamic body);
+
+  @Delete(path: 'api/v1/medical_shifts/{id}')
+  Future<Response> deleteEventMedicalShifts(@Path('id') id);
 }

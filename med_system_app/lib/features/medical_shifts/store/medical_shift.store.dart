@@ -136,19 +136,19 @@ abstract class _MedicalShiftStoreBase with Store {
     state = MedicalShiftState.error;
   }
 
-  // @action
-  // deleteMedicalShift(int medicalShiftId, index) async {
-  //   deleteState = DeleteMedicalShiftState.loading;
-  //   var deleteResult =
-  //       await _medicalShiftRepository.deleteMedicalShift(medicalShiftId);
-  //   deleteResult?.when(success: (shift) {
-  //     medicalShiftList.removeAt(index);
-  //     deleteState = DeleteMedicalShiftState.success;
-  //   }, failure: (NetworkExceptions error) {
-  //     handleError(NetworkExceptions.getErrorMessage(error));
-  //     deleteState = DeleteMedicalShiftState.error;
-  //   });
-  // }
+  @action
+  deleteMedicalShift(int medicalShiftId, index) async {
+    deleteState = DeleteMedicalShiftState.loading;
+    var deleteResult =
+        await _medicalShiftRepository.deleteMedicalShift(medicalShiftId);
+    deleteResult?.when(success: (shift) {
+      medicalShiftList.removeAt(index);
+      deleteState = DeleteMedicalShiftState.success;
+    }, failure: (NetworkExceptions error) {
+      handleError(NetworkExceptions.getErrorMessage(error));
+      deleteState = DeleteMedicalShiftState.error;
+    });
+  }
 
   @action
   editPaymentMedicalShift(int medicalShiftId, index) async {

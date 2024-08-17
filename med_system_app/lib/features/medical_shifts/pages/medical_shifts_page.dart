@@ -61,6 +61,20 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
             description: "Ocorreu um erro ao tentar editar plantão.");
       }
     }));
+    _disposers.add(reaction<DeleteMedicalShiftState>(
+        (_) => medicalShiftStore.deleteState, (validationState) {
+      if (validationState == DeleteMedicalShiftState.success) {
+        CustomToast.show(context,
+            type: ToastType.success,
+            title: "Exclusão de plantão",
+            description: "Plantão excluído com sucesso!");
+      } else if (validationState == DeleteMedicalShiftState.error) {
+        CustomToast.show(context,
+            type: ToastType.error,
+            title: "Exclusão de plantão",
+            description: "Ocorreu um erro ao tentar excluir plantão.");
+      }
+    }));
   }
 
   @override
@@ -331,7 +345,14 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
                                                     'Tem certeza que deseja excluir este plantão?',
                                                 textYes: 'Sim',
                                                 textNo: 'Não',
-                                                onPressedConfirm: () {},
+                                                onPressedConfirm: () {
+                                                  medicalShiftStore
+                                                      .deleteMedicalShift(
+                                                          medicalShiftModel
+                                                                  .id ??
+                                                              0,
+                                                          index);
+                                                },
                                                 onPressedCancel: () {},
                                               );
                                             })
