@@ -5,8 +5,81 @@ import 'package:distrito_medico/core/api/api_result.dart';
 import 'package:distrito_medico/core/api/network_exceptions.dart';
 import 'package:distrito_medico/features/medical_shifts/model/add_medical_shift.model.dart';
 import 'package:distrito_medico/features/medical_shifts/model/medical_shift.model.dart';
+import 'package:distrito_medico/features/medical_shifts/model/medical_shift_list.model.dart';
 
 class MedicalShiftRepository {
+  Future<Result<MedicalShiftList?>?> getAllMedicalShifts(
+      [int? page, int? perPage]) async {
+    try {
+      page ??= 1;
+
+      perPage ??= 10;
+      final response =
+          await medicalShiftService.getAllMedicalShifts(page, perPage);
+      if (response.isSuccessful) {
+        MedicalShiftList? medicalShiftList =
+            MedicalShiftList.fromJson(json.decode(response.body));
+
+        return Result.success(medicalShiftList);
+      } else if (response.statusCode == 500) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.internalServerError()));
+      }
+    } catch (e) {
+      throw Result.failure(NetworkExceptions.getException(e));
+    }
+    return null;
+  }
+
+  Future<Result<MedicalShiftList?>?> getAllMedicalShiftsByMonth(
+      [int? page, int? perPage, int? month]) async {
+    try {
+      page ??= 1;
+
+      perPage ??= 10;
+      month ??= DateTime.now().month;
+
+      final response = await medicalShiftService.getAllMedicalShiftsByMonth(
+          page, perPage, month);
+      if (response.isSuccessful) {
+        MedicalShiftList? medicalShiftList =
+            MedicalShiftList.fromJson(json.decode(response.body));
+
+        return Result.success(medicalShiftList);
+      } else if (response.statusCode == 500) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.internalServerError()));
+      }
+    } catch (e) {
+      throw Result.failure(NetworkExceptions.getException(e));
+    }
+    return null;
+  }
+
+  Future<Result<MedicalShiftList?>?> getAllMedicalShiftsByPayd(
+      [int? page, int? perPage, bool payd = false]) async {
+    try {
+      page ??= 1;
+
+      perPage ??= 10;
+
+      final response = await medicalShiftService.getAllMedicalShiftsByPaid(
+          page, perPage, payd);
+      if (response.isSuccessful) {
+        MedicalShiftList? medicalShiftList =
+            MedicalShiftList.fromJson(json.decode(response.body));
+
+        return Result.success(medicalShiftList);
+      } else if (response.statusCode == 500) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.internalServerError()));
+      }
+    } catch (e) {
+      throw Result.failure(NetworkExceptions.getException(e));
+    }
+    return null;
+  }
+
   Future<Result<MedicalShiftModel>?> registerMedicalShift(
       AddMedicalShiftRequestModel addMedicalShiftRequestModel) async {
     try {

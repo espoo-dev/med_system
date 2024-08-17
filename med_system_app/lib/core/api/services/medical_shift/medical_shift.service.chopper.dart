@@ -29,4 +29,65 @@ final class _$MedicalShiftService extends MedicalShiftService {
     );
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<dynamic>> getAllMedicalShifts(
+    int page,
+    int perPage,
+  ) {
+    final Uri $url = Uri.parse('/api/v1/medical_shifts');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'page': page,
+      'per_page': perPage,
+    };
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> getAllMedicalShiftsByPaid(
+    int page,
+    int perPage,
+    bool payd,
+  ) {
+    final Uri $url = Uri.parse('/api/v1/medical_shifts');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'page': page,
+      'per_page': perPage,
+      'payd': payd,
+    };
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> getAllMedicalShiftsByMonth(
+    int page,
+    int perPage,
+    int month,
+  ) {
+    final Uri $url = Uri.parse('/api/v1/medical_shifts');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'page': page,
+      'per_page': perPage,
+      'month': month,
+    };
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
 }

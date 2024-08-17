@@ -10,4 +10,18 @@ abstract class MedicalShiftService extends ChopperService {
 
   @Post(path: 'api/v1/medical_shifts')
   Future<Response> registerMedicalShift(@Body() dynamic body);
+
+  @Get(path: 'api/v1/medical_shifts')
+  Future<Response> getAllMedicalShifts(
+    @Query('page') int page,
+    @Query('per_page') int perPage,
+  );
+
+  @Get(path: 'api/v1/medical_shifts')
+  Future<Response> getAllMedicalShiftsByPaid(@Query('page') int page,
+      @Query('per_page') int perPage, @Query('payd') bool payd);
+
+  @Get(path: 'api/v1/medical_shifts')
+  Future<Response> getAllMedicalShiftsByMonth(@Query('page') int page,
+      @Query('per_page') int perPage, @Query('month') int month);
 }
