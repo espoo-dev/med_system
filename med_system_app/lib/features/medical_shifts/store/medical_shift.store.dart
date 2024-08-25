@@ -164,14 +164,6 @@ abstract class _MedicalShiftStoreBase with Store {
     });
   }
 
-  String getCurrentDate() {
-    DateTime currentDate = DateTime.now();
-    String day = currentDate.day.toString().padLeft(2, '0');
-    String month = currentDate.month.toString().padLeft(2, '0');
-    String year = currentDate.year.toString();
-    return '$day/$month/$year';
-  }
-
   @action
   dispose() {
     medicalShiftList.clear();
