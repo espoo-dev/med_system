@@ -75,12 +75,14 @@ final class _$MedicalShiftService extends MedicalShiftService {
     int page,
     int perPage,
     int month,
+    int year,
   ) {
     final Uri $url = Uri.parse('/api/v1/medical_shifts');
     final Map<String, dynamic> $params = <String, dynamic>{
       'page': page,
       'per_page': perPage,
       'month': month,
+      'year': year,
     };
     final Request $request = Request(
       'GET',

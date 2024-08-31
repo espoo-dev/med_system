@@ -33,15 +33,16 @@ class MedicalShiftRepository {
   }
 
   Future<Result<MedicalShiftList?>?> getAllMedicalShiftsByMonth(
-      [int? page, int? perPage, int? month]) async {
+      [int? page, int? perPage, int? month, int? year]) async {
     try {
       page ??= 1;
 
       perPage ??= 10;
       month ??= DateTime.now().month;
+      year ??= DateTime.now().year;
 
       final response = await medicalShiftService.getAllMedicalShiftsByMonth(
-          page, perPage, month);
+          page, perPage, month, year);
       if (response.isSuccessful) {
         MedicalShiftList? medicalShiftList =
             MedicalShiftList.fromJson(json.decode(response.body));
