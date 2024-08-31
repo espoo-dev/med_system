@@ -22,8 +22,11 @@ abstract class MedicalShiftService extends ChopperService {
       @Query('per_page') int perPage, @Query('payd') bool payd);
 
   @Get(path: 'api/v1/medical_shifts')
-  Future<Response> getAllMedicalShiftsByMonth(@Query('page') int page,
-      @Query('per_page') int perPage, @Query('month') int month);
+  Future<Response> getAllMedicalShiftsByMonth(
+      @Query('page') int page,
+      @Query('per_page') int perPage,
+      @Query('month') int month,
+      @Query('year') int year);
 
   @Put(path: 'api/v1/medical_shifts/{id}')
   Future<Response> editPaymentMedicalShift(
