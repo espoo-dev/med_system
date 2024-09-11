@@ -139,7 +139,7 @@ abstract class _AddMedicalShiftStoreBase with Store {
 
   dispose() {
     _hospitalName = "";
-    _workload = "";
+    _workload = "six";
     _startDate = "";
     _startHour = "";
     _amountCents = "";
