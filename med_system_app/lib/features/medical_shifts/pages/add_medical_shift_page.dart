@@ -1,6 +1,6 @@
 import 'package:distrito_medico/core/pages/success/success.page.dart';
 import 'package:distrito_medico/core/utils/navigation_utils.dart';
-import 'package:distrito_medico/core/widgets/auto_complete_real_widget.dart';
+
 import 'package:distrito_medico/core/widgets/error.widget.dart';
 import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
 import 'package:distrito_medico/core/widgets/my_button_widget.dart';
@@ -56,6 +56,12 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
     super.initState();
     addMedicalShiftStore.getAmountSuggestions();
     addMedicalShiftStore.getHospitalNameSuggestions();
+  }
+
+  List<String> addSpaceToCurrency(List<String> amounts) {
+    return amounts.map((amount) {
+      return amount.replaceFirst("R\$", "R\$ ");
+    }).toList();
   }
 
   @override
@@ -191,20 +197,80 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                         const SizedBox(
                           height: 15,
                         ),
-                        AutoCompleteReal(
-                          isCurrency: true,
-                          fontSize: 16,
-                          label: 'Valor plantão',
-                          placeholder: 'Digite o valor do plantão',
-                          suggestions: addMedicalShiftStore.amountSuggestions,
-                          inputType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            RealInputFormatter(moeda: true),
-                          ],
-                          onChanged: addMedicalShiftStore.setAmountCents,
-                          validators: const {'required': true, 'minLength': 3},
+                        Autocomplete(
+                          optionsBuilder: (TextEditingValue textEditingValue) {
+                            String query = textEditingValue.text;
+                            List<String> suggestions =
+                                addMedicalShiftStore.amountSuggestions;
+
+                            String cleanString(String str) {
+                              return str.replaceAll(RegExp(r'[^0-9]'), '');
+                            }
+
+                            if (query.isEmpty) {
+                              return const Iterable<String>.empty();
+                            } else {
+                              String cleanedQuery = cleanString(query);
+                              return suggestions.where((suggestion) {
+                                String cleanedSuggestion =
+                                    cleanString(suggestion);
+                                return cleanedSuggestion.contains(cleanedQuery);
+                              });
+                            }
+                          },
+                          onSelected: addMedicalShiftStore.setAmountCents,
+                          fieldViewBuilder: (context, controller, focusNode,
+                              onEditingComplete) {
+                            return TextField(
+                              controller: controller,
+                              onChanged: addMedicalShiftStore.setAmountCents,
+                              focusNode: focusNode,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                RealInputFormatter(moeda: true),
+                              ],
+                              onEditingComplete: onEditingComplete,
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
+                                  ),
+                                  hintText: "Digite valor do plantão",
+                                  label: const Text("Valor plantão")),
+                            );
+                          },
                         ),
+                        // AutoCompleteReal(
+                        //   isCurrency: true,
+                        //   fontSize: 16,
+                        //   label: 'Valor plantão',
+                        //   placeholder: 'Digite o valor do plantão',
+                        //   suggestions: addMedicalShiftStore.amountSuggestions,
+                        //   inputType: TextInputType.number,
+                        //   inputFormatters: [
+                        //     FilteringTextInputFormatter.digitsOnly,
+                        //     RealInputFormatter(moeda: true),
+                        //   ],
+                        //   onChanged: addMedicalShiftStore.setAmountCents,
+                        //   validators: const {'required': true, 'minLength': 3},
+                        // ),
                         const SizedBox(
                           height: 15,
                         ),
