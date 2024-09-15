@@ -66,80 +66,142 @@ class MatchPasswordValidator {
   }
 }
 
-// ignore: must_be_immutable
-class AutoCompleteReal extends StatefulWidget {
-  Function? onSave;
-  String? label;
-  String? placeholder;
-  Function? validation;
-  TextInputType? inputType;
-  String? initialValue;
-  bool? readOnly;
-  bool? autoValidate;
-  Map<String, dynamic>? validators;
-  Function? onChanged;
-  int? maxLength;
-  bool? obscureText;
-  bool? autofocus;
-  double? fontSize;
-  List<TextInputFormatter>? inputFormatters;
-  List<String>? suggestions;
+// Widget para a lista de sugestões
+class SuggestionsList extends StatelessWidget {
+  final List<String> suggestions;
+  final ValueChanged<String> onSuggestionSelected;
 
-  AutoCompleteReal(
-      {super.key,
-      this.onSave,
-      @required this.label,
-      @required this.placeholder,
-      this.validation,
-      @required this.inputType,
-      this.initialValue,
-      this.readOnly = false,
-      this.autoValidate = false,
-      this.validators,
-      this.onChanged,
-      this.maxLength,
-      this.obscureText = false,
-      this.inputFormatters,
-      this.fontSize,
-      this.suggestions,
-      this.autofocus = false});
+  const SuggestionsList({
+    required this.suggestions,
+    required this.onSuggestionSelected,
+  });
 
   @override
-  // ignore: library_private_types_in_public_api
+  Widget build(BuildContext context) {
+    return Material(
+      elevation: 4.0,
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        margin: const EdgeInsets.only(top: 10),
+        height: 100,
+        child: ListView.builder(
+          itemCount: suggestions.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(suggestions[index]),
+              onTap: () {
+                onSuggestionSelected(suggestions[index]);
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+// Componente principal AutoCompleteReal
+// ignore: must_be_immutable
+class AutoCompleteReal extends StatefulWidget {
+  final Key? key; // Adicionando a chave
+  final Function? onSave;
+  final String? label;
+  final String? placeholder;
+  final Function? validation;
+  final TextInputType? inputType;
+  final String? initialValue;
+  final bool? readOnly;
+  final bool? autoValidate;
+  final Map<String, dynamic>? validators;
+  final Function? onChanged;
+  final int? maxLength;
+  final bool? obscureText;
+  final bool? autofocus;
+  final bool? isCurrency;
+  final double? fontSize;
+  final List<TextInputFormatter>? inputFormatters;
+  final List<String>? suggestions;
+
+  AutoCompleteReal({
+    this.key, // Adicionando a chave
+    this.onSave,
+    required this.label,
+    required this.placeholder,
+    this.validation,
+    required this.inputType,
+    this.initialValue,
+    this.readOnly = false,
+    this.autoValidate = false,
+    this.validators,
+    this.onChanged,
+    this.maxLength,
+    this.obscureText = false,
+    this.inputFormatters,
+    this.fontSize,
+    this.isCurrency = false,
+    this.suggestions,
+    this.autofocus = false,
+  });
+
+  @override
   _AutoCompleteRealState createState() => _AutoCompleteRealState();
 }
 
 class _AutoCompleteRealState extends State<AutoCompleteReal> {
-  List<String> filteredSuggestions = [];
-  TextEditingController _controller = TextEditingController();
+  late List<String> filteredSuggestions;
+  late TextEditingController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller.text = widget.initialValue ?? '';
+    _controller = TextEditingController(text: widget.initialValue ?? '');
     filteredSuggestions = widget.suggestions ?? [];
   }
 
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   void _filterSuggestions(String query) {
-    if (widget.suggestions != null) {
-      setState(() {
+    setState(() {
+      if (widget.isCurrency!) {
         if (query.isEmpty) {
           filteredSuggestions = [];
         } else {
-          filteredSuggestions = widget.suggestions!
-              .where((suggestion) =>
-                  suggestion.toLowerCase().contains(query.toLowerCase()))
-              .toList();
+          String cleanedQuery = query.replaceAll(RegExp(r'[^0-9]'), '');
+          filteredSuggestions =
+              addSpaceToCurrency(widget.suggestions!).where((suggestion) {
+            String cleanedSuggestion =
+                suggestion.replaceAll(RegExp(r'[^0-9]'), '');
+            return cleanedSuggestion.contains(cleanedQuery);
+          }).toList();
         }
-      });
-    }
+      } else {
+        filteredSuggestions = query.isEmpty
+            ? []
+            : widget.suggestions!
+                .where((suggestion) =>
+                    suggestion.toLowerCase().contains(query.toLowerCase()))
+                .toList();
+      }
+    });
+  }
+
+  List<String> addSpaceToCurrency(List<String> amounts) {
+    return amounts.map((amount) {
+      return amount.replaceFirst("R\$", "R\$ ");
+    }).toList();
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         TextFormField(
+          key: widget.key, // Adicionando a chave
           controller: _controller,
           keyboardType: widget.inputType,
           autocorrect: true,
@@ -153,7 +215,6 @@ class _AutoCompleteRealState extends State<AutoCompleteReal> {
           maxLength: widget.maxLength,
           inputFormatters: widget.inputFormatters ?? [],
           enabled: true,
-          onSaved: widget.onSave ?? funcEmpty(),
           style: TextStyle(fontSize: widget.fontSize ?? 12),
           validator: (String? value) {
             if (widget.validators == null) return null;
@@ -179,36 +240,19 @@ class _AutoCompleteRealState extends State<AutoCompleteReal> {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             ),
+            hintText: widget.placeholder,
           ),
         ),
-        if (filteredSuggestions.isNotEmpty)
-          Material(
-            elevation: 4.0,
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              margin: const EdgeInsets.only(top: 10),
-              height: 100,
-              child: ListView.builder(
-                itemCount: filteredSuggestions.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(filteredSuggestions[index]),
-                    onTap: () {
-                      setState(() {
-                        _controller.text = filteredSuggestions[index];
-
-                        Future.delayed(const Duration(milliseconds: 200), () {
-                          setState(() {
-                            filteredSuggestions = [];
-                          });
-                        });
-                      });
-                      widget.onChanged?.call(filteredSuggestions[index]);
-                    },
-                  );
-                },
-              ),
-            ),
+        if (_controller.text.isNotEmpty && filteredSuggestions.isNotEmpty)
+          SuggestionsList(
+            suggestions: filteredSuggestions,
+            onSuggestionSelected: (suggestion) {
+              setState(() {
+                _controller.text = suggestion;
+                filteredSuggestions = [];
+              });
+              widget.onChanged?.call(suggestion);
+            },
           ),
         const SizedBox(
           height: 10,
@@ -216,6 +260,4 @@ class _AutoCompleteRealState extends State<AutoCompleteReal> {
       ],
     );
   }
-
-  funcEmpty() {}
 }

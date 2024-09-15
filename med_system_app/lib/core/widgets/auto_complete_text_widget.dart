@@ -68,71 +68,80 @@ class MatchPasswordValidator {
 
 // ignore: must_be_immutable
 class AutoCompleteTextField extends StatefulWidget {
-  Function? onSave;
-  String? label;
-  String? placeholder;
-  Function? validation;
-  TextInputType? inputType;
-  String? initialValue;
-  bool? readOnly;
-  bool? autoValidate;
-  Map<String, dynamic>? validators;
-  Function? onChanged;
-  int? maxLength;
-  bool? obscureText;
-  bool? autofocus;
-  double? fontSize;
-  List<TextInputFormatter>? inputFormatters;
-  List<String>? suggestions;
+  final void Function(String?)? onSave;
+  final String? label;
+  final String? placeholder;
+  final Function? validation;
+  final TextInputType? inputType;
+  final String? initialValue;
+  final bool? readOnly;
+  final bool? autoValidate;
+  final Map<String, dynamic>? validators;
+  final Function? onChanged;
+  final int? maxLength;
+  final bool? obscureText;
+  final bool? autofocus;
+  final double? fontSize;
+  final List<TextInputFormatter>? inputFormatters;
+  final List<String>? suggestions;
 
-  AutoCompleteTextField(
-      {super.key,
-      this.onSave,
-      @required this.label,
-      @required this.placeholder,
-      this.validation,
-      @required this.inputType,
-      this.initialValue,
-      this.readOnly = false,
-      this.autoValidate = false,
-      this.validators,
-      this.onChanged,
-      this.maxLength,
-      this.obscureText = false,
-      this.inputFormatters,
-      this.fontSize,
-      this.suggestions,
-      this.autofocus = false});
+  AutoCompleteTextField({
+    super.key,
+    this.onSave,
+    this.label,
+    this.placeholder,
+    this.validation,
+    this.inputType,
+    this.initialValue,
+    this.readOnly = false,
+    this.autoValidate = false,
+    this.validators,
+    this.onChanged,
+    this.maxLength,
+    this.obscureText = false,
+    this.inputFormatters,
+    this.fontSize,
+    this.suggestions,
+    this.autofocus = false,
+  });
 
   @override
-  // ignore: library_private_types_in_public_api
   _AutoCompleteTextFieldState createState() => _AutoCompleteTextFieldState();
 }
 
 class _AutoCompleteTextFieldState extends State<AutoCompleteTextField> {
-  List<String> filteredSuggestions = [];
+  late ValueNotifier<List<String>> _filteredSuggestions;
   TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _controller.text = widget.initialValue ?? '';
-    filteredSuggestions = widget.suggestions ?? [];
+    _filteredSuggestions = ValueNotifier(widget.suggestions ?? []);
+    _controller.addListener(_onTextChanged);
+  }
+
+  void _onTextChanged() {
+    _filterSuggestions(_controller.text);
   }
 
   void _filterSuggestions(String query) {
     if (widget.suggestions != null) {
-      setState(() {
-        if (query.isEmpty) {
-          filteredSuggestions = [];
-        } else {
-          filteredSuggestions = widget.suggestions!
+      _filteredSuggestions.value = query.isEmpty
+          ? []
+          : widget.suggestions!
               .where((suggestion) =>
                   suggestion.toLowerCase().contains(query.toLowerCase()))
               .toList();
-        }
-      });
     }
+  }
+
+  @override
+  void dispose() {
+    _controller.removeListener(_onTextChanged);
+    _controller.dispose();
+    _filteredSuggestions.dispose();
+    super.dispose();
   }
 
   @override
@@ -146,14 +155,13 @@ class _AutoCompleteTextFieldState extends State<AutoCompleteTextField> {
           readOnly: widget.readOnly ?? false,
           onChanged: (value) {
             widget.onChanged?.call(value);
-            _filterSuggestions(value);
           },
           obscureText: widget.obscureText ?? false,
           autofocus: widget.autofocus ?? false,
           maxLength: widget.maxLength,
           inputFormatters: widget.inputFormatters ?? [],
           enabled: true,
-          onSaved: widget.onSave ?? funcEmpty(),
+          onSaved: widget.onSave, // Pass the function directly
           style: TextStyle(fontSize: widget.fontSize ?? 12),
           validator: (String? value) {
             if (widget.validators == null) return null;
@@ -181,41 +189,60 @@ class _AutoCompleteTextFieldState extends State<AutoCompleteTextField> {
             ),
           ),
         ),
-        if (filteredSuggestions.isNotEmpty)
-          Material(
-            elevation: 4.0,
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              margin: const EdgeInsets.only(top: 10),
-              height: 100,
-              child: ListView.builder(
-                itemCount: filteredSuggestions.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(filteredSuggestions[index]),
-                    onTap: () {
+        ValueListenableBuilder<List<String>>(
+          valueListenable: _filteredSuggestions,
+          builder: (context, suggestions, child) {
+            return suggestions.isNotEmpty
+                ? SuggestionsList(
+                    suggestions: suggestions,
+                    onSuggestionSelected: (suggestion) {
                       setState(() {
-                        _controller.text = filteredSuggestions[index];
-
-                        Future.delayed(const Duration(milliseconds: 200), () {
-                          setState(() {
-                            filteredSuggestions = [];
-                          });
-                        });
+                        _controller.text = suggestion;
+                        _filteredSuggestions.value = [];
                       });
-                      widget.onChanged?.call(filteredSuggestions[index]);
+                      widget.onChanged?.call(suggestion);
                     },
-                  );
-                },
-              ),
-            ),
-          ),
+                  )
+                : SizedBox.shrink();
+          },
+        ),
         const SizedBox(
           height: 10,
         ),
       ],
     );
   }
+}
 
-  funcEmpty() {}
+class SuggestionsList extends StatelessWidget {
+  final List<String> suggestions;
+  final ValueChanged<String> onSuggestionSelected;
+
+  SuggestionsList({
+    required this.suggestions,
+    required this.onSuggestionSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      elevation: 4.0,
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        margin: const EdgeInsets.only(top: 10),
+        height: 100,
+        child: ListView.builder(
+          itemCount: suggestions.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(suggestions[index]),
+              onTap: () {
+                onSuggestionSelected(suggestions[index]);
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
 }

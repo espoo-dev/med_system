@@ -37,4 +37,10 @@ abstract class MedicalShiftService extends ChopperService {
 
   @Delete(path: 'api/v1/medical_shifts/{id}')
   Future<Response> deleteEventMedicalShifts(@Path('id') id);
+
+  @Get(path: 'api/v1/medical_shifts/amount_suggestions')
+  Future<Response> getAmountSuggetions();
+
+  @Get(path: 'api/v1/medical_shifts/hospital_name_suggestion')
+  Future<Response> getHospitalSuggetions();
 }

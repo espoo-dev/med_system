@@ -14,13 +14,21 @@ class EditMedicalShiftStore = _EditMedicalShiftStoreBase
 
 enum EditMedicalShiftState { idle, success, error, loading }
 
+enum MedicalShiftState { idle, success, error, loading }
+
 abstract class _EditMedicalShiftStoreBase with Store {
   final MedicalShiftRepository _medicalShiftRepository;
 
   @observable
   EditMedicalShiftState saveState = EditMedicalShiftState.idle;
 
+  @observable
+  MedicalShiftState medicalShiftState = MedicalShiftState.idle;
+
   _EditMedicalShiftStoreBase(this._medicalShiftRepository);
+
+  ObservableList<String> hospitalNameSuggestions = ObservableList<String>();
+  ObservableList<String> amountSuggestions = ObservableList<String>();
 
   @observable
   String _errorMessage = "";
@@ -142,6 +150,45 @@ abstract class _EditMedicalShiftStoreBase with Store {
         saveState = EditMedicalShiftState.error;
       });
     }
+  }
+
+  @action
+  fetchAllData() async {
+    try {
+      medicalShiftState = MedicalShiftState.loading;
+
+      await Future.wait([getHospitalNameSuggestions(), getAmountSuggestions()]);
+
+      medicalShiftState = MedicalShiftState.success;
+    } catch (error) {
+      medicalShiftState = MedicalShiftState.error;
+      handleError(error.toString());
+    }
+  }
+
+  @action
+  Future getHospitalNameSuggestions() async {
+    hospitalNameSuggestions.clear();
+    var resultProcedures = await _medicalShiftRepository
+        .getHospitalNameSuggestions()
+        .asObservable();
+    resultProcedures?.when(success: (List<String>? listNames) {
+      hospitalNameSuggestions.addAll(listNames!);
+    }, failure: (NetworkExceptions error) {
+      handleError(NetworkExceptions.getErrorMessage(error));
+    });
+  }
+
+  @action
+  Future getAmountSuggestions() async {
+    amountSuggestions.clear();
+    var resultProcedures =
+        await _medicalShiftRepository.getAmountSuggestions().asObservable();
+    resultProcedures?.when(success: (List<String>? listNames) {
+      amountSuggestions.addAll(listNames!);
+    }, failure: (NetworkExceptions error) {
+      handleError(NetworkExceptions.getErrorMessage(error));
+    });
   }
 
   handleError(String reason) {

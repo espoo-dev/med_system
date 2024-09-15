@@ -5,8 +5,11 @@ import 'package:distrito_medico/core/api/api_result.dart';
 import 'package:distrito_medico/core/api/network_exceptions.dart';
 import 'package:distrito_medico/features/medical_shifts/model/add_medical_shift.model.dart';
 import 'package:distrito_medico/features/medical_shifts/model/edit_payment_medical_shift_request.model.dart';
+import 'package:distrito_medico/features/medical_shifts/model/hospital_suggestions.model.dart';
 import 'package:distrito_medico/features/medical_shifts/model/medical_shift.model.dart';
 import 'package:distrito_medico/features/medical_shifts/model/medical_shift_list.model.dart';
+
+import '../model/amount_suggestions.model.dart';
 
 class MedicalShiftRepository {
   Future<Result<MedicalShiftList?>?> getAllMedicalShifts(
@@ -168,6 +171,42 @@ class MedicalShiftRepository {
       } else if (response.statusCode == 422) {
         return Result.failure(NetworkExceptions.getException(
             const NetworkExceptions.unableToProcess()));
+      } else if (response.statusCode == 500) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.internalServerError()));
+      }
+    } catch (e) {
+      throw Result.failure(NetworkExceptions.getException(e));
+    }
+    return null;
+  }
+
+  Future<Result<List<String>?>?> getHospitalNameSuggestions() async {
+    try {
+      final response = await medicalShiftService.getHospitalSuggetions();
+      if (response.isSuccessful) {
+        HospitalSuggestionModel? hospitalSuggestionModel =
+            HospitalSuggestionModel.fromJson(json.decode(response.body));
+
+        return Result.success(hospitalSuggestionModel.names);
+      } else if (response.statusCode == 500) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.internalServerError()));
+      }
+    } catch (e) {
+      throw Result.failure(NetworkExceptions.getException(e));
+    }
+    return null;
+  }
+
+  Future<Result<List<String>?>?> getAmountSuggestions() async {
+    try {
+      final response = await medicalShiftService.getAmountSuggetions();
+      if (response.isSuccessful) {
+        AmountSuggestionModel? hospitalSuggestionModel =
+            AmountSuggestionModel.fromJson(json.decode(response.body));
+
+        return Result.success(hospitalSuggestionModel.names);
       } else if (response.statusCode == 500) {
         return Result.failure(NetworkExceptions.getException(
             const NetworkExceptions.internalServerError()));

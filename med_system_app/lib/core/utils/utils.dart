@@ -103,3 +103,14 @@ String formatCurrency(double amount) {
       NumberFormat.currency(locale: 'en_US', symbol: '\$');
   return formatter.format(amount);
 }
+
+List<String> formatListToPtBr(List<String> values) {
+  var inputFormat = NumberFormat.currency(locale: 'en_US', symbol: '');
+  var outputFormat = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
+
+  return values.map((value) {
+    String cleanValue = value.replaceAll(RegExp(r'[^\d.,]'), '').trim();
+    double number = inputFormat.parse(cleanValue) as double;
+    return outputFormat.format(number);
+  }).toList();
+}

@@ -135,4 +135,27 @@ final class _$MedicalShiftService extends MedicalShiftService {
     );
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<dynamic>> getAmountSuggetions() {
+    final Uri $url = Uri.parse('/api/v1/medical_shifts/amount_suggestions');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> getHospitalSuggetions() {
+    final Uri $url =
+        Uri.parse('/api/v1/medical_shifts/hospital_name_suggestion');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
 }
