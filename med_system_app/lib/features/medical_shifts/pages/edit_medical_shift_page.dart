@@ -1,7 +1,6 @@
 import 'package:distrito_medico/core/pages/success/success.page.dart';
 import 'package:distrito_medico/core/utils/navigation_utils.dart';
 import 'package:distrito_medico/core/utils/utils.dart';
-import 'package:distrito_medico/core/widgets/auto_complete_real_widget.dart';
 import 'package:distrito_medico/core/widgets/error.widget.dart';
 import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
 import 'package:distrito_medico/core/widgets/my_button_widget.dart';
@@ -33,7 +32,6 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final editMedicalShiftStore = GetIt.I.get<EditMedicalShiftStore>();
   final List<ReactionDisposer> _disposers = [];
-  final TextEditingController _hospitalController = TextEditingController();
 
   @override
   void didChangeDependencies() {
@@ -62,7 +60,6 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
     editMedicalShiftStore.initializeWithShift(widget.medicalShift);
     editMedicalShiftStore.getAmountSuggestions();
     editMedicalShiftStore.getHospitalNameSuggestions();
-    _hospitalController.text = editMedicalShiftStore.hospitalName ?? '';
   }
 
   @override
@@ -136,12 +133,12 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
                   },
                   onSelected: (String selectedHospital) {
                     editMedicalShiftStore.setHospitalName(selectedHospital);
-                    _hospitalController.text = selectedHospital;
                   },
                   fieldViewBuilder:
                       (context, controller, focusNode, onEditingComplete) {
+                    controller.text = editMedicalShiftStore.hospitalName;
                     return TextField(
-                      controller: _hospitalController,
+                      controller: controller,
                       onChanged: editMedicalShiftStore.setHospitalName,
                       focusNode: focusNode,
                       onEditingComplete: onEditingComplete,
@@ -193,22 +190,78 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
                   textColor: Theme.of(context).colorScheme.primary,
                 ),
                 const SizedBox(height: 15),
-                AutoCompleteReal(
-                  key: UniqueKey(),
-                  isCurrency: true,
-                  fontSize: 16,
-                  label: 'Valor plantão',
-                  placeholder: 'Digite o valor do plantão',
-                  suggestions: editMedicalShiftStore.amountSuggestions,
-                  initialValue: editMedicalShiftStore.amountCents,
-                  inputType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    RealInputFormatter(moeda: true),
-                  ],
-                  onChanged: editMedicalShiftStore.setAmountCents,
-                  validators: const {'required': true, 'minLength': 3},
+                Autocomplete(
+                  optionsBuilder: (TextEditingValue textEditingValue) {
+                    String query = textEditingValue.text;
+                    List<String> suggestions =
+                        editMedicalShiftStore.amountSuggestions;
+
+                    String cleanString(String str) {
+                      return str.replaceAll(RegExp(r'[^0-9]'), '');
+                    }
+
+                    if (query.isEmpty) {
+                      return const Iterable<String>.empty();
+                    } else {
+                      String cleanedQuery = cleanString(query);
+                      return suggestions.where((suggestion) {
+                        String cleanedSuggestion = cleanString(suggestion);
+                        return cleanedSuggestion.contains(cleanedQuery);
+                      });
+                    }
+                  },
+                  onSelected: (String selectedAmount) {
+                    editMedicalShiftStore.setAmountCents(selectedAmount);
+                  },
+                  fieldViewBuilder:
+                      (context, controller, focusNode, onEditingComplete) {
+                    controller.text = editMedicalShiftStore.amountCents;
+                    return TextField(
+                      controller: controller,
+                      onChanged: editMedicalShiftStore.setAmountCents,
+                      focusNode: focusNode,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        RealInputFormatter(moeda: true),
+                      ],
+                      onEditingComplete: onEditingComplete,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.primary),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.primary),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.primary),
+                          ),
+                          hintText: "Digite valor do plantão",
+                          label: const Text("Valor plantão")),
+                    );
+                  },
                 ),
+                // AutoCompleteReal(
+                //   key: UniqueKey(),
+                //   isCurrency: true,
+                //   fontSize: 16,
+                //   label: 'Valor plantão',
+                //   placeholder: 'Digite o valor do plantão',
+                //   suggestions: editMedicalShiftStore.amountSuggestions,
+                //   initialValue: editMedicalShiftStore.amountCents,
+                //   inputType: TextInputType.number,
+                //   inputFormatters: [
+                //     FilteringTextInputFormatter.digitsOnly,
+                //     RealInputFormatter(moeda: true),
+                //   ],
+                //   onChanged: editMedicalShiftStore.setAmountCents,
+                //   validators: const {'required': true, 'minLength': 3},
+                // ),
                 const SizedBox(height: 15),
                 CustomSwitch(
                   labelText: "Pago",
