@@ -33,6 +33,7 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final editMedicalShiftStore = GetIt.I.get<EditMedicalShiftStore>();
   final List<ReactionDisposer> _disposers = [];
+  final TextEditingController _hospitalController = TextEditingController();
 
   @override
   void didChangeDependencies() {
@@ -61,6 +62,7 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
     editMedicalShiftStore.initializeWithShift(widget.medicalShift);
     editMedicalShiftStore.getAmountSuggestions();
     editMedicalShiftStore.getHospitalNameSuggestions();
+    _hospitalController.text = editMedicalShiftStore.hospitalName ?? '';
   }
 
   @override
@@ -121,16 +123,48 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AutoCompleteReal(
-                  isCurrency: false,
-                  fontSize: 16,
-                  label: 'Nome do hospital',
-                  placeholder: 'Digite o nome do hospital',
-                  suggestions: editMedicalShiftStore.hospitalNameSuggestions,
-                  initialValue: editMedicalShiftStore.hospitalName,
-                  onChanged: editMedicalShiftStore.setHospitalName,
-                  inputType: TextInputType.text,
-                  validators: const {'required': true, 'minLength': 3},
+                Autocomplete(
+                  optionsBuilder: (TextEditingValue textEditingValue) {
+                    if (textEditingValue.text.isEmpty) {
+                      return const Iterable<String>.empty();
+                    } else {
+                      return editMedicalShiftStore.hospitalNameSuggestions
+                          .where((word) => word
+                              .toLowerCase()
+                              .contains(textEditingValue.text.toLowerCase()));
+                    }
+                  },
+                  onSelected: (String selectedHospital) {
+                    editMedicalShiftStore.setHospitalName(selectedHospital);
+                    _hospitalController.text = selectedHospital;
+                  },
+                  fieldViewBuilder:
+                      (context, controller, focusNode, onEditingComplete) {
+                    return TextField(
+                      controller: _hospitalController,
+                      onChanged: editMedicalShiftStore.setHospitalName,
+                      focusNode: focusNode,
+                      onEditingComplete: onEditingComplete,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.primary),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.primary),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.primary),
+                          ),
+                          hintText: "Digite nome do hospital",
+                          label: const Text("Nome hospital")),
+                    );
+                  },
                 ),
                 const SizedBox(height: 15),
                 const Text("Carga horária",

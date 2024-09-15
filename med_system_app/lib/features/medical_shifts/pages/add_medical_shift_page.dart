@@ -5,7 +5,6 @@ import 'package:distrito_medico/core/widgets/error.widget.dart';
 import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
 import 'package:distrito_medico/core/widgets/my_button_widget.dart';
 import 'package:distrito_medico/core/widgets/my_date_input.widget.dart';
-
 import 'package:distrito_medico/core/widgets/my_time_input.widget.dart';
 import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
 import 'package:distrito_medico/core/widgets/custom_switch.widget.dart';
@@ -30,6 +29,7 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final addMedicalShiftStore = GetIt.I.get<AddMedicalShiftStore>();
   final List<ReactionDisposer> _disposers = [];
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -115,16 +115,51 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                   Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        AutoCompleteReal(
-                          isCurrency: false,
-                          fontSize: 16,
-                          label: 'Nome do hospital',
-                          placeholder: 'Digite o nome do hospital',
-                          suggestions:
-                              addMedicalShiftStore.hospitalNameSuggestions,
-                          onChanged: addMedicalShiftStore.setHospitalName,
-                          inputType: TextInputType.text,
-                          validators: const {'required': true, 'minLength': 3},
+                        Autocomplete(
+                          optionsBuilder: (TextEditingValue textEditingValue) {
+                            if (textEditingValue.text.isEmpty) {
+                              return const Iterable<String>.empty();
+                            } else {
+                              return addMedicalShiftStore
+                                  .hospitalNameSuggestions
+                                  .where((word) => word.toLowerCase().contains(
+                                      textEditingValue.text.toLowerCase()));
+                            }
+                          },
+                          onSelected: addMedicalShiftStore.setHospitalName,
+                          fieldViewBuilder: (context, controller, focusNode,
+                              onEditingComplete) {
+                            return TextField(
+                              controller: controller,
+                              onChanged: addMedicalShiftStore.setHospitalName,
+                              focusNode: focusNode,
+                              onEditingComplete: onEditingComplete,
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
+                                  ),
+                                  hintText: "Digite nome do hospital",
+                                  label: const Text("Nome hospital")),
+                            );
+                          },
                         ),
                         const SizedBox(
                           height: 15,
