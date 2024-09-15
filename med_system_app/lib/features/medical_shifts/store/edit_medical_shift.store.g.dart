@@ -33,6 +33,22 @@ mixin _$EditMedicalShiftStore on _EditMedicalShiftStoreBase, Store {
     });
   }
 
+  late final _$medicalShiftStateAtom = Atom(
+      name: '_EditMedicalShiftStoreBase.medicalShiftState', context: context);
+
+  @override
+  MedicalShiftState get medicalShiftState {
+    _$medicalShiftStateAtom.reportRead();
+    return super.medicalShiftState;
+  }
+
+  @override
+  set medicalShiftState(MedicalShiftState value) {
+    _$medicalShiftStateAtom.reportWrite(value, super.medicalShiftState, () {
+      super.medicalShiftState = value;
+    });
+  }
+
   late final _$_errorMessageAtom =
       Atom(name: '_EditMedicalShiftStoreBase._errorMessage', context: context);
 
@@ -155,6 +171,34 @@ mixin _$EditMedicalShiftStore on _EditMedicalShiftStoreBase, Store {
         .run(() => super.updateMedicalShift(medicalShiftId));
   }
 
+  late final _$fetchAllDataAsyncAction =
+      AsyncAction('_EditMedicalShiftStoreBase.fetchAllData', context: context);
+
+  @override
+  Future fetchAllData() {
+    return _$fetchAllDataAsyncAction.run(() => super.fetchAllData());
+  }
+
+  late final _$getHospitalNameSuggestionsAsyncAction = AsyncAction(
+      '_EditMedicalShiftStoreBase.getHospitalNameSuggestions',
+      context: context);
+
+  @override
+  Future<dynamic> getHospitalNameSuggestions() {
+    return _$getHospitalNameSuggestionsAsyncAction
+        .run(() => super.getHospitalNameSuggestions());
+  }
+
+  late final _$getAmountSuggestionsAsyncAction = AsyncAction(
+      '_EditMedicalShiftStoreBase.getAmountSuggestions',
+      context: context);
+
+  @override
+  Future<dynamic> getAmountSuggestions() {
+    return _$getAmountSuggestionsAsyncAction
+        .run(() => super.getAmountSuggestions());
+  }
+
   late final _$_EditMedicalShiftStoreBaseActionController =
       ActionController(name: '_EditMedicalShiftStoreBase', context: context);
 
@@ -239,6 +283,7 @@ mixin _$EditMedicalShiftStore on _EditMedicalShiftStoreBase, Store {
   String toString() {
     return '''
 saveState: ${saveState},
+medicalShiftState: ${medicalShiftState},
 isValidData: ${isValidData}
     ''';
   }

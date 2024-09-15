@@ -1,9 +1,11 @@
 import 'package:distrito_medico/core/pages/success/success.page.dart';
 import 'package:distrito_medico/core/utils/navigation_utils.dart';
+import 'package:distrito_medico/core/widgets/auto_complete_real_widget.dart';
+import 'package:distrito_medico/core/widgets/error.widget.dart';
 import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
 import 'package:distrito_medico/core/widgets/my_button_widget.dart';
 import 'package:distrito_medico/core/widgets/my_date_input.widget.dart';
-import 'package:distrito_medico/core/widgets/my_text_form_field.widget.dart';
+
 import 'package:distrito_medico/core/widgets/my_time_input.widget.dart';
 import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
 import 'package:distrito_medico/core/widgets/custom_switch.widget.dart';
@@ -52,6 +54,8 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
   @override
   void initState() {
     super.initState();
+    addMedicalShiftStore.getAmountSuggestions();
+    addMedicalShiftStore.getHospitalNameSuggestions();
   }
 
   @override
@@ -66,19 +70,35 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false,
-      onPopInvoked: (bool didPop) {
-        if (didPop) {}
-        to(context, const MedicalShiftsPage());
-      },
-      child: Scaffold(
+        canPop: false,
+        onPopInvoked: (bool didPop) {
+          if (didPop) {}
+          to(context, const MedicalShiftsPage());
+        },
+        child: Scaffold(
           appBar: const MyAppBar(
             title: 'Novo Plantão',
             hideLeading: true,
             image: null,
           ),
-          body: form(context)),
-    );
+          body: Observer(
+            builder: (BuildContext context) {
+              if (addMedicalShiftStore.medicalShiftState ==
+                  MedicalShiftState.error) {
+                return Center(
+                    child: ErrorRetryWidget(
+                        'Algo deu errado', 'Por favor, tente novamente', () {
+                  addMedicalShiftStore.fetchAllData();
+                }));
+              }
+              if (addMedicalShiftStore.medicalShiftState ==
+                  MedicalShiftState.loading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return form(context);
+            },
+          ),
+        ));
   }
 
   Widget form(BuildContext context) {
@@ -95,10 +115,13 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                   Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        MyTextFormField(
+                        AutoCompleteReal(
+                          isCurrency: false,
                           fontSize: 16,
                           label: 'Nome do hospital',
                           placeholder: 'Digite o nome do hospital',
+                          suggestions:
+                              addMedicalShiftStore.hospitalNameSuggestions,
                           onChanged: addMedicalShiftStore.setHospitalName,
                           inputType: TextInputType.text,
                           validators: const {'required': true, 'minLength': 3},
@@ -133,10 +156,12 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                         const SizedBox(
                           height: 15,
                         ),
-                        MyTextFormField(
+                        AutoCompleteReal(
+                          isCurrency: true,
                           fontSize: 16,
                           label: 'Valor plantão',
                           placeholder: 'Digite o valor do plantão',
+                          suggestions: addMedicalShiftStore.amountSuggestions,
                           inputType: TextInputType.number,
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,

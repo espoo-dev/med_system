@@ -33,6 +33,22 @@ mixin _$AddMedicalShiftStore on _AddMedicalShiftStoreBase, Store {
     });
   }
 
+  late final _$medicalShiftStateAtom = Atom(
+      name: '_AddMedicalShiftStoreBase.medicalShiftState', context: context);
+
+  @override
+  MedicalShiftState get medicalShiftState {
+    _$medicalShiftStateAtom.reportRead();
+    return super.medicalShiftState;
+  }
+
+  @override
+  set medicalShiftState(MedicalShiftState value) {
+    _$medicalShiftStateAtom.reportWrite(value, super.medicalShiftState, () {
+      super.medicalShiftState = value;
+    });
+  }
+
   late final _$_errorMessageAtom =
       Atom(name: '_AddMedicalShiftStoreBase._errorMessage', context: context);
 
@@ -155,6 +171,34 @@ mixin _$AddMedicalShiftStore on _AddMedicalShiftStoreBase, Store {
         .run(() => super.createMedicalShift());
   }
 
+  late final _$fetchAllDataAsyncAction =
+      AsyncAction('_AddMedicalShiftStoreBase.fetchAllData', context: context);
+
+  @override
+  Future fetchAllData() {
+    return _$fetchAllDataAsyncAction.run(() => super.fetchAllData());
+  }
+
+  late final _$getHospitalNameSuggestionsAsyncAction = AsyncAction(
+      '_AddMedicalShiftStoreBase.getHospitalNameSuggestions',
+      context: context);
+
+  @override
+  Future<dynamic> getHospitalNameSuggestions() {
+    return _$getHospitalNameSuggestionsAsyncAction
+        .run(() => super.getHospitalNameSuggestions());
+  }
+
+  late final _$getAmountSuggestionsAsyncAction = AsyncAction(
+      '_AddMedicalShiftStoreBase.getAmountSuggestions',
+      context: context);
+
+  @override
+  Future<dynamic> getAmountSuggestions() {
+    return _$getAmountSuggestionsAsyncAction
+        .run(() => super.getAmountSuggestions());
+  }
+
   late final _$_AddMedicalShiftStoreBaseActionController =
       ActionController(name: '_AddMedicalShiftStoreBase', context: context);
 
@@ -228,6 +272,7 @@ mixin _$AddMedicalShiftStore on _AddMedicalShiftStoreBase, Store {
   String toString() {
     return '''
 saveState: ${saveState},
+medicalShiftState: ${medicalShiftState},
 isValidData: ${isValidData}
     ''';
   }
