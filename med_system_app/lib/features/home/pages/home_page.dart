@@ -31,19 +31,19 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    homeStore.getLatestEventProcedures();
+    homeStore.fetchAllData();
   }
 
   _buildPageBody(BuildContext context) {
     return Observer(builder: (BuildContext context) {
-      if (homeStore.state == EventProcedureState.error) {
+      if (homeStore.state == HomeState.error) {
         return Center(
             child: ErrorRetryWidget(
                 'Algo deu errado', 'Por favor, tente novamente', () {
-          homeStore.getLatestEventProcedures();
+          homeStore.fetchAllData();
         }));
       }
-      if (homeStore.state == EventProcedureState.loading &&
+      if (homeStore.state == HomeState.loading &&
           _listEventProcedures.isEmpty) {
         return const Center(child: CircularProgressIndicator());
       }
@@ -60,7 +60,62 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             const WelcomeWidget(),
-            const SizedBox(height: 22),
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Wrap(
+                spacing: 10.0,
+                children: [
+                  FilterChip(
+                    label: const Text('Procedimentos'),
+                    selected:
+                        homeStore.selectedFilter == HomeFilterType.procedures,
+                    onSelected: (bool selected) {
+                      if (selected) {
+                        homeStore.setSelectedFilter(HomeFilterType.procedures);
+                      }
+                    },
+                    selectedColor: Theme.of(context).colorScheme.primary,
+                    showCheckmark: false,
+                    labelStyle: TextStyle(
+                      color:
+                          homeStore.selectedFilter == HomeFilterType.procedures
+                              ? Colors.white
+                              : Colors.black,
+                    ),
+                  ),
+                  FilterChip(
+                    label: const Text('Plantões'),
+                    selected: homeStore.selectedFilter ==
+                        HomeFilterType.medicalShifts,
+                    onSelected: (bool selected) {
+                      if (selected) {
+                        homeStore
+                            .setSelectedFilter(HomeFilterType.medicalShifts);
+                      }
+                    },
+                    selectedColor: Theme.of(context).colorScheme.primary,
+                    showCheckmark: false,
+                    labelStyle: TextStyle(
+                      color: homeStore.selectedFilter ==
+                              HomeFilterType.medicalShifts
+                          ? Colors.white
+                          : Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
+            // const Padding(
+            //   padding: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
+            //   child: Text("Procedimentos",
+            //       style: TextStyle(
+            //         fontWeight: FontWeight.w800,
+            //         fontSize: 18,
+            //       )),
+            // ),
             HorizontalMenuWidget(
               menuItems: menuHomeModel.buildMenuHome(
                   homeStore.eventProcedureModel.total,
@@ -70,7 +125,22 @@ class _HomePageState extends State<HomePage> {
             ),
             ListEventsWidget(
               items: homeStore.eventProcedureList,
-            )
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
+              child: Text("Plantões",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 18,
+                  )),
+            ),
+            HorizontalMenuWidget(
+              menuItems: menuHomeModel.buildMenuHome(
+                  homeStore.medicalShift.total,
+                  homeStore.medicalShift.totalPayd,
+                  homeStore.medicalShift.totalUnpayd,
+                  context),
+            ),
           ]);
     });
   }
