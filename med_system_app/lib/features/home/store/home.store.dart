@@ -1,6 +1,8 @@
 import 'package:distrito_medico/core/api/network_exceptions.dart';
 import 'package:distrito_medico/features/event_procedures/model/event_procedure.model.dart';
 import 'package:distrito_medico/features/home/repository/home_repository.dart';
+import 'package:distrito_medico/features/medical_shifts/model/medical_shift.model.dart';
+import 'package:distrito_medico/features/medical_shifts/model/medical_shift_list.model.dart';
 import 'package:mobx/mobx.dart';
 
 part 'home.store.g.dart';
@@ -8,7 +10,9 @@ part 'home.store.g.dart';
 // ignore: library_private_types_in_public_api
 class HomeStore = _HomeStoreBase with _$HomeStore;
 
-enum EventProcedureState { idle, success, error, loading }
+enum HomeState { idle, success, error, loading }
+
+enum HomeFilterType { procedures, medicalShifts }
 
 abstract class _HomeStoreBase with Store {
   final HomeRepository _homeRepository;
@@ -16,8 +20,15 @@ abstract class _HomeStoreBase with Store {
   ObservableList<EventProcedures> eventProcedureList =
       ObservableList<EventProcedures>();
 
+  ObservableList<MedicalShiftModel> medicalShiftList =
+      ObservableList<MedicalShiftModel>();
+
   @observable
-  EventProcedureState state = EventProcedureState.idle;
+  MedicalShiftList? _medicalShift = MedicalShiftList();
+  get medicalShift => _medicalShift;
+
+  @observable
+  HomeState state = HomeState.idle;
 
   @observable
   String _errorMessage = "";
@@ -29,19 +40,42 @@ abstract class _HomeStoreBase with Store {
 
   @computed
   bool get showBottomAppBar =>
-      state == EventProcedureState.success && eventProcedureList.isNotEmpty;
+      state == HomeState.success && eventProcedureList.isNotEmpty;
   @computed
   bool get showFloatingActionButton =>
-      state == EventProcedureState.success && eventProcedureList.isNotEmpty;
+      state == HomeState.success && eventProcedureList.isNotEmpty;
+
+  @observable
+  HomeFilterType selectedFilter = HomeFilterType.procedures;
+
+  @action
+  void setSelectedFilter(HomeFilterType filter) {
+    selectedFilter = filter;
+  }
 
   _HomeStoreBase(HomeRepository homeRepository)
       : _homeRepository = homeRepository;
 
   @action
-  getLatestEventProcedures() async {
-    eventProcedureList.clear();
+  fetchAllData() async {
+    try {
+      state = HomeState.loading;
 
-    state = EventProcedureState.loading;
+      await Future.wait([
+        getLatestEventProcedures(),
+        getLatestMedicalShifts(),
+      ]);
+
+      state = HomeState.success;
+    } catch (error) {
+      state = HomeState.error;
+      handleError(error.toString());
+    }
+  }
+
+  @action
+  Future getLatestEventProcedures() async {
+    eventProcedureList.clear();
 
     var resultEventProcedures =
         await _homeRepository.getLatestEventProcedures().asObservable();
@@ -54,14 +88,30 @@ abstract class _HomeStoreBase with Store {
     });
   }
 
+  @action
+  Future getLatestMedicalShifts() async {
+    eventProcedureList.clear();
+
+    var resultMedicalShifts =
+        await _homeRepository.getLatestMedicalShifts().asObservable();
+    resultMedicalShifts?.when(success: (MedicalShiftList? medicalShiftModel) {
+      _medicalShift = medicalShiftModel;
+      handleMedicalShiftSuccess(medicalShiftModel?.medicalShiftModelList);
+    }, failure: (NetworkExceptions error) {
+      handleError(NetworkExceptions.getErrorMessage(error));
+    });
+  }
+
+  handleMedicalShiftSuccess(List<MedicalShiftModel>? listMedicalShifts) {
+    medicalShiftList.addAll(listMedicalShifts!);
+  }
+
   handleSuccess(List<EventProcedures>? listEventProcedures) {
     eventProcedureList.addAll(listEventProcedures!);
-    state = EventProcedureState.success;
   }
 
   handleError(String reason) {
     _errorMessage = reason;
-    state = EventProcedureState.error;
   }
 
   @action

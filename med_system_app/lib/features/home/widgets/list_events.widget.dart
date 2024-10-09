@@ -20,7 +20,7 @@ class _ListEventsWidgetState extends State<ListEventsWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -70,7 +70,6 @@ class _ListEventsWidgetState extends State<ListEventsWidget> {
                 return Padding(
                   padding: const EdgeInsets.only(top: 8, bottom: 8),
                   child: Container(
-                    height: 48,
                     width: MediaQuery.of(context).size.width * 0.28,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(9),

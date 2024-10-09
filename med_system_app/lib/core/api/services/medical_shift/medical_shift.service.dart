@@ -43,4 +43,8 @@ abstract class MedicalShiftService extends ChopperService {
 
   @Get(path: 'api/v1/medical_shifts/hospital_name_suggestion')
   Future<Response> getHospitalSuggetions();
+
+  @Get(path: 'api/v1/medical_shifts')
+  Future<Response> getLatestMedicalShifts(
+      @Query('page') int page, @Query('per_page') int perPage);
 }

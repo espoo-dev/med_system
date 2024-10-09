@@ -24,16 +24,32 @@ mixin _$HomeStore on _HomeStoreBase, Store {
               name: '_HomeStoreBase.showFloatingActionButton'))
       .value;
 
+  late final _$_medicalShiftAtom =
+      Atom(name: '_HomeStoreBase._medicalShift', context: context);
+
+  @override
+  MedicalShiftList? get _medicalShift {
+    _$_medicalShiftAtom.reportRead();
+    return super._medicalShift;
+  }
+
+  @override
+  set _medicalShift(MedicalShiftList? value) {
+    _$_medicalShiftAtom.reportWrite(value, super._medicalShift, () {
+      super._medicalShift = value;
+    });
+  }
+
   late final _$stateAtom = Atom(name: '_HomeStoreBase.state', context: context);
 
   @override
-  EventProcedureState get state {
+  HomeState get state {
     _$stateAtom.reportRead();
     return super.state;
   }
 
   @override
-  set state(EventProcedureState value) {
+  set state(HomeState value) {
     _$stateAtom.reportWrite(value, super.state, () {
       super.state = value;
     });
@@ -72,17 +88,61 @@ mixin _$HomeStore on _HomeStoreBase, Store {
     });
   }
 
+  late final _$selectedFilterAtom =
+      Atom(name: '_HomeStoreBase.selectedFilter', context: context);
+
+  @override
+  HomeFilterType get selectedFilter {
+    _$selectedFilterAtom.reportRead();
+    return super.selectedFilter;
+  }
+
+  @override
+  set selectedFilter(HomeFilterType value) {
+    _$selectedFilterAtom.reportWrite(value, super.selectedFilter, () {
+      super.selectedFilter = value;
+    });
+  }
+
+  late final _$fetchAllDataAsyncAction =
+      AsyncAction('_HomeStoreBase.fetchAllData', context: context);
+
+  @override
+  Future fetchAllData() {
+    return _$fetchAllDataAsyncAction.run(() => super.fetchAllData());
+  }
+
   late final _$getLatestEventProceduresAsyncAction =
       AsyncAction('_HomeStoreBase.getLatestEventProcedures', context: context);
 
   @override
-  Future getLatestEventProcedures() {
+  Future<dynamic> getLatestEventProcedures() {
     return _$getLatestEventProceduresAsyncAction
         .run(() => super.getLatestEventProcedures());
   }
 
+  late final _$getLatestMedicalShiftsAsyncAction =
+      AsyncAction('_HomeStoreBase.getLatestMedicalShifts', context: context);
+
+  @override
+  Future<dynamic> getLatestMedicalShifts() {
+    return _$getLatestMedicalShiftsAsyncAction
+        .run(() => super.getLatestMedicalShifts());
+  }
+
   late final _$_HomeStoreBaseActionController =
       ActionController(name: '_HomeStoreBase', context: context);
+
+  @override
+  void setSelectedFilter(HomeFilterType filter) {
+    final _$actionInfo = _$_HomeStoreBaseActionController.startAction(
+        name: '_HomeStoreBase.setSelectedFilter');
+    try {
+      return super.setSelectedFilter(filter);
+    } finally {
+      _$_HomeStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   dynamic dispose() {
@@ -99,6 +159,7 @@ mixin _$HomeStore on _HomeStoreBase, Store {
   String toString() {
     return '''
 state: ${state},
+selectedFilter: ${selectedFilter},
 showBottomAppBar: ${showBottomAppBar},
 showFloatingActionButton: ${showFloatingActionButton}
     ''';
