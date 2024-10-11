@@ -9,6 +9,7 @@ import 'package:distrito_medico/features/home/store/home.store.dart';
 import 'package:distrito_medico/features/home/widgets/build_header.widget.dart';
 import 'package:distrito_medico/features/home/widgets/build_welcome.widget.dart';
 import 'package:distrito_medico/features/home/widgets/list_events.widget.dart';
+import 'package:distrito_medico/features/home/widgets/list_medical_shifts.widget.dart';
 import 'package:distrito_medico/features/home/widgets/my_app_bar.widget.dart';
 import 'package:distrito_medico/features/home/widgets/my_drawer.widget.dart';
 import 'package:flutter/material.dart';
@@ -27,10 +28,10 @@ class _HomePageState extends State<HomePage> {
   MenuHomeModel menuHomeModel = MenuHomeModel();
   final homeStore = GetIt.I.get<HomeStore>();
   final List<EventProcedures> _listEventProcedures = [];
+
   @override
   void initState() {
     super.initState();
-
     homeStore.fetchAllData();
   }
 
@@ -106,41 +107,27 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-
             const SizedBox(height: 20),
-            // const Padding(
-            //   padding: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
-            //   child: Text("Procedimentos",
-            //       style: TextStyle(
-            //         fontWeight: FontWeight.w800,
-            //         fontSize: 18,
-            //       )),
-            // ),
             HorizontalMenuWidget(
-              menuItems: menuHomeModel.buildMenuHome(
-                  homeStore.eventProcedureModel.total,
-                  homeStore.eventProcedureModel.totalPayd,
-                  homeStore.eventProcedureModel.totalUnpayd,
-                  context),
+              menuItems: homeStore.selectedFilter == HomeFilterType.procedures
+                  ? menuHomeModel.buildMenuHome(
+                      homeStore.eventProcedureModel.total,
+                      homeStore.eventProcedureModel.totalPayd,
+                      homeStore.eventProcedureModel.totalUnpayd,
+                      context)
+                  : menuHomeModel.buildMenuHome(
+                      homeStore.medicalShift.total,
+                      homeStore.medicalShift.totalPayd,
+                      homeStore.medicalShift.totalUnpayd,
+                      context),
             ),
-            ListEventsWidget(
-              items: homeStore.eventProcedureList,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
-              child: Text("Plantões",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 18,
-                  )),
-            ),
-            HorizontalMenuWidget(
-              menuItems: menuHomeModel.buildMenuHome(
-                  homeStore.medicalShift.total,
-                  homeStore.medicalShift.totalPayd,
-                  homeStore.medicalShift.totalUnpayd,
-                  context),
-            ),
+            homeStore.selectedFilter == HomeFilterType.procedures
+                ? ListEventsWidget(
+                    items: homeStore.eventProcedureList,
+                  )
+                : ListMedicalShiftsWidget(
+                    items: homeStore.medicalShiftList,
+                  ),
           ]);
     });
   }

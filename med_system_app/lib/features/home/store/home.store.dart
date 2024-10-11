@@ -90,7 +90,7 @@ abstract class _HomeStoreBase with Store {
 
   @action
   Future getLatestMedicalShifts() async {
-    eventProcedureList.clear();
+    medicalShiftList.clear();
 
     var resultMedicalShifts =
         await _homeRepository.getLatestMedicalShifts().asObservable();
