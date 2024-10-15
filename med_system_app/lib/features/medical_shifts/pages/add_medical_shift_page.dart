@@ -8,6 +8,7 @@ import 'package:distrito_medico/core/widgets/my_date_input.widget.dart';
 import 'package:distrito_medico/core/widgets/my_time_input.widget.dart';
 import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
 import 'package:distrito_medico/core/widgets/custom_switch.widget.dart';
+import 'package:distrito_medico/features/home/pages/home_page.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/medical_shifts_page.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/widgets/radio_group_workload.widget.dart';
 import 'package:distrito_medico/features/medical_shifts/store/add_medical_shift.store.dart';
@@ -19,7 +20,9 @@ import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 
 class AddMedicalShiftPage extends StatefulWidget {
-  const AddMedicalShiftPage({super.key});
+  final bool backToHome;
+
+  const AddMedicalShiftPage({super.key, this.backToHome = false});
 
   @override
   State<AddMedicalShiftPage> createState() => _AddMedicalShiftPageState();
@@ -79,7 +82,11 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
         canPop: false,
         onPopInvoked: (bool didPop) {
           if (didPop) {}
-          to(context, const MedicalShiftsPage());
+          if (widget.backToHome) {
+            to(context, const HomePage());
+          } else {
+            to(context, const MedicalShiftsPage());
+          }
         },
         child: Scaffold(
           appBar: const MyAppBar(

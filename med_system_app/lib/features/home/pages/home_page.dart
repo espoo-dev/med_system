@@ -12,6 +12,7 @@ import 'package:distrito_medico/features/home/widgets/list_events.widget.dart';
 import 'package:distrito_medico/features/home/widgets/list_medical_shifts.widget.dart';
 import 'package:distrito_medico/features/home/widgets/my_app_bar.widget.dart';
 import 'package:distrito_medico/features/home/widgets/my_drawer.widget.dart';
+import 'package:distrito_medico/features/medical_shifts/pages/add_medical_shift_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
@@ -143,11 +144,21 @@ class _HomePageState extends State<HomePage> {
             visible: homeStore.showFloatingActionButton,
             child: FloatingActionButton(
               onPressed: () {
-                push(
+                if (homeStore.selectedFilter == HomeFilterType.procedures) {
+                  push(
                     context,
                     const AddEventProcedurePage(
                       backToHome: true,
-                    ));
+                    ),
+                  );
+                } else {
+                  push(
+                    context,
+                    const AddMedicalShiftPage(
+                      backToHome: true,
+                    ),
+                  );
+                }
               },
               backgroundColor: Theme.of(context).colorScheme.primary,
               child: const Icon(
