@@ -162,9 +162,10 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
         to(context, const HomePage());
       },
       child: Scaffold(
-        appBar: const MyAppBar(
+        appBar: MyAppBar(
           title: 'Procedimentos',
           hideLeading: true,
+          onTrailingPressed: () {},
           image: null,
         ),
         bottomNavigationBar: Observer(builder: (_) {
