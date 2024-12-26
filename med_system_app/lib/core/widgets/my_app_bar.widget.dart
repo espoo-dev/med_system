@@ -6,6 +6,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? image;
   final bool? refresh;
   final VoidCallback? onPressed;
+  final VoidCallback? onTrailingPressed;
 
   const MyAppBar({
     super.key,
@@ -14,6 +15,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.refresh = false,
     required this.image,
     this.onPressed,
+    this.onTrailingPressed,
   });
 
   @override
@@ -32,6 +34,15 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
               icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
               onPressed: onPressed ?? () => Navigator.of(context).pop(),
             ),
+      actions: [
+        if (onTrailingPressed != null)
+          IconButton(
+            icon: const Icon(
+              Icons.filter_list,
+            ),
+            onPressed: onTrailingPressed,
+          ),
+      ],
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(15)),
       ),
