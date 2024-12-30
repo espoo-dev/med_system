@@ -33,7 +33,7 @@ final _chopper = ChopperClient(
     HeadersInterceptor(customHeaders),
     HttpLoggingInterceptor(),
     MyRequestInterceptor(),
-    MyResponseInterceptor()
+    MyResponseInterceptor(),
   ],
 );
 final signInService = _chopper.getService<SignInService>();

@@ -8,6 +8,41 @@ import 'package:distrito_medico/features/event_procedures/model/edit_payment_pro
 import 'package:distrito_medico/features/event_procedures/model/event_procedure.model.dart';
 
 class EventProcedureRepository {
+  Future<Result<EventProcedureModel?>?> getEventProceduresByFilters(
+      {int? page,
+      int? perPage,
+      int? month,
+      int? year,
+      bool? payd,
+      String? healthInsuranceName,
+      String? hospitalName}) async {
+    try {
+      page ??= 1;
+
+      perPage ??= 10;
+      final response = await eventProcedureService.getEventProceduresByFilters(
+          page: page,
+          perPage: perPage,
+          month: month,
+          year: year,
+          payd: payd,
+          healthInsuranceName: healthInsuranceName,
+          hospitalName: hospitalName);
+      if (response.isSuccessful) {
+        EventProcedureModel? eventProcedureModel =
+            EventProcedureModel.fromJson(json.decode(response.body));
+
+        return Result.success(eventProcedureModel);
+      } else if (response.statusCode == 500) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.internalServerError()));
+      }
+    } catch (e) {
+      throw Result.failure(NetworkExceptions.getException(e));
+    }
+    return null;
+  }
+
   Future<Result<EventProcedureModel?>?> getAllEventProcedures(
       [int? page, int? perPage]) async {
     try {

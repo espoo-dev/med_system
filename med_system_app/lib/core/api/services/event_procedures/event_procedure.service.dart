@@ -38,4 +38,15 @@ abstract class EventProcedureService extends ChopperService {
 
   @Delete(path: 'api/v1/event_procedures/{id}')
   Future<Response> deleteEventProcedure(@Path('id') id);
+
+  @Get(path: 'api/v1/event_procedures')
+  Future<Response> getEventProceduresByFilters({
+    @Query('page') int? page,
+    @Query('per_page') int? perPage,
+    @Query('month') int? month,
+    @Query('year') int? year,
+    @Query('payd') bool? payd,
+    @Query('health_insurance[name]') String? healthInsuranceName,
+    @Query('hospital[name]') String? hospitalName,
+  });
 }
