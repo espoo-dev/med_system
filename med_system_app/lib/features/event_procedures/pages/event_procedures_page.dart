@@ -2,7 +2,6 @@ import 'package:distrito_medico/core/theme/animations.dart';
 import 'package:distrito_medico/core/theme/icons.dart';
 import 'package:distrito_medico/core/utils/ui.dart';
 import 'package:distrito_medico/core/widgets/bottom_bar_widget.dart';
-import 'package:distrito_medico/core/widgets/dialog_filter_months.wdiget.dart';
 import 'package:distrito_medico/core/widgets/error.widget.dart';
 import 'package:distrito_medico/core/widgets/ext_fab.widget.dart';
 import 'package:distrito_medico/core/widgets/fab.widget.dart';
@@ -11,7 +10,8 @@ import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
 import 'package:distrito_medico/features/event_procedures/model/event_procedure.model.dart';
 import 'package:distrito_medico/features/event_procedures/pages/add_event_procedure_page.dart';
 import 'package:distrito_medico/features/event_procedures/pages/edit_event_procedure_page.dart';
-import 'package:distrito_medico/features/event_procedures/store/event_procedure.store.dart';
+import 'package:distrito_medico/features/event_procedures/pages/filter_event_procedures_page.dart';
+import 'package:distrito_medico/features/event_procedures/store/filter_event_procedure_store.dart';
 import 'package:distrito_medico/features/home/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -39,7 +39,7 @@ class EventProceduresPage extends StatefulWidget {
 }
 
 class _EventProceduresPageState extends State<EventProceduresPage> {
-  final eventProcedureStore = GetIt.I.get<EventProcedureStore>();
+  final eventProcedureStore = GetIt.I.get<FilterEventProcedureStore>();
   List<EventProcedures>? _listEventProcedures = [];
   final ScrollController _scrollController = ScrollController();
   bool isFab = false;
@@ -97,21 +97,21 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
       infiniteScrolling();
       showFabButton();
     });
-    setInitialFilter();
+    // setInitialFilter();
     eventProcedureStore.getAllEventProcedures(isRefresh: true);
   }
 
-  void setInitialFilter() {
-    if (widget.initialFilter != null) {
-      if (widget.initialFilter == InitialFilter.paid) {
-        eventProcedureStore.updateFilter(false, true, false, false);
-      } else if (widget.initialFilter == InitialFilter.unpaid) {
-        eventProcedureStore.updateFilter(false, false, true, false);
-      } else {
-        eventProcedureStore.updateFilter(true, false, false, false);
-      }
-    }
-  }
+  // void setInitialFilter() {
+  //   if (widget.initialFilter != null) {
+  //     if (widget.initialFilter == InitialFilter.paid) {
+  //       eventProcedureStore.updateFilter(false, true, false, false);
+  //     } else if (widget.initialFilter == InitialFilter.unpaid) {
+  //       eventProcedureStore.updateFilter(false, false, true, false);
+  //     } else {
+  //       eventProcedureStore.updateFilter(true, false, false, false);
+  //     }
+  //   }
+  // }
 
   showFabButton() {
     if (_scrollController.offset > 50) {
@@ -165,7 +165,13 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
         appBar: MyAppBar(
           title: 'Procedimentos',
           hideLeading: true,
-          onTrailingPressed: () {},
+          trailingIcon: const Icon(Icons.filter_list),
+          onTrailingPressed: () {
+            push(
+              context,
+              const FilterEventProceduresPage(),
+            );
+          },
           image: null,
         ),
         bottomNavigationBar: Observer(builder: (_) {
@@ -190,76 +196,6 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Observer(builder: (_) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FilterChip(
-                          label: const Text('Mês'),
-                          selected: eventProcedureStore.showMonth!,
-                          onSelected: (selected) async {
-                            eventProcedureStore.updateFilter(
-                                false, false, false, true);
-                            int? selectedMonth = await showDialogMonths(context,
-                                initialMonth: eventProcedureStore.month);
-                            if (selectedMonth != null) {
-                              eventProcedureStore.updateMonth(selectedMonth);
-                              _refreshProcedures();
-                            }
-                          },
-                          showCheckmark: false,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FilterChip(
-                          label: const Text('Todos'),
-                          selected: eventProcedureStore.showAll!,
-                          onSelected: (selected) {
-                            eventProcedureStore.updateFilter(
-                                selected, false, false, false);
-                            _refreshProcedures();
-                          },
-                          showCheckmark: false,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FilterChip(
-                          label: const Text('Recebidos'),
-                          selected: eventProcedureStore.showPaid!,
-                          onSelected: (selected) {
-                            eventProcedureStore.updateFilter(
-                                false, selected, false, false);
-                            _refreshProcedures();
-                          },
-                          showCheckmark: false,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FilterChip(
-                          label: const Text('A Receber'),
-                          selected: eventProcedureStore.showUnpaid!,
-                          onSelected: (selected) {
-                            eventProcedureStore.updateFilter(
-                                false, false, selected, false);
-                            _refreshProcedures();
-                          },
-                          showCheckmark: false,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }),
             // Observer(builder: (_) {
             //   return BottomAppBarContent(
             //     total: eventProcedureStore.eventProcedureModel?.total ?? "",

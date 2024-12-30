@@ -5,6 +5,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool hideLeading;
   final Widget? image;
   final bool? refresh;
+  final Widget? trailingIcon;
   final VoidCallback? onPressed;
   final VoidCallback? onTrailingPressed;
 
@@ -16,6 +17,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.image,
     this.onPressed,
     this.onTrailingPressed,
+    this.trailingIcon,
   });
 
   @override
@@ -35,11 +37,9 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
               onPressed: onPressed ?? () => Navigator.of(context).pop(),
             ),
       actions: [
-        if (onTrailingPressed != null)
+        if (onTrailingPressed != null && trailingIcon != null)
           IconButton(
-            icon: const Icon(
-              Icons.filter_list,
-            ),
+            icon: trailingIcon!,
             onPressed: onTrailingPressed,
           ),
       ],
