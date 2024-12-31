@@ -3,7 +3,6 @@ import 'package:distrito_medico/features/event_procedures/repository/event_proce
 import 'package:distrito_medico/features/event_procedures/store/add_event_procedure.store.dart';
 import 'package:distrito_medico/features/event_procedures/store/edit_event_procedure.store.dart';
 import 'package:distrito_medico/features/event_procedures/store/event_procedure.store.dart';
-import 'package:distrito_medico/features/event_procedures/store/filter_event_procedure_store.dart';
 import 'package:distrito_medico/features/health_insurances/repository/health_insurances_repository.dart';
 import 'package:distrito_medico/features/health_insurances/store/add_health_insurances.store.dart';
 import 'package:distrito_medico/features/health_insurances/store/edit_health_insurance.store.dart';
@@ -96,9 +95,6 @@ void setupServiceLocator() {
       () => AddProcedureStore(getIt<ProcedureRepository>()));
   getIt.registerLazySingleton<EditProcedureStore>(
       () => EditProcedureStore(getIt<ProcedureRepository>()));
-
-  getIt.registerLazySingleton<FilterEventProcedureStore>(
-      () => FilterEventProcedureStore(EventProcedureRepository()));
 
   getIt.registerLazySingleton<AddHealthInsuranceStore>(
       () => AddHealthInsuranceStore(getIt<HealthInsurancesRepository>()));

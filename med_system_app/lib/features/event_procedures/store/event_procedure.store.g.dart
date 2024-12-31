@@ -8,9 +8,9 @@ part of 'event_procedure.store.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$EventProcedureStore on _EventProcedureStoreBase, Store {
+mixin _$EventProcedureStore on _EventProcedureStore, Store {
   late final _$stateAtom =
-      Atom(name: '_EventProcedureStoreBase.state', context: context);
+      Atom(name: '_EventProcedureStore.state', context: context);
 
   @override
   EventProcedureState get state {
@@ -26,7 +26,7 @@ mixin _$EventProcedureStore on _EventProcedureStoreBase, Store {
   }
 
   late final _$editStateAtom =
-      Atom(name: '_EventProcedureStoreBase.editState', context: context);
+      Atom(name: '_EventProcedureStore.editState', context: context);
 
   @override
   EditEventProcedureState get editState {
@@ -42,7 +42,7 @@ mixin _$EventProcedureStore on _EventProcedureStoreBase, Store {
   }
 
   late final _$deleteSateAtom =
-      Atom(name: '_EventProcedureStoreBase.deleteSate', context: context);
+      Atom(name: '_EventProcedureStore.deleteSate', context: context);
 
   @override
   DeleteEventProcedureState get deleteSate {
@@ -57,88 +57,8 @@ mixin _$EventProcedureStore on _EventProcedureStoreBase, Store {
     });
   }
 
-  late final _$_showAllAtom =
-      Atom(name: '_EventProcedureStoreBase._showAll', context: context);
-
-  @override
-  bool get _showAll {
-    _$_showAllAtom.reportRead();
-    return super._showAll;
-  }
-
-  @override
-  set _showAll(bool value) {
-    _$_showAllAtom.reportWrite(value, super._showAll, () {
-      super._showAll = value;
-    });
-  }
-
-  late final _$_showPaidAtom =
-      Atom(name: '_EventProcedureStoreBase._showPaid', context: context);
-
-  @override
-  bool get _showPaid {
-    _$_showPaidAtom.reportRead();
-    return super._showPaid;
-  }
-
-  @override
-  set _showPaid(bool value) {
-    _$_showPaidAtom.reportWrite(value, super._showPaid, () {
-      super._showPaid = value;
-    });
-  }
-
-  late final _$_showMonthAtom =
-      Atom(name: '_EventProcedureStoreBase._showMonth', context: context);
-
-  @override
-  bool get _showMonth {
-    _$_showMonthAtom.reportRead();
-    return super._showMonth;
-  }
-
-  @override
-  set _showMonth(bool value) {
-    _$_showMonthAtom.reportWrite(value, super._showMonth, () {
-      super._showMonth = value;
-    });
-  }
-
-  late final _$_showUnpaidAtom =
-      Atom(name: '_EventProcedureStoreBase._showUnpaid', context: context);
-
-  @override
-  bool get _showUnpaid {
-    _$_showUnpaidAtom.reportRead();
-    return super._showUnpaid;
-  }
-
-  @override
-  set _showUnpaid(bool value) {
-    _$_showUnpaidAtom.reportWrite(value, super._showUnpaid, () {
-      super._showUnpaid = value;
-    });
-  }
-
-  late final _$_monthAtom =
-      Atom(name: '_EventProcedureStoreBase._month', context: context);
-
-  @override
-  int get _month {
-    _$_monthAtom.reportRead();
-    return super._month;
-  }
-
-  @override
-  set _month(int value) {
-    _$_monthAtom.reportWrite(value, super._month, () {
-      super._month = value;
-    });
-  }
-
   late final _$_errorMessageAtom =
-      Atom(name: '_EventProcedureStoreBase._errorMessage', context: context);
+      Atom(name: '_EventProcedureStore._errorMessage', context: context);
 
   @override
   String get _errorMessage {
@@ -154,7 +74,7 @@ mixin _$EventProcedureStore on _EventProcedureStoreBase, Store {
   }
 
   late final _$_pageAtom =
-      Atom(name: '_EventProcedureStoreBase._page', context: context);
+      Atom(name: '_EventProcedureStore._page', context: context);
 
   @override
   int get _page {
@@ -169,8 +89,8 @@ mixin _$EventProcedureStore on _EventProcedureStoreBase, Store {
     });
   }
 
-  late final _$_eventProcedureModelAtom = Atom(
-      name: '_EventProcedureStoreBase._eventProcedureModel', context: context);
+  late final _$_eventProcedureModelAtom =
+      Atom(name: '_EventProcedureStore._eventProcedureModel', context: context);
 
   @override
   EventProcedureModel? get _eventProcedureModel {
@@ -186,8 +106,89 @@ mixin _$EventProcedureStore on _EventProcedureStoreBase, Store {
     });
   }
 
+  late final _$selectedYearAtom =
+      Atom(name: '_EventProcedureStore.selectedYear', context: context);
+
+  @override
+  int? get selectedYear {
+    _$selectedYearAtom.reportRead();
+    return super.selectedYear;
+  }
+
+  @override
+  set selectedYear(int? value) {
+    _$selectedYearAtom.reportWrite(value, super.selectedYear, () {
+      super.selectedYear = value;
+    });
+  }
+
+  late final _$selectedMonthAtom =
+      Atom(name: '_EventProcedureStore.selectedMonth', context: context);
+
+  @override
+  int? get selectedMonth {
+    _$selectedMonthAtom.reportRead();
+    return super.selectedMonth;
+  }
+
+  @override
+  set selectedMonth(int? value) {
+    _$selectedMonthAtom.reportWrite(value, super.selectedMonth, () {
+      super.selectedMonth = value;
+    });
+  }
+
+  late final _$selectedPaymentStatusAtom = Atom(
+      name: '_EventProcedureStore.selectedPaymentStatus', context: context);
+
+  @override
+  bool? get selectedPaymentStatus {
+    _$selectedPaymentStatusAtom.reportRead();
+    return super.selectedPaymentStatus;
+  }
+
+  @override
+  set selectedPaymentStatus(bool? value) {
+    _$selectedPaymentStatusAtom.reportWrite(value, super.selectedPaymentStatus,
+        () {
+      super.selectedPaymentStatus = value;
+    });
+  }
+
+  late final _$hospitalNameAtom =
+      Atom(name: '_EventProcedureStore.hospitalName', context: context);
+
+  @override
+  String? get hospitalName {
+    _$hospitalNameAtom.reportRead();
+    return super.hospitalName;
+  }
+
+  @override
+  set hospitalName(String? value) {
+    _$hospitalNameAtom.reportWrite(value, super.hospitalName, () {
+      super.hospitalName = value;
+    });
+  }
+
+  late final _$healthInsuranceNameAtom =
+      Atom(name: '_EventProcedureStore.healthInsuranceName', context: context);
+
+  @override
+  String? get healthInsuranceName {
+    _$healthInsuranceNameAtom.reportRead();
+    return super.healthInsuranceName;
+  }
+
+  @override
+  set healthInsuranceName(String? value) {
+    _$healthInsuranceNameAtom.reportWrite(value, super.healthInsuranceName, () {
+      super.healthInsuranceName = value;
+    });
+  }
+
   late final _$getAllEventProceduresAsyncAction = AsyncAction(
-      '_EventProcedureStoreBase.getAllEventProcedures',
+      '_EventProcedureStore.getAllEventProcedures',
       context: context);
 
   @override
@@ -196,8 +197,18 @@ mixin _$EventProcedureStore on _EventProcedureStoreBase, Store {
         .run(() => super.getAllEventProcedures(isRefresh: isRefresh));
   }
 
+  late final _$getAllEventProceduresByFiltersAsyncAction = AsyncAction(
+      '_EventProcedureStore.getAllEventProceduresByFilters',
+      context: context);
+
+  @override
+  Future getAllEventProceduresByFilters() {
+    return _$getAllEventProceduresByFiltersAsyncAction
+        .run(() => super.getAllEventProceduresByFilters());
+  }
+
   late final _$deleteEventProcedureAsyncAction = AsyncAction(
-      '_EventProcedureStoreBase.deleteEventProcedure',
+      '_EventProcedureStore.deleteEventProcedure',
       context: context);
 
   @override
@@ -207,7 +218,7 @@ mixin _$EventProcedureStore on _EventProcedureStoreBase, Store {
   }
 
   late final _$editPaymentEventProcedureAsyncAction = AsyncAction(
-      '_EventProcedureStoreBase.editPaymentEventProcedure',
+      '_EventProcedureStore.editPaymentEventProcedure',
       context: context);
 
   @override
@@ -216,50 +227,83 @@ mixin _$EventProcedureStore on _EventProcedureStoreBase, Store {
         .run(() => super.editPaymentEventProcedure(eventProcedureId, index));
   }
 
-  late final _$_EventProcedureStoreBaseActionController =
-      ActionController(name: '_EventProcedureStoreBase', context: context);
+  late final _$_EventProcedureStoreActionController =
+      ActionController(name: '_EventProcedureStore', context: context);
 
   @override
-  dynamic updateMonth(int month) {
-    final _$actionInfo = _$_EventProcedureStoreBaseActionController.startAction(
-        name: '_EventProcedureStoreBase.updateMonth');
+  void setSelectedYear(int? year) {
+    final _$actionInfo = _$_EventProcedureStoreActionController.startAction(
+        name: '_EventProcedureStore.setSelectedYear');
     try {
-      return super.updateMonth(month);
+      return super.setSelectedYear(year);
     } finally {
-      _$_EventProcedureStoreBaseActionController.endAction(_$actionInfo);
+      _$_EventProcedureStoreActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void updateFilter(bool all, bool paid, bool unpaid, bool month) {
-    final _$actionInfo = _$_EventProcedureStoreBaseActionController.startAction(
-        name: '_EventProcedureStoreBase.updateFilter');
+  void setSelectedMonth(int? month) {
+    final _$actionInfo = _$_EventProcedureStoreActionController.startAction(
+        name: '_EventProcedureStore.setSelectedMonth');
     try {
-      return super.updateFilter(all, paid, unpaid, month);
+      return super.setSelectedMonth(month);
     } finally {
-      _$_EventProcedureStoreBaseActionController.endAction(_$actionInfo);
+      _$_EventProcedureStoreActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic getEventProcedures() {
-    final _$actionInfo = _$_EventProcedureStoreBaseActionController.startAction(
-        name: '_EventProcedureStoreBase.getEventProcedures');
+  void setSelectedPaymentStatus(bool? status) {
+    final _$actionInfo = _$_EventProcedureStoreActionController.startAction(
+        name: '_EventProcedureStore.setSelectedPaymentStatus');
     try {
-      return super.getEventProcedures();
+      return super.setSelectedPaymentStatus(status);
     } finally {
-      _$_EventProcedureStoreBaseActionController.endAction(_$actionInfo);
+      _$_EventProcedureStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setHospitalName(String? name) {
+    final _$actionInfo = _$_EventProcedureStoreActionController.startAction(
+        name: '_EventProcedureStore.setHospitalName');
+    try {
+      return super.setHospitalName(name);
+    } finally {
+      _$_EventProcedureStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setHealthInsuranceName(String? name) {
+    final _$actionInfo = _$_EventProcedureStoreActionController.startAction(
+        name: '_EventProcedureStore.setHealthInsuranceName');
+    try {
+      return super.setHealthInsuranceName(name);
+    } finally {
+      _$_EventProcedureStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clearFilters() {
+    final _$actionInfo = _$_EventProcedureStoreActionController.startAction(
+        name: '_EventProcedureStore.clearFilters');
+    try {
+      return super.clearFilters();
+    } finally {
+      _$_EventProcedureStoreActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   dynamic dispose() {
-    final _$actionInfo = _$_EventProcedureStoreBaseActionController.startAction(
-        name: '_EventProcedureStoreBase.dispose');
+    final _$actionInfo = _$_EventProcedureStoreActionController.startAction(
+        name: '_EventProcedureStore.dispose');
     try {
       return super.dispose();
     } finally {
-      _$_EventProcedureStoreBaseActionController.endAction(_$actionInfo);
+      _$_EventProcedureStoreActionController.endAction(_$actionInfo);
     }
   }
 
@@ -268,7 +312,12 @@ mixin _$EventProcedureStore on _EventProcedureStoreBase, Store {
     return '''
 state: ${state},
 editState: ${editState},
-deleteSate: ${deleteSate}
+deleteSate: ${deleteSate},
+selectedYear: ${selectedYear},
+selectedMonth: ${selectedMonth},
+selectedPaymentStatus: ${selectedPaymentStatus},
+hospitalName: ${hospitalName},
+healthInsuranceName: ${healthInsuranceName}
     ''';
   }
 }

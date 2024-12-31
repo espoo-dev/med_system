@@ -11,7 +11,7 @@ import 'package:distrito_medico/features/event_procedures/model/event_procedure.
 import 'package:distrito_medico/features/event_procedures/pages/add_event_procedure_page.dart';
 import 'package:distrito_medico/features/event_procedures/pages/edit_event_procedure_page.dart';
 import 'package:distrito_medico/features/event_procedures/pages/filter_event_procedures_page.dart';
-import 'package:distrito_medico/features/event_procedures/store/filter_event_procedure_store.dart';
+import 'package:distrito_medico/features/event_procedures/store/event_procedure.store.dart';
 import 'package:distrito_medico/features/home/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -39,7 +39,7 @@ class EventProceduresPage extends StatefulWidget {
 }
 
 class _EventProceduresPageState extends State<EventProceduresPage> {
-  final eventProcedureStore = GetIt.I.get<FilterEventProcedureStore>();
+  final eventProcedureStore = GetIt.I.get<EventProcedureStore>();
   List<EventProcedures>? _listEventProcedures = [];
   final ScrollController _scrollController = ScrollController();
   bool isFab = false;

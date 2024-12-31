@@ -1,6 +1,6 @@
 import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
 import 'package:distrito_medico/core/widgets/my_text_form_field.widget.dart';
-import 'package:distrito_medico/features/event_procedures/store/filter_event_procedure_store.dart';
+import 'package:distrito_medico/features/event_procedures/store/event_procedure.store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
@@ -16,7 +16,7 @@ class FilterEventProceduresPage extends StatefulWidget {
 }
 
 class _FilterEventProceduresPageState extends State<FilterEventProceduresPage> {
-  final filterEventProcedureStore = GetIt.I.get<FilterEventProcedureStore>();
+  final filterEventProcedureStore = GetIt.I.get<EventProcedureStore>();
 
   @override
   Widget build(BuildContext context) {
