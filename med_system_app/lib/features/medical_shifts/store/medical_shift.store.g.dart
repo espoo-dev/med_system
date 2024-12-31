@@ -57,86 +57,6 @@ mixin _$MedicalShiftStore on _MedicalShiftStoreBase, Store {
     });
   }
 
-  late final _$_showAllAtom =
-      Atom(name: '_MedicalShiftStoreBase._showAll', context: context);
-
-  @override
-  bool get _showAll {
-    _$_showAllAtom.reportRead();
-    return super._showAll;
-  }
-
-  @override
-  set _showAll(bool value) {
-    _$_showAllAtom.reportWrite(value, super._showAll, () {
-      super._showAll = value;
-    });
-  }
-
-  late final _$_showPaidAtom =
-      Atom(name: '_MedicalShiftStoreBase._showPaid', context: context);
-
-  @override
-  bool get _showPaid {
-    _$_showPaidAtom.reportRead();
-    return super._showPaid;
-  }
-
-  @override
-  set _showPaid(bool value) {
-    _$_showPaidAtom.reportWrite(value, super._showPaid, () {
-      super._showPaid = value;
-    });
-  }
-
-  late final _$_showMonthAtom =
-      Atom(name: '_MedicalShiftStoreBase._showMonth', context: context);
-
-  @override
-  bool get _showMonth {
-    _$_showMonthAtom.reportRead();
-    return super._showMonth;
-  }
-
-  @override
-  set _showMonth(bool value) {
-    _$_showMonthAtom.reportWrite(value, super._showMonth, () {
-      super._showMonth = value;
-    });
-  }
-
-  late final _$_showUnpaidAtom =
-      Atom(name: '_MedicalShiftStoreBase._showUnpaid', context: context);
-
-  @override
-  bool get _showUnpaid {
-    _$_showUnpaidAtom.reportRead();
-    return super._showUnpaid;
-  }
-
-  @override
-  set _showUnpaid(bool value) {
-    _$_showUnpaidAtom.reportWrite(value, super._showUnpaid, () {
-      super._showUnpaid = value;
-    });
-  }
-
-  late final _$_monthAtom =
-      Atom(name: '_MedicalShiftStoreBase._month', context: context);
-
-  @override
-  int get _month {
-    _$_monthAtom.reportRead();
-    return super._month;
-  }
-
-  @override
-  set _month(int value) {
-    _$_monthAtom.reportWrite(value, super._month, () {
-      super._month = value;
-    });
-  }
-
   late final _$_errorMessageAtom =
       Atom(name: '_MedicalShiftStoreBase._errorMessage', context: context);
 
@@ -150,6 +70,87 @@ mixin _$MedicalShiftStore on _MedicalShiftStoreBase, Store {
   set _errorMessage(String value) {
     _$_errorMessageAtom.reportWrite(value, super._errorMessage, () {
       super._errorMessage = value;
+    });
+  }
+
+  late final _$selectedYearAtom =
+      Atom(name: '_MedicalShiftStoreBase.selectedYear', context: context);
+
+  @override
+  int? get selectedYear {
+    _$selectedYearAtom.reportRead();
+    return super.selectedYear;
+  }
+
+  @override
+  set selectedYear(int? value) {
+    _$selectedYearAtom.reportWrite(value, super.selectedYear, () {
+      super.selectedYear = value;
+    });
+  }
+
+  late final _$selectedMonthAtom =
+      Atom(name: '_MedicalShiftStoreBase.selectedMonth', context: context);
+
+  @override
+  int? get selectedMonth {
+    _$selectedMonthAtom.reportRead();
+    return super.selectedMonth;
+  }
+
+  @override
+  set selectedMonth(int? value) {
+    _$selectedMonthAtom.reportWrite(value, super.selectedMonth, () {
+      super.selectedMonth = value;
+    });
+  }
+
+  late final _$selectedPaymentStatusAtom = Atom(
+      name: '_MedicalShiftStoreBase.selectedPaymentStatus', context: context);
+
+  @override
+  bool? get selectedPaymentStatus {
+    _$selectedPaymentStatusAtom.reportRead();
+    return super.selectedPaymentStatus;
+  }
+
+  @override
+  set selectedPaymentStatus(bool? value) {
+    _$selectedPaymentStatusAtom.reportWrite(value, super.selectedPaymentStatus,
+        () {
+      super.selectedPaymentStatus = value;
+    });
+  }
+
+  late final _$hospitalNameAtom =
+      Atom(name: '_MedicalShiftStoreBase.hospitalName', context: context);
+
+  @override
+  String? get hospitalName {
+    _$hospitalNameAtom.reportRead();
+    return super.hospitalName;
+  }
+
+  @override
+  set hospitalName(String? value) {
+    _$hospitalNameAtom.reportWrite(value, super.hospitalName, () {
+      super.hospitalName = value;
+    });
+  }
+
+  late final _$healthInsuranceNameAtom = Atom(
+      name: '_MedicalShiftStoreBase.healthInsuranceName', context: context);
+
+  @override
+  String? get healthInsuranceName {
+    _$healthInsuranceNameAtom.reportRead();
+    return super.healthInsuranceName;
+  }
+
+  @override
+  set healthInsuranceName(String? value) {
+    _$healthInsuranceNameAtom.reportWrite(value, super.healthInsuranceName, () {
+      super.healthInsuranceName = value;
     });
   }
 
@@ -195,6 +196,16 @@ mixin _$MedicalShiftStore on _MedicalShiftStoreBase, Store {
         .run(() => super.getAllMedicalShifts(isRefresh: isRefresh));
   }
 
+  late final _$getAllMedicalShiftByFiltersAsyncAction = AsyncAction(
+      '_MedicalShiftStoreBase.getAllMedicalShiftByFilters',
+      context: context);
+
+  @override
+  Future getAllMedicalShiftByFilters({bool isRefresh = false}) {
+    return _$getAllMedicalShiftByFiltersAsyncAction
+        .run(() => super.getAllMedicalShiftByFilters(isRefresh: isRefresh));
+  }
+
   late final _$deleteMedicalShiftAsyncAction = AsyncAction(
       '_MedicalShiftStoreBase.deleteMedicalShift',
       context: context);
@@ -219,22 +230,66 @@ mixin _$MedicalShiftStore on _MedicalShiftStoreBase, Store {
       ActionController(name: '_MedicalShiftStoreBase', context: context);
 
   @override
-  dynamic updateMonth(int month) {
+  void setSelectedYear(int? year) {
     final _$actionInfo = _$_MedicalShiftStoreBaseActionController.startAction(
-        name: '_MedicalShiftStoreBase.updateMonth');
+        name: '_MedicalShiftStoreBase.setSelectedYear');
     try {
-      return super.updateMonth(month);
+      return super.setSelectedYear(year);
     } finally {
       _$_MedicalShiftStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void updateFilter(bool all, bool paid, bool unpaid, bool month) {
+  void setSelectedMonth(int? month) {
     final _$actionInfo = _$_MedicalShiftStoreBaseActionController.startAction(
-        name: '_MedicalShiftStoreBase.updateFilter');
+        name: '_MedicalShiftStoreBase.setSelectedMonth');
     try {
-      return super.updateFilter(all, paid, unpaid, month);
+      return super.setSelectedMonth(month);
+    } finally {
+      _$_MedicalShiftStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setSelectedPaymentStatus(bool? status) {
+    final _$actionInfo = _$_MedicalShiftStoreBaseActionController.startAction(
+        name: '_MedicalShiftStoreBase.setSelectedPaymentStatus');
+    try {
+      return super.setSelectedPaymentStatus(status);
+    } finally {
+      _$_MedicalShiftStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setHospitalName(String? name) {
+    final _$actionInfo = _$_MedicalShiftStoreBaseActionController.startAction(
+        name: '_MedicalShiftStoreBase.setHospitalName');
+    try {
+      return super.setHospitalName(name);
+    } finally {
+      _$_MedicalShiftStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setHealthInsuranceName(String? name) {
+    final _$actionInfo = _$_MedicalShiftStoreBaseActionController.startAction(
+        name: '_MedicalShiftStoreBase.setHealthInsuranceName');
+    try {
+      return super.setHealthInsuranceName(name);
+    } finally {
+      _$_MedicalShiftStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clearFilters() {
+    final _$actionInfo = _$_MedicalShiftStoreBaseActionController.startAction(
+        name: '_MedicalShiftStoreBase.clearFilters');
+    try {
+      return super.clearFilters();
     } finally {
       _$_MedicalShiftStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -267,7 +322,12 @@ mixin _$MedicalShiftStore on _MedicalShiftStoreBase, Store {
     return '''
 state: ${state},
 editState: ${editState},
-deleteState: ${deleteState}
+deleteState: ${deleteState},
+selectedYear: ${selectedYear},
+selectedMonth: ${selectedMonth},
+selectedPaymentStatus: ${selectedPaymentStatus},
+hospitalName: ${hospitalName},
+healthInsuranceName: ${healthInsuranceName}
     ''';
   }
 }
