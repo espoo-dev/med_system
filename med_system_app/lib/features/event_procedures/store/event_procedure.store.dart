@@ -7,8 +7,7 @@ import 'package:mobx/mobx.dart';
 
 part 'event_procedure.store.g.dart';
 
-// ignore: library_private_types_in_public_api
-class EventProcedureStore = _EventProcedureStoreBase with _$EventProcedureStore;
+class EventProcedureStore = _EventProcedureStore with _$EventProcedureStore;
 
 enum EventProcedureState { idle, success, error, loading }
 
@@ -16,7 +15,7 @@ enum EditEventProcedureState { idle, success, error, loading }
 
 enum DeleteEventProcedureState { idle, success, error, loading }
 
-abstract class _EventProcedureStoreBase with Store {
+abstract class _EventProcedureStore with Store {
   final EventProcedureRepository _eventProcedureRepository;
 
   ObservableList<EventProcedures> eventProcedureList =
@@ -31,40 +30,6 @@ abstract class _EventProcedureStoreBase with Store {
   DeleteEventProcedureState deleteSate = DeleteEventProcedureState.idle;
 
   @observable
-  bool _showAll = false;
-  bool? get showAll => _showAll;
-
-  @observable
-  bool _showPaid = false;
-  bool? get showPaid => _showPaid;
-
-  @observable
-  bool _showMonth = true;
-  bool? get showMonth => _showMonth;
-
-  @observable
-  bool _showUnpaid = false;
-  bool? get showUnpaid => _showUnpaid;
-
-  @observable
-  int _month = DateTime.now().month;
-  get month => _month;
-
-  @action
-  updateMonth(int month) {
-    _month = month;
-  }
-
-  @action
-  void updateFilter(bool all, bool paid, bool unpaid, bool month) {
-    _showAll = all;
-    _showPaid = paid;
-    _showUnpaid = unpaid;
-    _showMonth = month;
-    _page = 1;
-  }
-
-  @observable
   String _errorMessage = "";
   get errorMessage => _errorMessage;
 
@@ -76,11 +41,82 @@ abstract class _EventProcedureStoreBase with Store {
   EventProcedureModel? _eventProcedureModel = EventProcedureModel();
   get eventProcedureModel => _eventProcedureModel;
 
-  _EventProcedureStoreBase(EventProcedureRepository eventProcedureRepository)
+  @observable
+  int? selectedYear;
+
+  @observable
+  int? selectedMonth;
+
+  @observable
+  bool? selectedPaymentStatus;
+
+  @observable
+  String? hospitalName;
+
+  @observable
+  String? healthInsuranceName;
+
+  _EventProcedureStore(EventProcedureRepository eventProcedureRepository)
       : _eventProcedureRepository = eventProcedureRepository;
 
+  List<int> get years {
+    int currentYear = DateTime.now().year;
+    return List.generate(20, (index) => currentYear - index);
+  }
+
+  List<int> get months => List.generate(12, (index) => index + 1);
+
   @action
-  getEventProcedures() {}
+  void setSelectedYear(int? year) {
+    selectedYear = year;
+  }
+
+  @action
+  void setSelectedMonth(int? month) {
+    selectedMonth = month;
+  }
+
+  @action
+  void setSelectedPaymentStatus(bool? status) {
+    selectedPaymentStatus = status;
+  }
+
+  @action
+  void setHospitalName(String? name) {
+    hospitalName = name;
+  }
+
+  @action
+  void setHealthInsuranceName(String? name) {
+    healthInsuranceName = name;
+  }
+
+  @action
+  void clearFilters() {
+    selectedYear = null;
+    selectedMonth = null;
+    selectedPaymentStatus = null;
+    hospitalName = null;
+    healthInsuranceName = null;
+  }
+
+  String getMonthName(int month) {
+    List<String> months = [
+      'Jan',
+      'Fev',
+      'Mar',
+      'Abr',
+      'Mai',
+      'Jun',
+      'Jul',
+      'Ago',
+      'Set',
+      'Out',
+      'Nov',
+      'Dez'
+    ];
+    return months[month - 1];
+  }
 
   @action
   getAllEventProcedures({bool isRefresh = false}) async {
@@ -95,23 +131,44 @@ abstract class _EventProcedureStoreBase with Store {
     }
     await Future.delayed(const Duration(seconds: 3));
 
-    if (_showPaid) {
-      resultEventProcedures = await _eventProcedureRepository
-          .getAllEventProceduresByPayd(_page, 10000, true)
-          .asObservable();
-    } else if (_showUnpaid) {
-      resultEventProcedures = await _eventProcedureRepository
-          .getAllEventProceduresByPayd(_page, 10000, false)
-          .asObservable();
-    } else if (_showMonth && _month != 0) {
-      resultEventProcedures = await _eventProcedureRepository
-          .getAllEventProceduresByMonth(_page, 10000, month)
-          .asObservable();
-    } else {
-      resultEventProcedures = await _eventProcedureRepository
-          .getAllEventProcedures(_page)
-          .asObservable();
-    }
+    resultEventProcedures = await _eventProcedureRepository
+        .getEventProceduresByFilters(
+            page: _page,
+            perPage: 10000,
+            month: selectedMonth,
+            year: selectedYear,
+            payd: selectedPaymentStatus,
+            healthInsuranceName: healthInsuranceName,
+            hospitalName: hospitalName)
+        .asObservable();
+
+    resultEventProcedures?.when(
+      success: (EventProcedureModel? eventProcedureModel) {
+        _eventProcedureModel = eventProcedureModel;
+        handleSuccess(eventProcedureModel?.eventProceduresList);
+      },
+      failure: (NetworkExceptions error) {
+        handleError(NetworkExceptions.getErrorMessage(error));
+      },
+    );
+  }
+
+  @action
+  getAllEventProceduresByFilters() async {
+    Result<EventProcedureModel?>? resultEventProcedures;
+    eventProcedureList.clear();
+    state = EventProcedureState.loading;
+
+    resultEventProcedures = await _eventProcedureRepository
+        .getEventProceduresByFilters(
+            page: 1,
+            perPage: 10000,
+            month: selectedMonth,
+            year: selectedYear,
+            payd: selectedPaymentStatus,
+            healthInsuranceName: healthInsuranceName,
+            hospitalName: hospitalName)
+        .asObservable();
 
     resultEventProcedures?.when(
       success: (EventProcedureModel? eventProcedureModel) {
@@ -175,10 +232,11 @@ abstract class _EventProcedureStoreBase with Store {
   dispose() {
     eventProcedureList.clear();
     _page = 1;
-    _showAll = false;
-    _showPaid = false;
-    _showUnpaid = false;
-    _showMonth = true;
     _eventProcedureModel = null;
+    selectedMonth = null;
+    selectedPaymentStatus = null;
+    selectedYear = null;
+    hospitalName = null;
+    healthInsuranceName = null;
   }
 }
