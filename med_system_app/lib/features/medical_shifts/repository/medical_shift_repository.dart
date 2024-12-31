@@ -12,6 +12,39 @@ import 'package:distrito_medico/features/medical_shifts/model/medical_shift_list
 import '../model/amount_suggestions.model.dart';
 
 class MedicalShiftRepository {
+  Future<Result<MedicalShiftList?>?> getMedicalShiftsByFilters(
+      {int? page,
+      int? perPage,
+      int? month,
+      int? year,
+      bool? payd,
+      String? hospitalName}) async {
+    try {
+      page ??= 1;
+
+      perPage ??= 10;
+      final response = await medicalShiftService.getMedicalShiftsByFilters(
+          page: page,
+          perPage: perPage,
+          month: month,
+          year: year,
+          payd: payd,
+          hospitalName: hospitalName);
+      if (response.isSuccessful) {
+        MedicalShiftList? medicalShiftList =
+            MedicalShiftList.fromJson(json.decode(response.body));
+
+        return Result.success(medicalShiftList);
+      } else if (response.statusCode == 500) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.internalServerError()));
+      }
+    } catch (e) {
+      throw Result.failure(NetworkExceptions.getException(e));
+    }
+    return null;
+  }
+
   Future<Result<MedicalShiftList?>?> getAllMedicalShifts(
       [int? page, int? perPage]) async {
     try {

@@ -33,42 +33,23 @@ abstract class _MedicalShiftStoreBase with Store {
   DeleteMedicalShiftState deleteState = DeleteMedicalShiftState.idle;
 
   @observable
-  bool _showAll = false;
-  bool? get showAll => _showAll;
-
-  @observable
-  bool _showPaid = false;
-  bool? get showPaid => _showPaid;
-
-  @observable
-  bool _showMonth = true;
-  bool? get showMonth => _showMonth;
-
-  @observable
-  bool _showUnpaid = false;
-  bool? get showUnpaid => _showUnpaid;
-
-  @observable
-  int _month = DateTime.now().month;
-  get month => _month;
-
-  @action
-  updateMonth(int month) {
-    _month = month;
-  }
-
-  @action
-  void updateFilter(bool all, bool paid, bool unpaid, bool month) {
-    _showAll = all;
-    _showPaid = paid;
-    _showUnpaid = unpaid;
-    _showMonth = month;
-    _page = 1;
-  }
-
-  @observable
   String _errorMessage = "";
   get errorMessage => _errorMessage;
+
+  @observable
+  int? selectedYear;
+
+  @observable
+  int? selectedMonth;
+
+  @observable
+  bool? selectedPaymentStatus;
+
+  @observable
+  String? hospitalName;
+
+  @observable
+  String? healthInsuranceName;
 
   @observable
   int _page = 1;
@@ -80,6 +61,65 @@ abstract class _MedicalShiftStoreBase with Store {
 
   _MedicalShiftStoreBase(MedicalShiftRepository medicalShiftRepository)
       : _medicalShiftRepository = medicalShiftRepository;
+
+  List<int> get years {
+    int currentYear = DateTime.now().year;
+    return List.generate(20, (index) => currentYear - index);
+  }
+
+  List<int> get months => List.generate(12, (index) => index + 1);
+
+  @action
+  void setSelectedYear(int? year) {
+    selectedYear = year;
+  }
+
+  @action
+  void setSelectedMonth(int? month) {
+    selectedMonth = month;
+  }
+
+  @action
+  void setSelectedPaymentStatus(bool? status) {
+    selectedPaymentStatus = status;
+  }
+
+  @action
+  void setHospitalName(String? name) {
+    hospitalName = name;
+  }
+
+  @action
+  void setHealthInsuranceName(String? name) {
+    healthInsuranceName = name;
+  }
+
+  @action
+  void clearFilters() {
+    selectedYear = null;
+    selectedMonth = null;
+    selectedPaymentStatus = null;
+    hospitalName = null;
+    healthInsuranceName = null;
+  }
+
+  String getMonthName(int month) {
+    List<String> months = [
+      'Jan',
+      'Fev',
+      'Mar',
+      'Abr',
+      'Mai',
+      'Jun',
+      'Jul',
+      'Ago',
+      'Set',
+      'Out',
+      'Nov',
+      'Dez'
+    ];
+    return months[month - 1];
+  }
 
   @action
   getMedicalShifts() {}
@@ -97,23 +137,44 @@ abstract class _MedicalShiftStoreBase with Store {
     }
     await Future.delayed(const Duration(seconds: 3));
 
-    if (_showPaid) {
-      resultMedicalShifts = await _medicalShiftRepository
-          .getAllMedicalShiftsByPayd(_page, 10000, true)
-          .asObservable();
-    } else if (_showUnpaid) {
-      resultMedicalShifts = await _medicalShiftRepository
-          .getAllMedicalShiftsByPayd(_page, 10000, false)
-          .asObservable();
-    } else if (_showMonth && _month != 0) {
-      resultMedicalShifts = await _medicalShiftRepository
-          .getAllMedicalShiftsByMonth(_page, 10000, month)
-          .asObservable();
-    } else {
-      resultMedicalShifts = await _medicalShiftRepository
-          .getAllMedicalShifts(_page)
-          .asObservable();
-    }
+    resultMedicalShifts = await _medicalShiftRepository
+        .getMedicalShiftsByFilters(
+            page: _page,
+            perPage: 10000,
+            month: selectedMonth,
+            year: selectedYear,
+            payd: selectedPaymentStatus,
+            hospitalName: hospitalName)
+        .asObservable();
+
+    resultMedicalShifts?.when(
+      success: (MedicalShiftList? medicalShiftModel) {
+        _medicalShift = medicalShiftModel;
+        handleSuccess(medicalShiftModel?.medicalShiftModelList);
+      },
+      failure: (NetworkExceptions error) {
+        handleError(NetworkExceptions.getErrorMessage(error));
+      },
+    );
+  }
+
+  @action
+  getAllMedicalShiftByFilters({bool isRefresh = false}) async {
+    Result<MedicalShiftList?>? resultMedicalShifts;
+    medicalShiftList.clear();
+    state = MedicalShiftState.loading;
+
+    await Future.delayed(const Duration(seconds: 3));
+
+    resultMedicalShifts = await _medicalShiftRepository
+        .getMedicalShiftsByFilters(
+            page: 1,
+            perPage: 10000,
+            month: selectedMonth,
+            year: selectedYear,
+            payd: selectedPaymentStatus,
+            hospitalName: hospitalName)
+        .asObservable();
 
     resultMedicalShifts?.when(
       success: (MedicalShiftList? medicalShiftModel) {
@@ -168,10 +229,10 @@ abstract class _MedicalShiftStoreBase with Store {
   dispose() {
     medicalShiftList.clear();
     _page = 1;
-    _showAll = false;
-    _showPaid = false;
-    _showUnpaid = false;
-    _showMonth = true;
     _medicalShift = null;
+    selectedMonth = null;
+    selectedPaymentStatus = null;
+    selectedYear = null;
+    hospitalName = null;
   }
 }

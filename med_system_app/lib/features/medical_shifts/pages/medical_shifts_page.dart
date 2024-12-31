@@ -2,7 +2,6 @@ import 'package:distrito_medico/core/theme/animations.dart';
 import 'package:distrito_medico/core/theme/icons.dart';
 import 'package:distrito_medico/core/utils/ui.dart';
 import 'package:distrito_medico/core/widgets/bottom_bar_widget.dart';
-import 'package:distrito_medico/core/widgets/dialog_filter_months.wdiget.dart';
 import 'package:distrito_medico/core/widgets/error.widget.dart';
 import 'package:distrito_medico/core/widgets/ext_fab.widget.dart';
 import 'package:distrito_medico/core/widgets/fab.widget.dart';
@@ -12,6 +11,7 @@ import 'package:distrito_medico/features/home/pages/home_page.dart';
 import 'package:distrito_medico/features/medical_shifts/model/medical_shift.model.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/add_medical_shift_page.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/edit_medical_shift_page.dart';
+import 'package:distrito_medico/features/medical_shifts/pages/filter_medical_shifts_page.dart';
 import 'package:distrito_medico/features/medical_shifts/store/medical_shift.store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -96,20 +96,8 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
       infiniteScrolling();
       showFabButton();
     });
-    setInitialFilter();
-    medicalShiftStore.getAllMedicalShifts(isRefresh: true);
-  }
 
-  void setInitialFilter() {
-    if (widget.initialFilter != null) {
-      if (widget.initialFilter == InitialFilter.paid) {
-        medicalShiftStore.updateFilter(false, true, false, false);
-      } else if (widget.initialFilter == InitialFilter.unpaid) {
-        medicalShiftStore.updateFilter(false, false, true, false);
-      } else {
-        medicalShiftStore.updateFilter(true, false, false, false);
-      }
-    }
+    medicalShiftStore.getAllMedicalShifts(isRefresh: true);
   }
 
   showFabButton() {
@@ -146,9 +134,16 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
         to(context, const HomePage());
       },
       child: Scaffold(
-        appBar: const MyAppBar(
+        appBar: MyAppBar(
           title: 'Plantões',
           hideLeading: true,
+          trailingIcon: const Icon(Icons.filter_list),
+          onTrailingPressed: () {
+            push(
+              context,
+              const FilterMedicalShiftsPage(),
+            );
+          },
           image: null,
         ),
         bottomNavigationBar: Observer(builder: (_) {
@@ -172,76 +167,6 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Observer(builder: (_) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FilterChip(
-                          label: const Text('Mês'),
-                          selected: medicalShiftStore.showMonth!,
-                          onSelected: (selected) async {
-                            medicalShiftStore.updateFilter(
-                                false, false, false, true);
-                            int? selectedMonth = await showDialogMonths(context,
-                                initialMonth: medicalShiftStore.month);
-                            if (selectedMonth != null) {
-                              medicalShiftStore.updateMonth(selectedMonth);
-                              _refreshMedicalShifts();
-                            }
-                          },
-                          showCheckmark: false,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FilterChip(
-                          label: const Text('Todos'),
-                          selected: medicalShiftStore.showAll!,
-                          onSelected: (selected) {
-                            medicalShiftStore.updateFilter(
-                                selected, false, false, false);
-                            _refreshMedicalShifts();
-                          },
-                          showCheckmark: false,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FilterChip(
-                          label: const Text('Recebidos'),
-                          selected: medicalShiftStore.showPaid!,
-                          onSelected: (selected) {
-                            medicalShiftStore.updateFilter(
-                                false, selected, false, false);
-                            _refreshMedicalShifts();
-                          },
-                          showCheckmark: false,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FilterChip(
-                          label: const Text('A Receber'),
-                          selected: medicalShiftStore.showUnpaid!,
-                          onSelected: (selected) {
-                            medicalShiftStore.updateFilter(
-                                false, false, selected, false);
-                            _refreshMedicalShifts();
-                          },
-                          showCheckmark: false,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: _refreshMedicalShifts,
