@@ -161,8 +161,6 @@ abstract class _EventProcedureStore with Store {
 
     resultEventProcedures = await _eventProcedureRepository
         .getEventProceduresByFilters(
-            page: 1,
-            perPage: 10000,
             month: selectedMonth,
             year: selectedYear,
             payd: selectedPaymentStatus,
