@@ -17,9 +17,6 @@ class EventProcedureRepository {
       String? healthInsuranceName,
       String? hospitalName}) async {
     try {
-      page ??= 1;
-
-      perPage ??= 10;
       final response = await eventProcedureService.getEventProceduresByFilters(
           page: page,
           perPage: perPage,

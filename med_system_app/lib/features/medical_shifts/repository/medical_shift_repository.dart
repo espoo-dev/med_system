@@ -20,9 +20,6 @@ class MedicalShiftRepository {
       bool? payd,
       String? hospitalName}) async {
     try {
-      page ??= 1;
-
-      perPage ??= 10;
       final response = await medicalShiftService.getMedicalShiftsByFilters(
           page: page,
           perPage: perPage,

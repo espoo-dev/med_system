@@ -168,8 +168,6 @@ abstract class _MedicalShiftStoreBase with Store {
 
     resultMedicalShifts = await _medicalShiftRepository
         .getMedicalShiftsByFilters(
-            page: 1,
-            perPage: 10000,
             month: selectedMonth,
             year: selectedYear,
             payd: selectedPaymentStatus,
