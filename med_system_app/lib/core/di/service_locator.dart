@@ -21,6 +21,7 @@ import 'package:distrito_medico/features/patients/repository/patient_repository.
 import 'package:distrito_medico/features/patients/store/add_patient.store.dart';
 import 'package:distrito_medico/features/patients/store/edit_patient.store.dart';
 import 'package:distrito_medico/features/patients/store/patient.store.dart';
+import 'package:distrito_medico/features/pdf/store/pdf_viewer.store.dart';
 import 'package:distrito_medico/features/procedures/repository/procedure_repository.dart';
 import 'package:distrito_medico/features/procedures/store/add_procedure.store.dart';
 import 'package:distrito_medico/features/procedures/store/edit_procedure.store.dart';
@@ -106,4 +107,6 @@ void setupServiceLocator() {
       () => MedicalShiftStore(getIt<MedicalShiftRepository>()));
   getIt.registerLazySingleton<EditMedicalShiftStore>(
       () => EditMedicalShiftStore(getIt<MedicalShiftRepository>()));
+
+  getIt.registerLazySingleton<PdfViewerStore>(() => PdfViewerStore());
 }

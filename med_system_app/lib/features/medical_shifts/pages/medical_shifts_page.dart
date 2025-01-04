@@ -137,13 +137,17 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
         appBar: MyAppBar(
           title: 'Plantões',
           hideLeading: true,
-          trailingIcon: const Icon(Icons.filter_list),
-          onTrailingPressed: () {
-            push(
-              context,
-              const FilterMedicalShiftsPage(),
-            );
-          },
+          trailingIcons: const [
+            Icon(Icons.filter_list),
+          ],
+          onTrailingPressed: [
+            () {
+              push(
+                context,
+                const FilterMedicalShiftsPage(),
+              );
+            },
+          ],
           image: null,
         ),
         bottomNavigationBar: Observer(builder: (_) {

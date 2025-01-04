@@ -61,5 +61,9 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Descrição do acesso a galeria</string>
+	<key>NSDocumentDirectoryUsageDescription</key>
+	<string>Descrição de uso do diretório de documentos do usuário</string>
 </dict>
 </plist>

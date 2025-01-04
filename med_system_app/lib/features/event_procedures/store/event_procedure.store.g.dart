@@ -57,6 +57,54 @@ mixin _$EventProcedureStore on _EventProcedureStore, Store {
     });
   }
 
+  late final _$pdfStateAtom =
+      Atom(name: '_EventProcedureStore.pdfState', context: context);
+
+  @override
+  PdfReportState get pdfState {
+    _$pdfStateAtom.reportRead();
+    return super.pdfState;
+  }
+
+  @override
+  set pdfState(PdfReportState value) {
+    _$pdfStateAtom.reportWrite(value, super.pdfState, () {
+      super.pdfState = value;
+    });
+  }
+
+  late final _$pdfErrorMessageAtom =
+      Atom(name: '_EventProcedureStore.pdfErrorMessage', context: context);
+
+  @override
+  String get pdfErrorMessage {
+    _$pdfErrorMessageAtom.reportRead();
+    return super.pdfErrorMessage;
+  }
+
+  @override
+  set pdfErrorMessage(String value) {
+    _$pdfErrorMessageAtom.reportWrite(value, super.pdfErrorMessage, () {
+      super.pdfErrorMessage = value;
+    });
+  }
+
+  late final _$_pdfPathAtom =
+      Atom(name: '_EventProcedureStore._pdfPath', context: context);
+
+  @override
+  String get _pdfPath {
+    _$_pdfPathAtom.reportRead();
+    return super._pdfPath;
+  }
+
+  @override
+  set _pdfPath(String value) {
+    _$_pdfPathAtom.reportWrite(value, super._pdfPath, () {
+      super._pdfPath = value;
+    });
+  }
+
   late final _$_errorMessageAtom =
       Atom(name: '_EventProcedureStore._errorMessage', context: context);
 
@@ -227,6 +275,16 @@ mixin _$EventProcedureStore on _EventProcedureStore, Store {
         .run(() => super.editPaymentEventProcedure(eventProcedureId, index));
   }
 
+  late final _$generatePdfReportForEventProcedureAsyncAction = AsyncAction(
+      '_EventProcedureStore.generatePdfReportForEventProcedure',
+      context: context);
+
+  @override
+  Future<void> generatePdfReportForEventProcedure() {
+    return _$generatePdfReportForEventProcedureAsyncAction
+        .run(() => super.generatePdfReportForEventProcedure());
+  }
+
   late final _$_EventProcedureStoreActionController =
       ActionController(name: '_EventProcedureStore', context: context);
 
@@ -313,6 +371,8 @@ mixin _$EventProcedureStore on _EventProcedureStore, Store {
 state: ${state},
 editState: ${editState},
 deleteSate: ${deleteSate},
+pdfState: ${pdfState},
+pdfErrorMessage: ${pdfErrorMessage},
 selectedYear: ${selectedYear},
 selectedMonth: ${selectedMonth},
 selectedPaymentStatus: ${selectedPaymentStatus},

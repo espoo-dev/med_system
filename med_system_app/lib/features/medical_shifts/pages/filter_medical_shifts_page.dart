@@ -16,7 +16,7 @@ class FilterMedicalShiftsPage extends StatefulWidget {
 }
 
 class _FilterMedicalShiftsPageState extends State<FilterMedicalShiftsPage> {
-  final filterEventProcedureStore = GetIt.I.get<MedicalShiftStore>();
+  final filterMedicalShiftStore = GetIt.I.get<MedicalShiftStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +24,14 @@ class _FilterMedicalShiftsPageState extends State<FilterMedicalShiftsPage> {
       appBar: MyAppBar(
         title: 'Filtros',
         hideLeading: true,
-        trailingIcon: const Text('Limpar'),
-        onTrailingPressed: () {
-          filterEventProcedureStore.clearFilters();
-        },
+        trailingIcons: const [
+          Text('Limpar'),
+        ],
+        onTrailingPressed: [
+          () {
+            filterMedicalShiftStore.clearFilters();
+          },
+        ],
         image: null,
       ),
       body: SingleChildScrollView(
@@ -46,12 +50,12 @@ class _FilterMedicalShiftsPageState extends State<FilterMedicalShiftsPage> {
                   ),
                   const SizedBox(height: 10),
                   DropdownButton<int>(
-                    value: filterEventProcedureStore.selectedYear,
+                    value: filterMedicalShiftStore.selectedYear,
                     hint: const Text('Selecione um ano'),
                     onChanged: (int? newValue) {
-                      filterEventProcedureStore.setSelectedYear(newValue);
+                      filterMedicalShiftStore.setSelectedYear(newValue);
                     },
-                    items: filterEventProcedureStore.years
+                    items: filterMedicalShiftStore.years
                         .map<DropdownMenuItem<int>>(
                           (int year) => DropdownMenuItem<int>(
                             value: year,
@@ -77,17 +81,17 @@ class _FilterMedicalShiftsPageState extends State<FilterMedicalShiftsPage> {
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
                       ),
-                      itemCount: filterEventProcedureStore.months.length,
+                      itemCount: filterMedicalShiftStore.months.length,
                       itemBuilder: (context, index) {
-                        final month = filterEventProcedureStore.months[index];
+                        final month = filterMedicalShiftStore.months[index];
                         return Observer(builder: (_) {
                           return FilterChip(
                             label: Text(
-                                filterEventProcedureStore.getMonthName(month)),
-                            selected: filterEventProcedureStore.selectedMonth ==
-                                month,
+                                filterMedicalShiftStore.getMonthName(month)),
+                            selected:
+                                filterMedicalShiftStore.selectedMonth == month,
                             onSelected: (isSelected) {
-                              filterEventProcedureStore
+                              filterMedicalShiftStore
                                   .setSelectedMonth(isSelected ? month : null);
                             },
                           );
@@ -107,9 +111,9 @@ class _FilterMedicalShiftsPageState extends State<FilterMedicalShiftsPage> {
                           title: const Text('Recebidos'),
                           value: true,
                           groupValue:
-                              filterEventProcedureStore.selectedPaymentStatus,
+                              filterMedicalShiftStore.selectedPaymentStatus,
                           onChanged: (value) {
-                            filterEventProcedureStore
+                            filterMedicalShiftStore
                                 .setSelectedPaymentStatus(value);
                           },
                         ),
@@ -119,9 +123,9 @@ class _FilterMedicalShiftsPageState extends State<FilterMedicalShiftsPage> {
                           title: const Text('A Receber'),
                           value: false,
                           groupValue:
-                              filterEventProcedureStore.selectedPaymentStatus,
+                              filterMedicalShiftStore.selectedPaymentStatus,
                           onChanged: (value) {
-                            filterEventProcedureStore
+                            filterMedicalShiftStore
                                 .setSelectedPaymentStatus(value);
                           },
                         ),
@@ -142,8 +146,8 @@ class _FilterMedicalShiftsPageState extends State<FilterMedicalShiftsPage> {
                       'minLength': 4,
                     },
                     onChanged: (value) =>
-                        filterEventProcedureStore.setHospitalName(value),
-                    initialValue: filterEventProcedureStore.hospitalName ?? '',
+                        filterMedicalShiftStore.setHospitalName(value),
+                    initialValue: filterMedicalShiftStore.hospitalName ?? '',
                   ),
                   const SizedBox(height: 20),
                   MyButtonWidget(
@@ -151,7 +155,7 @@ class _FilterMedicalShiftsPageState extends State<FilterMedicalShiftsPage> {
                     isLoading: false,
                     disabledColor: Colors.grey,
                     onTap: () {
-                      filterEventProcedureStore.getAllMedicalShiftByFilters();
+                      filterMedicalShiftStore.getAllMedicalShiftByFilters();
                       Navigator.pop(context);
                     },
                   ),
