@@ -29,7 +29,7 @@ class _FilterEventProceduresPageState extends State<FilterEventProceduresPage> {
             onPressed: () {
               filterEventProcedureStore.clearFilters();
             },
-            child: const Text('Limpar', style: TextStyle(color: Colors.white)),
+            child: const Text('Limpar'),
           ),
         ],
         image: null,
