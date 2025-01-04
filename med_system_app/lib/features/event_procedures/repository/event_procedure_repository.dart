@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:chopper/chopper.dart';
 import 'package:distrito_medico/core/api/api.dart';
 import 'package:distrito_medico/core/api/api_result.dart';
 import 'package:distrito_medico/core/api/network_exceptions.dart';
@@ -198,6 +199,25 @@ class EventProcedureRepository {
             EventProcedures.fromJson(json.decode(response.body));
 
         return Result.success(eventProcedureModel);
+      } else if (response.statusCode == 422) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.unableToProcess()));
+      } else if (response.statusCode == 500) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.internalServerError()));
+      }
+    } catch (e) {
+      throw Result.failure(NetworkExceptions.getException(e));
+    }
+    return null;
+  }
+
+  Future<Result<Response>?> generatePdfReport() async {
+    try {
+      final response = await eventProcedureService.generatePdfReport();
+
+      if (response.isSuccessful) {
+        return Result.success(response);
       } else if (response.statusCode == 422) {
         return Result.failure(NetworkExceptions.getException(
             const NetworkExceptions.unableToProcess()));

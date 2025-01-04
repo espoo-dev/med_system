@@ -1,9 +1,14 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:chopper/chopper.dart';
 import 'package:distrito_medico/core/api/api_result.dart';
 import 'package:distrito_medico/core/api/network_exceptions.dart';
 import 'package:distrito_medico/features/event_procedures/model/edit_payment_procedure_request.model.dart';
 import 'package:distrito_medico/features/event_procedures/model/event_procedure.model.dart';
 import 'package:distrito_medico/features/event_procedures/repository/event_procedure_repository.dart';
 import 'package:mobx/mobx.dart';
+import 'package:path_provider/path_provider.dart';
 
 part 'event_procedure.store.g.dart';
 
@@ -14,6 +19,8 @@ enum EventProcedureState { idle, success, error, loading }
 enum EditEventProcedureState { idle, success, error, loading }
 
 enum DeleteEventProcedureState { idle, success, error, loading }
+
+enum PdfReportState { idle, success, error, loading }
 
 abstract class _EventProcedureStore with Store {
   final EventProcedureRepository _eventProcedureRepository;
@@ -28,6 +35,16 @@ abstract class _EventProcedureStore with Store {
 
   @observable
   DeleteEventProcedureState deleteSate = DeleteEventProcedureState.idle;
+
+  @observable
+  PdfReportState pdfState = PdfReportState.idle;
+
+  @observable
+  String pdfErrorMessage = "";
+
+  @observable
+  String _pdfPath = "";
+  get pdfPath => _pdfPath;
 
   @observable
   String _errorMessage = "";
@@ -236,5 +253,43 @@ abstract class _EventProcedureStore with Store {
     selectedYear = null;
     hospitalName = null;
     healthInsuranceName = null;
+  }
+
+  @action
+  Future<void> generatePdfReportForEventProcedure() async {
+    pdfState = PdfReportState.loading;
+
+    Result<Response>? pdfResult =
+        await _eventProcedureRepository.generatePdfReport();
+
+    pdfResult?.when(
+      success: (response) async {
+        pdfState = PdfReportState.success;
+
+        final pdfBytes = response.bodyBytes;
+
+        _pdfPath = await _savePdfFile(pdfBytes);
+      },
+      failure: (NetworkExceptions error) {
+        pdfErrorMessage = NetworkExceptions.getErrorMessage(error);
+        pdfState = PdfReportState.error;
+      },
+    );
+  }
+
+  Future<String> _savePdfFile(Uint8List pdfBytes) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final pdfPath = '${directory.path}/report.pdf';
+
+      final pdfFile = File(pdfPath);
+      await pdfFile.writeAsBytes(pdfBytes);
+
+      return pdfPath;
+    } catch (e) {
+      pdfErrorMessage = "Erro ao salvar PDF: $e";
+      pdfState = PdfReportState.error;
+      return '';
+    }
   }
 }

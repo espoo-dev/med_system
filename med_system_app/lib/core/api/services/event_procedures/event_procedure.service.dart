@@ -49,4 +49,7 @@ abstract class EventProcedureService extends ChopperService {
     @Query('health_insurance[name]') String? healthInsuranceName,
     @Query('hospital[name]') String? hospitalName,
   });
+
+  @Get(path: 'api/v1/pdf_reports/generate')
+  Future<Response> generatePdfReport();
 }

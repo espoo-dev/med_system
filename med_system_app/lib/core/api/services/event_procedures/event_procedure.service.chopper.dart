@@ -181,4 +181,15 @@ final class _$EventProcedureService extends EventProcedureService {
     );
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<dynamic>> generatePdfReport() {
+    final Uri $url = Uri.parse('/api/v1/pdf_reports/generate');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
 }

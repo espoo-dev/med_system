@@ -24,10 +24,14 @@ class _FilterEventProceduresPageState extends State<FilterEventProceduresPage> {
       appBar: MyAppBar(
         title: 'Filtros',
         hideLeading: true,
-        trailingIcon: const Text('Limpar'),
-        onTrailingPressed: () {
-          filterEventProcedureStore.clearFilters();
-        },
+        trailingIcons: [
+          TextButton(
+            onPressed: () {
+              filterEventProcedureStore.clearFilters();
+            },
+            child: const Text('Limpar', style: TextStyle(color: Colors.white)),
+          ),
+        ],
         image: null,
       ),
       body: SingleChildScrollView(
