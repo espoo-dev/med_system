@@ -13,7 +13,6 @@ import 'package:distrito_medico/features/event_procedures/pages/edit_event_proce
 import 'package:distrito_medico/features/event_procedures/pages/filter_event_procedures_page.dart';
 import 'package:distrito_medico/features/event_procedures/store/event_procedure.store.dart';
 import 'package:distrito_medico/features/home/pages/home_page.dart';
-import 'package:distrito_medico/features/event_procedures/pages/generate_pdf_screen.page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -167,14 +166,14 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
           title: 'Procedimentos',
           hideLeading: true,
           trailingIcons: const [
-            Icon(Icons.description),
+            // Icon(Icons.description),
             Icon(Icons.filter_list)
           ],
           onTrailingPressed: [
-            () => push(
-                  context,
-                  const EventProcedureGeneratePdfPage(),
-                ),
+            // () => push(
+            //       context,
+            //       const EventProcedureGeneratePdfPage(),
+            //     ),
             () => push(
                   context,
                   const FilterEventProceduresPage(),
