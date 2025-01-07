@@ -82,11 +82,13 @@ final class _$EventProcedureService extends EventProcedureService {
   Future<Response<dynamic>> getLatestEventProcedures(
     int page,
     int perPage,
+    int? year,
   ) {
     final Uri $url = Uri.parse('/api/v1/event_procedures');
     final Map<String, dynamic> $params = <String, dynamic>{
       'page': page,
       'per_page': perPage,
+      'year': year,
     };
     final Request $request = Request(
       'GET',

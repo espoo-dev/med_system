@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/med_system_app/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/med_system_app/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/med_system_app/build" />
+      <excludeFolder url="file://$MODULE_DIR$/med_system_app/build/app/intermediates/assets/release/flutter_assets/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/med_system_app/build/app/intermediates/assets/release/flutter_assets/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/med_system_app/build/app/intermediates/assets/release/flutter_assets/build" />
+      <excludeFolder url="file://$MODULE_DIR$/med_system_app/build/app/intermediates/flutter/release/flutter_assets/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/med_system_app/build/app/intermediates/flutter/release/flutter_assets/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/med_system_app/build/app/intermediates/flutter/release/flutter_assets/build" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
