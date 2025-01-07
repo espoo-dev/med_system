@@ -108,19 +108,21 @@ class _FilterMedicalShiftsPageState extends State<FilterMedicalShiftsPage> {
                     children: [
                       Expanded(
                         child: RadioListTile<bool>(
-                          title: const Text('Recebidos'),
-                          value: true,
-                          groupValue:
-                              filterMedicalShiftStore.selectedPaymentStatus,
-                          onChanged: (value) {
-                            filterMedicalShiftStore
-                                .setSelectedPaymentStatus(value);
-                          },
-                        ),
+                            title: const Text('Recebidos',
+                                style: TextStyle(fontSize: 12)),
+                            value: true,
+                            groupValue:
+                                filterMedicalShiftStore.selectedPaymentStatus,
+                            onChanged: (value) {
+                              filterMedicalShiftStore
+                                  .setSelectedPaymentStatus(value);
+                            },
+                            contentPadding: EdgeInsets.zero),
                       ),
                       Expanded(
                         child: RadioListTile<bool>(
-                          title: const Text('A Receber'),
+                          title: const Text('A Receber',
+                              style: TextStyle(fontSize: 12)),
                           value: false,
                           groupValue:
                               filterMedicalShiftStore.selectedPaymentStatus,
@@ -128,6 +130,7 @@ class _FilterMedicalShiftsPageState extends State<FilterMedicalShiftsPage> {
                             filterMedicalShiftStore
                                 .setSelectedPaymentStatus(value);
                           },
+                          contentPadding: EdgeInsets.zero,
                         ),
                       ),
                     ],

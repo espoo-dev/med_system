@@ -108,7 +108,8 @@ class _FilterEventProceduresPageState extends State<FilterEventProceduresPage> {
                     children: [
                       Expanded(
                         child: RadioListTile<bool>(
-                          title: const Text('Recebidos'),
+                          title: const Text('Recebidos',
+                              style: TextStyle(fontSize: 12)),
                           value: true,
                           groupValue:
                               filterEventProcedureStore.selectedPaymentStatus,
@@ -116,11 +117,13 @@ class _FilterEventProceduresPageState extends State<FilterEventProceduresPage> {
                             filterEventProcedureStore
                                 .setSelectedPaymentStatus(value);
                           },
+                          contentPadding: EdgeInsets.zero,
                         ),
                       ),
                       Expanded(
                         child: RadioListTile<bool>(
-                          title: const Text('A Receber'),
+                          title: const Text('A Receber',
+                              style: TextStyle(fontSize: 12)),
                           value: false,
                           groupValue:
                               filterEventProcedureStore.selectedPaymentStatus,
@@ -128,6 +131,7 @@ class _FilterEventProceduresPageState extends State<FilterEventProceduresPage> {
                             filterEventProcedureStore
                                 .setSelectedPaymentStatus(value);
                           },
+                          contentPadding: EdgeInsets.zero,
                         ),
                       ),
                     ],

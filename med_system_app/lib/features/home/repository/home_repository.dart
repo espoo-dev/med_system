@@ -14,8 +14,8 @@ class HomeRepository {
 
       perPage ??= 3;
 
-      final response =
-          await eventProcedureService.getLatestEventProcedures(page, perPage);
+      final response = await eventProcedureService.getLatestEventProcedures(
+          page, perPage, DateTime.now().year);
       if (response.isSuccessful) {
         EventProcedureModel? eventProcedureModel =
             EventProcedureModel.fromJson(json.decode(response.body));
@@ -38,8 +38,8 @@ class HomeRepository {
 
       perPage ??= 3;
 
-      final response =
-          await medicalShiftService.getLatestMedicalShifts(page, perPage);
+      final response = await medicalShiftService.getLatestMedicalShifts(
+          page, perPage, DateTime.now().year);
       if (response.isSuccessful) {
         MedicalShiftList? medicalShiftList =
             MedicalShiftList.fromJson(json.decode(response.body));

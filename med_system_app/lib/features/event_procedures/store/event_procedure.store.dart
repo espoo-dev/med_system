@@ -264,11 +264,10 @@ abstract class _EventProcedureStore with Store {
 
     pdfResult?.when(
       success: (response) async {
-        pdfState = PdfReportState.success;
-
         final pdfBytes = response.bodyBytes;
 
         _pdfPath = await _savePdfFile(pdfBytes);
+        pdfState = PdfReportState.success;
       },
       failure: (NetworkExceptions error) {
         pdfErrorMessage = NetworkExceptions.getErrorMessage(error);
