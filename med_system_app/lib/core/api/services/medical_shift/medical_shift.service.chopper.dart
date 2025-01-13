@@ -206,4 +206,29 @@ final class _$MedicalShiftService extends MedicalShiftService {
     );
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<dynamic>> generatePdfReport({
+    String? entityName,
+    int? month,
+    int? year,
+    bool? payd,
+    String? hospitalName,
+  }) {
+    final Uri $url = Uri.parse('/api/v1/pdf_reports/generate');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'entity_name': entityName,
+      'month': month,
+      'year': year,
+      'payd': payd,
+      'hospital[name]': hospitalName,
+    };
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
 }

@@ -212,9 +212,21 @@ class EventProcedureRepository {
     return null;
   }
 
-  Future<Result<Response>?> generatePdfReport() async {
+  Future<Result<Response>?> generatePdfReport(
+      {String? entityName,
+      int? month,
+      int? year,
+      bool? payd,
+      String? healthInsuranceName,
+      String? hospitalName}) async {
     try {
-      final response = await eventProcedureService.generatePdfReport();
+      final response = await eventProcedureService.generatePdfReport(
+          entityName: 'event_procedures',
+          month: month,
+          year: year,
+          payd: payd,
+          healthInsuranceName: healthInsuranceName,
+          hospitalName: hospitalName);
 
       if (response.isSuccessful) {
         return Result.success(response);

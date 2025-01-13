@@ -167,14 +167,14 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
           title: 'Procedimentos',
           hideLeading: true,
           trailingIcons: const [
-            // Icon(Icons.description),
+            Icon(Icons.description),
             Icon(Icons.filter_list)
           ],
           onTrailingPressed: [
-            // () => push(
-            //       context,
-            //       const EventProcedureGeneratePdfPage(),
-            //     ),
+            () => push(
+                  context,
+                  const EventProcedureGeneratePdfPage(),
+                ),
             () => push(
                   context,
                   const FilterEventProceduresPage(),

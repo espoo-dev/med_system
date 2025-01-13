@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:chopper/chopper.dart';
 import 'package:distrito_medico/core/api/api.dart';
 import 'package:distrito_medico/core/api/api_result.dart';
 import 'package:distrito_medico/core/api/network_exceptions.dart';
@@ -237,6 +238,35 @@ class MedicalShiftRepository {
             AmountSuggestionModel.fromJson(json.decode(response.body));
 
         return Result.success(hospitalSuggestionModel.names);
+      } else if (response.statusCode == 500) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.internalServerError()));
+      }
+    } catch (e) {
+      throw Result.failure(NetworkExceptions.getException(e));
+    }
+    return null;
+  }
+
+  Future<Result<Response>?> generatePdfReport(
+      {String? entityName,
+      int? month,
+      int? year,
+      bool? payd,
+      String? hospitalName}) async {
+    try {
+      final response = await medicalShiftService.generatePdfReport(
+          entityName: 'medical_shifts',
+          month: month,
+          year: year,
+          payd: payd,
+          hospitalName: hospitalName);
+
+      if (response.isSuccessful) {
+        return Result.success(response);
+      } else if (response.statusCode == 422) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.unableToProcess()));
       } else if (response.statusCode == 500) {
         return Result.failure(NetworkExceptions.getException(
             const NetworkExceptions.internalServerError()));

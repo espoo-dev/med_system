@@ -170,6 +170,54 @@ mixin _$MedicalShiftStore on _MedicalShiftStoreBase, Store {
     });
   }
 
+  late final _$pdfStateAtom =
+      Atom(name: '_MedicalShiftStoreBase.pdfState', context: context);
+
+  @override
+  PdfReportState get pdfState {
+    _$pdfStateAtom.reportRead();
+    return super.pdfState;
+  }
+
+  @override
+  set pdfState(PdfReportState value) {
+    _$pdfStateAtom.reportWrite(value, super.pdfState, () {
+      super.pdfState = value;
+    });
+  }
+
+  late final _$pdfErrorMessageAtom =
+      Atom(name: '_MedicalShiftStoreBase.pdfErrorMessage', context: context);
+
+  @override
+  String get pdfErrorMessage {
+    _$pdfErrorMessageAtom.reportRead();
+    return super.pdfErrorMessage;
+  }
+
+  @override
+  set pdfErrorMessage(String value) {
+    _$pdfErrorMessageAtom.reportWrite(value, super.pdfErrorMessage, () {
+      super.pdfErrorMessage = value;
+    });
+  }
+
+  late final _$_pdfPathAtom =
+      Atom(name: '_MedicalShiftStoreBase._pdfPath', context: context);
+
+  @override
+  String get _pdfPath {
+    _$_pdfPathAtom.reportRead();
+    return super._pdfPath;
+  }
+
+  @override
+  set _pdfPath(String value) {
+    _$_pdfPathAtom.reportWrite(value, super._pdfPath, () {
+      super._pdfPath = value;
+    });
+  }
+
   late final _$_medicalShiftAtom =
       Atom(name: '_MedicalShiftStoreBase._medicalShift', context: context);
 
@@ -224,6 +272,16 @@ mixin _$MedicalShiftStore on _MedicalShiftStoreBase, Store {
   Future editPaymentMedicalShift(int medicalShiftId, dynamic index) {
     return _$editPaymentMedicalShiftAsyncAction
         .run(() => super.editPaymentMedicalShift(medicalShiftId, index));
+  }
+
+  late final _$generatePdfReportForMedicalShiftsAsyncAction = AsyncAction(
+      '_MedicalShiftStoreBase.generatePdfReportForMedicalShifts',
+      context: context);
+
+  @override
+  Future<void> generatePdfReportForMedicalShifts() {
+    return _$generatePdfReportForMedicalShiftsAsyncAction
+        .run(() => super.generatePdfReportForMedicalShifts());
   }
 
   late final _$_MedicalShiftStoreBaseActionController =
@@ -327,7 +385,9 @@ selectedYear: ${selectedYear},
 selectedMonth: ${selectedMonth},
 selectedPaymentStatus: ${selectedPaymentStatus},
 hospitalName: ${hospitalName},
-healthInsuranceName: ${healthInsuranceName}
+healthInsuranceName: ${healthInsuranceName},
+pdfState: ${pdfState},
+pdfErrorMessage: ${pdfErrorMessage}
     ''';
   }
 }

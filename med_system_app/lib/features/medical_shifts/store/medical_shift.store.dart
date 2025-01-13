@@ -1,3 +1,7 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:chopper/chopper.dart';
 import 'package:distrito_medico/core/api/api_result.dart';
 import 'package:distrito_medico/core/api/network_exceptions.dart';
 import 'package:distrito_medico/features/medical_shifts/model/edit_payment_medical_shift_request.model.dart';
@@ -5,6 +9,7 @@ import 'package:distrito_medico/features/medical_shifts/model/medical_shift.mode
 import 'package:distrito_medico/features/medical_shifts/model/medical_shift_list.model.dart';
 import 'package:distrito_medico/features/medical_shifts/repository/medical_shift_repository.dart';
 import 'package:mobx/mobx.dart';
+import 'package:path_provider/path_provider.dart';
 
 part 'medical_shift.store.g.dart';
 
@@ -16,6 +21,8 @@ enum MedicalShiftState { idle, success, error, loading }
 enum EditMedicalShiftState { idle, success, error, loading }
 
 enum DeleteMedicalShiftState { idle, success, error, loading }
+
+enum PdfReportState { idle, success, error, loading }
 
 abstract class _MedicalShiftStoreBase with Store {
   final MedicalShiftRepository _medicalShiftRepository;
@@ -37,10 +44,10 @@ abstract class _MedicalShiftStoreBase with Store {
   get errorMessage => _errorMessage;
 
   @observable
-  int? selectedYear;
+  int? selectedYear = DateTime.now().year;
 
   @observable
-  int? selectedMonth;
+  int? selectedMonth = DateTime.now().month;
 
   @observable
   bool? selectedPaymentStatus;
@@ -54,6 +61,16 @@ abstract class _MedicalShiftStoreBase with Store {
   @observable
   int _page = 1;
   get page => _page;
+
+  @observable
+  PdfReportState pdfState = PdfReportState.idle;
+
+  @observable
+  String pdfErrorMessage = "";
+
+  @observable
+  String _pdfPath = "";
+  get pdfPath => _pdfPath;
 
   @observable
   MedicalShiftList? _medicalShift = MedicalShiftList();
@@ -221,6 +238,47 @@ abstract class _MedicalShiftStoreBase with Store {
       editState = EditMedicalShiftState.error;
       handleError(NetworkExceptions.getErrorMessage(error));
     });
+  }
+
+  @action
+  Future<void> generatePdfReportForMedicalShifts() async {
+    pdfState = PdfReportState.loading;
+
+    Result<Response>? pdfResult =
+        await _medicalShiftRepository.generatePdfReport(
+            month: selectedMonth,
+            year: selectedYear,
+            payd: selectedPaymentStatus,
+            hospitalName: hospitalName);
+
+    pdfResult?.when(
+      success: (response) async {
+        final pdfBytes = response.bodyBytes;
+
+        _pdfPath = await _savePdfFile(pdfBytes);
+        pdfState = PdfReportState.success;
+      },
+      failure: (NetworkExceptions error) {
+        pdfErrorMessage = NetworkExceptions.getErrorMessage(error);
+        pdfState = PdfReportState.error;
+      },
+    );
+  }
+
+  Future<String> _savePdfFile(Uint8List pdfBytes) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final pdfPath = '${directory.path}/report.pdf';
+
+      final pdfFile = File(pdfPath);
+      await pdfFile.writeAsBytes(pdfBytes);
+
+      return pdfPath;
+    } catch (e) {
+      pdfErrorMessage = "Erro ao salvar PDF: $e";
+      pdfState = PdfReportState.error;
+      return '';
+    }
   }
 
   @action

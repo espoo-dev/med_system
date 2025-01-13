@@ -54,5 +54,12 @@ abstract class EventProcedureService extends ChopperService {
   });
 
   @Get(path: 'api/v1/pdf_reports/generate')
-  Future<Response> generatePdfReport();
+  Future<Response> generatePdfReport({
+    @Query('entity_name') String? entityName,
+    @Query('month') int? month,
+    @Query('year') int? year,
+    @Query('payd') bool? payd,
+    @Query('health_insurance[name]') String? healthInsuranceName,
+    @Query('hospital[name]') String? hospitalName,
+  });
 }

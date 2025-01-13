@@ -60,4 +60,13 @@ abstract class MedicalShiftService extends ChopperService {
     @Query('payd') bool? payd,
     @Query('hospital[name]') String? hospitalName,
   });
+
+  @Get(path: 'api/v1/pdf_reports/generate')
+  Future<Response> generatePdfReport({
+    @Query('entity_name') String? entityName,
+    @Query('month') int? month,
+    @Query('year') int? year,
+    @Query('payd') bool? payd,
+    @Query('hospital[name]') String? hospitalName,
+  });
 }
