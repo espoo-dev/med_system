@@ -12,6 +12,7 @@ import 'package:distrito_medico/features/medical_shifts/model/medical_shift.mode
 import 'package:distrito_medico/features/medical_shifts/pages/add_medical_shift_page.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/edit_medical_shift_page.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/filter_medical_shifts_page.dart';
+import 'package:distrito_medico/features/medical_shifts/pages/generate_pdf_medical_shift_screen.page.dart';
 import 'package:distrito_medico/features/medical_shifts/store/medical_shift.store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -138,9 +139,16 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
           title: 'Plantões',
           hideLeading: true,
           trailingIcons: const [
+            Icon(Icons.description),
             Icon(Icons.filter_list),
           ],
           onTrailingPressed: [
+            () {
+              push(
+                context,
+                const MedicalShiftGeneratePdfPage(),
+              );
+            },
             () {
               push(
                 context,

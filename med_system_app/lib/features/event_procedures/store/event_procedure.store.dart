@@ -59,10 +59,10 @@ abstract class _EventProcedureStore with Store {
   get eventProcedureModel => _eventProcedureModel;
 
   @observable
-  int? selectedYear;
+  int? selectedYear = DateTime.now().year;
 
   @observable
-  int? selectedMonth;
+  int? selectedMonth = DateTime.now().month;
 
   @observable
   bool? selectedPaymentStatus;
@@ -260,7 +260,12 @@ abstract class _EventProcedureStore with Store {
     pdfState = PdfReportState.loading;
 
     Result<Response>? pdfResult =
-        await _eventProcedureRepository.generatePdfReport();
+        await _eventProcedureRepository.generatePdfReport(
+            month: selectedMonth,
+            year: selectedYear,
+            payd: selectedPaymentStatus,
+            healthInsuranceName: healthInsuranceName,
+            hospitalName: hospitalName);
 
     pdfResult?.when(
       success: (response) async {
