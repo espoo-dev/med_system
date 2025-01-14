@@ -45,7 +45,7 @@ class _FilterMedicalShiftsPageState extends State<FilterMedicalShiftsPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'Selecione o ano',
+                    'Ano',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
@@ -66,7 +66,7 @@ class _FilterMedicalShiftsPageState extends State<FilterMedicalShiftsPage> {
                   ),
                   const SizedBox(height: 20),
                   const Text(
-                    'Selecione o mês',
+                    'Mês',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
@@ -100,7 +100,7 @@ class _FilterMedicalShiftsPageState extends State<FilterMedicalShiftsPage> {
                     ),
                   ),
                   const Text(
-                    'Selecione o status de pagamento',
+                    'Status de pagamento',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
