@@ -9,6 +9,22 @@ part of 'event_procedure.store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$EventProcedureStore on _EventProcedureStore, Store {
+  late final _$filterStateAtom =
+      Atom(name: '_EventProcedureStore.filterState', context: context);
+
+  @override
+  FilterProcedureState get filterState {
+    _$filterStateAtom.reportRead();
+    return super.filterState;
+  }
+
+  @override
+  set filterState(FilterProcedureState value) {
+    _$filterStateAtom.reportWrite(value, super.filterState, () {
+      super.filterState = value;
+    });
+  }
+
   late final _$stateAtom =
       Atom(name: '_EventProcedureStore.state', context: context);
 
@@ -54,6 +70,22 @@ mixin _$EventProcedureStore on _EventProcedureStore, Store {
   set deleteSate(DeleteEventProcedureState value) {
     _$deleteSateAtom.reportWrite(value, super.deleteSate, () {
       super.deleteSate = value;
+    });
+  }
+
+  late final _$_hospitalAtom =
+      Atom(name: '_EventProcedureStore._hospital', context: context);
+
+  @override
+  Hospital? get _hospital {
+    _$_hospitalAtom.reportRead();
+    return super._hospital;
+  }
+
+  @override
+  set _hospital(Hospital? value) {
+    _$_hospitalAtom.reportWrite(value, super._hospital, () {
+      super._hospital = value;
     });
   }
 
@@ -235,6 +267,30 @@ mixin _$EventProcedureStore on _EventProcedureStore, Store {
     });
   }
 
+  late final _$_healthInsuranceAtom =
+      Atom(name: '_EventProcedureStore._healthInsurance', context: context);
+
+  @override
+  HealthInsurance? get _healthInsurance {
+    _$_healthInsuranceAtom.reportRead();
+    return super._healthInsurance;
+  }
+
+  @override
+  set _healthInsurance(HealthInsurance? value) {
+    _$_healthInsuranceAtom.reportWrite(value, super._healthInsurance, () {
+      super._healthInsurance = value;
+    });
+  }
+
+  late final _$fetchAllDataAsyncAction =
+      AsyncAction('_EventProcedureStore.fetchAllData', context: context);
+
+  @override
+  Future fetchAllData() {
+    return _$fetchAllDataAsyncAction.run(() => super.fetchAllData());
+  }
+
   late final _$getAllEventProceduresAsyncAction = AsyncAction(
       '_EventProcedureStore.getAllEventProcedures',
       context: context);
@@ -285,6 +341,24 @@ mixin _$EventProcedureStore on _EventProcedureStore, Store {
         .run(() => super.generatePdfReportForEventProcedure());
   }
 
+  late final _$getAllHospitalsAsyncAction =
+      AsyncAction('_EventProcedureStore.getAllHospitals', context: context);
+
+  @override
+  Future<dynamic> getAllHospitals() {
+    return _$getAllHospitalsAsyncAction.run(() => super.getAllHospitals());
+  }
+
+  late final _$getAllHealthInsurancesAsyncAction = AsyncAction(
+      '_EventProcedureStore.getAllHealthInsurances',
+      context: context);
+
+  @override
+  Future<dynamic> getAllHealthInsurances() {
+    return _$getAllHealthInsurancesAsyncAction
+        .run(() => super.getAllHealthInsurances());
+  }
+
   late final _$_EventProcedureStoreActionController =
       ActionController(name: '_EventProcedureStore', context: context);
 
@@ -322,22 +396,22 @@ mixin _$EventProcedureStore on _EventProcedureStore, Store {
   }
 
   @override
-  void setHospitalName(String? name) {
+  void setHospitalName(Hospital hospital) {
     final _$actionInfo = _$_EventProcedureStoreActionController.startAction(
         name: '_EventProcedureStore.setHospitalName');
     try {
-      return super.setHospitalName(name);
+      return super.setHospitalName(hospital);
     } finally {
       _$_EventProcedureStoreActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void setHealthInsuranceName(String? name) {
+  void setHealthInsuranceName(HealthInsurance healthInsurance) {
     final _$actionInfo = _$_EventProcedureStoreActionController.startAction(
         name: '_EventProcedureStore.setHealthInsuranceName');
     try {
-      return super.setHealthInsuranceName(name);
+      return super.setHealthInsuranceName(healthInsurance);
     } finally {
       _$_EventProcedureStoreActionController.endAction(_$actionInfo);
     }
@@ -368,6 +442,7 @@ mixin _$EventProcedureStore on _EventProcedureStore, Store {
   @override
   String toString() {
     return '''
+filterState: ${filterState},
 state: ${state},
 editState: ${editState},
 deleteSate: ${deleteSate},

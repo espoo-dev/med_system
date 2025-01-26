@@ -7,6 +7,10 @@ import 'package:distrito_medico/core/api/network_exceptions.dart';
 import 'package:distrito_medico/features/event_procedures/model/edit_payment_procedure_request.model.dart';
 import 'package:distrito_medico/features/event_procedures/model/event_procedure.model.dart';
 import 'package:distrito_medico/features/event_procedures/repository/event_procedure_repository.dart';
+import 'package:distrito_medico/features/health_insurances/model/health_insurances.model.dart';
+import 'package:distrito_medico/features/health_insurances/repository/health_insurances_repository.dart';
+import 'package:distrito_medico/features/hospitals/model/hospital.model.dart';
+import 'package:distrito_medico/features/hospitals/respository/hospital_repository.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -20,13 +24,20 @@ enum EditEventProcedureState { idle, success, error, loading }
 
 enum DeleteEventProcedureState { idle, success, error, loading }
 
+enum FilterProcedureState { idle, success, error, loading }
+
 enum PdfReportState { idle, success, error, loading }
 
 abstract class _EventProcedureStore with Store {
   final EventProcedureRepository _eventProcedureRepository;
+  final HospitalRepository _hospitalRepository;
+  final HealthInsurancesRepository _healthInsurancesRepository;
 
   ObservableList<EventProcedures> eventProcedureList =
       ObservableList<EventProcedures>();
+
+  @observable
+  FilterProcedureState filterState = FilterProcedureState.idle;
 
   @observable
   EventProcedureState state = EventProcedureState.idle;
@@ -35,6 +46,15 @@ abstract class _EventProcedureStore with Store {
 
   @observable
   DeleteEventProcedureState deleteSate = DeleteEventProcedureState.idle;
+
+  ObservableList<Hospital> hospitalList = ObservableList<Hospital>();
+  ObservableList<HealthInsurance> healthInsuranceList =
+      ObservableList<HealthInsurance>();
+
+  @observable
+  Hospital? _hospital;
+
+  Hospital? get hospital => _hospital;
 
   @observable
   PdfReportState pdfState = PdfReportState.idle;
@@ -73,8 +93,18 @@ abstract class _EventProcedureStore with Store {
   @observable
   String? healthInsuranceName;
 
-  _EventProcedureStore(EventProcedureRepository eventProcedureRepository)
-      : _eventProcedureRepository = eventProcedureRepository;
+  @observable
+  HealthInsurance? _healthInsurance;
+
+  HealthInsurance? get healthInsurance => _healthInsurance;
+
+  _EventProcedureStore(
+      EventProcedureRepository eventProcedureRepository,
+      HospitalRepository hospitalRepository,
+      HealthInsurancesRepository healthInsurancesRepository)
+      : _eventProcedureRepository = eventProcedureRepository,
+        _hospitalRepository = hospitalRepository,
+        _healthInsurancesRepository = healthInsurancesRepository;
 
   List<int> get years {
     int currentYear = DateTime.now().year;
@@ -99,13 +129,22 @@ abstract class _EventProcedureStore with Store {
   }
 
   @action
-  void setHospitalName(String? name) {
-    hospitalName = name;
+  void setHospitalName(Hospital hospital) {
+    _hospital = Hospital(
+        id: hospital.id,
+        name: hospital.name ?? _hospital?.name ?? "",
+        address: hospital.address ?? _hospital?.address ?? "");
+    hospitalName = hospital.name;
   }
 
   @action
-  void setHealthInsuranceName(String? name) {
-    healthInsuranceName = name;
+  void setHealthInsuranceName(HealthInsurance healthInsurance) {
+    _healthInsurance = HealthInsurance(
+      // ignore: unnecessary_null_in_if_null_operators
+      id: healthInsurance.id ?? null,
+      name: healthInsurance.name ?? _healthInsurance?.name ?? "",
+    );
+    healthInsuranceName = healthInsurance.name;
   }
 
   @action
@@ -133,6 +172,26 @@ abstract class _EventProcedureStore with Store {
       'Dez'
     ];
     return months[month - 1];
+  }
+
+  @action
+  fetchAllData() async {
+    try {
+      if (selectedMonth == null && selectedYear == null) {
+        selectedYear = DateTime.now().year;
+        selectedMonth = DateTime.now().month;
+      }
+      filterState = FilterProcedureState.loading;
+      await Future.wait([
+        // Fetch all hospitals
+        getAllHospitals(),
+        getAllHealthInsurances()
+      ]);
+      filterState = FilterProcedureState.success;
+    } catch (error) {
+      filterState = FilterProcedureState.error;
+      handleError(error.toString());
+    }
   }
 
   @action
@@ -245,6 +304,10 @@ abstract class _EventProcedureStore with Store {
 
   @action
   dispose() {
+    healthInsuranceList.clear();
+    _healthInsurance = null;
+    hospitalList.clear();
+    _hospital = null;
     eventProcedureList.clear();
     _page = 1;
     _eventProcedureModel = null;
@@ -295,5 +358,31 @@ abstract class _EventProcedureStore with Store {
       pdfState = PdfReportState.error;
       return '';
     }
+  }
+
+  @action
+  Future getAllHospitals() async {
+    hospitalList.clear();
+    var resultHospital =
+        await _hospitalRepository.getAllHospitals().asObservable();
+    resultHospital?.when(success: (List<Hospital>? listHospital) {
+      hospitalList.addAll(listHospital!);
+    }, failure: (NetworkExceptions error) {
+      handleError(NetworkExceptions.getErrorMessage(error));
+    });
+  }
+
+  @action
+  Future getAllHealthInsurances() async {
+    healthInsuranceList.clear();
+
+    var resultHealthInsurances =
+        await _healthInsurancesRepository.getAllInsurances().asObservable();
+    resultHealthInsurances?.when(
+        success: (List<HealthInsurance>? listHealthInsurances) {
+      healthInsuranceList.addAll(listHealthInsurances!);
+    }, failure: (NetworkExceptions error) {
+      handleError(NetworkExceptions.getErrorMessage(error));
+    });
   }
 }

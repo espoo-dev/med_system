@@ -139,6 +139,14 @@ abstract class _MedicalShiftStoreBase with Store {
   }
 
   @action
+  init() {
+    if (selectedMonth == null && selectedYear == null) {
+      selectedYear = DateTime.now().year;
+      selectedMonth = DateTime.now().month;
+    }
+  }
+
+  @action
   getMedicalShifts() {}
 
   @action
