@@ -1,6 +1,9 @@
 import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
-import 'package:distrito_medico/core/widgets/my_text_form_field.widget.dart';
+import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown_search_health_insurances.widget.dart';
+import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown_search_hospitals.widget.dart';
 import 'package:distrito_medico/features/event_procedures/store/event_procedure.store.dart';
+import 'package:distrito_medico/features/health_insurances/model/health_insurances.model.dart';
+import 'package:distrito_medico/features/hospitals/model/hospital.model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
@@ -17,6 +20,12 @@ class FilterEventProceduresPage extends StatefulWidget {
 
 class _FilterEventProceduresPageState extends State<FilterEventProceduresPage> {
   final filterEventProcedureStore = GetIt.I.get<EventProcedureStore>();
+
+  @override
+  void initState() {
+    super.initState();
+    filterEventProcedureStore.fetchAllData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,42 +145,57 @@ class _FilterEventProceduresPageState extends State<FilterEventProceduresPage> {
                       ),
                     ],
                   ),
-                  const Text(
-                    'Nome do hospital',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
+
                   const SizedBox(height: 10),
-                  MyTextFormField(
-                    label: 'Nome hospital',
-                    placeholder: 'Digite nome do hospital',
-                    inputType: TextInputType.text,
-                    validators: const {
-                      'required': true,
-                      'minLength': 4,
-                    },
-                    onChanged: (value) =>
-                        filterEventProcedureStore.setHospitalName(value),
-                    initialValue: filterEventProcedureStore.hospitalName ?? '',
+                  DropdownSearchHospitals(
+                      hospitalList: filterEventProcedureStore.hospitalList,
+                      selectedHospital:
+                          filterEventProcedureStore.hospital ?? Hospital(),
+                      onChanged: (Hospital? hospital) {
+                        filterEventProcedureStore.setHospitalName(hospital!);
+                      }),
+                  // MyTextFormField(
+                  //   label: 'Nome hospital',
+                  //   placeholder: 'Digite nome do hospital',
+                  //   inputType: TextInputType.text,
+                  //   validators: const {
+                  //     'required': true,
+                  //     'minLength': 4,
+                  //   },
+                  //   onChanged: (value) =>
+                  //       filterEventProcedureStore.setHospitalName(value),
+                  //   initialValue: filterEventProcedureStore.hospitalName ?? '',
+                  // ),
+                  const SizedBox(height: 15),
+                  DropdownHealthInsurances(
+                    healthInsuranceList:
+                        filterEventProcedureStore.healthInsuranceList,
+                    selectedHealthInsurance:
+                        filterEventProcedureStore.healthInsurance ??
+                            HealthInsurance(),
+                    onChanged: (HealthInsurance? healthInsurance) =>
+                        filterEventProcedureStore
+                            .setHealthInsuranceName(healthInsurance!),
                   ),
-                  const Text(
-                    'Nome do plano de saúde',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  MyTextFormField(
-                    label: 'Nome plano de saúde',
-                    placeholder: 'Digite nome do plano de saúde',
-                    inputType: TextInputType.text,
-                    validators: const {
-                      'required': true,
-                      'minLength': 4,
-                    },
-                    onChanged: (value) =>
-                        filterEventProcedureStore.setHealthInsuranceName(value),
-                    initialValue:
-                        filterEventProcedureStore.healthInsuranceName ?? '',
-                  ),
-                  const SizedBox(height: 20),
+                  // const Text(
+                  //   'Nome do plano de saúde',
+                  //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  // ),
+                  // const SizedBox(height: 10),
+                  // MyTextFormField(
+                  //   label: 'Nome plano de saúde',
+                  //   placeholder: 'Digite nome do plano de saúde',
+                  //   inputType: TextInputType.text,
+                  //   validators: const {
+                  //     'required': true,
+                  //     'minLength': 4,
+                  //   },
+                  //   onChanged: (value) =>
+                  //       filterEventProcedureStore.setHealthInsuranceName(value),
+                  //   initialValue:
+                  //       filterEventProcedureStore.healthInsuranceName ?? '',
+                  // ),
+                  const SizedBox(height: 15),
                   MyButtonWidget(
                     text: 'Filtrar',
                     isLoading: false,

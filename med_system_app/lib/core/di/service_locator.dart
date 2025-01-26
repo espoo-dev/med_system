@@ -66,8 +66,10 @@ void setupServiceLocator() {
       () => HospitalStore(getIt<HospitalRepository>()));
   getIt.registerLazySingleton<HealthInsurancesStore>(
       () => HealthInsurancesStore(getIt<HealthInsurancesRepository>()));
-  getIt.registerLazySingleton<EventProcedureStore>(
-      () => EventProcedureStore(getIt<EventProcedureRepository>()));
+  getIt.registerLazySingleton<EventProcedureStore>(() => EventProcedureStore(
+      getIt<EventProcedureRepository>(),
+      getIt<HospitalRepository>(),
+      getIt<HealthInsurancesRepository>()));
   getIt.registerLazySingleton<AddEventProcedureStore>(
       () => AddEventProcedureStore(
             getIt<ProcedureRepository>(),
@@ -103,8 +105,9 @@ void setupServiceLocator() {
       () => EditHealthInsuranceStore(getIt<HealthInsurancesRepository>()));
   getIt.registerLazySingleton<AddMedicalShiftStore>(
       () => AddMedicalShiftStore(getIt<MedicalShiftRepository>()));
-  getIt.registerLazySingleton<MedicalShiftStore>(
-      () => MedicalShiftStore(getIt<MedicalShiftRepository>()));
+  getIt.registerLazySingleton<MedicalShiftStore>(() => MedicalShiftStore(
+        getIt<MedicalShiftRepository>(),
+      ));
   getIt.registerLazySingleton<EditMedicalShiftStore>(
       () => EditMedicalShiftStore(getIt<MedicalShiftRepository>()));
 

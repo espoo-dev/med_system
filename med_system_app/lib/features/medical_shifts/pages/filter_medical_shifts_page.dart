@@ -17,6 +17,11 @@ class FilterMedicalShiftsPage extends StatefulWidget {
 
 class _FilterMedicalShiftsPageState extends State<FilterMedicalShiftsPage> {
   final filterMedicalShiftStore = GetIt.I.get<MedicalShiftStore>();
+  @override
+  void initState() {
+    super.initState();
+    filterMedicalShiftStore.init();
+  }
 
   @override
   Widget build(BuildContext context) {
