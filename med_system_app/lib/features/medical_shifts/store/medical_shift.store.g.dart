@@ -354,6 +354,17 @@ mixin _$MedicalShiftStore on _MedicalShiftStoreBase, Store {
   }
 
   @override
+  dynamic init() {
+    final _$actionInfo = _$_MedicalShiftStoreBaseActionController.startAction(
+        name: '_MedicalShiftStoreBase.init');
+    try {
+      return super.init();
+    } finally {
+      _$_MedicalShiftStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic getMedicalShifts() {
     final _$actionInfo = _$_MedicalShiftStoreBaseActionController.startAction(
         name: '_MedicalShiftStoreBase.getMedicalShifts');

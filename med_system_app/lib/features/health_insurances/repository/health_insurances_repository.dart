@@ -8,14 +8,16 @@ import 'package:distrito_medico/features/health_insurances/model/health_insuranc
 
 class HealthInsurancesRepository {
   Future<Result<List<HealthInsurance>?>?> getAllInsurances(
-      [int? page, int? perPage]) async {
+      [int? page, int? perPage, bool? custom]) async {
     try {
       page ??= 1;
 
       perPage ??= 10000;
 
-      final response =
-          await healthInsurancesService.getAllHealthInsurances(page, perPage);
+      custom ??= false;
+
+      final response = await healthInsurancesService.getAllHealthInsurances(
+          page, perPage, custom);
       if (response.isSuccessful) {
         HealthInsuranceModel? healthInsuranceModel =
             HealthInsuranceModel.fromJson(json.decode(response.body));
