@@ -21,11 +21,13 @@ final class _$HealthInsurancesService extends HealthInsurancesService {
   Future<Response<dynamic>> getAllHealthInsurances(
     int page,
     int perPage,
+    bool custom,
   ) {
     final Uri $url = Uri.parse('/api/v1/health_insurances');
     final Map<String, dynamic> $params = <String, dynamic>{
       'page': page,
       'per_page': perPage,
+      'custom': custom,
     };
     final Request $request = Request(
       'GET',
