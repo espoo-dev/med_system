@@ -9,8 +9,10 @@ abstract class HealthInsurancesService extends ChopperService {
       _$HealthInsurancesService(client);
 
   @Get(path: 'api/v1/health_insurances')
-  Future<Response> getAllHealthInsurances(@Query('page') int page,
-      @Query('per_page') int perPage, @Query('custom') bool custom);
+  Future<Response> getAllHealthInsurances(
+      {@Query('page') int? page,
+      @Query('per_page') int? perPage,
+      @Query('custom') bool? custom});
 
   @Get(path: 'api/v1/health_insurances')
   Future<Response> getAllHealthInsurancesByCustom(@Query('custom') bool custom);
