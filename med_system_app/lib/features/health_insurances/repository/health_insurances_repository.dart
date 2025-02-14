@@ -14,10 +14,8 @@ class HealthInsurancesRepository {
 
       perPage ??= 10000;
 
-      custom ??= false;
-
       final response = await healthInsurancesService.getAllHealthInsurances(
-          page, perPage, custom);
+          page: page, perPage: perPage, custom: custom);
       if (response.isSuccessful) {
         HealthInsuranceModel? healthInsuranceModel =
             HealthInsuranceModel.fromJson(json.decode(response.body));

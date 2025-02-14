@@ -18,11 +18,11 @@ final class _$HealthInsurancesService extends HealthInsurancesService {
   final Type definitionType = HealthInsurancesService;
 
   @override
-  Future<Response<dynamic>> getAllHealthInsurances(
-    int page,
-    int perPage,
-    bool custom,
-  ) {
+  Future<Response<dynamic>> getAllHealthInsurances({
+    int? page,
+    int? perPage,
+    bool? custom,
+  }) {
     final Uri $url = Uri.parse('/api/v1/health_insurances');
     final Map<String, dynamic> $params = <String, dynamic>{
       'page': page,
