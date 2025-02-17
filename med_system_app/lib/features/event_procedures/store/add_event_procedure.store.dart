@@ -523,8 +523,9 @@ abstract class _AddEventProcedureStoreBase with Store {
   Future getAllHealthInsurances() async {
     healthInsuranceList.clear();
 
-    var resultHealthInsurances =
-        await _healthInsurancesRepository.getAllInsurances().asObservable();
+    var resultHealthInsurances = await _healthInsurancesRepository
+        .getAllInsurancesByCustom(false)
+        .asObservable();
     resultHealthInsurances?.when(
         success: (List<HealthInsurance>? listHealthInsurances) {
       healthInsuranceList.addAll(listHealthInsurances!);
