@@ -58,7 +58,7 @@ abstract class MedicalShiftService extends ChopperService {
     @Query('month') int? month,
     @Query('year') int? year,
     @Query('payd') bool? payd,
-    @Query('hospital[name]') String? hospitalName,
+    @Query('hospital_name') String? hospitalName,
   });
 
   @Get(path: 'api/v1/pdf_reports/generate')
@@ -67,6 +67,6 @@ abstract class MedicalShiftService extends ChopperService {
     @Query('month') int? month,
     @Query('year') int? year,
     @Query('payd') bool? payd,
-    @Query('hospital[name]') String? hospitalName,
+    @Query('hospital_name') String? hospitalName,
   });
 }
