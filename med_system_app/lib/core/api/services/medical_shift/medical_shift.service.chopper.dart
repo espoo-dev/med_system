@@ -196,7 +196,7 @@ final class _$MedicalShiftService extends MedicalShiftService {
       'month': month,
       'year': year,
       'payd': payd,
-      'hospital[name]': hospitalName,
+      'hospital_name': hospitalName,
     };
     final Request $request = Request(
       'GET',
@@ -221,7 +221,7 @@ final class _$MedicalShiftService extends MedicalShiftService {
       'month': month,
       'year': year,
       'payd': payd,
-      'hospital[name]': hospitalName,
+      'hospital_name': hospitalName,
     };
     final Request $request = Request(
       'GET',
