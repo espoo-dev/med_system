@@ -67,6 +67,6 @@ abstract class MedicalShiftService extends ChopperService {
     @Query('month') int? month,
     @Query('year') int? year,
     @Query('payd') bool? payd,
-    @Query('hospital_name') String? hospitalName,
+    @Query('hospital[name]') String? hospitalName,
   });
 }
