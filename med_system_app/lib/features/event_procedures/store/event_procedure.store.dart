@@ -311,9 +311,9 @@ abstract class _EventProcedureStore with Store {
     eventProcedureList.clear();
     _page = 1;
     _eventProcedureModel = null;
-    selectedMonth = null;
+    //selectedMonth = null;
     selectedPaymentStatus = null;
-    selectedYear = null;
+    //selectedYear = null;
     hospitalName = null;
     healthInsuranceName = null;
   }
