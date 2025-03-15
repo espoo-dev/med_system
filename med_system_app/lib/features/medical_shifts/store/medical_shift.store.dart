@@ -294,9 +294,9 @@ abstract class _MedicalShiftStoreBase with Store {
     medicalShiftList.clear();
     _page = 1;
     _medicalShift = null;
-    selectedMonth = null;
+    //selectedMonth = null;
     selectedPaymentStatus = null;
-    selectedYear = null;
+    //selectedYear = null;
     hospitalName = null;
   }
 }
