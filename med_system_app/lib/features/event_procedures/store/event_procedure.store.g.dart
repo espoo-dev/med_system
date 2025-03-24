@@ -440,6 +440,17 @@ mixin _$EventProcedureStore on _EventProcedureStore, Store {
   }
 
   @override
+  void filterEventProceduresByDate(DateTime selectedDate) {
+    final _$actionInfo = _$_EventProcedureStoreActionController.startAction(
+        name: '_EventProcedureStore.filterEventProceduresByDate');
+    try {
+      return super.filterEventProceduresByDate(selectedDate);
+    } finally {
+      _$_EventProcedureStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 filterState: ${filterState},

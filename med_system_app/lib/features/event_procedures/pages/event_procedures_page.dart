@@ -12,6 +12,7 @@ import 'package:distrito_medico/features/event_procedures/pages/add_event_proced
 import 'package:distrito_medico/features/event_procedures/pages/edit_event_procedure_page.dart';
 import 'package:distrito_medico/features/event_procedures/pages/filter_event_procedures_page.dart';
 import 'package:distrito_medico/features/event_procedures/pages/generate_pdf_screen.page.dart';
+import 'package:distrito_medico/features/event_procedures/pages/widgets/calendar_widget.dart';
 import 'package:distrito_medico/features/event_procedures/store/event_procedure.store.dart';
 import 'package:distrito_medico/features/home/pages/home_page.dart';
 import 'package:flutter/material.dart';
@@ -213,6 +214,26 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
             //         eventProcedureStore.eventProcedureModel?.totalPayd ?? "",
             //   );
             // }),
+            Observer(
+              builder: (_) {
+                return Column(
+                  children: [
+                    CalendarWidget(
+                      events: eventProcedureStore.eventProcedureListCalendar,
+                      initialMonth: eventProcedureStore.selectedMonth ??
+                          DateTime.now().year,
+                      initialYear: eventProcedureStore.selectedYear ??
+                          DateTime.now().year,
+                      onDaySelected: (selectedDate) {
+                        print('Data selecionada: $selectedDate');
+                        eventProcedureStore
+                            .filterEventProceduresByDate(selectedDate);
+                      },
+                    ),
+                  ],
+                );
+              },
+            ),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: _refreshProcedures,
