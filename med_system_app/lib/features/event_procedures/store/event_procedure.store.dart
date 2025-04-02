@@ -11,7 +11,6 @@ import 'package:distrito_medico/features/health_insurances/model/health_insuranc
 import 'package:distrito_medico/features/health_insurances/repository/health_insurances_repository.dart';
 import 'package:distrito_medico/features/hospitals/model/hospital.model.dart';
 import 'package:distrito_medico/features/hospitals/respository/hospital_repository.dart';
-import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -35,9 +34,6 @@ abstract class _EventProcedureStore with Store {
   final HealthInsurancesRepository _healthInsurancesRepository;
 
   ObservableList<EventProcedures> eventProcedureList =
-      ObservableList<EventProcedures>();
-
-  ObservableList<EventProcedures> eventProcedureListCalendar =
       ObservableList<EventProcedures>();
 
   @observable
@@ -199,12 +195,11 @@ abstract class _EventProcedureStore with Store {
   }
 
   @action
-  getAllEventProcedures({bool isRefresh = false}) async {
+  getAllEventProcedures({bool isRefresh = false, int perPage = 10000}) async {
     Result<EventProcedureModel?>? resultEventProcedures;
     if (isRefresh) {
       _page = 1;
       eventProcedureList.clear();
-      eventProcedureListCalendar.clear();
     }
     state = EventProcedureState.loading;
     if (!isRefresh) {
@@ -215,7 +210,7 @@ abstract class _EventProcedureStore with Store {
     resultEventProcedures = await _eventProcedureRepository
         .getEventProceduresByFilters(
             page: _page,
-            perPage: 10000,
+            perPage: perPage,
             month: selectedMonth,
             year: selectedYear,
             payd: selectedPaymentStatus,
@@ -238,7 +233,6 @@ abstract class _EventProcedureStore with Store {
   getAllEventProceduresByFilters() async {
     Result<EventProcedureModel?>? resultEventProcedures;
     eventProcedureList.clear();
-    eventProcedureListCalendar.clear();
     state = EventProcedureState.loading;
 
     resultEventProcedures = await _eventProcedureRepository
@@ -263,7 +257,6 @@ abstract class _EventProcedureStore with Store {
 
   handleSuccess(List<EventProcedures>? listEventProcedures) {
     eventProcedureList.addAll(listEventProcedures!);
-    eventProcedureListCalendar.addAll(listEventProcedures!);
     state = EventProcedureState.success;
   }
 
@@ -391,48 +384,5 @@ abstract class _EventProcedureStore with Store {
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));
     });
-  }
-
-  @action
-  void filterEventProceduresByDate(DateTime selectedDate) {
-    // Criar uma nova lista para armazenar os eventos filtrados
-    List<EventProcedures> filteredList = [];
-    filteredList.clear();
-
-    // Iterando sobre a lista de eventos com forEach
-    for (var eventProcedure in eventProcedureListCalendar) {
-      // Verificando se a data do evento não está vazia
-      if (eventProcedure.date?.isEmpty ?? true) {
-        continue; // Ignorar evento com data inválida
-      }
-
-      // Convertendo o campo 'date' de EventProcedure (string) para DateTime
-      try {
-        DateTime eventDate =
-            DateFormat('dd/MM/yyyy').parse(eventProcedure.date ?? '');
-
-        // Ajustando as datas para o mesmo horário (meia-noite)
-        eventDate = DateTime(eventDate.year, eventDate.month, eventDate.day);
-        selectedDate =
-            DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
-
-        // Comparando as datas
-        if (eventDate.isAtSameMomentAs(selectedDate)) {
-          // Adiciona o evento filtrado à lista
-          filteredList.add(eventProcedure);
-        }
-      } catch (e) {
-        // Caso ocorra erro no parse
-        print(
-            "Erro ao parsear a data do evento: ${eventProcedure.date} - Erro: $e");
-      }
-    }
-
-    // Atualizando o eventProcedureList com os eventos filtrados
-    eventProcedureList.clear();
-    eventProcedureList.addAll(filteredList);
-
-    // Log para verificação
-    print("Lista filtrada atualizada: ${eventProcedureList.length} eventos.");
   }
 }

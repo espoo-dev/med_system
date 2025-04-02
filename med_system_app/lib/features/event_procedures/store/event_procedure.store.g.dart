@@ -296,9 +296,9 @@ mixin _$EventProcedureStore on _EventProcedureStore, Store {
       context: context);
 
   @override
-  Future getAllEventProcedures({bool isRefresh = false}) {
-    return _$getAllEventProceduresAsyncAction
-        .run(() => super.getAllEventProcedures(isRefresh: isRefresh));
+  Future getAllEventProcedures({bool isRefresh = false, int perPage = 10000}) {
+    return _$getAllEventProceduresAsyncAction.run(() =>
+        super.getAllEventProcedures(isRefresh: isRefresh, perPage: perPage));
   }
 
   late final _$getAllEventProceduresByFiltersAsyncAction = AsyncAction(
@@ -434,17 +434,6 @@ mixin _$EventProcedureStore on _EventProcedureStore, Store {
         name: '_EventProcedureStore.dispose');
     try {
       return super.dispose();
-    } finally {
-      _$_EventProcedureStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void filterEventProceduresByDate(DateTime selectedDate) {
-    final _$actionInfo = _$_EventProcedureStoreActionController.startAction(
-        name: '_EventProcedureStore.filterEventProceduresByDate');
-    try {
-      return super.filterEventProceduresByDate(selectedDate);
     } finally {
       _$_EventProcedureStoreActionController.endAction(_$actionInfo);
     }

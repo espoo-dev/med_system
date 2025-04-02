@@ -387,6 +387,17 @@ mixin _$MedicalShiftStore on _MedicalShiftStoreBase, Store {
   }
 
   @override
+  void filterMedicalShiftsByDate(DateTime selectedDate) {
+    final _$actionInfo = _$_MedicalShiftStoreBaseActionController.startAction(
+        name: '_MedicalShiftStoreBase.filterMedicalShiftsByDate');
+    try {
+      return super.filterMedicalShiftsByDate(selectedDate);
+    } finally {
+      _$_MedicalShiftStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 state: ${state},

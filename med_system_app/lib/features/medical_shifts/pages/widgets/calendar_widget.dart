@@ -1,42 +1,42 @@
-import 'package:distrito_medico/features/event_procedures/model/event_procedure.model.dart';
+import 'package:distrito_medico/features/medical_shifts/model/medical_shift.model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:flutter_mobx/flutter_mobx.dart'; // Importando o Observer do MobX
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 class CalendarWidget extends StatefulWidget {
   final Function(DateTime) onDaySelected;
   final int initialMonth;
   final int initialYear;
-  final List<EventProcedures> events; // Passando a lista de eventos
+  final List<MedicalShiftModel> events;
 
   const CalendarWidget({
-    Key? key,
+    super.key,
     required this.onDaySelected,
     required this.initialMonth,
     required this.initialYear,
-    required this.events, // Lista de eventos
-  }) : super(key: key);
+    required this.events,
+  });
 
   @override
+  // ignore: library_private_types_in_public_api
   _CalendarWidgetState createState() => _CalendarWidgetState();
 }
 
 class _CalendarWidgetState extends State<CalendarWidget> {
-  CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
   @override
   void initState() {
     super.initState();
+    setState(() {});
     _focusedDay = DateTime(widget.initialYear, widget.initialMonth);
     _selectedDay = DateTime.now();
   }
 
-  // Função para filtrar eventos para o dia selecionado
-  List<EventProcedures> getEventsForDay(DateTime day) {
-    List<EventProcedures> eventsForDay = [];
+  List<MedicalShiftModel> getEventsForDay(DateTime day) {
+    List<MedicalShiftModel> eventsForDay = [];
     for (var event in widget.events) {
       DateTime eventDate = DateFormat('dd/MM/yyyy').parse(event.date ?? '');
       if (eventDate.year == day.year &&
@@ -55,10 +55,9 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         return SingleChildScrollView(
           child: Column(
             children: [
-              // Calendário
               Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
+                padding: const EdgeInsets.all(8),
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
                 ),
@@ -72,65 +71,81 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                       _selectedDay = selectedDate;
                       _focusedDay = focusedDay;
                     });
-                    // Passando o dia selecionado com ano e mês
+
                     widget.onDaySelected(DateTime(selectedDate.year,
                         selectedDate.month, selectedDate.day));
                   },
                   onFormatChanged: (format) {
-                    setState(() {
-                      _calendarFormat = format;
-                    });
+                    setState(() {});
                   },
                   availableGestures: AvailableGestures.none,
                   headerStyle: HeaderStyle(
-                    titleCentered: true, // Centralizar o título
-                    formatButtonVisible:
-                        false, // Remover botão de troca de formato
-                    leftChevronVisible: false, // Remover seta esquerda
-                    rightChevronVisible: false, // Remover seta direita
+                    titleCentered: true,
+                    formatButtonVisible: false,
+                    leftChevronVisible: false,
+                    rightChevronVisible: false,
                     titleTextStyle: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context)
-                          .primaryColor, // Usar cor primária do tema
+                      color: Theme.of(context).primaryColor,
                     ),
-                    titleTextFormatter: (date, locale) => DateFormat.yMMM(
-                            locale)
-                        .format(date)
-                        .capitalize(), // Adiciona a capitalização da primeira letra
+                    titleTextFormatter: (date, locale) =>
+                        DateFormat.yMMM(locale).format(date).capitalize(),
+                  ),
+                  calendarStyle: CalendarStyle(
+                    outsideDaysVisible: false,
+                    selectedDecoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(8)),
+                    todayDecoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor.withOpacity(0.4),
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(8)),
+                    defaultDecoration: BoxDecoration(
+                      shape: BoxShape
+                          .rectangle, // Define um padrão para evitar conflitos
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    weekendDecoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    disabledDecoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                   calendarBuilders: CalendarBuilders(
-                    // Customizar o dia do mês com um marker (círculo, ícone, etc.)
                     markerBuilder: (context, day, events) {
-                      List<EventProcedures> dayEvents = getEventsForDay(day);
+                      List<MedicalShiftModel> dayEvents = getEventsForDay(day);
                       if (dayEvents.isNotEmpty) {
                         return Positioned(
                           bottom: 1,
                           right: 1,
                           child: Container(
-                            padding: EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              color: Colors.red, // Cor do marker
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              color: Colors.red,
                               shape: BoxShape.circle,
                             ),
                             child: dayEvents.length > 1
                                 ? Text(
                                     '${dayEvents.length}',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 10,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   )
-                                : null, // Se tiver mais de 1 evento, mostra a quantidade
+                                : null,
                           ),
                         );
                       }
-                      return const SizedBox(); // Caso não tenha evento
+                      return const SizedBox();
                     },
                   ),
-                  locale:
-                      'pt_BR', // Definindo o calendário para o idioma português
+                  locale: 'pt_BR',
                 ),
               ),
             ],
@@ -142,11 +157,10 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 }
 
 extension StringExtension on String {
-  // Função para capitalizar a primeira letra
   String capitalize() {
-    if (this.isEmpty) {
+    if (isEmpty) {
       return this;
     }
-    return this[0].toUpperCase() + this.substring(1).toLowerCase();
+    return this[0].toUpperCase() + substring(1).toLowerCase();
   }
 }

@@ -13,6 +13,7 @@ import 'package:distrito_medico/features/medical_shifts/pages/add_medical_shift_
 import 'package:distrito_medico/features/medical_shifts/pages/edit_medical_shift_page.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/filter_medical_shifts_page.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/generate_pdf_medical_shift_screen.page.dart';
+import 'package:distrito_medico/features/medical_shifts/pages/widgets/calendar_widget.dart';
 import 'package:distrito_medico/features/medical_shifts/store/medical_shift.store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -179,6 +180,28 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Observer(
+              builder: (_) {
+                if (medicalShiftStore.state == MedicalShiftState.success) {
+                  return Column(
+                    children: [
+                      CalendarWidget(
+                        events: medicalShiftStore.medicalShiftListCalendar,
+                        initialMonth: medicalShiftStore.selectedMonth ??
+                            DateTime.now().month,
+                        initialYear: medicalShiftStore.selectedYear ??
+                            DateTime.now().year,
+                        onDaySelected: (selectedDate) {
+                          medicalShiftStore
+                              .filterMedicalShiftsByDate(selectedDate);
+                        },
+                      ),
+                    ],
+                  );
+                }
+                return const SizedBox.shrink();
+              },
+            ),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: _refreshMedicalShifts,
@@ -210,7 +233,7 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
                                       height: 250, width: 250),
                                 ),
                                 const SizedBox(
-                                  height: 50,
+                                  height: 10,
                                 ),
                                 const Center(
                                   child: Text(
