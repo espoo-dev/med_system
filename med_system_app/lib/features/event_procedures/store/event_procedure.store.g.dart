@@ -296,9 +296,9 @@ mixin _$EventProcedureStore on _EventProcedureStore, Store {
       context: context);
 
   @override
-  Future getAllEventProcedures({bool isRefresh = false}) {
-    return _$getAllEventProceduresAsyncAction
-        .run(() => super.getAllEventProcedures(isRefresh: isRefresh));
+  Future getAllEventProcedures({bool isRefresh = false, int perPage = 10000}) {
+    return _$getAllEventProceduresAsyncAction.run(() =>
+        super.getAllEventProcedures(isRefresh: isRefresh, perPage: perPage));
   }
 
   late final _$getAllEventProceduresByFiltersAsyncAction = AsyncAction(

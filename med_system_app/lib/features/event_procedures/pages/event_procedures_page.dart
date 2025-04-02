@@ -99,7 +99,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
       showFabButton();
     });
     // setInitialFilter();
-    eventProcedureStore.getAllEventProcedures(isRefresh: true);
+    eventProcedureStore.getAllEventProcedures(isRefresh: true, perPage: 10);
   }
 
   // void setInitialFilter() {
@@ -130,7 +130,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
     if (_scrollController.position.maxScrollExtent ==
             _scrollController.position.pixels &&
         !(eventProcedureStore.state == EventProcedureState.loading)) {
-      eventProcedureStore.getAllEventProcedures(isRefresh: false);
+      eventProcedureStore.getAllEventProcedures(isRefresh: false, perPage: 10);
     }
   }
   // void infiniteScrolling() {
@@ -151,7 +151,8 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
 
   Future _refreshProcedures() async {
     debugPrint('refreshProcedures');
-    await eventProcedureStore.getAllEventProcedures(isRefresh: true);
+    await eventProcedureStore.getAllEventProcedures(
+        isRefresh: true, perPage: 10);
   }
 
   @override
@@ -225,7 +226,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                               'Algo deu errado', 'Por favor, tente novamente',
                               () {
                         eventProcedureStore.getAllEventProcedures(
-                            isRefresh: true);
+                            isRefresh: true, perPage: 10);
                       }));
                     }
                     if (eventProcedureStore.state ==

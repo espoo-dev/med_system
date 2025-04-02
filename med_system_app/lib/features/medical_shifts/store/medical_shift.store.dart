@@ -8,6 +8,8 @@ import 'package:distrito_medico/features/medical_shifts/model/edit_payment_medic
 import 'package:distrito_medico/features/medical_shifts/model/medical_shift.model.dart';
 import 'package:distrito_medico/features/medical_shifts/model/medical_shift_list.model.dart';
 import 'package:distrito_medico/features/medical_shifts/repository/medical_shift_repository.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -28,6 +30,9 @@ abstract class _MedicalShiftStoreBase with Store {
   final MedicalShiftRepository _medicalShiftRepository;
 
   ObservableList<MedicalShiftModel> medicalShiftList =
+      ObservableList<MedicalShiftModel>();
+
+  ObservableList<MedicalShiftModel> medicalShiftListCalendar =
       ObservableList<MedicalShiftModel>();
 
   @observable
@@ -155,6 +160,7 @@ abstract class _MedicalShiftStoreBase with Store {
     if (isRefresh) {
       _page = 1;
       medicalShiftList.clear();
+      medicalShiftListCalendar.clear();
     }
     state = MedicalShiftState.loading;
     if (!isRefresh) {
@@ -187,6 +193,7 @@ abstract class _MedicalShiftStoreBase with Store {
   getAllMedicalShiftByFilters({bool isRefresh = false}) async {
     Result<MedicalShiftList?>? resultMedicalShifts;
     medicalShiftList.clear();
+    medicalShiftListCalendar.clear();
     state = MedicalShiftState.loading;
 
     await Future.delayed(const Duration(seconds: 3));
@@ -212,6 +219,7 @@ abstract class _MedicalShiftStoreBase with Store {
 
   handleSuccess(List<MedicalShiftModel>? listMedicalShifts) {
     medicalShiftList.addAll(listMedicalShifts!);
+    medicalShiftListCalendar.addAll(listMedicalShifts);
     state = MedicalShiftState.success;
   }
 
@@ -298,5 +306,39 @@ abstract class _MedicalShiftStoreBase with Store {
     selectedPaymentStatus = null;
     //selectedYear = null;
     hospitalName = null;
+  }
+
+  @action
+  void filterMedicalShiftsByDate(DateTime selectedDate) {
+    List<MedicalShiftModel> filteredList = [];
+    filteredList.clear();
+
+    for (var medicalShift in medicalShiftListCalendar) {
+      if (medicalShift.date?.isEmpty ?? true) {
+        continue;
+      }
+
+      try {
+        DateTime eventDate =
+            DateFormat('dd/MM/yyyy').parse(medicalShift.date ?? '');
+
+        eventDate = DateTime(eventDate.year, eventDate.month, eventDate.day);
+        selectedDate =
+            DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+
+        if (eventDate.isAtSameMomentAs(selectedDate)) {
+          filteredList.add(medicalShift);
+        }
+      } catch (e) {
+        debugPrint(
+            "Erro ao parsear a data do evento: ${medicalShift.date} - Erro: $e");
+      }
+    }
+
+    medicalShiftList.clear();
+    medicalShiftList.addAll(filteredList);
+
+    debugPrint(
+        "Lista filtrada atualizada: ${medicalShiftList.length} eventos.");
   }
 }

@@ -195,7 +195,7 @@ abstract class _EventProcedureStore with Store {
   }
 
   @action
-  getAllEventProcedures({bool isRefresh = false}) async {
+  getAllEventProcedures({bool isRefresh = false, int perPage = 10000}) async {
     Result<EventProcedureModel?>? resultEventProcedures;
     if (isRefresh) {
       _page = 1;
@@ -210,7 +210,7 @@ abstract class _EventProcedureStore with Store {
     resultEventProcedures = await _eventProcedureRepository
         .getEventProceduresByFilters(
             page: _page,
-            perPage: 10000,
+            perPage: perPage,
             month: selectedMonth,
             year: selectedYear,
             payd: selectedPaymentStatus,
