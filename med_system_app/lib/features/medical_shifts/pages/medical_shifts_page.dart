@@ -180,28 +180,28 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Observer(
-              builder: (_) {
-                if (medicalShiftStore.state == MedicalShiftState.success) {
-                  return Column(
-                    children: [
-                      CalendarWidget(
-                        events: medicalShiftStore.medicalShiftListCalendar,
-                        initialMonth: medicalShiftStore.selectedMonth ??
-                            DateTime.now().month,
-                        initialYear: medicalShiftStore.selectedYear ??
-                            DateTime.now().year,
-                        onDaySelected: (selectedDate) {
-                          medicalShiftStore
-                              .filterMedicalShiftsByDate(selectedDate);
-                        },
-                      ),
-                    ],
-                  );
-                }
-                return const SizedBox.shrink();
-              },
-            ),
+            // Observer(
+            //   builder: (_) {
+            //     if (medicalShiftStore.state == MedicalShiftState.success) {
+            //       return Column(
+            //         children: [
+            //           CalendarWidget(
+            //             events: medicalShiftStore.medicalShiftListCalendar,
+            //             initialMonth: medicalShiftStore.selectedMonth ??
+            //                 DateTime.now().month,
+            //             initialYear: medicalShiftStore.selectedYear ??
+            //                 DateTime.now().year,
+            //             onDaySelected: (selectedDate) {
+            //               medicalShiftStore
+            //                   .filterMedicalShiftsByDate(selectedDate);
+            //             },
+            //           ),
+            //         ],
+            //       );
+            //     }
+            //     return const SizedBox.shrink();
+            //   },
+            // ),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: _refreshMedicalShifts,
