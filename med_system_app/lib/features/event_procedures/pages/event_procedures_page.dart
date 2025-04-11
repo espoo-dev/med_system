@@ -186,9 +186,9 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
         bottomNavigationBar: Observer(builder: (_) {
           return BottomAppBarContent(
             total: eventProcedureStore.eventProcedureModel?.total ?? "",
-            totalUnpayd:
-                eventProcedureStore.eventProcedureModel?.totalUnpayd ?? "",
-            totalPayd: eventProcedureStore.eventProcedureModel?.totalPayd ?? "",
+            totalUnpaid:
+                eventProcedureStore.eventProcedureModel?.totalUnpaid ?? "",
+            totalpaid: eventProcedureStore.eventProcedureModel?.totalpaid ?? "",
           );
         }),
         floatingActionButton: isFab
@@ -208,10 +208,10 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
             // Observer(builder: (_) {
             //   return BottomAppBarContent(
             //     total: eventProcedureStore.eventProcedureModel?.total ?? "",
-            //     totalUnpayd:
-            //         eventProcedureStore.eventProcedureModel?.totalUnpayd ?? "",
-            //     totalPayd:
-            //         eventProcedureStore.eventProcedureModel?.totalPayd ?? "",
+            //     totalUnpaid:
+            //         eventProcedureStore.eventProcedureModel?.totalUnpaid ?? "",
+            //     totalpaid:
+            //         eventProcedureStore.eventProcedureModel?.totalpaid ?? "",
             //   );
             // }),
             Expanded(
@@ -284,7 +284,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                                       _listEventProcedures![index];
                                   return Slidable(
                                     key: ValueKey(_listEventProcedures?.length),
-                                    startActionPane: !eventProcedures.payd!
+                                    startActionPane: !eventProcedures.paid!
                                         ? ActionPane(
                                             motion: const StretchMotion(),
                                             children: [
@@ -342,13 +342,13 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                                                     eventProcedures));
                                       },
                                       leading: SvgPicture.asset(
-                                        eventProcedures.payd!
+                                        eventProcedures.paid!
                                             ? iconCheckCoreAsset
                                             : iconCloseCoreAsset,
                                         width: 32,
                                         height: 32,
                                         colorFilter: ColorFilter.mode(
-                                          eventProcedures.payd!
+                                          eventProcedures.paid!
                                               ? Theme.of(context)
                                                   .colorScheme
                                                   .primary

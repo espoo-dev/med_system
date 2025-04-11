@@ -145,19 +145,19 @@ mixin _$AddMedicalShiftStore on _AddMedicalShiftStoreBase, Store {
     });
   }
 
-  late final _$_paydAtom =
-      Atom(name: '_AddMedicalShiftStoreBase._payd', context: context);
+  late final _$_paidAtom =
+      Atom(name: '_AddMedicalShiftStoreBase._paid', context: context);
 
   @override
-  bool get _payd {
-    _$_paydAtom.reportRead();
-    return super._payd;
+  bool get _paid {
+    _$_paidAtom.reportRead();
+    return super._paid;
   }
 
   @override
-  set _payd(bool value) {
-    _$_paydAtom.reportWrite(value, super._payd, () {
-      super._payd = value;
+  set _paid(bool value) {
+    _$_paidAtom.reportWrite(value, super._paid, () {
+      super._paid = value;
     });
   }
 
@@ -258,11 +258,11 @@ mixin _$AddMedicalShiftStore on _AddMedicalShiftStoreBase, Store {
   }
 
   @override
-  void setPayd(bool payd) {
+  void setpaid(bool paid) {
     final _$actionInfo = _$_AddMedicalShiftStoreBaseActionController
-        .startAction(name: '_AddMedicalShiftStoreBase.setPayd');
+        .startAction(name: '_AddMedicalShiftStoreBase.setpaid');
     try {
-      return super.setPayd(payd);
+      return super.setpaid(paid);
     } finally {
       _$_AddMedicalShiftStoreBaseActionController.endAction(_$actionInfo);
     }

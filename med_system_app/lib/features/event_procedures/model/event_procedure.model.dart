@@ -1,11 +1,11 @@
 class EventProcedureModel {
   List<EventProcedures>? eventProceduresList;
   String? total = "";
-  String? totalPayd = "";
-  String? totalUnpayd = "";
+  String? totalpaid = "";
+  String? totalUnpaid = "";
 
   EventProcedureModel(
-      {this.eventProceduresList, this.total, this.totalPayd, this.totalUnpayd});
+      {this.eventProceduresList, this.total, this.totalpaid, this.totalUnpaid});
 
   EventProcedureModel.fromJson(Map<String, dynamic> json) {
     if (json['event_procedures'] != null) {
@@ -15,8 +15,8 @@ class EventProcedureModel {
       });
     }
     total = json['total'];
-    totalPayd = json['total_payd'];
-    totalUnpayd = json['total_unpayd'];
+    totalpaid = json['total_paid'];
+    totalUnpaid = json['total_unpaid'];
   }
 
   Map<String, dynamic> toJson() {
@@ -26,8 +26,8 @@ class EventProcedureModel {
           eventProceduresList!.map((v) => v.toJson()).toList();
     }
     data['total'] = total;
-    data['total_payd'] = totalPayd;
-    data['total_unpayd'] = totalUnpayd;
+    data['total_paid'] = totalpaid;
+    data['total_unpaid'] = totalUnpaid;
     return data;
   }
 }
@@ -42,8 +42,8 @@ class EventProcedures {
   String? date;
   String? roomType;
   bool? urgency;
-  String? paydAt;
-  bool? payd;
+  String? paidAt;
+  bool? paid;
   String? totalAmountCents;
   String? payment;
   String? procedureValue;
@@ -59,8 +59,8 @@ class EventProcedures {
       String? date,
       String? roomType,
       bool? urgency,
-      String? paydAt,
-      bool? payd,
+      String? paidAt,
+      bool? paid,
       String? totalAmountCents,
       String? payment,
       String? procedureValue,
@@ -75,8 +75,8 @@ class EventProcedures {
       date: date ?? this.date,
       roomType: roomType ?? this.roomType,
       urgency: urgency ?? this.urgency,
-      paydAt: paydAt ?? this.paydAt,
-      payd: payd ?? this.payd,
+      paidAt: paidAt ?? this.paidAt,
+      paid: paid ?? this.paid,
       totalAmountCents: totalAmountCents ?? this.totalAmountCents,
       payment: payment ?? this.payment,
       procedureValue: procedureValue ?? this.procedureValue,
@@ -94,8 +94,8 @@ class EventProcedures {
       this.date,
       this.roomType,
       this.urgency,
-      this.paydAt,
-      this.payd,
+      this.paidAt,
+      this.paid,
       this.totalAmountCents,
       this.payment,
       this.procedureValue,
@@ -111,8 +111,8 @@ class EventProcedures {
     date = json['date'];
     roomType = json['room_type'];
     urgency = json['urgency'];
-    paydAt = json['payd_at'];
-    payd = json['payd'];
+    paidAt = json['paid_at'];
+    paid = json['paid'];
     payment = json['payment'];
     totalAmountCents = json['total_amount_cents'];
     procedureValue = json['precedure_value'];
@@ -130,8 +130,8 @@ class EventProcedures {
     data['date'] = date;
     data['room_type'] = roomType;
     data['urgency'] = urgency;
-    data['payd_at'] = paydAt;
-    data['payd'] = payd;
+    data['paid_at'] = paidAt;
+    data['paid'] = paid;
     data['payment'] = payment;
     data['total_amount_cents'] = totalAmountCents;
     data['precedure_value'] = procedureValue;

@@ -323,13 +323,13 @@ abstract class _AddEventProcedureStoreBase with Store {
   }
 
   @observable
-  bool _payd = false;
+  bool _paid = false;
 
-  bool? get payd => _payd;
+  bool? get paid => _paid;
 
   @action
-  void setPayd(bool payd) {
-    _payd = payd;
+  void setpaid(bool paid) {
+    _paid = paid;
   }
 
   @computed
@@ -413,7 +413,7 @@ abstract class _AddEventProcedureStoreBase with Store {
                   custom: isOtherPayment ? true : false),
               patientServiceNumber: _patientServiceNumber,
               date: _createdDate,
-              payd: _payd,
+              paid: _paid,
               urgency: isOtherPayment ? null : _urgency,
               payment: _payment,
               roomType: isOtherPayment ? null : _accommodation));
@@ -553,7 +553,7 @@ abstract class _AddEventProcedureStoreBase with Store {
     _accommodation = "ward";
     _payment = "health_insurance";
     _createdDate = "";
-    _payd = false;
+    _paid = false;
     _patient = null;
     _patient = null;
     _procedure = null;

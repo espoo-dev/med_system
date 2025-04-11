@@ -53,13 +53,13 @@ final class _$MedicalShiftService extends MedicalShiftService {
   Future<Response<dynamic>> getAllMedicalShiftsByPaid(
     int page,
     int perPage,
-    bool payd,
+    bool paid,
   ) {
     final Uri $url = Uri.parse('/api/v1/medical_shifts');
     final Map<String, dynamic> $params = <String, dynamic>{
       'page': page,
       'per_page': perPage,
-      'payd': payd,
+      'paid': paid,
     };
     final Request $request = Request(
       'GET',
@@ -186,7 +186,7 @@ final class _$MedicalShiftService extends MedicalShiftService {
     int? perPage,
     int? month,
     int? year,
-    bool? payd,
+    bool? paid,
     String? hospitalName,
   }) {
     final Uri $url = Uri.parse('/api/v1/medical_shifts');
@@ -195,7 +195,7 @@ final class _$MedicalShiftService extends MedicalShiftService {
       'per_page': perPage,
       'month': month,
       'year': year,
-      'payd': payd,
+      'paid': paid,
       'hospital_name': hospitalName,
     };
     final Request $request = Request(
@@ -212,7 +212,7 @@ final class _$MedicalShiftService extends MedicalShiftService {
     String? entityName,
     int? month,
     int? year,
-    bool? payd,
+    bool? paid,
     String? hospitalName,
   }) {
     final Uri $url = Uri.parse('/api/v1/pdf_reports/generate');
@@ -220,7 +220,7 @@ final class _$MedicalShiftService extends MedicalShiftService {
       'entity_name': entityName,
       'month': month,
       'year': year,
-      'payd': payd,
+      'paid': paid,
       'hospital[name]': hospitalName,
     };
     final Request $request = Request(

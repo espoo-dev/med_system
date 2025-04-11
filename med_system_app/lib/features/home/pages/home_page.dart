@@ -113,13 +113,13 @@ class _HomePageState extends State<HomePage> {
               menuItems: homeStore.selectedFilter == HomeFilterType.procedures
                   ? menuHomeModel.buildMenuHome(
                       homeStore.eventProcedureModel.total,
-                      homeStore.eventProcedureModel.totalPayd,
-                      homeStore.eventProcedureModel.totalUnpayd,
+                      homeStore.eventProcedureModel.totalpaid,
+                      homeStore.eventProcedureModel.totalUnpaid,
                       context)
                   : menuHomeModel.buildMenuHome(
                       homeStore.medicalShift.total,
-                      homeStore.medicalShift.totalPayd,
-                      homeStore.medicalShift.totalUnpayd,
+                      homeStore.medicalShift.totalpaid,
+                      homeStore.medicalShift.totalUnpaid,
                       context),
             ),
             homeStore.selectedFilter == HomeFilterType.procedures

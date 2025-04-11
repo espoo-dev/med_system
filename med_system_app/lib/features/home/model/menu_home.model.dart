@@ -8,8 +8,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 class MenuHomeModel {
   MenuHomeModel();
 
-  List<MenuItemModel> buildMenuHome(String total, String totalPayd,
-      String totalUnpayd, BuildContext context) {
+  List<MenuItemModel> buildMenuHome(String total, String totalpaid,
+      String totalUnpaid, BuildContext context) {
     var menufinancial = [
       MenuItemModel(
           image: SvgPicture.asset(
@@ -22,7 +22,7 @@ class MenuHomeModel {
             ),
           ),
           backgroundColor: const Color(0xff45B3CB),
-          label: totalPayd,
+          label: totalpaid,
           description: 'Recebido',
           action: () {
             push(
@@ -34,7 +34,7 @@ class MenuHomeModel {
           }),
       MenuItemModel(
           backgroundColor: const Color(0xffED7390),
-          label: totalUnpayd,
+          label: totalUnpaid,
           description: 'A receber',
           image: SvgPicture.asset(
             iconHeartRemoveHomeAsset,

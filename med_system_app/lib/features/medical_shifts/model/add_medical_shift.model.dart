@@ -4,7 +4,7 @@ class AddMedicalShiftRequestModel {
   String? startDate;
   String? startHour;
   int? amountCents;
-  bool? payd;
+  bool? paid;
 
   AddMedicalShiftRequestModel({
     this.hospitalName,
@@ -12,7 +12,7 @@ class AddMedicalShiftRequestModel {
     this.startDate,
     this.startHour,
     this.amountCents,
-    this.payd,
+    this.paid,
   });
 
   AddMedicalShiftRequestModel.fromJson(Map<String, dynamic> json) {
@@ -21,7 +21,7 @@ class AddMedicalShiftRequestModel {
     startDate = json['start_date'];
     startHour = json['start_hour'];
     amountCents = json['amount_cents'];
-    payd = json['payd'];
+    paid = json['paid'];
   }
 
   Map<String, dynamic> toJson() {
@@ -31,7 +31,7 @@ class AddMedicalShiftRequestModel {
     data['start_date'] = startDate;
     data['start_hour'] = startHour;
     data['amount_cents'] = amountCents;
-    data['payd'] = payd;
+    data['paid'] = paid;
     return data;
   }
 }

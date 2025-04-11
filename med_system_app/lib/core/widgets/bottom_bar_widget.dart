@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class BottomAppBarContent extends StatefulWidget {
   final String total;
-  final String totalUnpayd;
-  final String totalPayd;
+  final String totalUnpaid;
+  final String totalpaid;
 
   const BottomAppBarContent({
     super.key,
     required this.total,
-    required this.totalUnpayd,
-    required this.totalPayd,
+    required this.totalUnpaid,
+    required this.totalpaid,
   });
 
   @override
@@ -63,7 +63,7 @@ class _BottomAppBarContentState extends State<BottomAppBarContent> {
                     ),
                   ),
                   Text(
-                    widget.totalUnpayd,
+                    widget.totalUnpaid,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.primary,
@@ -84,7 +84,7 @@ class _BottomAppBarContentState extends State<BottomAppBarContent> {
                     ),
                   ),
                   Text(
-                    widget.totalPayd,
+                    widget.totalpaid,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.bold,

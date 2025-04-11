@@ -3,8 +3,8 @@ class AddEventProcedureRequestModel {
   HealthInsuranceAttributes? healthInsuranceAttributes;
   String? patientServiceNumber;
   String? date;
-  String? paydAt;
-  bool? payd;
+  String? paidAt;
+  bool? paid;
   bool? urgency;
   String? payment;
   String? roomType;
@@ -16,8 +16,8 @@ class AddEventProcedureRequestModel {
     this.healthInsuranceAttributes,
     this.patientServiceNumber,
     this.date,
-    this.paydAt,
-    this.payd,
+    this.paidAt,
+    this.paid,
     this.urgency,
     this.payment,
     this.roomType,
@@ -33,8 +33,8 @@ class AddEventProcedureRequestModel {
         : null;
     patientServiceNumber = json['patient_service_number'];
     date = json['date'];
-    paydAt = json['payd_at'];
-    payd = json['payd'];
+    paidAt = json['paid_at'];
+    paid = json['paid'];
     urgency = json['urgency'];
     payment = json['payment'];
     roomType = json['room_type'];
@@ -54,8 +54,8 @@ class AddEventProcedureRequestModel {
     }
     data['patient_service_number'] = patientServiceNumber;
     data['date'] = date;
-    data['payd_at'] = paydAt;
-    data['payd'] = payd;
+    data['paid_at'] = paidAt;
+    data['paid'] = paid;
     data['urgency'] = urgency;
     data['payment'] = payment;
     data['room_type'] = roomType;

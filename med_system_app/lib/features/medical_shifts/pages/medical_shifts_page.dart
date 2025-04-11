@@ -162,8 +162,8 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
         bottomNavigationBar: Observer(builder: (_) {
           return BottomAppBarContent(
             total: medicalShiftStore.medicalShift?.total ?? "",
-            totalUnpayd: medicalShiftStore.medicalShift?.totalUnpayd ?? "",
-            totalPayd: medicalShiftStore.medicalShift?.totalPayd ?? "",
+            totalUnpaid: medicalShiftStore.medicalShift?.totalUnpaid ?? "",
+            totalpaid: medicalShiftStore.medicalShift?.totalpaid ?? "",
           );
         }),
         floatingActionButton: isFab
@@ -268,7 +268,7 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
                                       _listMedicalShift![index];
                                   return Slidable(
                                     key: ValueKey(_listMedicalShift?.length),
-                                    startActionPane: !medicalShiftModel.payd!
+                                    startActionPane: !medicalShiftModel.paid!
                                         ? ActionPane(
                                             motion: const StretchMotion(),
                                             children: [
@@ -327,13 +327,13 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
                                                     medicalShiftModel));
                                       },
                                       leading: SvgPicture.asset(
-                                        medicalShiftModel.payd!
+                                        medicalShiftModel.paid!
                                             ? iconCheckCoreAsset
                                             : iconCloseCoreAsset,
                                         width: 32,
                                         height: 32,
                                         colorFilter: ColorFilter.mode(
-                                          medicalShiftModel.payd!
+                                          medicalShiftModel.paid!
                                               ? Theme.of(context)
                                                   .colorScheme
                                                   .primary

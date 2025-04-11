@@ -7,7 +7,7 @@ class MedicalShiftModel {
   String? startDate;
   String? startHour;
   String? amountCents;
-  bool? payd;
+  bool? paid;
   String? title;
   String? shift;
   String? date;
@@ -20,7 +20,7 @@ class MedicalShiftModel {
       this.startDate,
       this.startHour,
       this.amountCents,
-      this.payd,
+      this.paid,
       this.title,
       this.shift,
       this.date,
@@ -33,7 +33,7 @@ class MedicalShiftModel {
     startDate = json['start_date'];
     startHour = json['start_hour'];
     amountCents = json['amount_cents'];
-    payd = json['payd'];
+    paid = json['paid'];
     title = json['title'];
     shift = json['shift'];
     date = json['date'];
@@ -48,7 +48,7 @@ class MedicalShiftModel {
     data['start_date'] = startDate;
     data['start_hour'] = startHour;
     data['amount_cents'] = amountCents;
-    data['payd'] = payd;
+    data['paid'] = paid;
     data['title'] = title;
     data['shift'] = shift;
     data['hour'] = hour;
@@ -62,7 +62,7 @@ class MedicalShiftModel {
       String? startDate,
       String? startHour,
       String? amountCents,
-      bool? payd,
+      bool? paid,
       String? title,
       String? shift,
       String? date,
@@ -74,7 +74,7 @@ class MedicalShiftModel {
         startDate: startDate ?? this.startDate,
         startHour: startHour ?? this.startHour,
         amountCents: amountCents ?? this.amountCents,
-        payd: payd ?? this.payd,
+        paid: paid ?? this.paid,
         title: title ?? this.title,
         shift: shift ?? this.shift,
         date: date ?? this.date,

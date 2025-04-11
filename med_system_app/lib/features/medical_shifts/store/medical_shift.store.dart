@@ -174,7 +174,7 @@ abstract class _MedicalShiftStoreBase with Store {
             perPage: 10000,
             month: selectedMonth,
             year: selectedYear,
-            payd: selectedPaymentStatus,
+            paid: selectedPaymentStatus,
             hospitalName: hospitalName)
         .asObservable();
 
@@ -202,7 +202,7 @@ abstract class _MedicalShiftStoreBase with Store {
         .getMedicalShiftsByFilters(
             month: selectedMonth,
             year: selectedYear,
-            payd: selectedPaymentStatus,
+            paid: selectedPaymentStatus,
             hospitalName: hospitalName)
         .asObservable();
 
@@ -246,9 +246,9 @@ abstract class _MedicalShiftStoreBase with Store {
   editPaymentMedicalShift(int medicalShiftId, index) async {
     editState = EditMedicalShiftState.loading;
     var editResult = await _medicalShiftRepository.editPaymentMedicalShift(
-        medicalShiftId, EditPaymentMedicalShiftModel(payd: true));
+        medicalShiftId, EditPaymentMedicalShiftModel(paid: true));
     editResult?.when(success: (medicalShift) {
-      medicalShiftList[index] = medicalShiftList[index].copyWith(payd: true);
+      medicalShiftList[index] = medicalShiftList[index].copyWith(paid: true);
       editState = EditMedicalShiftState.success;
     }, failure: (NetworkExceptions error) {
       editState = EditMedicalShiftState.error;
@@ -264,7 +264,7 @@ abstract class _MedicalShiftStoreBase with Store {
         await _medicalShiftRepository.generatePdfReport(
             month: selectedMonth,
             year: selectedYear,
-            payd: selectedPaymentStatus,
+            paid: selectedPaymentStatus,
             hospitalName: hospitalName);
 
     pdfResult?.when(

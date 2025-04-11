@@ -19,7 +19,7 @@ abstract class MedicalShiftService extends ChopperService {
 
   @Get(path: 'api/v1/medical_shifts')
   Future<Response> getAllMedicalShiftsByPaid(@Query('page') int page,
-      @Query('per_page') int perPage, @Query('payd') bool payd);
+      @Query('per_page') int perPage, @Query('paid') bool paid);
 
   @Get(path: 'api/v1/medical_shifts')
   Future<Response> getAllMedicalShiftsByMonth(
@@ -57,7 +57,7 @@ abstract class MedicalShiftService extends ChopperService {
     @Query('per_page') int? perPage,
     @Query('month') int? month,
     @Query('year') int? year,
-    @Query('payd') bool? payd,
+    @Query('paid') bool? paid,
     @Query('hospital_name') String? hospitalName,
   });
 
@@ -66,7 +66,7 @@ abstract class MedicalShiftService extends ChopperService {
     @Query('entity_name') String? entityName,
     @Query('month') int? month,
     @Query('year') int? year,
-    @Query('payd') bool? payd,
+    @Query('paid') bool? paid,
     @Query('hospital[name]') String? hospitalName,
   });
 }

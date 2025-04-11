@@ -400,9 +400,9 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                         ),
                         CustomSwitch(
                           labelText: "Pago",
-                          initialValue: addEventProcedureStore.payd ?? false,
+                          initialValue: addEventProcedureStore.paid ?? false,
                           onChanged: (value) {
-                            addEventProcedureStore.setPayd(value);
+                            addEventProcedureStore.setpaid(value);
                           },
                         ),
                         Center(child: Observer(builder: (_) {

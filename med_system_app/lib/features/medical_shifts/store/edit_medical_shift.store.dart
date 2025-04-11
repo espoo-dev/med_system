@@ -81,11 +81,11 @@ abstract class _EditMedicalShiftStoreBase with Store {
   }
 
   @observable
-  bool _payd = false;
-  get payd => _payd;
+  bool _paid = false;
+  get paid => _paid;
   @action
-  void setPayd(bool payd) {
-    _payd = payd;
+  void setpaid(bool paid) {
+    _paid = paid;
   }
 
   @action
@@ -95,7 +95,7 @@ abstract class _EditMedicalShiftStoreBase with Store {
     _startDate = shift.date ?? "";
     _startHour = shift.hour ?? "";
     _amountCents = shift.amountCents?.toString() ?? "";
-    _payd = shift.payd ?? false;
+    _paid = shift.paid ?? false;
   }
 
   bool validateHospitalName() {
@@ -139,7 +139,7 @@ abstract class _EditMedicalShiftStoreBase with Store {
           startDate: _startDate,
           startHour: _startHour,
           amountCents: parseReal(_amountCents),
-          payd: _payd,
+          paid: _paid,
         ),
       );
 
@@ -201,7 +201,7 @@ abstract class _EditMedicalShiftStoreBase with Store {
     _startDate = "";
     _startHour = "";
     _amountCents = "";
-    _payd = false;
+    _paid = false;
     saveState = EditMedicalShiftState.idle;
   }
 

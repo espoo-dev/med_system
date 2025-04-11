@@ -1,15 +1,15 @@
 class EditPaymentMedicalShiftModel {
-  bool? payd;
+  bool? paid;
 
-  EditPaymentMedicalShiftModel({this.payd});
+  EditPaymentMedicalShiftModel({this.paid});
 
   EditPaymentMedicalShiftModel.fromJson(Map<String, dynamic> json) {
-    payd = json['payd'];
+    paid = json['paid'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['payd'] = payd;
+    data['paid'] = paid;
     return data;
   }
 }

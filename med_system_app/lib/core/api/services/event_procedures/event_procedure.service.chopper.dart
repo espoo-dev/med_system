@@ -40,13 +40,13 @@ final class _$EventProcedureService extends EventProcedureService {
   Future<Response<dynamic>> getAllEventProceduresByPaid(
     int page,
     int perPage,
-    bool payd,
+    bool paid,
   ) {
     final Uri $url = Uri.parse('/api/v1/event_procedures');
     final Map<String, dynamic> $params = <String, dynamic>{
       'page': page,
       'per_page': perPage,
-      'payd': payd,
+      'paid': paid,
     };
     final Request $request = Request(
       'GET',
@@ -161,7 +161,7 @@ final class _$EventProcedureService extends EventProcedureService {
     int? perPage,
     int? month,
     int? year,
-    bool? payd,
+    bool? paid,
     String? healthInsuranceName,
     String? hospitalName,
   }) {
@@ -171,7 +171,7 @@ final class _$EventProcedureService extends EventProcedureService {
       'per_page': perPage,
       'month': month,
       'year': year,
-      'payd': payd,
+      'paid': paid,
       'health_insurance[name]': healthInsuranceName,
       'hospital[name]': hospitalName,
     };
@@ -189,7 +189,7 @@ final class _$EventProcedureService extends EventProcedureService {
     String? entityName,
     int? month,
     int? year,
-    bool? payd,
+    bool? paid,
     String? healthInsuranceName,
     String? hospitalName,
   }) {
@@ -198,7 +198,7 @@ final class _$EventProcedureService extends EventProcedureService {
       'entity_name': entityName,
       'month': month,
       'year': year,
-      'payd': payd,
+      'paid': paid,
       'health_insurance[name]': healthInsuranceName,
       'hospital[name]': hospitalName,
     };

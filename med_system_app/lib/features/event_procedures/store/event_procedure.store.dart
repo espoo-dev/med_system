@@ -213,7 +213,7 @@ abstract class _EventProcedureStore with Store {
             perPage: perPage,
             month: selectedMonth,
             year: selectedYear,
-            payd: selectedPaymentStatus,
+            paid: selectedPaymentStatus,
             healthInsuranceName: healthInsuranceName,
             hospitalName: hospitalName)
         .asObservable();
@@ -239,7 +239,7 @@ abstract class _EventProcedureStore with Store {
         .getEventProceduresByFilters(
             month: selectedMonth,
             year: selectedYear,
-            payd: selectedPaymentStatus,
+            paid: selectedPaymentStatus,
             healthInsuranceName: healthInsuranceName,
             hospitalName: hospitalName)
         .asObservable();
@@ -283,10 +283,10 @@ abstract class _EventProcedureStore with Store {
   editPaymentEventProcedure(int eventProcedureId, index) async {
     editState = EditEventProcedureState.loading;
     var editResult = await _eventProcedureRepository.editPaymentEventProcedure(
-        eventProcedureId, EditPaymentEventProcedureModel(payd: true));
+        eventProcedureId, EditPaymentEventProcedureModel(paid: true));
     editResult?.when(success: (eventProcedure) {
       eventProcedureList[index] =
-          eventProcedureList[index].copyWith(payd: true);
+          eventProcedureList[index].copyWith(paid: true);
       editState = EditEventProcedureState.success;
     }, failure: (NetworkExceptions error) {
       editState = EditEventProcedureState.error;
@@ -326,7 +326,7 @@ abstract class _EventProcedureStore with Store {
         await _eventProcedureRepository.generatePdfReport(
             month: selectedMonth,
             year: selectedYear,
-            payd: selectedPaymentStatus,
+            paid: selectedPaymentStatus,
             healthInsuranceName: healthInsuranceName,
             hospitalName: hospitalName);
 
