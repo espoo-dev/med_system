@@ -265,8 +265,8 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
                 const SizedBox(height: 15),
                 CustomSwitch(
                   labelText: "Pago",
-                  initialValue: editMedicalShiftStore.payd,
-                  onChanged: editMedicalShiftStore.setPayd,
+                  initialValue: editMedicalShiftStore.paid,
+                  onChanged: editMedicalShiftStore.setpaid,
                 ),
                 const SizedBox(height: 15),
                 Center(

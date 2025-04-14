@@ -59,7 +59,7 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
         widget.eventProcedures.healthInsurance ?? "");
     editEventProcedureStore.setPatientServiceNumber(
         widget.eventProcedures.patientServiceNumber ?? "");
-    editEventProcedureStore.setPayd(widget.eventProcedures.payd ?? false);
+    editEventProcedureStore.setpaid(widget.eventProcedures.paid ?? false);
     editEventProcedureStore.setUrgency(widget.eventProcedures.urgency ?? false);
     editEventProcedureStore
         .setAccommodation(widget.eventProcedures.roomType ?? "");
@@ -440,9 +440,9 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                         ),
                         CustomSwitch(
                           labelText: "Pago",
-                          initialValue: editEventProcedureStore.payd ?? false,
+                          initialValue: editEventProcedureStore.paid ?? false,
                           onChanged: (value) {
-                            editEventProcedureStore.setPayd(value);
+                            editEventProcedureStore.setpaid(value);
                           },
                         ),
                         const SizedBox(

@@ -16,7 +16,7 @@ abstract class EventProcedureService extends ChopperService {
 
   @Get(path: 'api/v1/event_procedures')
   Future<Response> getAllEventProceduresByPaid(@Query('page') int page,
-      @Query('per_page') int perPage, @Query('payd') bool payd);
+      @Query('per_page') int perPage, @Query('paid') bool paid);
 
   @Get(path: 'api/v1/event_procedures')
   Future<Response> getAllEventProceduresByMonth(@Query('page') int page,
@@ -48,7 +48,7 @@ abstract class EventProcedureService extends ChopperService {
     @Query('per_page') int? perPage,
     @Query('month') int? month,
     @Query('year') int? year,
-    @Query('payd') bool? payd,
+    @Query('paid') bool? paid,
     @Query('health_insurance[name]') String? healthInsuranceName,
     @Query('hospital[name]') String? hospitalName,
   });
@@ -58,7 +58,7 @@ abstract class EventProcedureService extends ChopperService {
     @Query('entity_name') String? entityName,
     @Query('month') int? month,
     @Query('year') int? year,
-    @Query('payd') bool? payd,
+    @Query('paid') bool? paid,
     @Query('health_insurance[name]') String? healthInsuranceName,
     @Query('hospital[name]') String? hospitalName,
   });

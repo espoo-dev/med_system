@@ -18,7 +18,7 @@ class MedicalShiftRepository {
       int? perPage,
       int? month,
       int? year,
-      bool? payd,
+      bool? paid,
       String? hospitalName}) async {
     try {
       final response = await medicalShiftService.getMedicalShiftsByFilters(
@@ -26,7 +26,7 @@ class MedicalShiftRepository {
           perPage: perPage,
           month: month,
           year: year,
-          payd: payd,
+          paid: paid,
           hospitalName: hospitalName);
       if (response.isSuccessful) {
         MedicalShiftList? medicalShiftList =
@@ -92,15 +92,15 @@ class MedicalShiftRepository {
     return null;
   }
 
-  Future<Result<MedicalShiftList?>?> getAllMedicalShiftsByPayd(
-      [int? page, int? perPage, bool payd = false]) async {
+  Future<Result<MedicalShiftList?>?> getAllMedicalShiftsBypaid(
+      [int? page, int? perPage, bool paid = false]) async {
     try {
       page ??= 1;
 
       perPage ??= 10;
 
       final response = await medicalShiftService.getAllMedicalShiftsByPaid(
-          page, perPage, payd);
+          page, perPage, paid);
       if (response.isSuccessful) {
         MedicalShiftList? medicalShiftList =
             MedicalShiftList.fromJson(json.decode(response.body));
@@ -252,14 +252,14 @@ class MedicalShiftRepository {
       {String? entityName,
       int? month,
       int? year,
-      bool? payd,
+      bool? paid,
       String? hospitalName}) async {
     try {
       final response = await medicalShiftService.generatePdfReport(
           entityName: 'medical_shifts',
           month: month,
           year: year,
-          payd: payd,
+          paid: paid,
           hospitalName: hospitalName);
 
       if (response.isSuccessful) {

@@ -316,19 +316,19 @@ mixin _$AddEventProcedureStore on _AddEventProcedureStoreBase, Store {
     });
   }
 
-  late final _$_paydAtom =
-      Atom(name: '_AddEventProcedureStoreBase._payd', context: context);
+  late final _$_paidAtom =
+      Atom(name: '_AddEventProcedureStoreBase._paid', context: context);
 
   @override
-  bool get _payd {
-    _$_paydAtom.reportRead();
-    return super._payd;
+  bool get _paid {
+    _$_paidAtom.reportRead();
+    return super._paid;
   }
 
   @override
-  set _payd(bool value) {
-    _$_paydAtom.reportWrite(value, super._payd, () {
-      super._payd = value;
+  set _paid(bool value) {
+    _$_paidAtom.reportWrite(value, super._paid, () {
+      super._paid = value;
     });
   }
 
@@ -600,11 +600,11 @@ mixin _$AddEventProcedureStore on _AddEventProcedureStoreBase, Store {
   }
 
   @override
-  void setPayd(bool payd) {
+  void setpaid(bool paid) {
     final _$actionInfo = _$_AddEventProcedureStoreBaseActionController
-        .startAction(name: '_AddEventProcedureStoreBase.setPayd');
+        .startAction(name: '_AddEventProcedureStoreBase.setpaid');
     try {
-      return super.setPayd(payd);
+      return super.setpaid(paid);
     } finally {
       _$_AddEventProcedureStoreBaseActionController.endAction(_$actionInfo);
     }

@@ -3,14 +3,14 @@ import 'package:distrito_medico/features/medical_shifts/model/medical_shift.mode
 class MedicalShiftList {
   List<MedicalShiftModel>? medicalShiftModelList;
   String? total = "";
-  String? totalPayd = "";
-  String? totalUnpayd = "";
+  String? totalpaid = "";
+  String? totalUnpaid = "";
 
   MedicalShiftList(
       {this.medicalShiftModelList,
       this.total,
-      this.totalPayd,
-      this.totalUnpayd});
+      this.totalpaid,
+      this.totalUnpaid});
 
   MedicalShiftList.fromJson(Map<String, dynamic> json) {
     if (json['medical_shifts'] != null) {
@@ -20,8 +20,8 @@ class MedicalShiftList {
       });
     }
     total = json['total'];
-    totalPayd = json['total_payd'];
-    totalUnpayd = json['total_unpaid'];
+    totalpaid = json['total_paid'];
+    totalUnpaid = json['total_unpaid'];
   }
 
   Map<String, dynamic> toJson() {
@@ -31,8 +31,8 @@ class MedicalShiftList {
           medicalShiftModelList!.map((v) => v.toJson()).toList();
     }
     data['total'] = total;
-    data['total_payd'] = totalPayd;
-    data['total_unpaid'] = totalUnpayd;
+    data['total_paid'] = totalpaid;
+    data['total_unpaid'] = totalUnpaid;
     return data;
   }
 }

@@ -14,7 +14,7 @@ class EventProcedureRepository {
       int? perPage,
       int? month,
       int? year,
-      bool? payd,
+      bool? paid,
       String? healthInsuranceName,
       String? hospitalName}) async {
     try {
@@ -23,7 +23,7 @@ class EventProcedureRepository {
           perPage: perPage,
           month: month,
           year: year,
-          payd: payd,
+          paid: paid,
           healthInsuranceName: healthInsuranceName,
           hospitalName: hospitalName);
       if (response.isSuccessful) {
@@ -89,15 +89,15 @@ class EventProcedureRepository {
     return null;
   }
 
-  Future<Result<EventProcedureModel?>?> getAllEventProceduresByPayd(
-      [int? page, int? perPage, bool payd = false]) async {
+  Future<Result<EventProcedureModel?>?> getAllEventProceduresBypaid(
+      [int? page, int? perPage, bool paid = false]) async {
     try {
       page ??= 1;
 
       perPage ??= 10;
 
       final response = await eventProcedureService.getAllEventProceduresByPaid(
-          page, perPage, payd);
+          page, perPage, paid);
       if (response.isSuccessful) {
         EventProcedureModel? eventProcedureModel =
             EventProcedureModel.fromJson(json.decode(response.body));
@@ -216,7 +216,7 @@ class EventProcedureRepository {
       {String? entityName,
       int? month,
       int? year,
-      bool? payd,
+      bool? paid,
       String? healthInsuranceName,
       String? hospitalName}) async {
     try {
@@ -224,7 +224,7 @@ class EventProcedureRepository {
           entityName: 'event_procedures',
           month: month,
           year: year,
-          payd: payd,
+          paid: paid,
           healthInsuranceName: healthInsuranceName,
           hospitalName: hospitalName);
 
