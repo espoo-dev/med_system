@@ -2,6 +2,7 @@ import 'package:chopper/chopper.dart';
 import 'package:distrito_medico/core/api/interceptors/MyRequest.interceptor.dart';
 import 'package:distrito_medico/core/api/interceptors/MyResponse.interceptor.dart';
 import 'package:distrito_medico/core/api/services/auth/sign_in.service.dart';
+import 'package:distrito_medico/core/api/services/doctor_registration/sign_up.service.dart';
 import 'package:distrito_medico/core/api/services/event_procedures/event_procedure.service.dart';
 import 'package:distrito_medico/core/api/services/events/events_procedure.service.dart';
 import 'package:distrito_medico/core/api/services/health_insurances/health_insurances.service.dart';
@@ -27,7 +28,8 @@ final _chopper = ChopperClient(
     HospitalService.create(),
     HealthInsurancesService.create(),
     EventProcedureService.create(),
-    MedicalShiftService.create()
+    MedicalShiftService.create(),
+    SignUpService.create()
   ],
   interceptors: [
     HeadersInterceptor(customHeaders),
@@ -36,6 +38,7 @@ final _chopper = ChopperClient(
     MyResponseInterceptor(),
   ],
 );
+final signUpService = _chopper.getService<SignUpService>();
 final signInService = _chopper.getService<SignInService>();
 final procedureService = _chopper.getService<ProcedureService>();
 final eventsService = _chopper.getService<EventsService>();

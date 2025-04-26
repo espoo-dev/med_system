@@ -58,6 +58,10 @@ abstract class _MedicalShiftStoreBase with Store {
   bool? selectedPaymentStatus;
 
   @observable
+  DateTime? _selectedDate;
+  get selectedDate => _selectedDate;
+
+  @observable
   String? hospitalName;
 
   @observable
@@ -312,6 +316,7 @@ abstract class _MedicalShiftStoreBase with Store {
   void filterMedicalShiftsByDate(DateTime selectedDate) {
     List<MedicalShiftModel> filteredList = [];
     filteredList.clear();
+    _selectedDate = selectedDate;
 
     for (var medicalShift in medicalShiftListCalendar) {
       if (medicalShift.date?.isEmpty ?? true) {

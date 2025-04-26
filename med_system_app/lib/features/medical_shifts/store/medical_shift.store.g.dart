@@ -122,6 +122,22 @@ mixin _$MedicalShiftStore on _MedicalShiftStoreBase, Store {
     });
   }
 
+  late final _$_selectedDateAtom =
+      Atom(name: '_MedicalShiftStoreBase._selectedDate', context: context);
+
+  @override
+  DateTime? get _selectedDate {
+    _$_selectedDateAtom.reportRead();
+    return super._selectedDate;
+  }
+
+  @override
+  set _selectedDate(DateTime? value) {
+    _$_selectedDateAtom.reportWrite(value, super._selectedDate, () {
+      super._selectedDate = value;
+    });
+  }
+
   late final _$hospitalNameAtom =
       Atom(name: '_MedicalShiftStoreBase.hospitalName', context: context);
 
