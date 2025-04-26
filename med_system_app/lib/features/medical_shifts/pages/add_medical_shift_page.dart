@@ -21,8 +21,13 @@ import 'package:mobx/mobx.dart';
 
 class AddMedicalShiftPage extends StatefulWidget {
   final bool backToHome;
+  final DateTime? initialDate;
 
-  const AddMedicalShiftPage({super.key, this.backToHome = false});
+  const AddMedicalShiftPage({
+    super.key,
+    this.backToHome = false,
+    this.initialDate,
+  });
 
   @override
   State<AddMedicalShiftPage> createState() => _AddMedicalShiftPageState();
@@ -191,7 +196,7 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                           onChanged: addMedicalShiftStore.setStartDate,
                           label: 'Data início',
                           textColor: Theme.of(context).colorScheme.primary,
-                          selectedDate: DateTime.now(),
+                          selectedDate: widget.initialDate ?? DateTime.now(),
                         ),
                         const SizedBox(
                           height: 15,
