@@ -4,6 +4,8 @@ import 'package:distrito_medico/core/widgets/my_button_widget.dart';
 import 'package:distrito_medico/core/widgets/my_text_form_field.widget.dart';
 import 'package:distrito_medico/core/widgets/my_text_form_field_password.widget.dart';
 import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
+import 'package:distrito_medico/features/doctor_registration/pages/signup.page.dart';
+import 'package:distrito_medico/features/forgot_passoword/forgot_password.page.dart';
 import 'package:distrito_medico/features/home/pages/home_page.dart';
 import 'package:distrito_medico/features/signin/store/signin.store.dart';
 import 'package:flutter/material.dart';
@@ -95,19 +97,55 @@ class _SignInPageState extends State<SignInPage> {
                       },
                       onChanged: signInStore.changePassword),
                   const SizedBox(height: 24.0),
-                  Center(child: Observer(builder: (_) {
-                    return MyButtonWidget(
-                      text: 'Entrar',
-                      isLoading: signInStore.signInState == SignInState.loading,
-                      onTap: () async {
-                        _formKey.currentState?.save();
-                        if (_formKey.currentState!.validate()) {
-                          await signInStore.signIn(
-                              signInStore.email, signInStore.password);
-                        }
-                      },
-                    );
-                  })),
+                  Center(
+                    child: Column(
+                      children: [
+                        Observer(builder: (_) {
+                          return MyButtonWidget(
+                            text: 'Entrar',
+                            isLoading:
+                                signInStore.signInState == SignInState.loading,
+                            onTap: () async {
+                              _formKey.currentState?.save();
+                              if (_formKey.currentState!.validate()) {
+                                await signInStore.signIn(
+                                    signInStore.email, signInStore.password);
+                              }
+                            },
+                          );
+                        }),
+                        const SizedBox(height: 16),
+                        TextButton(
+                          onPressed: () {
+                            push(
+                                context,
+                                const ForgotPasswordPage(
+                                  url: '',
+                                ));
+                          },
+                          child: Text(
+                            'Esqueceu sua senha?',
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            push(context, const SignUpPage());
+                          },
+                          child: Text(
+                            'Registrar',
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
