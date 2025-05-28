@@ -1,4 +1,6 @@
 import 'package:distrito_medico/core/storage/shared_preference_helper.dart';
+import 'package:distrito_medico/features/doctor_registration/repository/signup_repository.dart';
+import 'package:distrito_medico/features/doctor_registration/store/signup.store.dart';
 import 'package:distrito_medico/features/event_procedures/repository/event_procedure_repository.dart';
 import 'package:distrito_medico/features/event_procedures/store/add_event_procedure.store.dart';
 import 'package:distrito_medico/features/event_procedures/store/edit_event_procedure.store.dart';
@@ -51,6 +53,7 @@ void setupServiceLocator() {
   getIt.registerSingleton(HealthInsurancesRepository());
   getIt.registerSingleton(EventProcedureRepository());
   getIt.registerSingleton(MedicalShiftRepository());
+  getIt.registerSingleton(SignUpRepository());
 
   // stores
 
@@ -112,4 +115,7 @@ void setupServiceLocator() {
       () => EditMedicalShiftStore(getIt<MedicalShiftRepository>()));
 
   getIt.registerLazySingleton<PdfViewerStore>(() => PdfViewerStore());
+
+  getIt.registerLazySingleton<SignUpStore>(
+      () => SignUpStore(getIt<SignUpRepository>()));
 }
