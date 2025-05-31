@@ -120,7 +120,8 @@ class _SignInPageState extends State<SignInPage> {
                             push(
                                 context,
                                 const ForgotPasswordPage(
-                                  url: '',
+                                  url:
+                                      'https://api.meusprocedimentos.com.br/users/password/new',
                                 ));
                           },
                           child: Text(
