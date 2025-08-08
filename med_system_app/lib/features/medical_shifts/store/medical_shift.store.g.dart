@@ -392,6 +392,17 @@ mixin _$MedicalShiftStore on _MedicalShiftStoreBase, Store {
   }
 
   @override
+  void setMonthAndYearAndFetchShifts(int month, int year) {
+    final _$actionInfo = _$_MedicalShiftStoreBaseActionController.startAction(
+        name: '_MedicalShiftStoreBase.setMonthAndYearAndFetchShifts');
+    try {
+      return super.setMonthAndYearAndFetchShifts(month, year);
+    } finally {
+      _$_MedicalShiftStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic dispose() {
     final _$actionInfo = _$_MedicalShiftStoreBaseActionController.startAction(
         name: '_MedicalShiftStoreBase.dispose');

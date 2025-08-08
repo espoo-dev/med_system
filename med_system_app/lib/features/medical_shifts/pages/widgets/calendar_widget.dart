@@ -6,6 +6,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 
 class CalendarWidget extends StatefulWidget {
   final Function(DateTime) onDaySelected;
+  final Function(int month, int year)? onMonthChanged;
   final int initialMonth;
   final int initialYear;
   final List<MedicalShiftModel> events;
@@ -13,6 +14,7 @@ class CalendarWidget extends StatefulWidget {
   const CalendarWidget({
     super.key,
     required this.onDaySelected,
+    required this.onMonthChanged,
     required this.initialMonth,
     required this.initialYear,
     required this.events,
@@ -78,12 +80,20 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   onFormatChanged: (format) {
                     setState(() {});
                   },
+                  onPageChanged: (focusedDay) {
+                    setState(() {
+                      _focusedDay = focusedDay;
+                    });
+
+                    widget.onMonthChanged
+                        ?.call(focusedDay.month, focusedDay.year);
+                  },
                   availableGestures: AvailableGestures.none,
                   headerStyle: HeaderStyle(
                     titleCentered: true,
                     formatButtonVisible: false,
-                    leftChevronVisible: false,
-                    rightChevronVisible: false,
+                    leftChevronVisible: true,
+                    rightChevronVisible: true,
                     titleTextStyle: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
