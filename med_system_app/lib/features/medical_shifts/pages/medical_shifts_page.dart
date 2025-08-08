@@ -1,4 +1,3 @@
-import 'package:distrito_medico/core/theme/animations.dart';
 import 'package:distrito_medico/core/theme/icons.dart';
 import 'package:distrito_medico/core/utils/ui.dart';
 import 'package:distrito_medico/core/widgets/bottom_bar_widget.dart';
@@ -20,7 +19,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
-import 'package:lottie/lottie.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../core/utils/navigation_utils.dart';
@@ -202,6 +200,8 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
                           medicalShiftStore
                               .filterMedicalShiftsByDate(selectedDate);
                         },
+                        onMonthChanged:
+                            medicalShiftStore.setMonthAndYearAndFetchShifts,
                       ),
                     ],
                   );
@@ -227,22 +227,15 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
                       return const Center(child: CircularProgressIndicator());
                     }
                     if (medicalShiftStore.medicalShiftList.isEmpty) {
-                      return Column(
+                      return const Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           Padding(
-                            padding: const EdgeInsets.only(left: 30, right: 20),
+                            padding: EdgeInsets.only(left: 30, right: 20),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Center(
-                                  child: Lottie.asset(animationEventProcedure,
-                                      height: 250, width: 250),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                const Center(
                                   child: Text(
                                     'Plantão não encontrado.',
                                     style: TextStyle(

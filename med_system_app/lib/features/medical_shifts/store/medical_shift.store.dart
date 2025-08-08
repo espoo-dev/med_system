@@ -221,6 +221,13 @@ abstract class _MedicalShiftStoreBase with Store {
     );
   }
 
+  @action
+  void setMonthAndYearAndFetchShifts(int month, int year) {
+    setSelectedMonth(month);
+    setSelectedYear(year);
+    getAllMedicalShiftByFilters();
+  }
+
   handleSuccess(List<MedicalShiftModel>? listMedicalShifts) {
     medicalShiftList.addAll(listMedicalShifts!);
     medicalShiftListCalendar.addAll(listMedicalShifts);
