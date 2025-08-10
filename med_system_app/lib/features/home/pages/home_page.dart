@@ -4,6 +4,7 @@ import 'package:distrito_medico/core/widgets/my_horizontal_menu.widget.dart';
 import 'package:distrito_medico/features/event_procedures/model/event_procedure.model.dart';
 import 'package:distrito_medico/features/event_procedures/pages/add_event_procedure_page.dart';
 import 'package:distrito_medico/features/home/model/menu_home.model.dart';
+import 'package:distrito_medico/features/home/model/menu_home_medical_shift.dart';
 import 'package:distrito_medico/features/home/pages/empty_events_procedures_page.dart';
 import 'package:distrito_medico/features/home/store/home.store.dart';
 import 'package:distrito_medico/features/home/widgets/build_header.widget.dart';
@@ -27,6 +28,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   MenuHomeModel menuHomeModel = MenuHomeModel();
+  MenuHomeMedicalSfhitModel menuHomeMedicalShiftsaModel =
+      MenuHomeMedicalSfhitModel();
   final homeStore = GetIt.I.get<HomeStore>();
   final List<EventProcedures> _listEventProcedures = [];
 
@@ -116,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                       homeStore.eventProcedureModel.totalpaid,
                       homeStore.eventProcedureModel.totalUnpaid,
                       context)
-                  : menuHomeModel.buildMenuHome(
+                  : menuHomeMedicalShiftsaModel.buildMenuHome(
                       homeStore.medicalShift.total,
                       homeStore.medicalShift.totalpaid,
                       homeStore.medicalShift.totalUnpaid,
