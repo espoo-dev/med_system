@@ -10,6 +10,7 @@ import 'package:distrito_medico/core/api/services/hospitals/hospital.service.dar
 import 'package:distrito_medico/core/api/services/medical_shift/medical_shift.service.dart';
 import 'package:distrito_medico/core/api/services/patients/patient.service.dart';
 import 'package:distrito_medico/core/api/services/procedures/procedure.service.dart';
+import 'package:distrito_medico/core/api/services/medical_shift_recurrences/medical_shift_recurrence.service.dart';
 
 var customHeaders = {
   'content-type': 'application/json; charset=UTF-8',
@@ -29,6 +30,7 @@ final _chopper = ChopperClient(
     HealthInsurancesService.create(),
     EventProcedureService.create(),
     MedicalShiftService.create(),
+    MedicalShiftRecurrenceService.create(),
     SignUpService.create()
   ],
   interceptors: [
@@ -47,3 +49,4 @@ final hospitalService = _chopper.getService<HospitalService>();
 final healthInsurancesService = _chopper.getService<HealthInsurancesService>();
 final eventProcedureService = _chopper.getService<EventProcedureService>();
 final medicalShiftService = _chopper.getService<MedicalShiftService>();
+final medicalShiftRecurrenceService = _chopper.getService<MedicalShiftRecurrenceService>();
