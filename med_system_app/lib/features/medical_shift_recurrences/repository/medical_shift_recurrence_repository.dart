@@ -9,8 +9,8 @@ class MedicalShiftRecurrenceRepository {
   Future<Result<MedicalShiftRecurrenceModel>?> createMedicalShiftRecurrence(
       MedicalShiftRecurrenceModel medicalShiftRecurrenceModel) async {
     try {
-      final response = await medicalShiftRecurrenceService
-          .createMedicalShiftRecurrence(
+      final response =
+          await medicalShiftRecurrenceService.createMedicalShiftRecurrence(
               json.encode(medicalShiftRecurrenceModel.toJson()));
 
       if (response.isSuccessful) {
@@ -38,10 +38,8 @@ class MedicalShiftRecurrenceRepository {
           await medicalShiftRecurrenceService.deleteMedicalShiftRecurrence(id);
 
       if (response.isSuccessful) {
-        // Assuming the delete response returns the deleted object or success message
-        // If it returns the deleted object:
         MedicalShiftRecurrenceModel? model =
-             MedicalShiftRecurrenceModel.fromJson(json.decode(response.body));
+            MedicalShiftRecurrenceModel.fromJson(json.decode(response.body));
         return Result.success(model);
       } else if (response.statusCode == 422) {
         return Result.failure(NetworkExceptions.getException(

@@ -161,6 +161,86 @@ mixin _$AddMedicalShiftStore on _AddMedicalShiftStoreBase, Store {
     });
   }
 
+  late final _$_isRecurrentAtom =
+      Atom(name: '_AddMedicalShiftStoreBase._isRecurrent', context: context);
+
+  @override
+  bool get _isRecurrent {
+    _$_isRecurrentAtom.reportRead();
+    return super._isRecurrent;
+  }
+
+  @override
+  set _isRecurrent(bool value) {
+    _$_isRecurrentAtom.reportWrite(value, super._isRecurrent, () {
+      super._isRecurrent = value;
+    });
+  }
+
+  late final _$_frequencyAtom =
+      Atom(name: '_AddMedicalShiftStoreBase._frequency', context: context);
+
+  @override
+  String? get _frequency {
+    _$_frequencyAtom.reportRead();
+    return super._frequency;
+  }
+
+  @override
+  set _frequency(String? value) {
+    _$_frequencyAtom.reportWrite(value, super._frequency, () {
+      super._frequency = value;
+    });
+  }
+
+  late final _$_dayOfWeekAtom =
+      Atom(name: '_AddMedicalShiftStoreBase._dayOfWeek', context: context);
+
+  @override
+  int? get _dayOfWeek {
+    _$_dayOfWeekAtom.reportRead();
+    return super._dayOfWeek;
+  }
+
+  @override
+  set _dayOfWeek(int? value) {
+    _$_dayOfWeekAtom.reportWrite(value, super._dayOfWeek, () {
+      super._dayOfWeek = value;
+    });
+  }
+
+  late final _$_dayOfMonthAtom =
+      Atom(name: '_AddMedicalShiftStoreBase._dayOfMonth', context: context);
+
+  @override
+  int? get _dayOfMonth {
+    _$_dayOfMonthAtom.reportRead();
+    return super._dayOfMonth;
+  }
+
+  @override
+  set _dayOfMonth(int? value) {
+    _$_dayOfMonthAtom.reportWrite(value, super._dayOfMonth, () {
+      super._dayOfMonth = value;
+    });
+  }
+
+  late final _$_endDateAtom =
+      Atom(name: '_AddMedicalShiftStoreBase._endDate', context: context);
+
+  @override
+  String? get _endDate {
+    _$_endDateAtom.reportRead();
+    return super._endDate;
+  }
+
+  @override
+  set _endDate(String? value) {
+    _$_endDateAtom.reportWrite(value, super._endDate, () {
+      super._endDate = value;
+    });
+  }
+
   late final _$createMedicalShiftAsyncAction = AsyncAction(
       '_AddMedicalShiftStoreBase.createMedicalShift',
       context: context);
@@ -169,6 +249,15 @@ mixin _$AddMedicalShiftStore on _AddMedicalShiftStoreBase, Store {
   Future createMedicalShift() {
     return _$createMedicalShiftAsyncAction
         .run(() => super.createMedicalShift());
+  }
+
+  late final _$_createRecurrenceAsyncAction = AsyncAction(
+      '_AddMedicalShiftStoreBase._createRecurrence',
+      context: context);
+
+  @override
+  Future<void> _createRecurrence() {
+    return _$_createRecurrenceAsyncAction.run(() => super._createRecurrence());
   }
 
   late final _$fetchAllDataAsyncAction =
@@ -263,6 +352,61 @@ mixin _$AddMedicalShiftStore on _AddMedicalShiftStoreBase, Store {
         .startAction(name: '_AddMedicalShiftStoreBase.setpaid');
     try {
       return super.setpaid(paid);
+    } finally {
+      _$_AddMedicalShiftStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setIsRecurrent(bool isRecurrent) {
+    final _$actionInfo = _$_AddMedicalShiftStoreBaseActionController
+        .startAction(name: '_AddMedicalShiftStoreBase.setIsRecurrent');
+    try {
+      return super.setIsRecurrent(isRecurrent);
+    } finally {
+      _$_AddMedicalShiftStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setFrequency(String? frequency) {
+    final _$actionInfo = _$_AddMedicalShiftStoreBaseActionController
+        .startAction(name: '_AddMedicalShiftStoreBase.setFrequency');
+    try {
+      return super.setFrequency(frequency);
+    } finally {
+      _$_AddMedicalShiftStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setDayOfWeek(int? dayOfWeek) {
+    final _$actionInfo = _$_AddMedicalShiftStoreBaseActionController
+        .startAction(name: '_AddMedicalShiftStoreBase.setDayOfWeek');
+    try {
+      return super.setDayOfWeek(dayOfWeek);
+    } finally {
+      _$_AddMedicalShiftStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setDayOfMonth(int? dayOfMonth) {
+    final _$actionInfo = _$_AddMedicalShiftStoreBaseActionController
+        .startAction(name: '_AddMedicalShiftStoreBase.setDayOfMonth');
+    try {
+      return super.setDayOfMonth(dayOfMonth);
+    } finally {
+      _$_AddMedicalShiftStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setEndDate(String? endDate) {
+    final _$actionInfo = _$_AddMedicalShiftStoreBaseActionController
+        .startAction(name: '_AddMedicalShiftStoreBase.setEndDate');
+    try {
+      return super.setEndDate(endDate);
     } finally {
       _$_AddMedicalShiftStoreBaseActionController.endAction(_$actionInfo);
     }

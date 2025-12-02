@@ -291,6 +291,314 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                           initialValue: false,
                           onChanged: addMedicalShiftStore.setpaid,
                         ),
+                        // Recurrence Section
+                        Observer(builder: (_) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CustomSwitch(
+                                labelText: "Recorrente",
+                                initialValue: addMedicalShiftStore.isRecurrent,
+                                onChanged: addMedicalShiftStore.setIsRecurrent,
+                              ),
+                              if (addMedicalShiftStore.isRecurrent) ...[
+                                const SizedBox(height: 15),
+                                const Text(
+                                  "Frequência",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                DropdownButtonFormField<String>(
+                                  value: addMedicalShiftStore.frequency,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
+                                    ),
+                                    hintText: "Selecione a frequência",
+                                  ),
+                                  items: const [
+                                    DropdownMenuItem(
+                                      value: "weekly",
+                                      child: Text("Semanal"),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: "biweekly",
+                                      child: Text("Quinzenal"),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: "monthly_fixed_day",
+                                      child: Text("Escolha um dia"),
+                                    ),
+                                  ],
+                                  onChanged: addMedicalShiftStore.setFrequency,
+                                ),
+                                if (addMedicalShiftStore.frequency != null &&
+                                    addMedicalShiftStore.frequency !=
+                                        'monthly_fixed_day') ...[
+                                  const SizedBox(height: 15),
+                                  const Text(
+                                    "Dia da Semana",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  DropdownButtonFormField<int>(
+                                    value: addMedicalShiftStore.dayOfWeek,
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: BorderSide(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: BorderSide(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: BorderSide(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary),
+                                      ),
+                                      hintText: "Selecione o dia da semana",
+                                    ),
+                                    items: const [
+                                      DropdownMenuItem(
+                                          value: 0, child: Text("Domingo")),
+                                      DropdownMenuItem(
+                                          value: 1, child: Text("Segunda")),
+                                      DropdownMenuItem(
+                                          value: 2, child: Text("Terça")),
+                                      DropdownMenuItem(
+                                          value: 3, child: Text("Quarta")),
+                                      DropdownMenuItem(
+                                          value: 4, child: Text("Quinta")),
+                                      DropdownMenuItem(
+                                          value: 5, child: Text("Sexta")),
+                                      DropdownMenuItem(
+                                          value: 6, child: Text("Sábado")),
+                                    ],
+                                    onChanged:
+                                        addMedicalShiftStore.setDayOfWeek,
+                                  ),
+                                ],
+                                if (addMedicalShiftStore.frequency ==
+                                    'monthly_fixed_day') ...[
+                                  const SizedBox(height: 15),
+                                  const Text(
+                                    "Dia do Mês",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  DropdownButtonFormField<int>(
+                                    value: addMedicalShiftStore.dayOfMonth,
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: BorderSide(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: BorderSide(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: BorderSide(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary),
+                                      ),
+                                      hintText: "Selecione o dia do mês",
+                                    ),
+                                    items: List.generate(
+                                      31,
+                                      (index) => DropdownMenuItem(
+                                        value: index + 1,
+                                        child: Text("${index + 1}"),
+                                      ),
+                                    ),
+                                    onChanged:
+                                        addMedicalShiftStore.setDayOfMonth,
+                                  ),
+                                ],
+                                const SizedBox(height: 15),
+                                const Text(
+                                  "Data Final (Opcional)",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: InkWell(
+                                        onTap: () async {
+                                          final ThemeData theme =
+                                              Theme.of(context);
+                                          final ColorScheme colorScheme =
+                                              theme.colorScheme.copyWith(
+                                            primary: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            onPrimary: Colors.white,
+                                            onBackground: Colors.white,
+                                            surfaceTint: Colors.white,
+                                          );
+
+                                          final date = await showDatePicker(
+                                            context: context,
+                                            helpText: 'Selecione a data final',
+                                            locale: const Locale('pt', 'BR'),
+                                            initialEntryMode:
+                                                DatePickerEntryMode.calendar,
+                                            initialDate: addMedicalShiftStore
+                                                        .endDate !=
+                                                    null
+                                                ? _parseDate(
+                                                    addMedicalShiftStore
+                                                        .endDate!)
+                                                : DateTime.now()
+                                                    .add(Duration(days: 30)),
+                                            firstDate: DateTime.now(),
+                                            lastDate: DateTime(
+                                                DateTime.now().year + 5),
+                                            builder: (BuildContext context,
+                                                Widget? child) {
+                                              return Theme(
+                                                data: theme.copyWith(
+                                                    colorScheme: colorScheme),
+                                                child: child ?? Container(),
+                                              );
+                                            },
+                                          );
+
+                                          if (date != null) {
+                                            String formattedDate =
+                                                "${date.day}/${date.month}/${date.year}";
+
+                                            // Validate end date is after start date
+                                            if (addMedicalShiftStore
+                                                .startDate.isNotEmpty) {
+                                              DateTime startDate = _parseDate(
+                                                  addMedicalShiftStore
+                                                      .startDate);
+                                              if (date.isBefore(startDate) ||
+                                                  date.isAtSameMomentAs(
+                                                      startDate)) {
+                                                CustomToast.show(context,
+                                                    type: ToastType.error,
+                                                    title: "Data inválida",
+                                                    description:
+                                                        "A data final deve ser maior que a data inicial.");
+                                                return;
+                                              }
+                                            }
+
+                                            addMedicalShiftStore
+                                                .setEndDate(formattedDate);
+                                          }
+                                        },
+                                        child: InputDecorator(
+                                          decoration: InputDecoration(
+                                            hintText: "Selecione a data final",
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              borderSide: BorderSide(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                              ),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              borderSide: BorderSide(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                              ),
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              borderSide: BorderSide(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                              ),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            addMedicalShiftStore.endDate ??
+                                                "Selecione a data final",
+                                            style: TextStyle(
+                                              color: addMedicalShiftStore
+                                                          .endDate !=
+                                                      null
+                                                  ? Theme.of(context)
+                                                      .colorScheme
+                                                      .primary
+                                                  : Colors.grey,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    if (addMedicalShiftStore.endDate != null)
+                                      IconButton(
+                                        icon: const Icon(Icons.clear),
+                                        color: Colors.red,
+                                        onPressed: () {
+                                          addMedicalShiftStore.setEndDate(null);
+                                        },
+                                      ),
+                                  ],
+                                ),
+                              ],
+                            ],
+                          );
+                        }),
                         const SizedBox(
                           height: 15,
                         ),
@@ -324,5 +632,18 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
         ),
       ],
     );
+  }
+
+  DateTime _parseDate(String dateString) {
+    // Parse date in format dd/MM/yyyy
+    final parts = dateString.split('/');
+    if (parts.length == 3) {
+      return DateTime(
+        int.parse(parts[2]), // year
+        int.parse(parts[1]), // month
+        int.parse(parts[0]), // day
+      );
+    }
+    return DateTime.now();
   }
 }

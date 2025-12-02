@@ -306,7 +306,7 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
                                                 context: context,
                                                 title: 'Excluir Plantão',
                                                 content: hasRecurrence
-                                                    ? 'Este plantão faz parte de uma recorrência. Tem certeza que deseja excluir este plantão e sua recorrência?'
+                                                    ? 'Este plantão faz parte de uma recorrência. Ao confirmar, a recorrência será excluída e não serão criados novos plantões. Tem certeza?'
                                                     : 'Tem certeza que deseja excluir este plantão?',
                                                 textYes: 'Sim',
                                                 textNo: 'Não',
