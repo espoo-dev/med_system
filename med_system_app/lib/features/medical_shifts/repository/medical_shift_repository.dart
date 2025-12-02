@@ -194,11 +194,24 @@ class MedicalShiftRepository {
   Future<Result<MedicalShiftModel>?> deleteMedicalShift(int medicalShiftId,
       {int? medicalShiftRecurrenceId}) async {
     try {
+      // If there's a recurrence ID, delete ONLY the recurrence
       if (medicalShiftRecurrenceId != null) {
-        await _recurrenceRepository
+        final recurrenceResult = await _recurrenceRepository
             .deleteMedicalShiftRecurrence(medicalShiftRecurrenceId);
+        
+        // Return success based on recurrence deletion
+        return recurrenceResult?.when(
+          success: (recurrence) {
+            // Create a dummy MedicalShiftModel for success response
+            return Result.success(MedicalShiftModel(id: medicalShiftId));
+          },
+          failure: (error) {
+            return Result.failure(error);
+          },
+        );
       }
 
+      // If no recurrence ID, delete the shift normally
       final response =
           await medicalShiftService.deleteEventMedicalShifts(medicalShiftId);
 

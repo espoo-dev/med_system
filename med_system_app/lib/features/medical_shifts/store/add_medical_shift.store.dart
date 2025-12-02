@@ -3,6 +3,8 @@
 import 'package:distrito_medico/core/api/network_exceptions.dart';
 import 'package:distrito_medico/features/medical_shifts/model/add_medical_shift.model.dart';
 import 'package:distrito_medico/features/medical_shifts/repository/medical_shift_repository.dart';
+import 'package:distrito_medico/features/medical_shift_recurrences/model/medical_shift_recurrence.model.dart';
+import 'package:distrito_medico/features/medical_shift_recurrences/repository/medical_shift_recurrence_repository.dart';
 import 'package:mobx/mobx.dart';
 
 part 'add_medical_shift.store.g.dart';
@@ -17,6 +19,8 @@ enum MedicalShiftState { idle, success, error, loading }
 
 abstract class _AddMedicalShiftStoreBase with Store {
   final MedicalShiftRepository _medicalShiftRepository;
+  final MedicalShiftRecurrenceRepository _recurrenceRepository =
+      MedicalShiftRecurrenceRepository();
 
   @observable
   SaveMedicalShiftState saveState = SaveMedicalShiftState.idle;
@@ -87,6 +91,61 @@ abstract class _AddMedicalShiftStoreBase with Store {
     _paid = paid;
   }
 
+  // Recurrence fields
+  @observable
+  bool _isRecurrent = false;
+  get isRecurrent => _isRecurrent;
+  @action
+  void setIsRecurrent(bool isRecurrent) {
+    _isRecurrent = isRecurrent;
+    // Reset recurrence fields when disabled
+    if (!isRecurrent) {
+      _frequency = null;
+      _dayOfWeek = null;
+      _dayOfMonth = null;
+      _endDate = null;
+    }
+  }
+
+  @observable
+  String? _frequency;
+  get frequency => _frequency;
+  @action
+  void setFrequency(String? frequency) {
+    _frequency = frequency;
+    // Reset day fields when frequency changes
+    if (frequency != 'monthly_fixed_day') {
+      _dayOfMonth = null;
+    }
+    if (frequency == 'monthly_fixed_day') {
+      _dayOfWeek = null;
+    }
+  }
+
+  @observable
+  int? _dayOfWeek;
+  get dayOfWeek => _dayOfWeek;
+  @action
+  void setDayOfWeek(int? dayOfWeek) {
+    _dayOfWeek = dayOfWeek;
+  }
+
+  @observable
+  int? _dayOfMonth;
+  get dayOfMonth => _dayOfMonth;
+  @action
+  void setDayOfMonth(int? dayOfMonth) {
+    _dayOfMonth = dayOfMonth;
+  }
+
+  @observable
+  String? _endDate;
+  get endDate => _endDate;
+  @action
+  void setEndDate(String? endDate) {
+    _endDate = endDate;
+  }
+
   bool validateHospitalName() {
     return _hospitalName.isNotEmpty;
   }
@@ -132,12 +191,38 @@ abstract class _AddMedicalShiftStoreBase with Store {
         ),
       );
 
-      registerShiftResult?.when(success: (shift) {
+      registerShiftResult?.when(success: (shift) async {
+        // If recurrence is enabled, create the recurrence
+        if (_isRecurrent && _frequency != null) {
+          await _createRecurrence();
+        }
         saveState = SaveMedicalShiftState.success;
       }, failure: (NetworkExceptions error) {
         handleError(NetworkExceptions.getErrorMessage(error));
         saveState = SaveMedicalShiftState.error;
       });
+    }
+  }
+
+  @action
+  Future<void> _createRecurrence() async {
+    try {
+      final recurrenceModel = MedicalShiftRecurrenceModel(
+        frequency: _frequency,
+        dayOfWeek: _dayOfWeek,
+        dayOfMonth: _dayOfMonth,
+        endDate: _endDate,
+        workload: _workload,
+        startDate: _startDate,
+        amountCents: parseReal(_amountCents),
+        hospitalName: _hospitalName,
+        startHour: _startHour,
+      );
+
+      await _recurrenceRepository.createMedicalShiftRecurrence(recurrenceModel);
+    } catch (e) {
+      // Log error but don't fail the shift creation
+      handleError('Erro ao criar recorrência: ${e.toString()}');
     }
   }
 
@@ -191,6 +276,11 @@ abstract class _AddMedicalShiftStoreBase with Store {
     _startHour = "";
     _amountCents = "";
     _paid = false;
+    _isRecurrent = false;
+    _frequency = null;
+    _dayOfWeek = null;
+    _dayOfMonth = null;
+    _endDate = null;
     saveState = SaveMedicalShiftState.idle;
   }
 
