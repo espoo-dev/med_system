@@ -240,10 +240,12 @@ abstract class _MedicalShiftStoreBase with Store {
   }
 
   @action
-  deleteMedicalShift(int medicalShiftId, index) async {
+  deleteMedicalShift(int medicalShiftId, index,
+      {int? medicalShiftRecurrenceId}) async {
     deleteState = DeleteMedicalShiftState.loading;
-    var deleteResult =
-        await _medicalShiftRepository.deleteMedicalShift(medicalShiftId);
+    var deleteResult = await _medicalShiftRepository.deleteMedicalShift(
+        medicalShiftId,
+        medicalShiftRecurrenceId: medicalShiftRecurrenceId);
     deleteResult?.when(success: (shift) {
       medicalShiftList.removeAt(index);
       deleteState = DeleteMedicalShiftState.success;

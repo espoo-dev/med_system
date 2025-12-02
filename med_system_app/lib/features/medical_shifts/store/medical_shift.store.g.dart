@@ -275,9 +275,11 @@ mixin _$MedicalShiftStore on _MedicalShiftStoreBase, Store {
       context: context);
 
   @override
-  Future deleteMedicalShift(int medicalShiftId, dynamic index) {
-    return _$deleteMedicalShiftAsyncAction
-        .run(() => super.deleteMedicalShift(medicalShiftId, index));
+  Future deleteMedicalShift(int medicalShiftId, dynamic index,
+      {int? medicalShiftRecurrenceId}) {
+    return _$deleteMedicalShiftAsyncAction.run(() => super.deleteMedicalShift(
+        medicalShiftId, index,
+        medicalShiftRecurrenceId: medicalShiftRecurrenceId));
   }
 
   late final _$editPaymentMedicalShiftAsyncAction = AsyncAction(

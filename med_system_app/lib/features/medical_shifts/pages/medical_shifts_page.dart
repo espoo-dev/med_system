@@ -298,20 +298,27 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
                                             icon: Icons.delete,
                                             label: 'Deletar',
                                             onPressed: (context) {
+                                              final hasRecurrence =
+                                                  medicalShiftModel
+                                                          .medicalShiftRecurrenceId !=
+                                                      null;
                                               showAlert(
                                                 context: context,
                                                 title: 'Excluir Plantão',
-                                                content:
-                                                    'Tem certeza que deseja excluir este plantão?',
+                                                content: hasRecurrence
+                                                    ? 'Este plantão faz parte de uma recorrência. Tem certeza que deseja excluir este plantão e sua recorrência?'
+                                                    : 'Tem certeza que deseja excluir este plantão?',
                                                 textYes: 'Sim',
                                                 textNo: 'Não',
                                                 onPressedConfirm: () {
                                                   medicalShiftStore
                                                       .deleteMedicalShift(
-                                                          medicalShiftModel
-                                                                  .id ??
-                                                              0,
-                                                          index);
+                                                    medicalShiftModel.id ?? 0,
+                                                    index,
+                                                    medicalShiftRecurrenceId:
+                                                        medicalShiftModel
+                                                            .medicalShiftRecurrenceId,
+                                                  );
                                                 },
                                                 onPressedCancel: () {},
                                               );

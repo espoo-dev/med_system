@@ -11,8 +11,11 @@ import 'package:distrito_medico/features/medical_shifts/model/medical_shift.mode
 import 'package:distrito_medico/features/medical_shifts/model/medical_shift_list.model.dart';
 
 import '../model/amount_suggestions.model.dart';
+import '../../medical_shift_recurrences/repository/medical_shift_recurrence_repository.dart';
 
 class MedicalShiftRepository {
+  final MedicalShiftRecurrenceRepository _recurrenceRepository =
+      MedicalShiftRecurrenceRepository();
   Future<Result<MedicalShiftList?>?> getMedicalShiftsByFilters(
       {int? page,
       int? perPage,
@@ -188,9 +191,14 @@ class MedicalShiftRepository {
     return null;
   }
 
-  Future<Result<MedicalShiftModel>?> deleteMedicalShift(
-      int medicalShiftId) async {
+  Future<Result<MedicalShiftModel>?> deleteMedicalShift(int medicalShiftId,
+      {int? medicalShiftRecurrenceId}) async {
     try {
+      if (medicalShiftRecurrenceId != null) {
+        await _recurrenceRepository
+            .deleteMedicalShiftRecurrence(medicalShiftRecurrenceId);
+      }
+
       final response =
           await medicalShiftService.deleteEventMedicalShifts(medicalShiftId);
 
