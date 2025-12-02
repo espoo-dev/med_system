@@ -9,6 +9,24 @@ part of 'medical_shift.store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$MedicalShiftStore on _MedicalShiftStoreBase, Store {
+  late final _$medicalShiftListCalendarAtom = Atom(
+      name: '_MedicalShiftStoreBase.medicalShiftListCalendar',
+      context: context);
+
+  @override
+  ObservableList<MedicalShiftModel> get medicalShiftListCalendar {
+    _$medicalShiftListCalendarAtom.reportRead();
+    return super.medicalShiftListCalendar;
+  }
+
+  @override
+  set medicalShiftListCalendar(ObservableList<MedicalShiftModel> value) {
+    _$medicalShiftListCalendarAtom
+        .reportWrite(value, super.medicalShiftListCalendar, () {
+      super.medicalShiftListCalendar = value;
+    });
+  }
+
   late final _$stateAtom =
       Atom(name: '_MedicalShiftStoreBase.state', context: context);
 
@@ -429,6 +447,7 @@ mixin _$MedicalShiftStore on _MedicalShiftStoreBase, Store {
   @override
   String toString() {
     return '''
+medicalShiftListCalendar: ${medicalShiftListCalendar},
 state: ${state},
 editState: ${editState},
 deleteState: ${deleteState},

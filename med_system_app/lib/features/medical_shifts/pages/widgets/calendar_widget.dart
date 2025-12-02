@@ -64,6 +64,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
                 ),
                 child: TableCalendar(
+                  key: ValueKey(widget.events.length),
                   firstDay: DateTime(2000),
                   lastDay: DateTime(2100),
                   focusedDay: _focusedDay,

@@ -107,8 +107,7 @@ abstract class _EventProcedureStore with Store {
         _healthInsurancesRepository = healthInsurancesRepository;
 
   List<int> get years {
-    int currentYear = DateTime.now().year;
-    return List.generate(20, (index) => currentYear - index);
+    return List.generate(31, (index) => 2050 - index);
   }
 
   List<int> get months => List.generate(12, (index) => index + 1);

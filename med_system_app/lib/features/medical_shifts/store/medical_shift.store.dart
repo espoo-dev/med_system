@@ -32,6 +32,7 @@ abstract class _MedicalShiftStoreBase with Store {
   ObservableList<MedicalShiftModel> medicalShiftList =
       ObservableList<MedicalShiftModel>();
 
+  @observable
   ObservableList<MedicalShiftModel> medicalShiftListCalendar =
       ObservableList<MedicalShiftModel>();
 
@@ -89,8 +90,7 @@ abstract class _MedicalShiftStoreBase with Store {
       : _medicalShiftRepository = medicalShiftRepository;
 
   List<int> get years {
-    int currentYear = DateTime.now().year;
-    return List.generate(20, (index) => currentYear - index);
+    return List.generate(31, (index) => 2050 - index);
   }
 
   List<int> get months => List.generate(12, (index) => index + 1);
@@ -248,6 +248,11 @@ abstract class _MedicalShiftStoreBase with Store {
         medicalShiftRecurrenceId: medicalShiftRecurrenceId);
     deleteResult?.when(success: (shift) {
       medicalShiftList.removeAt(index);
+
+      medicalShiftListCalendar
+          .removeWhere((element) => element.id == medicalShiftId);
+      medicalShiftListCalendar = ObservableList.of(medicalShiftListCalendar);
+
       deleteState = DeleteMedicalShiftState.success;
     }, failure: (NetworkExceptions error) {
       handleError(NetworkExceptions.getErrorMessage(error));
