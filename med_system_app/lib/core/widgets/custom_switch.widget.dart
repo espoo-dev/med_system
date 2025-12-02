@@ -28,14 +28,16 @@ class _CustomSwitchState extends State<CustomSwitch> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          widget.labelText,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
+        Expanded(
+          child: Text(
+            widget.labelText,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         Switch(
