@@ -1,4 +1,5 @@
 import 'package:distrito_medico/core/theme/icons.dart';
+import 'package:distrito_medico/core/utils/delete_recurrence_dialog.dart';
 import 'package:distrito_medico/core/utils/ui.dart';
 import 'package:distrito_medico/core/widgets/bottom_bar_widget.dart';
 import 'package:distrito_medico/core/widgets/error.widget.dart';
@@ -297,20 +298,24 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
                                             backgroundColor: Colors.red,
                                             icon: Icons.delete,
                                             label: 'Deletar',
-                                            onPressed: (context) {
+                                            onPressed: (context) async {
                                               final hasRecurrence =
                                                   medicalShiftModel
                                                           .medicalShiftRecurrenceId !=
                                                       null;
-                                              showAlert(
-                                                context: context,
-                                                title: 'Excluir Plantão',
-                                                content: hasRecurrence
-                                                    ? 'Este plantão faz parte de uma recorrência. Ao confirmar, a recorrência será excluída e não serão criados novos plantões. Tem certeza?'
-                                                    : 'Tem certeza que deseja excluir este plantão?',
-                                                textYes: 'Sim',
-                                                textNo: 'Não',
-                                                onPressedConfirm: () {
+
+                                              if (hasRecurrence) {
+                                                // Show dialog with 3 options for recurrent shifts
+                                                final result =
+                                                    await showDeleteRecurrenceDialog(
+                                                  context: context,
+                                                );
+
+                                                if (result == null) {
+                                                  // User cancelled
+                                                  return;
+                                                } else if (result == true) {
+                                                  // Delete all recurrences
                                                   medicalShiftStore
                                                       .deleteMedicalShift(
                                                     medicalShiftModel.id ?? 0,
@@ -319,9 +324,37 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
                                                         medicalShiftModel
                                                             .medicalShiftRecurrenceId,
                                                   );
-                                                },
-                                                onPressedCancel: () {},
-                                              );
+                                                } else {
+                                                  // Delete only this shift
+                                                  medicalShiftStore
+                                                      .deleteMedicalShift(
+                                                    medicalShiftModel.id ?? 0,
+                                                    index,
+                                                    medicalShiftRecurrenceId:
+                                                        null,
+                                                  );
+                                                }
+                                              } else {
+                                                // Show normal confirmation dialog for non-recurrent shifts
+                                                showAlert(
+                                                  context: context,
+                                                  title: 'Excluir Plantão',
+                                                  content:
+                                                      'Tem certeza que deseja excluir este plantão?',
+                                                  textYes: 'Sim',
+                                                  textNo: 'Não',
+                                                  onPressedConfirm: () {
+                                                    medicalShiftStore
+                                                        .deleteMedicalShift(
+                                                      medicalShiftModel.id ?? 0,
+                                                      index,
+                                                      medicalShiftRecurrenceId:
+                                                          null,
+                                                    );
+                                                  },
+                                                  onPressedCancel: () {},
+                                                );
+                                              }
                                             })
                                       ],
                                     ),
