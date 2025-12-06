@@ -5,7 +5,8 @@ import 'package:distrito_medico/core/widgets/my_button_widget.dart';
 import 'package:distrito_medico/core/widgets/my_text_form_field.widget.dart';
 import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
 import 'package:distrito_medico/features/hospitals/pages/hospital_page.dart';
-import 'package:distrito_medico/features/hospitals/store/add_hospital.store.dart';
+import 'package:distrito_medico/features/hospitals/presentation/viewmodels/create_hospital_viewmodel.dart';
+import 'package:distrito_medico/features/hospitals/presentation/viewmodels/hospital_list_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
@@ -19,35 +20,45 @@ class AddHospitalPage extends StatefulWidget {
 }
 
 class _AddHospitalState extends State<AddHospitalPage> {
-  final addHospitalStore = GetIt.I.get<AddHospitalStore>();
+  final _viewModel = GetIt.I.get<CreateHospitalViewModel>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   final List<ReactionDisposer> _disposers = [];
 
   @override
   void initState() {
     super.initState();
+    _viewModel.reset();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _disposers.add(reaction<SaveHospitalState>(
-        (_) => addHospitalStore.saveState, (validationState) {
-      if (validationState == SaveHospitalState.success) {
-        to(
+    _disposers.add(reaction<CreateHospitalState>(
+      (_) => _viewModel.state,
+      (state) {
+        if (state == CreateHospitalState.success) {
+          // Atualiza a lista de hospitais
+          GetIt.I.get<HospitalListViewModel>().loadHospitals(refresh: true);
+
+          to(
             context,
             const SuccessPage(
               title: 'Hospital criado com sucesso!',
               goToPage: HospitalPage(),
-            ));
-      } else if (validationState == SaveHospitalState.error) {
-        CustomToast.show(context,
+            ),
+          );
+        } else if (state == CreateHospitalState.error) {
+          CustomToast.show(
+            context,
             type: ToastType.error,
             title: "Cadastrar novo hospital",
-            description: "Ocorreu um erro ao tentar cadastrar.");
-      }
-    }));
+            description: _viewModel.errorMessage.isNotEmpty
+                ? _viewModel.errorMessage
+                : "Ocorreu um erro ao tentar cadastrar.",
+          );
+        }
+      },
+    ));
   }
 
   @override
@@ -63,16 +74,17 @@ class _AddHospitalState extends State<AddHospitalPage> {
     return PopScope(
       canPop: false,
       onPopInvoked: (bool didPop) {
-        if (didPop) {}
+        if (didPop) return;
         to(context, const HospitalPage());
       },
       child: Scaffold(
-          appBar: const MyAppBar(
-            title: 'Novo hospital',
-            hideLeading: true,
-            image: null,
-          ),
-          body: form(context)),
+        appBar: const MyAppBar(
+          title: 'Novo hospital',
+          hideLeading: true,
+          image: null,
+        ),
+        body: form(context),
+      ),
     );
   }
 
@@ -90,44 +102,51 @@ class _AddHospitalState extends State<AddHospitalPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       MyTextFormField(
-                          fontSize: 16,
-                          label: 'Nome do hospital',
-                          placeholder: 'Digite o nome do hospital',
-                          inputType: TextInputType.text,
-                          validators: const {'required': true, 'minLength': 3},
-                          onChanged: addHospitalStore.setNameHospital),
+                        fontSize: 16,
+                        label: 'Nome do hospital',
+                        placeholder: 'Digite o nome do hospital',
+                        inputType: TextInputType.text,
+                        validators: const {'required': true, 'minLength': 3},
+                        onChanged: _viewModel.setName,
+                      ),
                       MyTextFormField(
-                          fontSize: 16,
-                          label: 'Nome do endereço',
-                          placeholder: 'Digite o nome do endereço',
-                          inputType: TextInputType.text,
-                          validators: const {'required': true, 'minLength': 3},
-                          onChanged: addHospitalStore.setAddress),
+                        fontSize: 16,
+                        label: 'Endereço',
+                        placeholder: 'Digite o endereço do hospital',
+                        inputType: TextInputType.text,
+                        validators: const {'required': true, 'minLength': 5},
+                        onChanged: _viewModel.setAddress,
+                      ),
                       const SizedBox(
                         height: 15,
                       ),
-                      Center(child: Observer(builder: (_) {
-                        return MyButtonWidget(
-                          text: 'Cadastrar hospital',
-                          isLoading: addHospitalStore.saveState ==
-                              SaveHospitalState.loading,
-                          disabledColor: Colors.grey,
-                          onTap: addHospitalStore.isValidData
-                              ? () async {
-                                  _formKey.currentState?.save();
-                                  if (_formKey.currentState!.validate()) {
-                                    addHospitalStore.createHospital();
-                                  } else {
-                                    CustomToast.show(context,
-                                        type: ToastType.error,
-                                        title: "Cadastrar novo hospital",
-                                        description:
-                                            "Por favor, preencha os campos.");
-                                  }
-                                }
-                              : null,
-                        );
-                      })),
+                      Center(
+                        child: Observer(
+                          builder: (_) {
+                            return MyButtonWidget(
+                              text: 'Cadastrar hospital',
+                              isLoading: _viewModel.isLoading,
+                              disabledColor: Colors.grey,
+                              onTap: _viewModel.canSubmit
+                                  ? () async {
+                                      _formKey.currentState?.save();
+                                      if (_formKey.currentState!.validate()) {
+                                        await _viewModel.createHospital();
+                                      } else {
+                                        CustomToast.show(
+                                          context,
+                                          type: ToastType.error,
+                                          title: "Cadastrar novo hospital",
+                                          description:
+                                              "Por favor, preencha os campos.",
+                                        );
+                                      }
+                                    }
+                                  : null,
+                            );
+                          },
+                        ),
+                      ),
                       const SizedBox(
                         height: 15,
                       ),

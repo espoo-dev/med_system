@@ -95,7 +95,7 @@ class MyDrawer extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const HealthInsurancePage()));
+                      builder: (context) => const HealthInsurancesPage()));
             },
             title: const Text(
               "Convênios",

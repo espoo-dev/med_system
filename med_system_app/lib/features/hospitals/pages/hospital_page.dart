@@ -1,16 +1,15 @@
+import 'package:distrito_medico/core/utils/navigation_utils.dart';
 import 'package:distrito_medico/core/widgets/error.widget.dart';
 import 'package:distrito_medico/core/widgets/ext_fab.widget.dart';
 import 'package:distrito_medico/core/widgets/fab.widget.dart';
 import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
-import 'package:distrito_medico/features/hospitals/model/hospital.model.dart';
+import 'package:distrito_medico/features/hospitals/domain/entities/hospital_entity.dart';
 import 'package:distrito_medico/features/hospitals/pages/add_hospital_page.dart';
 import 'package:distrito_medico/features/hospitals/pages/edit_hospital_page.dart';
-import 'package:distrito_medico/features/hospitals/store/hospital.store.dart';
+import 'package:distrito_medico/features/hospitals/presentation/viewmodels/hospital_list_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-
-import '../../../core/utils/navigation_utils.dart';
 
 class HospitalPage extends StatefulWidget {
   const HospitalPage({super.key});
@@ -20,50 +19,54 @@ class HospitalPage extends StatefulWidget {
 }
 
 class _HospitalPageState extends State<HospitalPage> {
-  final _hostpialStore = GetIt.I.get<HospitalStore>();
-  List<Hospital>? _listHospital = [];
+  final _viewModel = GetIt.I.get<HospitalListViewModel>();
   final ScrollController _scrollController = ScrollController();
   bool isFab = false;
 
   @override
   void initState() {
     super.initState();
-    debugPrint('initstate');
     _scrollController.addListener(() {
-      inifiteScrolling();
+      infiniteScrolling();
       showFabButton();
     });
-    _hostpialStore.getAllHospitals(isRefresh: true);
+    _viewModel.loadHospitals(refresh: true);
   }
 
-  showFabButton() {
+  void showFabButton() {
     if (_scrollController.offset > 50) {
-      setState(() {
-        isFab = true;
-      });
+      if (!isFab) {
+        setState(() {
+          isFab = true;
+        });
+      }
     } else {
-      setState(() {
-        isFab = false;
-      });
+      if (isFab) {
+        setState(() {
+          isFab = false;
+        });
+      }
     }
   }
 
-  inifiteScrolling() {
+  void infiniteScrolling() {
     var maxScroll = _scrollController.position.maxScrollExtent;
     if (maxScroll == _scrollController.offset) {
-      _hostpialStore.getAllHospitals(isRefresh: false);
+      _viewModel.loadHospitals(refresh: false);
     }
   }
 
-  Future _refreshProcedures() async {
-    await _hostpialStore.getAllHospitals(isRefresh: true);
+  Future<void> _refreshHospitals() async {
+    await _viewModel.loadHospitals(refresh: true);
   }
 
   @override
   void dispose() {
-    super.dispose();
     _scrollController.dispose();
-    _hostpialStore.dispose();
+    // Não damos dispose no ViewModel aqui pois ele é um Singleton
+    // Mas podemos resetar o estado se necessário
+    // _viewModel.dispose();
+    super.dispose();
   }
 
   @override
@@ -86,77 +89,67 @@ class _HospitalPageState extends State<HospitalPage> {
               },
             ),
       body: RefreshIndicator(
-        onRefresh: _refreshProcedures,
+        onRefresh: _refreshHospitals,
         child: Observer(
           builder: (BuildContext context) {
-            if (_hostpialStore.state == HospitalState.error) {
+            if (_viewModel.state == HospitalListState.error &&
+                _viewModel.hospitals.isEmpty) {
               return Center(
-                  child: ErrorRetryWidget(
-                      'Algo deu errado', 'Por favor, tente novamente', () {
-                _hostpialStore.getAllHospitals(isRefresh: true);
-              }));
+                child: ErrorRetryWidget(
+                  'Algo deu errado',
+                  'Por favor, tente novamente',
+                  () {
+                    _viewModel.loadHospitals(refresh: true);
+                  },
+                ),
+              );
             }
-            if (_hostpialStore.state == HospitalState.loading &&
-                _listHospital!.isEmpty) {
+
+            if (_viewModel.state == HospitalListState.loading &&
+                _viewModel.hospitals.isEmpty) {
               return const Center(child: CircularProgressIndicator());
             }
-            if (_hostpialStore.hospitalList.isEmpty) {
+
+            if (_viewModel.hospitals.isEmpty &&
+                _viewModel.state == HospitalListState.success) {
               return const Center(
-                  child: Text('Você não possui hospitais cadastrados.'));
+                child: Text('Você não possui hospitais cadastrados.'),
+              );
             }
-            _listHospital = _hostpialStore.hospitalList;
+
             return Stack(
               children: [
                 ListView.separated(
-                    controller: _scrollController,
-                    itemCount: _hostpialStore.state == HospitalState.loading
-                        ? _listHospital!.length + 1
-                        : _listHospital!.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      if (index < _listHospital!.length) {
-                        Hospital hospital = _listHospital![index];
-                        return ListTile(
-                          onTap: () {
-                            to(context, EditHospitaltPage(hospital: hospital));
-                          },
-                          title: Text(
-                            hospital.name ?? "",
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
+                  controller: _scrollController,
+                  itemCount: _viewModel.state == HospitalListState.loading
+                      ? _viewModel.hospitals.length + 1
+                      : _viewModel.hospitals.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index < _viewModel.hospitals.length) {
+                      HospitalEntity hospital = _viewModel.hospitals[index];
+                      return ListTile(
+                        onTap: () {
+                          to(context, EditHospitaltPage(hospital: hospital));
+                        },
+                        title: Text(
+                          hospital.name,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
                           ),
-                          subtitle: Text(hospital.address ?? ""),
-                          trailing: Icon(
-                            size: 10.0,
-                            Icons.arrow_forward_ios,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          // trailing: IconButton(
-                          //   onPressed: () {
-                          //     showAlert(
-                          //       title: 'Excluir Hospital',
-                          //       content:
-                          //           'Tem certeza que deseja excluir este hospital?',
-                          //       textYes: 'Sim',
-                          //       textNo: 'Não',
-                          //       onPressedConfirm: () {},
-                          //       onPressedCancel: () {
-                          //         Navigator.pop(context);
-                          //       },
-                          //       context: context,
-                          //     );
-                          //   },
-                          //   icon: Icon(
-                          //     Icons.delete,
-                          //     color: Theme.of(context).colorScheme.primary,
-                          //   ),
-                          // ),
-                        );
-                      } else {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                    },
-                    separatorBuilder: (_, __) => const Divider()),
+                        ),
+                        subtitle: Text(hospital.address),
+                        trailing: Icon(
+                          size: 10.0,
+                          Icons.arrow_forward_ios,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      );
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  },
+                  separatorBuilder: (_, __) => const Divider(),
+                ),
               ],
             );
           },

@@ -59,6 +59,8 @@ dependencies:
   webview_flutter: ^4.2.2
   share_plus: ^6.0.0
   mockito: ^5.0.0
+  dartz: ^0.10.1
+  equatable: ^2.0.5
 
 
 dev_dependencies:
@@ -68,6 +70,7 @@ dev_dependencies:
   mobx_codegen: ^2.4.0
   chopper_generator: ^7.0.6
   json_serializable:
+  mocktail: ^1.0.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

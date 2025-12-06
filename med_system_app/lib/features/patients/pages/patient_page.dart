@@ -5,10 +5,10 @@ import 'package:distrito_medico/core/widgets/ext_fab.widget.dart';
 import 'package:distrito_medico/core/widgets/fab.widget.dart';
 import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
 import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
-import 'package:distrito_medico/features/patients/model/patient.model.dart';
+import 'package:distrito_medico/features/patients/domain/entities/patient_entity.dart';
 import 'package:distrito_medico/features/patients/pages/add_patient_page.dart';
 import 'package:distrito_medico/features/patients/pages/edit_patient_page.dart';
-import 'package:distrito_medico/features/patients/store/patient.store.dart';
+import 'package:distrito_medico/features/patients/presentation/viewmodels/patient_list_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -22,11 +22,8 @@ class PatientPage extends StatefulWidget {
   State<PatientPage> createState() => _PatientPageState();
 }
 
-enum Actions { delete }
-
 class _PatientPageState extends State<PatientPage> {
-  final _patientStore = GetIt.I.get<PatientStore>();
-  List<Patient>? _listPatients = [];
+  final _viewModel = GetIt.I.get<PatientListViewModel>();
   final ScrollController _scrollController = ScrollController();
   bool isFab = false;
   final List<ReactionDisposer> _disposers = [];
@@ -34,35 +31,38 @@ class _PatientPageState extends State<PatientPage> {
   @override
   void initState() {
     super.initState();
-    debugPrint('initstate');
     _scrollController.addListener(() {
-      inifiteScrolling();
+      infiniteScrolling();
       showFabButton();
     });
-    _patientStore.getAllPatients(isRefresh: true);
+    _viewModel.loadPatients(refresh: true);
   }
 
-  showFabButton() {
+  void showFabButton() {
     if (_scrollController.offset > 50) {
-      setState(() {
-        isFab = true;
-      });
+      if (!isFab) {
+        setState(() {
+          isFab = true;
+        });
+      }
     } else {
-      setState(() {
-        isFab = false;
-      });
+      if (isFab) {
+        setState(() {
+          isFab = false;
+        });
+      }
     }
   }
 
-  inifiteScrolling() {
+  void infiniteScrolling() {
     var maxScroll = _scrollController.position.maxScrollExtent;
     if (maxScroll == _scrollController.offset) {
-      _patientStore.getAllPatients(isRefresh: false);
+      _viewModel.loadPatients(refresh: false);
     }
   }
 
-  Future _refreshProcedures() async {
-    await _patientStore.getAllPatients(isRefresh: true);
+  Future<void> _refreshPatients() async {
+    await _viewModel.loadPatients(refresh: true);
   }
 
   @override
@@ -70,29 +70,41 @@ class _PatientPageState extends State<PatientPage> {
     super.didChangeDependencies();
 
     _disposers.add(reaction<DeletePatientState>(
-        (_) => _patientStore.deletePatientState, (validationState) {
-      if (validationState == DeletePatientState.success) {
-        CustomToast.show(context,
+      (_) => _viewModel.deleteState,
+      (state) {
+        if (state == DeletePatientState.success) {
+          CustomToast.show(
+            context,
             type: ToastType.success,
             title: "Exclusão de paciente",
-            description: "Paciente excluído com sucesso!");
-      } else if (validationState == DeletePatientState.error) {
-        CustomToast.show(context,
+            description: "Paciente excluído com sucesso!",
+          );
+          _viewModel.resetDeleteState();
+        } else if (state == DeletePatientState.error) {
+          CustomToast.show(
+            context,
             type: ToastType.error,
             title: "Exclusão de paciente",
-            description: "Ocorreu um erro ao tentar excluir paciente.");
-      }
-    }));
+            description: _viewModel.errorMessage.isNotEmpty
+                ? _viewModel.errorMessage
+                : "Ocorreu um erro ao tentar excluir paciente.",
+          );
+          _viewModel.resetDeleteState();
+        }
+      },
+    ));
   }
 
   @override
   void dispose() {
-    super.dispose();
     _scrollController.dispose();
-    _patientStore.dispose();
     for (var disposer in _disposers) {
       disposer();
     }
+    // Não damos dispose no ViewModel aqui pois ele é um Singleton
+    // Mas podemos resetar o estado se necessário
+    // _viewModel.dispose();
+    super.dispose();
   }
 
   @override
@@ -115,91 +127,108 @@ class _PatientPageState extends State<PatientPage> {
               },
             ),
       body: RefreshIndicator(
-        onRefresh: _refreshProcedures,
+        onRefresh: _refreshPatients,
         child: Observer(
           builder: (BuildContext context) {
-            if (_patientStore.state == PatientState.error) {
+            if (_viewModel.state == PatientListState.error &&
+                _viewModel.patients.isEmpty) {
               return Center(
-                  child: ErrorRetryWidget(
-                      'Algo deu errado', 'Por favor, tente novamente', () {
-                _patientStore.getAllPatients(isRefresh: true);
-              }));
+                child: ErrorRetryWidget(
+                  'Algo deu errado',
+                  'Por favor, tente novamente',
+                  () {
+                    _viewModel.loadPatients(refresh: true);
+                  },
+                ),
+              );
             }
-            if (_patientStore.state == PatientState.loading &&
-                _listPatients!.isEmpty) {
+
+            if (_viewModel.state == PatientListState.loading &&
+                _viewModel.patients.isEmpty) {
               return const Center(child: CircularProgressIndicator());
             }
-            if (_patientStore.patientList.isEmpty &&
-                _patientStore.state == PatientState.success) {
+
+            if (_viewModel.patients.isEmpty &&
+                _viewModel.state == PatientListState.success) {
               return const Center(
-                  child: Text('Você não possui pacientes cadastrados.'));
+                child: Text('Você não possui pacientes cadastrados.'),
+              );
             }
-            _listPatients = _patientStore.patientList;
+
             return Stack(
               children: [
                 SlidableAutoCloseBehavior(
                   closeWhenOpened: true,
                   child: ListView.separated(
-                      controller: _scrollController,
-                      itemCount: _patientStore.state == PatientState.loading
-                          ? _listPatients!.length + 1
-                          : _listPatients!.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        if (index < _listPatients!.length) {
-                          Patient patient = _listPatients![index];
-                          return Slidable(
-                            key: ValueKey(_listPatients?.length),
-                            endActionPane: ActionPane(
-                              motion: const BehindMotion(),
-                              children: [
-                                SlidableAction(
-                                    backgroundColor: Colors.red,
-                                    icon: Icons.delete,
-                                    label: 'Deletar',
-                                    onPressed: (context) {
-                                      if (patient.deletable == true) {
-                                        showAlert(
-                                          context: context,
-                                          title: 'Excluir Paciente',
-                                          content:
-                                              'Tem certeza que deseja excluir este paciente?',
-                                          textYes: 'Sim',
-                                          textNo: 'Não',
-                                          onPressedConfirm: () {
-                                            _patientStore.deletePatient(
-                                                patient.id ?? 0, index);
-                                          },
-                                          onPressedCancel: () {},
-                                        );
-                                      } else {
-                                        CustomToast.show(context,
-                                            type: ToastType.error,
-                                            title: "Exclusão de paciente",
-                                            description:
-                                                "Paciente tem procedimento vinculado.");
-                                      }
-                                    })
-                              ],
-                            ),
-                            child: ListTile(
-                              onTap: () {
-                                to(context, EditPatientPage(patient: patient));
-                              },
-                              title: Text(
-                                patient.name ?? "",
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                    controller: _scrollController,
+                    itemCount: _viewModel.state == PatientListState.loading
+                        ? _viewModel.patients.length + 1
+                        : _viewModel.patients.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      if (index < _viewModel.patients.length) {
+                        PatientEntity patient = _viewModel.patients[index];
+                        return Slidable(
+                          key: ValueKey(patient.id),
+                          endActionPane: ActionPane(
+                            motion: const BehindMotion(),
+                            children: [
+                              SlidableAction(
+                                backgroundColor: Colors.red,
+                                icon: Icons.delete,
+                                label: 'Deletar',
+                                onPressed: (context) {
+                                  if (patient.deletable) {
+                                    showAlert(
+                                      context: context,
+                                      title: 'Excluir Paciente',
+                                      content:
+                                          'Tem certeza que deseja excluir este paciente?',
+                                      textYes: 'Sim',
+                                      textNo: 'Não',
+                                      onPressedConfirm: () {
+                                        _viewModel.deletePatient(patient.id);
+                                      },
+                                      onPressedCancel: () {},
+                                    );
+                                  } else {
+                                    CustomToast.show(
+                                      context,
+                                      type: ToastType.error,
+                                      title: "Exclusão de paciente",
+                                      description:
+                                          "Paciente tem procedimento vinculado.",
+                                    );
+                                  }
+                                },
+                              )
+                            ],
+                          ),
+                          child: ListTile(
+                            onTap: () {
+                              to(context, EditPatientPage(patient: patient));
+                            },
+                            title: Text(
+                              patient.name,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                          );
-                        } else {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-                      },
-                      separatorBuilder: (_, __) => const Divider()),
+                          ),
+                        );
+                      } else {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                    },
+                    separatorBuilder: (_, __) => const Divider(),
+                  ),
                 ),
+                if (_viewModel.isDeleting)
+                  Container(
+                    color: Colors.black26,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
               ],
             );
           },

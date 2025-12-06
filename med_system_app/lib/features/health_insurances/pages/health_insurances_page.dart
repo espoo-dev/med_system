@@ -1,168 +1,176 @@
+import 'package:distrito_medico/core/pages/error/error_retry_page.dart';
 import 'package:distrito_medico/core/utils/navigation_utils.dart';
-import 'package:distrito_medico/core/widgets/error.widget.dart';
 import 'package:distrito_medico/core/widgets/ext_fab.widget.dart';
 import 'package:distrito_medico/core/widgets/fab.widget.dart';
 import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
-import 'package:distrito_medico/features/health_insurances/model/health_insurances.model.dart';
 import 'package:distrito_medico/features/health_insurances/pages/add_health_insurances_page.dart';
 import 'package:distrito_medico/features/health_insurances/pages/edit_health_insurance_page.dart';
-import 'package:distrito_medico/features/health_insurances/store/health_insurances.store.dart';
+import 'package:distrito_medico/features/health_insurances/presentation/viewmodels/health_insurance_list_viewmodel.dart';
+import 'package:distrito_medico/features/home/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get_it/get_it.dart';
 
-class HealthInsurancePage extends StatefulWidget {
-  const HealthInsurancePage({super.key});
+class HealthInsurancesPage extends StatefulWidget {
+  const HealthInsurancesPage({super.key});
 
   @override
-  State<HealthInsurancePage> createState() => _HealthInsurancePageState();
+  State<HealthInsurancesPage> createState() => _HealthInsurancesPageState();
 }
 
-class _HealthInsurancePageState extends State<HealthInsurancePage> {
-  final _healthInsuranceStore = GetIt.I.get<HealthInsurancesStore>();
-  List<HealthInsurance>? _listHealthInsurance = [];
+class _HealthInsurancesPageState extends State<HealthInsurancesPage> {
+  final _viewModel = GetIt.I.get<HealthInsuranceListViewModel>();
   final ScrollController _scrollController = ScrollController();
   bool isFab = false;
+
   @override
   void initState() {
     super.initState();
-    debugPrint('initstate');
-    _scrollController.addListener(() {
-      inifiteScrolling();
-      showFabButton();
-    });
-    _healthInsuranceStore.getAllHealthInsurances(isRefresh: true);
+    _viewModel.loadHealthInsurances(refresh: true);
+    _scrollController.addListener(_onScroll);
   }
 
-  showFabButton() {
+  void _onScroll() {
+    // Infinite scrolling logic
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      if (!_viewModel.isLoading && _viewModel.hasMore) {
+        _viewModel.loadHealthInsurances();
+      }
+    }
+
+    // FAB animation logic
     if (_scrollController.offset > 50) {
-      setState(() {
-        isFab = true;
-      });
+      if (!isFab) {
+        setState(() {
+          isFab = true;
+        });
+      }
     } else {
-      setState(() {
-        isFab = false;
-      });
+      if (isFab) {
+        setState(() {
+          isFab = false;
+        });
+      }
     }
-  }
-
-  inifiteScrolling() {
-    var maxScroll = _scrollController.position.maxScrollExtent;
-    if (maxScroll == _scrollController.offset) {
-      _healthInsuranceStore.getAllHealthInsurances(isRefresh: false);
-    }
-  }
-
-  Future _refreshProcedures() async {
-    await _healthInsuranceStore.getAllHealthInsurances(isRefresh: true);
   }
 
   @override
   void dispose() {
-    super.dispose();
     _scrollController.dispose();
-    _healthInsuranceStore.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const MyAppBar(
-        title: 'Convênios',
-        hideLeading: true,
-        image: null,
-      ),
-      floatingActionButton: isFab
-          ? buildFAB(context, () {
-              to(context, const AddHealthInsurances());
-            })
-          : buildExtendedFAB(
-              context,
-              "Novo convênio",
-              () {
-                to(context, const AddHealthInsurances());
-              },
-            ),
-      body: RefreshIndicator(
-        onRefresh: _refreshProcedures,
-        child: Observer(
-          builder: (BuildContext context) {
-            if (_healthInsuranceStore.state == HealthInsuranceState.error) {
-              return Center(
-                  child: ErrorRetryWidget(
-                      'Algo deu errado', 'Por favor, tente novamente', () {
-                _healthInsuranceStore.getAllHealthInsurances(isRefresh: true);
-              }));
-            }
-            if (_healthInsuranceStore.state == HealthInsuranceState.loading &&
-                _listHealthInsurance!.isEmpty) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (_healthInsuranceStore.healthInsuranceList.isEmpty) {
-              return const Center(
-                  child: Text('Você não possui convênios cadastrados.'));
-            }
-            _listHealthInsurance = _healthInsuranceStore.healthInsuranceList;
-            return Stack(
-              children: [
-                ListView.separated(
-                    controller: _scrollController,
-                    itemCount: _healthInsuranceStore.state ==
-                            HealthInsuranceState.loading
-                        ? _listHealthInsurance!.length + 1
-                        : _listHealthInsurance!.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      if (index < _listHealthInsurance!.length) {
-                        HealthInsurance healthInsurance =
-                            _listHealthInsurance![index];
-                        return ListTile(
-                          onTap: () {
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) {
+        if (didPop) return;
+        to(context, const HomePage());
+      },
+      child: Scaffold(
+        appBar: const MyAppBar(
+          title: 'Convênios',
+          image: null,
+          hideLeading: true,
+        ),
+        floatingActionButton: isFab
+            ? buildFAB(context, () {
+                to(context, const AddHealthInsurancesPage());
+              })
+            : buildExtendedFAB(
+                context,
+                "Novo convênio",
+                () {
+                  to(context, const AddHealthInsurancesPage());
+                },
+              ),
+        body: Observer(builder: (_) {
+          if (_viewModel.state == HealthInsuranceListState.loading &&
+              _viewModel.healthInsurances.isEmpty) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (_viewModel.state == HealthInsuranceListState.error &&
+              _viewModel.healthInsurances.isEmpty) {
+            return Center(
+              child: ErrorRetryPage(
+                onRetry: () => _viewModel.loadHealthInsurances(refresh: true),
+              ),
+            );
+          }
+
+          if (_viewModel.healthInsurances.isEmpty) {
+            return const Center(child: Text('Nenhum convênio encontrado.'));
+          }
+
+          return RefreshIndicator(
+            onRefresh: () async {
+              await _viewModel.loadHealthInsurances(refresh: true);
+            },
+            child: SlidableAutoCloseBehavior(
+              closeWhenOpened: true,
+              child: ListView.separated(
+                controller: _scrollController,
+                itemCount: _viewModel.healthInsurances.length + 1,
+                separatorBuilder: (_, __) => const Divider(),
+                itemBuilder: (context, index) {
+                  if (index == _viewModel.healthInsurances.length) {
+                    return _viewModel.hasMore
+                        ? const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Center(child: CircularProgressIndicator()),
+                          )
+                        : const SizedBox.shrink();
+                  }
+
+                  final healthInsurance = _viewModel.healthInsurances[index];
+                  return Slidable(
+                    key: ValueKey(healthInsurance.id),
+                    endActionPane: ActionPane(
+                      motion: const BehindMotion(),
+                      children: [
+                        SlidableAction(
+                          backgroundColor: Theme.of(context).primaryColor,
+                          icon: Icons.edit,
+                          label: 'Editar',
+                          onPressed: (context) {
                             to(
                                 context,
                                 EditHealthInsurancePage(
-                                    healthInsurance: healthInsurance));
+                                  healthInsuranceEntity: healthInsurance,
+                                ));
                           },
-                          title: Text(
-                            healthInsurance.name ?? "",
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          trailing: Icon(
-                            size: 10.0,
-                            Icons.arrow_forward_ios,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          // trailing: IconButton(
-                          //   onPressed: () {
-                          //     showAlert(
-                          //       title: 'Excluir convênio',
-                          //       content:
-                          //           'Tem certeza que deseja excluir este convênio?',
-                          //       textYes: 'Sim',
-                          //       textNo: 'Não',
-                          //       onPressedConfirm: () {},
-                          //       onPressedCancel: () {
-                          //         Navigator.pop(context);
-                          //       },
-                          //       context: context,
-                          //     );
-                          //   },
-                          //   icon: Icon(
-                          //     Icons.delete,
-                          //     color: Theme.of(context).colorScheme.primary,
-                          //   ),
-                          // ),
-                        );
-                      } else {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                    },
-                    separatorBuilder: (_, __) => const Divider()),
-              ],
-            );
-          },
-        ),
+                        ),
+                        // Adicionar botão de deletar futuramente se implementado
+                      ],
+                    ),
+                    child: ListTile(
+                      onTap: () {
+                        to(
+                            context,
+                            EditHealthInsurancePage(
+                              healthInsuranceEntity: healthInsurance,
+                            ));
+                      },
+                      title: Text(
+                        healthInsurance.name,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
+                        size: 10.0,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          );
+        }),
       ),
     );
   }

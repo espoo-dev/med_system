@@ -5,7 +5,8 @@ import 'package:distrito_medico/core/widgets/my_button_widget.dart';
 import 'package:distrito_medico/core/widgets/my_text_form_field.widget.dart';
 import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
 import 'package:distrito_medico/features/patients/pages/patient_page.dart';
-import 'package:distrito_medico/features/patients/store/add_patient.store.dart';
+import 'package:distrito_medico/features/patients/presentation/viewmodels/create_patient_viewmodel.dart';
+import 'package:distrito_medico/features/patients/presentation/viewmodels/patient_list_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
@@ -19,35 +20,45 @@ class AddPatientPage extends StatefulWidget {
 }
 
 class _AddPatientState extends State<AddPatientPage> {
-  final addPatientStore = GetIt.I.get<AddPatientStore>();
+  final _viewModel = GetIt.I.get<CreatePatientViewModel>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   final List<ReactionDisposer> _disposers = [];
 
   @override
   void initState() {
     super.initState();
+    _viewModel.reset();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _disposers.add(reaction<SavePatientState>((_) => addPatientStore.saveState,
-        (validationState) {
-      if (validationState == SavePatientState.success) {
-        to(
+    _disposers.add(reaction<CreatePatientState>(
+      (_) => _viewModel.state,
+      (state) {
+        if (state == CreatePatientState.success) {
+          // Atualiza a lista de pacientes
+          GetIt.I.get<PatientListViewModel>().loadPatients(refresh: true);
+          
+          to(
             context,
             const SuccessPage(
               title: 'Paciente criado com sucesso!',
               goToPage: PatientPage(),
-            ));
-      } else if (validationState == SavePatientState.error) {
-        CustomToast.show(context,
+            ),
+          );
+        } else if (state == CreatePatientState.error) {
+          CustomToast.show(
+            context,
             type: ToastType.error,
-            title: "Cadastrar novo Pacinete",
-            description: "Ocorreu um erro ao tentar cadastrar.");
-      }
-    }));
+            title: "Cadastrar novo Paciente",
+            description: _viewModel.errorMessage.isNotEmpty
+                ? _viewModel.errorMessage
+                : "Ocorreu um erro ao tentar cadastrar.",
+          );
+        }
+      },
+    ));
   }
 
   @override
@@ -55,7 +66,6 @@ class _AddPatientState extends State<AddPatientPage> {
     for (var disposer in _disposers) {
       disposer();
     }
-    addPatientStore.dispose();
     super.dispose();
   }
 
@@ -64,16 +74,17 @@ class _AddPatientState extends State<AddPatientPage> {
     return PopScope(
       canPop: false,
       onPopInvoked: (bool didPop) {
-        if (didPop) {}
+        if (didPop) return;
         to(context, const PatientPage());
       },
       child: Scaffold(
-          appBar: const MyAppBar(
-            title: 'Novo Paciente',
-            hideLeading: true,
-            image: null,
-          ),
-          body: form(context)),
+        appBar: const MyAppBar(
+          title: 'Novo Paciente',
+          hideLeading: true,
+          image: null,
+        ),
+        body: form(context),
+      ),
     );
   }
 
@@ -91,37 +102,43 @@ class _AddPatientState extends State<AddPatientPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       MyTextFormField(
-                          fontSize: 16,
-                          label: 'Nome do paciente',
-                          placeholder: 'Digite o nome do paciente',
-                          inputType: TextInputType.text,
-                          validators: const {'required': true, 'minLength': 3},
-                          onChanged: addPatientStore.setNamePatient),
+                        fontSize: 16,
+                        label: 'Nome do paciente',
+                        placeholder: 'Digite o nome do paciente',
+                        inputType: TextInputType.text,
+                        validators: const {'required': true, 'minLength': 3},
+                        onChanged: _viewModel.setName,
+                      ),
                       const SizedBox(
                         height: 15,
                       ),
-                      Center(child: Observer(builder: (_) {
-                        return MyButtonWidget(
-                          text: 'Cadastrar paciente',
-                          isLoading: addPatientStore.saveState ==
-                              SavePatientState.loading,
-                          disabledColor: Colors.grey,
-                          onTap: addPatientStore.isValidData
-                              ? () async {
-                                  _formKey.currentState?.save();
-                                  if (_formKey.currentState!.validate()) {
-                                    addPatientStore.createPatient();
-                                  } else {
-                                    CustomToast.show(context,
-                                        type: ToastType.error,
-                                        title: "Cadastrar novo paciente",
-                                        description:
-                                            "Por favor, preencha os campos.");
-                                  }
-                                }
-                              : null,
-                        );
-                      })),
+                      Center(
+                        child: Observer(
+                          builder: (_) {
+                            return MyButtonWidget(
+                              text: 'Cadastrar paciente',
+                              isLoading: _viewModel.isLoading,
+                              disabledColor: Colors.grey,
+                              onTap: _viewModel.canSubmit
+                                  ? () async {
+                                      _formKey.currentState?.save();
+                                      if (_formKey.currentState!.validate()) {
+                                        await _viewModel.createPatient();
+                                      } else {
+                                        CustomToast.show(
+                                          context,
+                                          type: ToastType.error,
+                                          title: "Cadastrar novo paciente",
+                                          description:
+                                              "Por favor, preencha os campos.",
+                                        );
+                                      }
+                                    }
+                                  : null,
+                            );
+                          },
+                        ),
+                      ),
                       const SizedBox(
                         height: 15,
                       ),
