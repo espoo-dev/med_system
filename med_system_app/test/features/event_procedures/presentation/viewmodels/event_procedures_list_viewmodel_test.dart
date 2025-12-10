@@ -33,6 +33,7 @@ void main() {
   late MockGenerateEventProcedurePdfUseCase mockGeneratePdfUseCase;
 
   setUp(() {
+    TestWidgetsFlutterBinding.ensureInitialized();
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
     mockGetUseCase = MockGetEventProceduresUseCase();
@@ -110,7 +111,7 @@ void main() {
     // assert
     expect(viewModel.isLoading, false);
     expect(viewModel.eventProcedures, isEmpty);
-    expect(viewModel.errorMessage, 'Erro ao conectar com o servidor.');
+    expect(viewModel.errorMessage, 'Server Error');
   });
   
   test('should generate pdf successfully', () async {

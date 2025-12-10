@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:distrito_medico/core/errors/failures.dart';
 import 'package:distrito_medico/features/procedures/domain/entities/procedure_entity.dart';
 import 'package:distrito_medico/features/procedures/domain/usecases/create_procedure_usecase.dart';
 import 'package:distrito_medico/features/procedures/presentation/viewmodels/create_procedure_viewmodel.dart';

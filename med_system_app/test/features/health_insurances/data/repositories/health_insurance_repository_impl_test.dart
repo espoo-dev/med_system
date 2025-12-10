@@ -1,4 +1,3 @@
-import 'package:dartz/dartz.dart';
 import 'package:distrito_medico/core/errors/exceptions.dart';
 import 'package:distrito_medico/core/errors/failures.dart';
 import 'package:distrito_medico/features/health_insurances/data/datasources/health_insurance_remote_datasource.dart';

@@ -221,7 +221,7 @@ abstract class _EventProceduresListViewModelBase with Store {
 
   String _mapFailureToMessage(Failure failure) {
     if (failure is ServerFailure) {
-      return 'Erro ao conectar com o servidor.';
+      return failure.message;
     }
     return 'Ocorreu um erro inesperado.';
   }
