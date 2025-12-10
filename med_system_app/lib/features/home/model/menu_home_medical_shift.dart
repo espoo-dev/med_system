@@ -31,6 +31,7 @@ class MenuHomeMedicalSfhitModel {
                   backToHome: true,
                   initialFilter: InitialFilter.paid,
                 ));
+            // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Funcionalidade em manutenção")));
           }),
       MenuItemModel(
           backgroundColor: const Color(0xffED7390),
@@ -52,6 +53,7 @@ class MenuHomeMedicalSfhitModel {
                   backToHome: true,
                   initialFilter: InitialFilter.unpaid,
                 ));
+            // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Funcionalidade em manutenção")));
           }),
       MenuItemModel(
           backgroundColor: const Color(0xff6FB1A1),
@@ -73,6 +75,7 @@ class MenuHomeMedicalSfhitModel {
                   backToHome: true,
                   initialFilter: InitialFilter.all,
                 ));
+            // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Funcionalidade em manutenção")));
           }),
     ];
     return menufinancial;

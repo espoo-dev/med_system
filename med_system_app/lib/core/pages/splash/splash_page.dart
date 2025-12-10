@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:distrito_medico/core/theme/icons.dart';
-import 'package:distrito_medico/features/signin/page/signin.page.dart';
+import 'package:distrito_medico/features/auth/presentation/pages/signin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

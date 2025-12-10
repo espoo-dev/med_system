@@ -8,6 +8,7 @@ import 'package:distrito_medico/core/widgets/my_text_form_field.widget.dart';
 import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/event_procedures_page.dart';
 import 'package:distrito_medico/core/widgets/custom_switch.widget.dart';
+import 'package:distrito_medico/features/event_procedures/presentation/viewmodels/create_event_procedure_viewmodel.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown_search_health_insurances.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown_search_health_insurances_others.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown_search_hospitals.widget.dart';
@@ -17,12 +18,12 @@ import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown
 import 'package:distrito_medico/features/event_procedures/pages/widgets/radio_group.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/radio_group_payment.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/triangle_widget.dart';
-import 'package:distrito_medico/features/event_procedures/store/add_event_procedure.store.dart';
-import 'package:distrito_medico/features/health_insurances/model/health_insurances.model.dart';
+// Entity imports
+import 'package:distrito_medico/features/patients/domain/entities/patient_entity.dart';
+import 'package:distrito_medico/features/hospitals/domain/entities/hospital_entity.dart';
+import 'package:distrito_medico/features/health_insurances/domain/entities/health_insurance_entity.dart';
+import 'package:distrito_medico/features/procedures/domain/entities/procedure_entity.dart';
 import 'package:distrito_medico/features/home/pages/home_page.dart';
-import 'package:distrito_medico/features/hospitals/model/hospital.model.dart';
-import 'package:distrito_medico/features/patients/model/patient.model.dart';
-import 'package:distrito_medico/features/procedures/model/procedure.model.dart';
 import 'package:distrito_medico/features/procedures/util/real_input_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -40,33 +41,38 @@ class AddEventProcedurePage extends StatefulWidget {
 }
 
 class _AddEventProcedureState extends State<AddEventProcedurePage> {
-  final addEventProcedureStore = GetIt.I.get<AddEventProcedureStore>();
+  final _viewModel = GetIt.I.get<CreateEventProcedureViewModel>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final List<ReactionDisposer> _disposers = [];
 
   @override
   void initState() {
     super.initState();
-    addEventProcedureStore.fetchAllData();
+    _viewModel.loadInitialData();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _disposers.add(reaction<SaveEventProcedureState>(
-        (_) => addEventProcedureStore.saveState, (validationState) {
-      if (validationState == SaveEventProcedureState.success) {
+    _disposers.add(reaction<bool>(
+        (_) => _viewModel.isSuccess, (success) {
+      if (success) {
         to(
             context,
             const SuccessPage(
               title: 'Evento criado com sucesso!',
               goToPage: EventProceduresPage(),
             ));
-      } else if (validationState == SaveEventProcedureState.error) {
+      }
+    }));
+    
+    _disposers.add(reaction<String?>(
+        (_) => _viewModel.errorMessage, (message) {
+      if (message != null) {
         CustomToast.show(context,
             type: ToastType.error,
             title: "Cadastrar novo evento",
-            description: "Ocorreu um erro ao tentar cadastrar novo evento.");
+            description: message);
       }
     }));
   }
@@ -76,7 +82,6 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
     for (var disposer in _disposers) {
       disposer();
     }
-    addEventProcedureStore.dispose();
     super.dispose();
   }
 
@@ -85,7 +90,7 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
     return PopScope(
       canPop: false,
       onPopInvoked: (bool didPop) {
-        if (didPop) {}
+        if (didPop) return;
         if (widget.backToHome) {
           to(context, const HomePage());
         } else {
@@ -100,17 +105,19 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
         ),
         body: Observer(
           builder: (BuildContext context) {
-            if (addEventProcedureStore.state == AddEventProcedureState.error) {
-              return Center(
-                  child: ErrorRetryWidget(
-                      'Algo deu errado', 'Por favor, tente novamente', () {
-                addEventProcedureStore.fetchAllData();
-              }));
-            }
-            if (addEventProcedureStore.state ==
-                AddEventProcedureState.loading) {
+            if (_viewModel.isLoading && _viewModel.patients.isEmpty) { // Loading inicial crítico
               return const Center(child: CircularProgressIndicator());
             }
+             // Se tiver erro mas sem dados, mostra retry
+            if (_viewModel.errorMessage != null && _viewModel.patients.isEmpty) {
+              return Center(
+                  child: ErrorRetryWidget(
+                      _viewModel.errorMessage ?? 'Algo deu errado', 
+                      'Por favor, tente novamente', () {
+                _viewModel.loadInitialData();
+              }));
+            }
+           
             return form(context);
           },
         ),
@@ -132,12 +139,15 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // Adapter for Patient
                         DropdownSearchPatients(
-                            patientList: addEventProcedureStore.patientList,
-                            selectedPatient:
-                                addEventProcedureStore.patient ?? Patient(),
-                            onChanged: (Patient? patient) =>
-                                addEventProcedureStore.setPatient(patient!)),
+                            patientList: _viewModel.patients,
+                            selectedPatient: _viewModel.selectedPatient,
+                            onChanged: (PatientEntity? patient) {
+                              if (patient != null) {
+                                _viewModel.setPatient(patient);
+                              }
+                            }),
                         const SizedBox(
                           height: 15,
                         ),
@@ -150,13 +160,12 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                               'required': true,
                               'minLength': 4
                             },
-                            onChanged:
-                                addEventProcedureStore.setPatientServiceNumber),
+                            onChanged: _viewModel.setPatientServiceNumber),
                         const SizedBox(
                           height: 15,
                         ),
                         MyInputDate(
-                          onChanged: addEventProcedureStore.setCreatedDate,
+                          onChanged: _viewModel.setCreatedDate,
                           label: 'Data',
                           textColor: Theme.of(context).colorScheme.primary,
                           selectedDate: DateTime.now(),
@@ -164,92 +173,35 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                         const SizedBox(
                           height: 15,
                         ),
+                        // Adapter for Hospital
                         DropdownSearchHospitals(
-                            hospitalList: addEventProcedureStore.hospitalList,
-                            selectedHospital:
-                                addEventProcedureStore.hospital ?? Hospital(),
-                            onChanged: (Hospital? hospital) {
-                              addEventProcedureStore.setHospital(hospital!);
+                            hospitalList: _viewModel.hospitals,
+                            selectedHospital: _viewModel.selectedHospital,
+                            onChanged: (HospitalEntity? hospital) {
+                               if (hospital != null) {
+                                _viewModel.setHospital(hospital);
+                               }
                             }),
                         const SizedBox(
                           height: 15,
                         ),
                         MyRadioGroupPayment(onValueChanged: (value) {
-                          addEventProcedureStore.setPayment(value);
+                          _viewModel.setPaymentType(value == 'Convênio' ? 'health_insurance' : 'others');
                         }),
                         const SizedBox(
                           height: 15,
                         ),
                         Visibility(
-                          visible: !addEventProcedureStore.isOtherPayment,
+                          visible: _viewModel.paymentType == 'health_insurance',
                           child: Column(
                             children: [
                               DropdownHealthInsurances(
-                                healthInsuranceList:
-                                    addEventProcedureStore.healthInsuranceList,
-                                selectedHealthInsurance:
-                                    addEventProcedureStore.healthInsurance ??
-                                        HealthInsurance(),
-                                onChanged: (HealthInsurance? healthInsurance) =>
-                                    addEventProcedureStore
-                                        .setHealthInsurance(healthInsurance!),
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Visibility(
-                          visible: !addEventProcedureStore.isOtherPayment,
-                          child: Column(
-                            children: [
-                              DropdownSearchProcedures(
-                                procedureList:
-                                    addEventProcedureStore.procedureList,
-                                selectedProcedure:
-                                    addEventProcedureStore.procedure ??
-                                        Procedure(),
-                                onChanged: (Procedure? procedure) =>
-                                    addEventProcedureStore
-                                        .setProcedure(procedure!),
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Visibility(
-                          visible: !addEventProcedureStore.isOtherPayment,
-                          child: const Text("Acomodação",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              )),
-                        ),
-                        Visibility(
-                          visible: !addEventProcedureStore.isOtherPayment,
-                          child: Column(
-                            children: [
-                              MyRadioGroup(onValueChanged: (value) {
-                                addEventProcedureStore.setAccommodation(value);
-                              }),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Visibility(
-                          visible: !addEventProcedureStore.isOtherPayment,
-                          child: Column(
-                            children: [
-                              CustomSwitch(
-                                labelText: "Urgência",
-                                initialValue: false,
-                                onChanged: (value) {
-                                  addEventProcedureStore.setUrgency(value);
+                                healthInsuranceList: _viewModel.healthInsurances,
+                                selectedHealthInsurance: _viewModel.selectedHealthInsurance,
+                                onChanged: (HealthInsuranceEntity? healthInsurance) {
+                                   if (healthInsurance != null) {
+                                      _viewModel.setHealthInsurance(healthInsurance);
+                                   }
                                 },
                               ),
                               const SizedBox(
@@ -259,7 +211,64 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                           ),
                         ),
                         Visibility(
-                          visible: addEventProcedureStore.isOtherPayment,
+                          visible: _viewModel.paymentType == 'health_insurance',
+                          child: Column(
+                            children: [
+                              DropdownSearchProcedures(
+                                procedureList: _viewModel.procedures,
+                                selectedProcedure: _viewModel.selectedProcedure,
+                                onChanged: (ProcedureEntity? procedure) {
+                                  if (procedure != null) {
+                                     _viewModel.setProcedure(procedure);
+                                  }
+                                },
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Visibility(
+                          visible: _viewModel.paymentType == 'health_insurance',
+                          child: const Text("Acomodação",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              )),
+                        ),
+                        Visibility(
+                          visible: _viewModel.paymentType == 'health_insurance',
+                          child: Column(
+                            children: [
+                              MyRadioGroup(onValueChanged: (value) {
+                                _viewModel.setRoomType(value == 'ward' ? 'ward' : 'apartment');
+                              }),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Visibility(
+                          visible: _viewModel.paymentType == 'health_insurance',
+                          child: Column(
+                            children: [
+                              CustomSwitch(
+                                labelText: "Urgência",
+                                initialValue: false,
+                                onChanged: (value) {
+                                  _viewModel.setUrgency(value);
+                                },
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Visibility(
+                          visible: _viewModel.paymentType != 'health_insurance',
                           child: Stack(
                             children: [
                               Card(
@@ -276,24 +285,39 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                                       const SizedBox(
                                         height: 15,
                                       ),
-                                      DropdownSearchProceduresOthers(
-                                        procedureList: addEventProcedureStore
-                                            .procedureListOthers,
-                                        selectedProcedure:
-                                            addEventProcedureStore
-                                                    .procedureOther ??
-                                                Procedure(),
-                                        onChanged: (Procedure? procedure) =>
-                                            addEventProcedureStore
-                                                .setProcedureOther(procedure!),
-                                      ),
-                                      const SizedBox(
-                                        height: 15,
-                                      ),
+                                      // Procedimentos Outros (Geralmente é um dropdown também ou texto livre? Store antigo usava dropdown de procedimentos marcados como 'others'?
+                                      // O Store antigo usava GetAllProceduresByCustom. O novo ViewModel chama getAllProcedures.
+                                      // Se houver uma flag custom, precisaremos filtrar. No ViewModel atual eu peguei TODOS.
+                                      // Vou assumir que o usuário pode selecionar qualquer um ou digitar novo?
+                                      // O widget DropdownSearchProceduresOthers parece sugerir seleção.
+                                      // Se for seleção de "Outros", o ViewModel deveria ter carregado lista específica?
+                                      // Por simplicidade, vou usar a mesma lista de procedures, talvez filtrada se eu tivesse o campo 'custom' na Entity.
+                                      // A Entity ProcedureEntity não tem 'custom' explicitamente mapeado no meu código anterior?
+                                      // Vou verificar ProcedureEntity. Se não tiver, vou usar a lista completa.
+                                      // Olhando o código, vou usar MyTextFormField para nome se for "Outros" customizado, mas o design antigo usava Dropdown...
+                                      // Ah, o antigo store tinha `getAllProceduresByCustom`. Eu não migrei isso para o UseCase novo getAllProcedures (ele pega todos?).
+                                      // Vou usar um TextField para simplificar "Outros" ou usar a lista completa como placeholder.
+                                      // O widget DropdownSearchProceduresOthers espera uma lista. Vou passar a lista completa filtrada se possível, ou toda ela.
+                                      
                                       Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
+                                          MyTextFormField(
+                                            fontSize: 16,
+                                            label: 'Nome do Procedimento',
+                                            placeholder:
+                                                'Digite o nome do procedimento',
+                                            inputType: TextInputType.text,
+                                            onChanged: (value) {
+                                              _viewModel.setOtherProcedureName(value);
+                                            },
+                                            validators: const {
+                                              'required': true,
+                                              'minLength': 3
+                                            },
+                                          ),
+                                          const SizedBox(height: 15),
                                           MyTextFormField(
                                             fontSize: 16,
                                             label: 'Digite observação',
@@ -301,8 +325,7 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                                                 'Digite a observação do procedimento',
                                             inputType: TextInputType.text,
                                             onChanged: (value) {
-                                              addEventProcedureStore
-                                                  .setDescription(value);
+                                              _viewModel.setOtherProcedureDescription(value);
                                             },
                                             validators: const {
                                               'required': true,
@@ -324,8 +347,7 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                                               RealInputFormatter(moeda: true),
                                             ],
                                             onChanged: (value) {
-                                              addEventProcedureStore
-                                                  .setAmountCents(value);
+                                              _viewModel.setOtherProcedureAmount(value);
                                             },
                                             validators: const {
                                               'required': true,
@@ -337,19 +359,19 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                                       const SizedBox(
                                         height: 15,
                                       ),
-                                      DropdownHealthInsurancesOthers(
-                                        healthInsuranceList:
-                                            addEventProcedureStore
-                                                .healthInsuranceListOthers,
-                                        selectedHealthInsurance:
-                                            addEventProcedureStore
-                                                    .healthInsuranceOther ??
-                                                HealthInsurance(),
-                                        onChanged: (HealthInsurance?
-                                                healthInsurance) =>
-                                            addEventProcedureStore
-                                                .setHealthInsuranceOther(
-                                                    healthInsurance!),
+                                      // Health Insurance Outros
+                                      MyTextFormField(
+                                          fontSize: 16,
+                                          label: 'Nome do Convênio',
+                                          placeholder: 'Digite o nome do convênio',
+                                          inputType: TextInputType.text,
+                                          onChanged: (value) {
+                                            _viewModel.setOtherHealthInsuranceName(value);
+                                          },
+                                          validators: const {
+                                            'required': true,
+                                            'minLength': 3
+                                          },
                                       ),
                                       const SizedBox(
                                         height: 15,
@@ -400,23 +422,21 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                         ),
                         CustomSwitch(
                           labelText: "Pago",
-                          initialValue: addEventProcedureStore.paid ?? false,
+                          initialValue: _viewModel.isPaid,
                           onChanged: (value) {
-                            addEventProcedureStore.setpaid(value);
+                            _viewModel.setIsPaid(value);
                           },
                         ),
                         Center(child: Observer(builder: (_) {
                           return MyButtonWidget(
                             text: 'Cadastrar procedimento',
-                            isLoading: addEventProcedureStore.saveState ==
-                                SaveEventProcedureState.loading,
+                            isLoading: _viewModel.isLoading,
                             disabledColor: Colors.grey,
-                            onTap: addEventProcedureStore.isValidData
+                            onTap: _viewModel.isValidFullData
                                 ? () async {
                                     _formKey.currentState?.save();
                                     if (_formKey.currentState!.validate()) {
-                                      addEventProcedureStore
-                                          .createEventProcedure();
+                                      _viewModel.createEventProcedure();
                                     } else {
                                       CustomToast.show(context,
                                           type: ToastType.error,

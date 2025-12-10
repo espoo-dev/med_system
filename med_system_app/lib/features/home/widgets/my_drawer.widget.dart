@@ -5,8 +5,8 @@ import 'package:distrito_medico/features/hospitals/pages/hospital_page.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/medical_shifts_page.dart';
 import 'package:distrito_medico/features/patients/pages/patient_page.dart';
 import 'package:distrito_medico/features/procedures/pages/procedures_page.dart';
-import 'package:distrito_medico/features/signin/page/signin.page.dart';
-import 'package:distrito_medico/features/signin/store/signin.store.dart';
+import 'package:distrito_medico/features/auth/presentation/pages/signin_page.dart';
+import 'package:distrito_medico/features/auth/presentation/viewmodels/signin_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
@@ -16,7 +16,7 @@ class MyDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final signInStore = GetIt.I.get<SignInStore>();
+    final signInViewModel = GetIt.I.get<SignInViewModel>();
 
     return Drawer(
       child: ListView(
@@ -25,7 +25,7 @@ class MyDrawer extends StatelessWidget {
           UserAccountsDrawerHeader(
             accountName: const Text("Olá"),
             accountEmail:
-                Text(signInStore.currentUser?.resourceOwner?.email ?? ""),
+                Text(signInViewModel.currentUser?.resourceOwner?.email ?? ""),
           ),
           ListTile(
             onTap: () {
@@ -34,6 +34,7 @@ class MyDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => const MedicalShiftsPage()));
+              // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Funcionalidade em manutenção")));
             },
             title: const Text(
               "Plantões",
@@ -133,7 +134,7 @@ class MyDrawer extends StatelessWidget {
           ),
           ListTile(
             onTap: () {
-              signInStore.forceLogout();
+              signInViewModel.logout();
               to(context, const SignInPage());
             },
             title: const Text(

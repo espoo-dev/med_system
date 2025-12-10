@@ -1,4 +1,4 @@
-import 'package:distrito_medico/features/pdf/store/pdf_viewer.store.dart';
+import 'package:distrito_medico/features/pdf/presentation/viewmodels/pdf_viewer_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:get_it/get_it.dart';
@@ -17,17 +17,17 @@ class PdfViewerScreen extends StatefulWidget {
 }
 
 class _PdfViewerScreenState extends State<PdfViewerScreen> {
-  final PdfViewerStore _pdfViewerStore = GetIt.I.get<PdfViewerStore>();
+  final PdfViewerViewModel _pdfViewerViewModel = GetIt.I.get<PdfViewerViewModel>();
 
   @override
   void initState() {
     super.initState();
-    _pdfViewerStore.setPdfPath(widget.pdfPath);
+    _pdfViewerViewModel.setPdfPath(widget.pdfPath);
   }
 
   @override
   void dispose() {
-    _pdfViewerStore.deletePdf();
+    _pdfViewerViewModel.clearPdfPath();
     super.dispose();
   }
 

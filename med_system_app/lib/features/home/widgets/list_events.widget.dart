@@ -2,6 +2,7 @@ import 'package:distrito_medico/core/theme/icons.dart';
 import 'package:distrito_medico/core/utils/navigation_utils.dart';
 import 'package:distrito_medico/core/utils/utils.dart';
 import 'package:distrito_medico/features/event_procedures/model/event_procedure.model.dart';
+import 'package:distrito_medico/features/event_procedures/domain/entities/event_procedure_entity.dart';
 import 'package:distrito_medico/features/event_procedures/pages/edit_event_procedure_page.dart';
 import 'package:distrito_medico/features/event_procedures/pages/event_procedures_page.dart';
 import 'package:flutter/material.dart';
@@ -110,10 +111,29 @@ class _ListEventsWidgetState extends State<ListEventsWidget> {
                         color: iconColor,
                       ),
                       onTap: () {
+                        // Convert EventProcedures model to EventProcedureEntity
+                        final entity = EventProcedureEntity(
+                          id: item.id,
+                          procedure: item.procedure,
+                          patient: item.patient,
+                          hospital: item.hospital,
+                          healthInsurance: item.healthInsurance,
+                          patientServiceNumber: item.patientServiceNumber,
+                          date: item.date,
+                          roomType: item.roomType,
+                          urgency: item.urgency,
+                          paidAt: item.paidAt,
+                          paid: item.paid,
+                          totalAmountCents: item.totalAmountCents,
+                          payment: item.payment,
+                          procedureValue: item.procedureValue,
+                          procedureDescription: item.precedureDescription,
+                        );
+                        
                         push(
                             context,
                             EditEventProcedurePage(
-                              eventProcedures: item,
+                              eventProcedure: entity,
                               backToHome: true,
                             ));
                       },

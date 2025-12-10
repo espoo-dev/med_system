@@ -1,6 +1,6 @@
 import 'package:distrito_medico/app.page.dart';
 import 'package:distrito_medico/core/di/service_locator.dart';
-import 'package:distrito_medico/features/signin/store/signin.store.dart';
+import 'package:distrito_medico/features/auth/presentation/viewmodels/signin_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
@@ -17,8 +17,8 @@ void main() async {
   _setupLogging();
   setupServiceLocator();
 
-  final signStore = GetIt.I.get<SignInStore>();
-  await signStore.getUserStorage();
+  final signInViewModel = GetIt.I.get<SignInViewModel>();
+  await signInViewModel.loadCurrentUser();
 
   runApp(const AppPage());
 }

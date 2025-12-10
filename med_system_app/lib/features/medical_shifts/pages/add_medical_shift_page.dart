@@ -1,6 +1,5 @@
 import 'package:distrito_medico/core/pages/success/success.page.dart';
 import 'package:distrito_medico/core/utils/navigation_utils.dart';
-
 import 'package:distrito_medico/core/widgets/error.widget.dart';
 import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
 import 'package:distrito_medico/core/widgets/my_button_widget.dart';
@@ -11,7 +10,7 @@ import 'package:distrito_medico/core/widgets/custom_switch.widget.dart';
 import 'package:distrito_medico/features/home/pages/home_page.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/medical_shifts_page.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/widgets/radio_group_workload.widget.dart';
-import 'package:distrito_medico/features/medical_shifts/store/add_medical_shift.store.dart';
+import 'package:distrito_medico/features/medical_shifts/presentation/viewmodels/create_medical_shift_viewmodel.dart';
 import 'package:distrito_medico/features/procedures/util/real_input_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -35,26 +34,28 @@ class AddMedicalShiftPage extends StatefulWidget {
 
 class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final addMedicalShiftStore = GetIt.I.get<AddMedicalShiftStore>();
+  final _viewModel = GetIt.I.get<CreateMedicalShiftViewModel>();
   final List<ReactionDisposer> _disposers = [];
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _disposers.add(reaction<SaveMedicalShiftState>(
-        (_) => addMedicalShiftStore.saveState, (validationState) {
-      if (validationState == SaveMedicalShiftState.success) {
+    _disposers.add(reaction<CreateMedicalShiftState>(
+        (_) => _viewModel.state, (state) {
+      if (state == CreateMedicalShiftState.success) {
         to(
             context,
             const SuccessPage(
               title: 'Plantão criado com sucesso!',
               goToPage: MedicalShiftsPage(),
             ));
-      } else if (validationState == SaveMedicalShiftState.error) {
+      } else if (state == CreateMedicalShiftState.error) {
         CustomToast.show(context,
             type: ToastType.error,
             title: "Cadastrar novo Plantão",
-            description: "Ocorreu um erro ao tentar cadastrar.");
+            description: _viewModel.errorMessage.isNotEmpty 
+                ? _viewModel.errorMessage 
+                : "Ocorreu um erro ao tentar cadastrar.");
       }
     }));
   }
@@ -62,8 +63,17 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
   @override
   void initState() {
     super.initState();
-    addMedicalShiftStore.getAmountSuggestions();
-    addMedicalShiftStore.getHospitalNameSuggestions();
+    _viewModel.reset(); // Reset viewmodel on entry
+    _viewModel.loadSuggestions();
+    
+    // Set initial date if provided
+    if (widget.initialDate != null) {
+      // Assuming format needed is String
+      // MyInputDate expects what? It emits normalized string.
+      // But _viewModel.startDate expects String.
+      String formatted = "${widget.initialDate!.day.toString().padLeft(2, '0')}/${widget.initialDate!.month.toString().padLeft(2, '0')}/${widget.initialDate!.year}";
+      _viewModel.setStartDate(formatted);
+    }
   }
 
   List<String> addSpaceToCurrency(List<String> amounts) {
@@ -77,7 +87,8 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
     for (var disposer in _disposers) {
       disposer();
     }
-    addMedicalShiftStore.dispose();
+    // _viewModel.dispose? Store mixin doesn't have dispose, but we can call reset if we want.
+    // _viewModel.reset(); // Done at initState
     super.dispose();
   }
 
@@ -86,7 +97,7 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
     return PopScope(
         canPop: false,
         onPopInvoked: (bool didPop) {
-          if (didPop) {}
+          if (didPop) return;
           if (widget.backToHome) {
             to(context, const HomePage());
           } else {
@@ -101,16 +112,17 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
           ),
           body: Observer(
             builder: (BuildContext context) {
-              if (addMedicalShiftStore.medicalShiftState ==
-                  MedicalShiftState.error) {
-                return Center(
-                    child: ErrorRetryWidget(
-                        'Algo deu errado', 'Por favor, tente novamente', () {
-                  addMedicalShiftStore.fetchAllData();
-                }));
+              /*
+              // Since state is singular, 'loading' blocks the whole form?
+              // The original only showed loading instead of form.
+              if (_viewModel.state == CreateMedicalShiftState.loading) {
+                 return const Center(child: CircularProgressIndicator());
               }
-              if (addMedicalShiftStore.medicalShiftState ==
-                  MedicalShiftState.loading) {
+              // But 'loading' also happens when fetching suggestions?
+              // No, 'loadSuggestions' doesn't set state to loading in ViewModel (it's async void).
+              // Only createMedicalShift sets state to loading.
+              */
+              if (_viewModel.state == CreateMedicalShiftState.loading) {
                 return const Center(child: CircularProgressIndicator());
               }
               return form(context);
@@ -138,18 +150,18 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                             if (textEditingValue.text.isEmpty) {
                               return const Iterable<String>.empty();
                             } else {
-                              return addMedicalShiftStore
-                                  .hospitalNameSuggestions
+                              return _viewModel
+                                  .hospitalSuggestions
                                   .where((word) => word.toLowerCase().contains(
                                       textEditingValue.text.toLowerCase()));
                             }
                           },
-                          onSelected: addMedicalShiftStore.setHospitalName,
+                          onSelected: _viewModel.setHospitalName,
                           fieldViewBuilder: (context, controller, focusNode,
                               onEditingComplete) {
                             return TextField(
                               controller: controller,
-                              onChanged: addMedicalShiftStore.setHospitalName,
+                              onChanged: _viewModel.setHospitalName,
                               focusNode: focusNode,
                               onEditingComplete: onEditingComplete,
                               decoration: InputDecoration(
@@ -188,12 +200,14 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                               fontWeight: FontWeight.bold,
                             )),
                         MyRadioGroupWorkLoad(
-                            onValueChanged: addMedicalShiftStore.setWorkload),
+                            onValueChanged: _viewModel.setWorkload,
+                            initialValue: _viewModel.workload,
+                        ),
                         const SizedBox(
                           height: 15,
                         ),
                         MyInputDate(
-                          onChanged: addMedicalShiftStore.setStartDate,
+                          onChanged: _viewModel.setStartDate,
                           label: 'Data início',
                           textColor: Theme.of(context).colorScheme.primary,
                           selectedDate: widget.initialDate ?? DateTime.now(),
@@ -204,7 +218,7 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                         MyInputTime(
                             label: 'Hora início',
                             selectedTime: selectedTime,
-                            onChanged: addMedicalShiftStore.setStartHour,
+                            onChanged: _viewModel.setStartHour,
                             textColor: Theme.of(context).colorScheme.primary),
                         const SizedBox(
                           height: 15,
@@ -213,7 +227,7 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                           optionsBuilder: (TextEditingValue textEditingValue) {
                             String query = textEditingValue.text;
                             List<String> suggestions =
-                                addMedicalShiftStore.amountSuggestions;
+                                _viewModel.amountSuggestions;
 
                             String cleanString(String str) {
                               return str.replaceAll(RegExp(r'[^0-9]'), '');
@@ -230,12 +244,12 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                               });
                             }
                           },
-                          onSelected: addMedicalShiftStore.setAmountCents,
+                          onSelected: _viewModel.setAmountCents,
                           fieldViewBuilder: (context, controller, focusNode,
                               onEditingComplete) {
                             return TextField(
                               controller: controller,
-                              onChanged: addMedicalShiftStore.setAmountCents,
+                              onChanged: _viewModel.setAmountCents,
                               focusNode: focusNode,
                               inputFormatters: [
                                 FilteringTextInputFormatter.digitsOnly,
@@ -269,27 +283,13 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                             );
                           },
                         ),
-                        // AutoCompleteReal(
-                        //   isCurrency: true,
-                        //   fontSize: 16,
-                        //   label: 'Valor plantão',
-                        //   placeholder: 'Digite o valor do plantão',
-                        //   suggestions: addMedicalShiftStore.amountSuggestions,
-                        //   inputType: TextInputType.number,
-                        //   inputFormatters: [
-                        //     FilteringTextInputFormatter.digitsOnly,
-                        //     RealInputFormatter(moeda: true),
-                        //   ],
-                        //   onChanged: addMedicalShiftStore.setAmountCents,
-                        //   validators: const {'required': true, 'minLength': 3},
-                        // ),
                         const SizedBox(
                           height: 15,
                         ),
                         CustomSwitch(
                           labelText: "Pago",
                           initialValue: false,
-                          onChanged: addMedicalShiftStore.setpaid,
+                          onChanged: _viewModel.setPaid,
                         ),
                         // Recurrence Section
                         Observer(builder: (_) {
@@ -298,10 +298,10 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                             children: [
                               CustomSwitch(
                                 labelText: "Recorrente",
-                                initialValue: addMedicalShiftStore.isRecurrent,
-                                onChanged: addMedicalShiftStore.setIsRecurrent,
+                                initialValue: _viewModel.isRecurrent,
+                                onChanged: _viewModel.setIsRecurrent,
                               ),
-                              if (addMedicalShiftStore.isRecurrent) ...[
+                              if (_viewModel.isRecurrent) ...[
                                 const SizedBox(height: 15),
                                 const Text(
                                   "Frequência",
@@ -312,7 +312,7 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                                 ),
                                 const SizedBox(height: 8),
                                 DropdownButtonFormField<String>(
-                                  value: addMedicalShiftStore.frequency,
+                                  value: _viewModel.frequency,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10),
@@ -351,10 +351,10 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                                       child: Text("Escolha um dia"),
                                     ),
                                   ],
-                                  onChanged: addMedicalShiftStore.setFrequency,
+                                  onChanged: _viewModel.setFrequency,
                                 ),
-                                if (addMedicalShiftStore.frequency != null &&
-                                    addMedicalShiftStore.frequency !=
+                                if (_viewModel.frequency != null &&
+                                    _viewModel.frequency !=
                                         'monthly_fixed_day') ...[
                                   const SizedBox(height: 15),
                                   const Text(
@@ -366,7 +366,7 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                                   ),
                                   const SizedBox(height: 8),
                                   DropdownButtonFormField<int>(
-                                    value: addMedicalShiftStore.dayOfWeek,
+                                    value: _viewModel.dayOfWeek,
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10),
@@ -408,10 +408,10 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                                           value: 6, child: Text("Sábado")),
                                     ],
                                     onChanged:
-                                        addMedicalShiftStore.setDayOfWeek,
+                                        _viewModel.setDayOfWeek,
                                   ),
                                 ],
-                                if (addMedicalShiftStore.frequency ==
+                                if (_viewModel.frequency ==
                                     'monthly_fixed_day') ...[
                                   const SizedBox(height: 15),
                                   const Text(
@@ -423,7 +423,7 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                                   ),
                                   const SizedBox(height: 8),
                                   DropdownButtonFormField<int>(
-                                    value: addMedicalShiftStore.dayOfMonth,
+                                    value: _viewModel.dayOfMonth,
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10),
@@ -456,7 +456,7 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                                       ),
                                     ),
                                     onChanged:
-                                        addMedicalShiftStore.setDayOfMonth,
+                                        _viewModel.setDayOfMonth,
                                   ),
                                 ],
                                 const SizedBox(height: 15),
@@ -491,14 +491,14 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                                             locale: const Locale('pt', 'BR'),
                                             initialEntryMode:
                                                 DatePickerEntryMode.calendar,
-                                            initialDate: addMedicalShiftStore
+                                            initialDate: _viewModel
                                                         .endDate !=
                                                     null
                                                 ? _parseDate(
-                                                    addMedicalShiftStore
+                                                    _viewModel
                                                         .endDate!)
                                                 : DateTime.now()
-                                                    .add(Duration(days: 30)),
+                                                    .add(const Duration(days: 30)),
                                             firstDate: DateTime.now(),
                                             lastDate: DateTime(
                                                 DateTime.now().year + 5),
@@ -514,13 +514,13 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
 
                                           if (date != null) {
                                             String formattedDate =
-                                                "${date.day}/${date.month}/${date.year}";
+                                                "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}";
 
                                             // Validate end date is after start date
-                                            if (addMedicalShiftStore
+                                            if (_viewModel
                                                 .startDate.isNotEmpty) {
                                               DateTime startDate = _parseDate(
-                                                  addMedicalShiftStore
+                                                  _viewModel
                                                       .startDate);
                                               if (date.isBefore(startDate) ||
                                                   date.isAtSameMomentAs(
@@ -534,7 +534,7 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                                               }
                                             }
 
-                                            addMedicalShiftStore
+                                            _viewModel
                                                 .setEndDate(formattedDate);
                                           }
                                         },
@@ -570,10 +570,10 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                                             ),
                                           ),
                                           child: Text(
-                                            addMedicalShiftStore.endDate ??
+                                            _viewModel.endDate ??
                                                 "Selecione a data final",
                                             style: TextStyle(
-                                              color: addMedicalShiftStore
+                                              color: _viewModel
                                                           .endDate !=
                                                       null
                                                   ? Theme.of(context)
@@ -585,12 +585,12 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                                         ),
                                       ),
                                     ),
-                                    if (addMedicalShiftStore.endDate != null)
+                                    if (_viewModel.endDate != null)
                                       IconButton(
                                         icon: const Icon(Icons.clear),
                                         color: Colors.red,
                                         onPressed: () {
-                                          addMedicalShiftStore.setEndDate(null);
+                                          _viewModel.setEndDate(null);
                                         },
                                       ),
                                   ],
@@ -605,14 +605,14 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                         Center(child: Observer(builder: (_) {
                           return MyButtonWidget(
                             text: 'Cadastrar plantão',
-                            isLoading: addMedicalShiftStore.saveState ==
-                                SaveMedicalShiftState.loading,
+                            isLoading: _viewModel.state ==
+                                CreateMedicalShiftState.loading,
                             disabledColor: Colors.grey,
-                            onTap: addMedicalShiftStore.isValidData
+                            onTap: _viewModel.isValidData
                                 ? () async {
                                     _formKey.currentState?.save();
                                     if (_formKey.currentState!.validate()) {
-                                      addMedicalShiftStore.createMedicalShift();
+                                      _viewModel.createMedicalShift();
                                     } else {
                                       CustomToast.show(context,
                                           type: ToastType.error,

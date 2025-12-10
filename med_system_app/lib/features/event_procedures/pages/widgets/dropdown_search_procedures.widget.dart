@@ -1,11 +1,11 @@
-import 'package:distrito_medico/features/procedures/model/procedure.model.dart';
+import 'package:distrito_medico/features/procedures/domain/entities/procedure_entity.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
 class DropdownSearchProcedures extends StatefulWidget {
-  final List<Procedure> procedureList;
-  final Procedure selectedProcedure;
-  final Function(Procedure?) onChanged;
+  final List<ProcedureEntity> procedureList;
+  final ProcedureEntity? selectedProcedure;
+  final Function(ProcedureEntity?) onChanged;
 
   const DropdownSearchProcedures({
     super.key,
@@ -36,7 +36,7 @@ class _DropdownSearchProceduresState extends State<DropdownSearchProcedures> {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownSearch<Procedure>(
+    return DropdownSearch<ProcedureEntity>(
       dropdownButtonProps: DropdownButtonProps(
         color: Theme.of(context).colorScheme.primary,
       ),
@@ -105,7 +105,7 @@ class _DropdownSearchProceduresState extends State<DropdownSearchProcedures> {
         },
       ),
       items: widget.procedureList,
-      itemAsString: (Procedure procedure) =>
+      itemAsString: (ProcedureEntity procedure) =>
           "${procedure.code} ${procedure.name}",
       onChanged: widget.onChanged,
       dropdownDecoratorProps: DropDownDecoratorProps(

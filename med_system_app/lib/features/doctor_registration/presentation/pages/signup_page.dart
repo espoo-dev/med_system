@@ -5,7 +5,7 @@ import 'package:distrito_medico/core/widgets/my_text_form_field.widget.dart';
 import 'package:distrito_medico/core/widgets/my_text_form_field_password.widget.dart';
 import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
 import 'package:distrito_medico/features/doctor_registration/presentation/viewmodels/signup_viewmodel.dart';
-import 'package:distrito_medico/features/signin/page/signin.page.dart';
+import 'package:distrito_medico/features/auth/presentation/pages/signin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';

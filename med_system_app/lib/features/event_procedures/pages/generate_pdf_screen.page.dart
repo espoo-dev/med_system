@@ -1,4 +1,4 @@
-import 'package:distrito_medico/features/event_procedures/store/event_procedure.store.dart';
+import 'package:distrito_medico/features/event_procedures/presentation/viewmodels/event_procedures_list_viewmodel.dart';
 import 'package:distrito_medico/features/pdf/pdf_screen.page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -14,12 +14,12 @@ class EventProcedureGeneratePdfPage extends StatefulWidget {
 
 class _EventProcedureGeneratePdfPageState
     extends State<EventProcedureGeneratePdfPage> {
-  final _store = GetIt.I.get<EventProcedureStore>();
+  final _viewModel = GetIt.I.get<EventProceduresListViewModel>();
 
   @override
   void initState() {
     super.initState();
-    _store.generatePdfReportForEventProcedure();
+    _viewModel.generatePdf();
   }
 
   @override
@@ -27,17 +27,17 @@ class _EventProcedureGeneratePdfPageState
     return Scaffold(
       body: Observer(
         builder: (_) {
-          if (_store.pdfState == PdfReportState.loading) {
+          if (_viewModel.isPdfLoading) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (_store.pdfState == PdfReportState.success) {
+          if (_viewModel.pdfPath != null) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                   builder: (context) => PdfViewerScreen(
-                      pdfPath: _store.pdfPath!,
+                      pdfPath: _viewModel.pdfPath!,
                       title: 'Relatório de procedimento'),
                 ),
               );
@@ -46,9 +46,9 @@ class _EventProcedureGeneratePdfPageState
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (_store.pdfState == PdfReportState.error) {
+          if (_viewModel.errorMessage != null) {
             return Center(
-              child: Text(_store.pdfErrorMessage),
+              child: Text(_viewModel.errorMessage!),
             );
           }
           return const Center(

@@ -1,4 +1,4 @@
-import 'package:distrito_medico/features/medical_shifts/model/medical_shift.model.dart';
+import 'package:distrito_medico/features/medical_shifts/domain/entities/medical_shift_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -9,7 +9,7 @@ class CalendarWidget extends StatefulWidget {
   final Function(int month, int year)? onMonthChanged;
   final int initialMonth;
   final int initialYear;
-  final List<MedicalShiftModel> events;
+  final List<MedicalShiftEntity> events;
 
   const CalendarWidget({
     super.key,
@@ -37,14 +37,19 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     _selectedDay = DateTime.now();
   }
 
-  List<MedicalShiftModel> getEventsForDay(DateTime day) {
-    List<MedicalShiftModel> eventsForDay = [];
+  List<MedicalShiftEntity> getEventsForDay(DateTime day) {
+    List<MedicalShiftEntity> eventsForDay = [];
     for (var event in widget.events) {
-      DateTime eventDate = DateFormat('dd/MM/yyyy').parse(event.date ?? '');
-      if (eventDate.year == day.year &&
-          eventDate.month == day.month &&
-          eventDate.day == day.day) {
-        eventsForDay.add(event);
+      if (event.date == null || event.date!.isEmpty) continue;
+      try {
+        DateTime eventDate = DateFormat('dd/MM/yyyy').parse(event.date!);
+        if (eventDate.year == day.year &&
+            eventDate.month == day.month &&
+            eventDate.day == day.day) {
+          eventsForDay.add(event);
+        }
+      } catch (e) {
+        // ignore error
       }
     }
     return eventsForDay;
@@ -129,7 +134,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   ),
                   calendarBuilders: CalendarBuilders(
                     markerBuilder: (context, day, events) {
-                      List<MedicalShiftModel> dayEvents = getEventsForDay(day);
+                      List<MedicalShiftEntity> dayEvents = getEventsForDay(day);
                       if (dayEvents.isNotEmpty) {
                         return Positioned(
                           bottom: 1,
