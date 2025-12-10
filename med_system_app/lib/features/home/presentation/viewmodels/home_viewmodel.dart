@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../event_procedures/domain/entities/event_procedure_entity.dart';
@@ -8,6 +7,7 @@ import '../../domain/usecases/get_latest_medical_shifts_usecase.dart';
 
 part 'home_viewmodel.g.dart';
 
+// ignore: library_private_types_in_public_api
 class HomeViewModel = _HomeViewModelBase with _$HomeViewModel;
 
 enum HomeFilterType { procedures, medicalShifts }
@@ -87,9 +87,7 @@ abstract class _HomeViewModelBase with Store {
   @computed
   String get totalUnpaidMedicalShifts => _totalUnpaidMedicalShifts;
 
-  String _formatCurrency(double value) {
-    return NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$').format(value);
-  }
+
 
   /* Actions */
   @action

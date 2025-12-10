@@ -12,20 +12,14 @@ import 'package:distrito_medico/features/event_procedures/pages/event_procedures
 import 'package:distrito_medico/core/widgets/custom_switch.widget.dart';
 import 'package:distrito_medico/features/event_procedures/presentation/viewmodels/update_event_procedure_viewmodel.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown_search_health_insurances.widget.dart';
-import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown_search_health_insurances_others.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown_search_hospitals.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown_search_patients.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown_search_procedures.widget.dart';
-import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown_search_procedures_others.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/radio_group.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/radio_group_payment.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/triangle_widget.dart';
 // Models for widgets compatibility
-import 'package:distrito_medico/features/health_insurances/model/health_insurances.model.dart';
 import 'package:distrito_medico/features/home/pages/home_page.dart';
-import 'package:distrito_medico/features/hospitals/model/hospital.model.dart';
-import 'package:distrito_medico/features/patients/model/patient.model.dart';
-import 'package:distrito_medico/features/procedures/model/procedure.model.dart';
 // Entity imports
 import 'package:distrito_medico/features/patients/domain/entities/patient_entity.dart';
 import 'package:distrito_medico/features/hospitals/domain/entities/hospital_entity.dart';

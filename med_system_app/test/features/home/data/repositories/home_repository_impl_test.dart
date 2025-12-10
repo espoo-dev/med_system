@@ -3,14 +3,10 @@ import 'package:distrito_medico/core/errors/exceptions.dart';
 import 'package:distrito_medico/core/errors/failures.dart';
 import 'package:distrito_medico/features/event_procedures/data/models/event_procedure_list_model.dart';
 import 'package:distrito_medico/features/event_procedures/data/models/event_procedure_model.dart';
-import 'package:distrito_medico/features/event_procedures/domain/entities/event_procedure_entity.dart';
-import 'package:distrito_medico/features/event_procedures/domain/entities/event_procedure_list_entity.dart';
 import 'package:distrito_medico/features/home/data/datasources/home_remote_datasource.dart';
 import 'package:distrito_medico/features/home/data/repositories/home_repository_impl.dart';
 import 'package:distrito_medico/features/medical_shifts/data/models/medical_shift_list_model.dart';
 import 'package:distrito_medico/features/medical_shifts/data/models/medical_shift_model.dart';
-import 'package:distrito_medico/features/medical_shifts/domain/entities/medical_shift_entity.dart';
-import 'package:distrito_medico/features/medical_shifts/domain/entities/medical_shift_list_entity.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 

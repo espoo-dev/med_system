@@ -5,13 +5,13 @@ import '../../../../core/usecases/usecase.dart';
 import '../repositories/event_procedure_repository.dart';
 
 class DeleteEventProcedureUseCase
-    implements UseCase<void, DeleteEventProcedureParams> {
+    implements UseCase<Unit, DeleteEventProcedureParams> {
   final EventProcedureRepository repository;
 
   DeleteEventProcedureUseCase(this.repository);
 
   @override
-  Future<Either<Failure, void>> call(DeleteEventProcedureParams params) async {
+  Future<Either<Failure, Unit>> call(DeleteEventProcedureParams params) async {
     return await repository.deleteEventProcedure(params.id);
   }
 }

@@ -1,7 +1,5 @@
-import 'package:distrito_medico/core/errors/failures.dart';
 
 import 'package:distrito_medico/features/medical_shifts/domain/entities/medical_shift_entity.dart';
-import 'package:distrito_medico/features/medical_shifts/domain/entities/medical_shift_list_entity.dart';
 import 'package:distrito_medico/features/medical_shifts/domain/usecases/delete_medical_shift_usecase.dart';
 import 'package:distrito_medico/features/medical_shifts/domain/usecases/generate_pdf_report_usecase.dart';
 import 'package:distrito_medico/features/medical_shifts/domain/usecases/get_medical_shifts_usecase.dart';
@@ -14,6 +12,7 @@ part 'medical_shifts_list_viewmodel.g.dart';
 enum MedicalShiftListState { idle, loading, success, error }
 enum MedicalShiftDeleteState { idle, loading, success, error }
 
+// ignore: library_private_types_in_public_api
 class MedicalShiftsListViewModel = _MedicalShiftsListViewModelBase with _$MedicalShiftsListViewModel;
 
 abstract class _MedicalShiftsListViewModelBase with Store {
@@ -108,7 +107,7 @@ abstract class _MedicalShiftsListViewModelBase with Store {
 
     result.fold(
       (failure) {
-        errorMessage = failure.message ?? "Erro ao carregar plantões";
+        errorMessage = failure.message;
         state = MedicalShiftListState.error;
       },
       (listEntity) {
@@ -169,7 +168,7 @@ abstract class _MedicalShiftsListViewModelBase with Store {
 
     result.fold(
       (failure) {
-        errorMessage = failure.message ?? "Erro ao deletar";
+        errorMessage = failure.message;
         deleteState = MedicalShiftDeleteState.error;
       },
       (success) {
@@ -189,7 +188,7 @@ abstract class _MedicalShiftsListViewModelBase with Store {
 
     result.fold(
       (failure) {
-        errorMessage = failure.message ?? "Erro ao atualizar pagamento";
+        errorMessage = failure.message;
       },
       (updatedEntity) {
         if (index < medicalShifts.length) {
@@ -220,7 +219,7 @@ abstract class _MedicalShiftsListViewModelBase with Store {
 
     result.fold(
       (failure) {
-        errorMessage = failure.message ?? "Erro ao gerar PDF";
+        errorMessage = failure.message;
         isGeneratingPdf = false;
       },
       (path) {

@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart';
 import 'package:distrito_medico/core/errors/failures.dart';

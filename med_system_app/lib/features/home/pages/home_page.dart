@@ -15,7 +15,6 @@ import 'package:distrito_medico/features/home/widgets/my_app_bar.widget.dart';
 import 'package:distrito_medico/features/home/widgets/my_drawer.widget.dart';
 import 'package:distrito_medico/features/medical_shifts/domain/entities/medical_shift_entity.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/add_medical_shift_page.dart';
-import 'package:distrito_medico/features/medical_shifts/pages/add_medical_shift_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';

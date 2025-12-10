@@ -88,7 +88,7 @@ class MedicalShiftRepositoryImpl implements IMedicalShiftRepository {
         startHour: startHour,
       );
       await remoteDataSource.createMedicalShiftRecurrence(request);
-      return Right(null);
+      return const Right(null);
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message));
     }
@@ -145,7 +145,7 @@ class MedicalShiftRepositoryImpl implements IMedicalShiftRepository {
       } else {
         await remoteDataSource.deleteMedicalShift(id);
       }
-      return Right(null);
+      return const Right(null);
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message));
     }

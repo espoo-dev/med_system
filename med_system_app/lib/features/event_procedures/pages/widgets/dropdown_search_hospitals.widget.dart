@@ -82,14 +82,14 @@ class _DropdownSearchHospitalState extends State<DropdownSearchHospitals> {
           return Padding(
             padding: const EdgeInsets.all(15),
             child: Text(
-              item.name ?? "",
+              item.name,
               style: const TextStyle(fontSize: 20),
             ),
           );
         },
       ),
       items: widget.hospitalList,
-      itemAsString: (HospitalEntity hospital) => hospital.name ?? "",
+      itemAsString: (HospitalEntity hospital) => hospital.name,
       onChanged: widget.onChanged,
       dropdownDecoratorProps: DropDownDecoratorProps(
         dropdownSearchDecoration: InputDecoration(

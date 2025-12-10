@@ -25,7 +25,7 @@ class MyDrawer extends StatelessWidget {
           UserAccountsDrawerHeader(
             accountName: const Text("Olá"),
             accountEmail:
-                Text(signInViewModel.currentUser?.resourceOwner?.email ?? ""),
+                Text(signInViewModel.currentUser?.resourceOwner.email ?? ""),
           ),
           ListTile(
             onTap: () {

@@ -2,8 +2,6 @@ import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown_search_health_insurances.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown_search_hospitals.widget.dart';
 // Models for compatibility with widgets
-import 'package:distrito_medico/features/health_insurances/model/health_insurances.model.dart';
-import 'package:distrito_medico/features/hospitals/model/hospital.model.dart';
 // ViewModel and Entities
 import 'package:distrito_medico/features/event_procedures/presentation/viewmodels/filter_event_procedures_viewmodel.dart';
 import 'package:distrito_medico/features/hospitals/domain/entities/hospital_entity.dart';

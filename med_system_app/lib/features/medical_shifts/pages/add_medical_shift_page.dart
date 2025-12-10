@@ -1,6 +1,5 @@
 import 'package:distrito_medico/core/pages/success/success.page.dart';
 import 'package:distrito_medico/core/utils/navigation_utils.dart';
-import 'package:distrito_medico/core/widgets/error.widget.dart';
 import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
 import 'package:distrito_medico/core/widgets/my_button_widget.dart';
 import 'package:distrito_medico/core/widgets/my_date_input.widget.dart';
@@ -511,6 +510,8 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                                               );
                                             },
                                           );
+
+                                          if (!context.mounted) return;
 
                                           if (date != null) {
                                             String formattedDate =

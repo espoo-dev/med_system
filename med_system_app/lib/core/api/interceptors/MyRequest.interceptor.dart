@@ -14,7 +14,7 @@ class MyRequestInterceptor implements RequestInterceptor {
     if (!uri.toString().contains('sign_in')) {
       if (signInViewModel.currentUser?.token != null) {
         return applyHeaders(request,
-            {'Authorization': 'Bearer ${signInViewModel.currentUser!.token!}'});
+            {'Authorization': 'Bearer ${signInViewModel.currentUser!.token}'});
       }
     }
 

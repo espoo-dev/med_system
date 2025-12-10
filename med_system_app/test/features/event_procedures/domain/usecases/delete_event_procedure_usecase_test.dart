@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:distrito_medico/core/errors/failures.dart';
-import 'package:distrito_medico/core/usecases/usecase.dart';
 import 'package:distrito_medico/features/event_procedures/domain/repositories/event_procedure_repository.dart';
 import 'package:distrito_medico/features/event_procedures/domain/usecases/delete_event_procedure_usecase.dart';
 import 'package:flutter_test/flutter_test.dart';

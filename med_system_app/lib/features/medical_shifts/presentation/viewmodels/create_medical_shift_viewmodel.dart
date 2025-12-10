@@ -1,5 +1,3 @@
-import 'package:distrito_medico/core/errors/failures.dart';
-import 'package:distrito_medico/features/medical_shifts/domain/entities/medical_shift_entity.dart';
 import 'package:distrito_medico/features/medical_shifts/domain/usecases/create_medical_shift_usecase.dart';
 import 'package:distrito_medico/features/medical_shifts/domain/usecases/create_medical_shift_recurrence_usecase.dart';
 import 'package:distrito_medico/features/medical_shifts/domain/usecases/get_amount_suggestions_usecase.dart';
@@ -11,6 +9,7 @@ part 'create_medical_shift_viewmodel.g.dart';
 
 enum CreateMedicalShiftState { idle, loading, success, error }
 
+// ignore: library_private_types_in_public_api
 class CreateMedicalShiftViewModel = _CreateMedicalShiftViewModelBase with _$CreateMedicalShiftViewModel;
 
 abstract class _CreateMedicalShiftViewModelBase with Store {
@@ -137,10 +136,10 @@ abstract class _CreateMedicalShiftViewModelBase with Store {
 
   @action
   Future<void> loadSuggestions() async {
-    final hospResult = await getHospitalSuggestionsUseCase(NoParams());
+    final hospResult = await getHospitalSuggestionsUseCase(const NoParams());
     hospResult.fold((l) {}, (r) => hospitalSuggestions = ObservableList.of(r));
     
-    final amountResult = await getAmountSuggestionsUseCase(NoParams());
+    final amountResult = await getAmountSuggestionsUseCase(const NoParams());
     amountResult.fold((l) {}, (r) => amountSuggestions = ObservableList.of(r));
   }
 
@@ -164,7 +163,7 @@ abstract class _CreateMedicalShiftViewModelBase with Store {
 
     await result.fold(
       (failure) async {
-        errorMessage = failure.message ?? "Erro ao criar plantão";
+        errorMessage = failure.message;
         state = CreateMedicalShiftState.error;
       },
       (entity) async {

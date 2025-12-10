@@ -7,7 +7,6 @@ import 'package:distrito_medico/core/widgets/ext_fab.widget.dart';
 import 'package:distrito_medico/core/widgets/fab.widget.dart';
 import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
 import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
-import 'package:distrito_medico/features/event_procedures/domain/entities/event_procedure_entity.dart';
 import 'package:distrito_medico/features/event_procedures/pages/add_event_procedure_page.dart';
 import 'package:distrito_medico/features/event_procedures/pages/edit_event_procedure_page.dart';
 import 'package:distrito_medico/features/event_procedures/pages/filter_event_procedures_page.dart';

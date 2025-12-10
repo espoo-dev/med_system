@@ -1,5 +1,4 @@
 import 'package:distrito_medico/core/errors/failures.dart';
-import 'package:distrito_medico/core/usecases/usecase.dart';
 import 'package:distrito_medico/features/event_procedures/domain/entities/event_procedure_entity.dart';
 import 'package:distrito_medico/features/event_procedures/domain/usecases/update_event_procedure_usecase.dart';
 import 'package:distrito_medico/features/health_insurances/domain/entities/health_insurance_entity.dart';
@@ -14,6 +13,7 @@ import 'package:mobx/mobx.dart';
 
 part 'update_event_procedure_viewmodel.g.dart';
 
+// ignore: library_private_types_in_public_api
 class UpdateEventProcedureViewModel = _UpdateEventProcedureViewModelBase
     with _$UpdateEventProcedureViewModel;
 
@@ -311,7 +311,7 @@ abstract class _UpdateEventProcedureViewModelBase with Store {
 
     final result = await _updateEventProcedureUseCase(UpdateEventProcedureParams(
       id: _eventProcedureId!,
-      hospitalId: selectedHospital!.id!,
+      hospitalId: selectedHospital!.id,
       patientServiceNumber: patientServiceNumber,
       date: createdDate,
       roomType: roomType,

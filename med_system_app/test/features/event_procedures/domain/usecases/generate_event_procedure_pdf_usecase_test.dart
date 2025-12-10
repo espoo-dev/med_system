@@ -19,7 +19,7 @@ void main() {
     useCase = GenerateEventProcedurePdfUseCase(mockRepository);
   });
 
-  final tFilters = GenerateEventProcedurePdfParams(
+  const tFilters = GenerateEventProcedurePdfParams(
     month: 1,
     year: 2023,
   );

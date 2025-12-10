@@ -1,11 +1,8 @@
 import 'dart:convert';
-import 'package:chopper/chopper.dart';
 import 'package:distrito_medico/features/event_procedures/data/models/event_procedure_list_model.dart';
 import 'package:distrito_medico/features/medical_shifts/data/models/medical_shift_list_model.dart';
 import '../../../../core/api/api.dart';
 import '../../../../core/errors/exceptions.dart';
-import '../../../event_procedures/data/models/event_procedure_model.dart';
-import '../../../medical_shifts/data/models/medical_shift_model.dart';
 
 /// Interface do DataSource remoto da Home
 abstract class HomeRemoteDataSource {

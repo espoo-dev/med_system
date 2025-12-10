@@ -133,10 +133,10 @@ class EventProcedureRepositoryImpl implements EventProcedureRepository {
   }
 
   @override
-  Future<Either<Failure, void>> deleteEventProcedure(int id) async {
+  Future<Either<Failure, Unit>> deleteEventProcedure(int id) async {
     try {
       await remoteDataSource.deleteEventProcedure(id);
-      return const Right(null);
+      return const Right(unit);
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message));
     }

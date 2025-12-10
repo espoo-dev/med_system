@@ -249,21 +249,21 @@ class MockEventProcedureRepository extends _i1.Mock
       ) as _i4.Future<_i2.Either<_i5.Failure, _i7.EventProcedureEntity>>);
 
   @override
-  _i4.Future<_i2.Either<_i5.Failure, void>> deleteEventProcedure(int? id) =>
+  _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>> deleteEventProcedure(int? id) =>
       (super.noSuchMethod(
         Invocation.method(
           #deleteEventProcedure,
           [id],
         ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, void>>.value(
-            _FakeEither_0<_i5.Failure, void>(
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>>.value(
+            _FakeEither_0<_i5.Failure, _i2.Unit>(
           this,
           Invocation.method(
             #deleteEventProcedure,
             [id],
           ),
         )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, void>>);
+      ) as _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, _i8.Uint8List>> generatePdfReport({

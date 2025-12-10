@@ -55,7 +55,7 @@ abstract class EventProcedureRepository {
     String? payment,
   });
 
-  Future<Either<Failure, void>> deleteEventProcedure(int id);
+  Future<Either<Failure, Unit>> deleteEventProcedure(int id);
 
   Future<Either<Failure, Uint8List>> generatePdfReport({
     int? month,

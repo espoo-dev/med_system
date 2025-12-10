@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:chopper/chopper.dart';
 import '../../../../core/api/services/event_procedures/event_procedure.service.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../models/event_procedure_model.dart';

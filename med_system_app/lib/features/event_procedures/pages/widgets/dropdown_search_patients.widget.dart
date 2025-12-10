@@ -99,14 +99,14 @@ class _DropdownSearchPatientsState extends State<DropdownSearchPatients> {
           return Padding(
             padding: const EdgeInsets.all(15),
             child: Text(
-              item.name ?? "",
+              item.name,
               style: const TextStyle(fontSize: 20),
             ),
           );
         },
       ),
       items: widget.patientList,
-      itemAsString: (PatientEntity patient) => patient.name ?? "",
+      itemAsString: (PatientEntity patient) => patient.name,
       onChanged: widget.onChanged,
       dropdownDecoratorProps: DropDownDecoratorProps(
         dropdownSearchDecoration: InputDecoration(

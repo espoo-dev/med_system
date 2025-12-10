@@ -11,6 +11,7 @@ import 'package:distrito_medico/features/event_procedures/domain/usecases/genera
 
 part 'event_procedures_list_viewmodel.g.dart';
 
+// ignore: library_private_types_in_public_api
 class EventProceduresListViewModel = _EventProceduresListViewModelBase
     with _$EventProceduresListViewModel;
 

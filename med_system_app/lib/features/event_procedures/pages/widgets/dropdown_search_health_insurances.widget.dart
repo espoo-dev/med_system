@@ -83,14 +83,14 @@ class _DropdownHealthInsurancesState extends State<DropdownHealthInsurances> {
           return Padding(
             padding: const EdgeInsets.all(15),
             child: Text(
-              item.name ?? "",
+              item.name,
               style: const TextStyle(fontSize: 20),
             ),
           );
         },
       ),
       items: widget.healthInsuranceList,
-      itemAsString: (HealthInsuranceEntity healthInsurance) => healthInsurance.name ?? "",
+      itemAsString: (HealthInsuranceEntity healthInsurance) => healthInsurance.name,
       onChanged: widget.onChanged,
       dropdownDecoratorProps: DropDownDecoratorProps(
         dropdownSearchDecoration: InputDecoration(

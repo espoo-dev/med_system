@@ -98,7 +98,7 @@ class _DropdownSearchProceduresState extends State<DropdownSearchProcedures> {
           return Padding(
             padding: const EdgeInsets.all(15),
             child: Text(
-              item.name ?? "",
+              item.name,
               style: const TextStyle(fontSize: 20),
             ),
           );

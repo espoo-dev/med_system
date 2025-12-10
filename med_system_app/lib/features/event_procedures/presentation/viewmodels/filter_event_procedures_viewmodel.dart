@@ -1,4 +1,3 @@
-import 'package:distrito_medico/core/usecases/usecase.dart';
 import 'package:distrito_medico/features/health_insurances/domain/entities/health_insurance_entity.dart';
 import 'package:distrito_medico/features/health_insurances/domain/usecases/get_all_health_insurances_usecase.dart';
 import 'package:distrito_medico/features/hospitals/domain/entities/hospital_entity.dart';
@@ -7,6 +6,7 @@ import 'package:mobx/mobx.dart';
 
 part 'filter_event_procedures_viewmodel.g.dart';
 
+// ignore: library_private_types_in_public_api
 class FilterEventProceduresViewModel = _FilterEventProceduresViewModelBase
     with _$FilterEventProceduresViewModel;
 
