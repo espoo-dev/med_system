@@ -31,7 +31,7 @@ jobs:
 
       - name: Run Build Runner
         working-directory: med_system_app
-        run: flutter pub run build_runner build --delete-conflicting-outputs
+        run: dart run build_runner build --delete-conflicting-outputs
 
       # Nota: Para builds de produção reais, você precisaria configurar a assinatura do app (Keystore)
       # Aqui estamos gerando um APK de debug/profile ou release não assinado para demonstração
