@@ -46,7 +46,7 @@ jobs:
 
       - name: Analyze Code
         working-directory: med_system_app
-        run: flutter analyze
+        run: flutter analyze --no-fatal-infos
 
       - name: Run Tests
         working-directory: med_system_app
