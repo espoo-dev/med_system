@@ -1,5 +1,8 @@
 # Documentação do Projeto
 
+[![codecov](https://codecov.io/gh/espoo-dev/med_system/branch/main/graph/badge.svg)](https://codecov.io/gh/espoo-dev/med_system)
+
+
 ## Diagrama da Arquitetura - Feature de Autenticação
 
 ## 📐 Visão Geral da Clean Architecture
