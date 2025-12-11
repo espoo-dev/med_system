@@ -56,3 +56,4 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           file: med_system_app/coverage/lcov.info
+          token: ${{ secrets.CODECOV_TOKEN }}
