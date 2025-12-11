@@ -23,7 +23,11 @@ jobs:
         with:
           channel: 'stable'
           flutter-version: '3.24.5'
-          cache: true
+          cache: false
+
+      - name: Clean Dependencies
+        working-directory: med_system_app
+        run: rm -f pubspec.lock
 
       - name: Get Dependencies
         working-directory: med_system_app
