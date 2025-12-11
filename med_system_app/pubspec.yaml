@@ -58,6 +58,7 @@ dependencies:
   webview_flutter: ^4.2.2
   share_plus: ^6.0.0
   mockito: ^5.0.0
+  intl: any
   dartz: ^0.10.1
   equatable: ^2.0.5
 
