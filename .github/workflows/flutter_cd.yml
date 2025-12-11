@@ -3,6 +3,7 @@ name: Flutter CD - Android Build
 on:
   release:
     types: [published]
+  workflow_dispatch:  # Permite executar manualmente
 
 jobs:
   build:
@@ -36,9 +37,7 @@ jobs:
       - name: Run Build Runner
         working-directory: med_system_app
         run: dart run build_runner build --delete-conflicting-outputs
-
-      # Nota: Para builds de produção reais, você precisaria configurar a assinatura do app (Keystore)
-      # Aqui estamos gerando um APK de debug/profile ou release não assinado para demonstração
+        
       - name: Build APK
         working-directory: med_system_app
         run: flutter build apk --release --no-sound-null-safety
