@@ -25,20 +25,23 @@ jobs:
           cache: true
 
       - name: Get Dependencies
+        working-directory: med_system_app
         run: flutter pub get
 
       - name: Run Build Runner
+        working-directory: med_system_app
         run: flutter pub run build_runner build --delete-conflicting-outputs
 
       # Nota: Para builds de produção reais, você precisaria configurar a assinatura do app (Keystore)
       # Aqui estamos gerando um APK de debug/profile ou release não assinado para demonstração
       - name: Build APK
+        working-directory: med_system_app
         run: flutter build apk --release --no-sound-null-safety
 
       - name: Upload APK to Release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: build/app/outputs/flutter-apk/app-release.apk
+          file: med_system_app/build/app/outputs/flutter-apk/app-release.apk
           asset_name: med_system_app_${{ github.ref_name }}.apk
           tag: ${{ github.ref }}
