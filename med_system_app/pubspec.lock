@@ -1059,7 +1059,7 @@ packages:
     source: hosted
     version: "3.14.0"
   win32:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
       name: win32
       sha256: "0eaf06e3446824099858367950a813472af675116bf63f008a4c2a75ae13e9cb"
