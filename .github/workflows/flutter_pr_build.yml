@@ -1,0 +1,50 @@
+name: Flutter PR Build
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [ "main", "master", "develop" ]
+
+jobs:
+  build-pr-apk:
+    name: Build PR APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: '3.24.5'
+          cache: false
+
+      - name: Clean Dependencies
+        working-directory: med_system_app
+        run: rm -f pubspec.lock
+
+      - name: Get Dependencies
+        working-directory: med_system_app
+        run: flutter pub get
+
+      - name: Run Build Runner
+        working-directory: med_system_app
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Build APK (Release)
+        working-directory: med_system_app
+        run: flutter build apk --release --no-sound-null-safety
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-${{ github.event.number }}-apk
+          path: med_system_app/build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 14
