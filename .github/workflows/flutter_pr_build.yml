@@ -38,13 +38,13 @@ jobs:
         working-directory: med_system_app
         run: dart run build_runner build --delete-conflicting-outputs
 
-      - name: Build APK (Release)
+      - name: Build APK (Debug)
         working-directory: med_system_app
-        run: flutter build apk --release
+        run: flutter build apk --debug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: pr-${{ github.event.number }}-apk
-          path: med_system_app/build/app/outputs/flutter-apk/app-release.apk
+          path: med_system_app/build/app/outputs/flutter-apk/app-debug.apk
           retention-days: 14
