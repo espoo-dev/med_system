@@ -50,7 +50,11 @@ jobs:
 
       - name: Run Tests
         working-directory: med_system_app
-        run: flutter test --coverage
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lcov
+          flutter test --coverage
+          lcov --remove coverage/lcov.info 'lib/**/pages/*' 'lib/**/widgets/*' 'lib/**/*_page.dart' 'lib/**/*_widget.dart' 'lib/**/*.g.dart' -o coverage/lcov.info
 
       - name: Upload Coverage
         uses: codecov/codecov-action@v3
