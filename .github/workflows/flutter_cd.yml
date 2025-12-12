@@ -40,7 +40,7 @@ jobs:
         
       - name: Build APK
         working-directory: med_system_app
-        run: flutter build apk --release --no-sound-null-safety
+        run: flutter build apk --release
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
