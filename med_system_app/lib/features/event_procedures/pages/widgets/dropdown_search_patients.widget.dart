@@ -1,12 +1,12 @@
 import 'package:distrito_medico/core/widgets/my_button_widget.dart';
-import 'package:distrito_medico/features/patients/model/patient.model.dart';
+import 'package:distrito_medico/features/patients/domain/entities/patient_entity.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
 class DropdownSearchPatients extends StatefulWidget {
-  final List<Patient> patientList;
-  final Patient selectedPatient;
-  final Function(Patient?) onChanged;
+  final List<PatientEntity> patientList;
+  final PatientEntity? selectedPatient;
+  final Function(PatientEntity?) onChanged;
 
   const DropdownSearchPatients({
     super.key,
@@ -23,7 +23,7 @@ class DropdownSearchPatients extends StatefulWidget {
 class _DropdownSearchPatientsState extends State<DropdownSearchPatients> {
   @override
   Widget build(BuildContext context) {
-    return DropdownSearch<Patient>(
+    return DropdownSearch<PatientEntity>(
       dropdownButtonProps: DropdownButtonProps(
         color: Theme.of(context).colorScheme.primary,
       ),
@@ -83,7 +83,7 @@ class _DropdownSearchPatientsState extends State<DropdownSearchPatients> {
                   child: MyButtonWidget(
                     text: "Adicionar paciente",
                     onTap: () {
-                      widget.onChanged(Patient(id: null, name: text));
+                      widget.onChanged(PatientEntity(id: 0, name: text, deletable: false));
                       Navigator.pop(context);
                     },
                   ),
@@ -99,14 +99,14 @@ class _DropdownSearchPatientsState extends State<DropdownSearchPatients> {
           return Padding(
             padding: const EdgeInsets.all(15),
             child: Text(
-              item.name ?? "",
+              item.name,
               style: const TextStyle(fontSize: 20),
             ),
           );
         },
       ),
       items: widget.patientList,
-      itemAsString: (Patient patient) => patient.name ?? "",
+      itemAsString: (PatientEntity patient) => patient.name,
       onChanged: widget.onChanged,
       dropdownDecoratorProps: DropDownDecoratorProps(
         dropdownSearchDecoration: InputDecoration(

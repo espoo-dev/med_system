@@ -8,19 +8,20 @@ import 'package:distrito_medico/core/widgets/my_date_input.widget.dart';
 import 'package:distrito_medico/core/widgets/my_time_input.widget.dart';
 import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
 import 'package:distrito_medico/core/widgets/custom_switch.widget.dart';
+import 'package:distrito_medico/features/medical_shifts/domain/entities/medical_shift_entity.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/medical_shifts_page.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/widgets/radio_group_workload.widget.dart';
-import 'package:distrito_medico/features/medical_shifts/store/edit_medical_shift.store.dart';
+import 'package:distrito_medico/features/medical_shifts/presentation/viewmodels/update_medical_shift_viewmodel.dart';
 import 'package:distrito_medico/features/procedures/util/real_input_format.dart';
-import 'package:distrito_medico/features/medical_shifts/model/medical_shift.model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 
 class EditMedicalShiftPage extends StatefulWidget {
-  final MedicalShiftModel medicalShift;
+  final MedicalShiftEntity medicalShift;
 
   const EditMedicalShiftPage({super.key, required this.medicalShift});
 
@@ -30,26 +31,28 @@ class EditMedicalShiftPage extends StatefulWidget {
 
 class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final editMedicalShiftStore = GetIt.I.get<EditMedicalShiftStore>();
+  final _viewModel = GetIt.I.get<UpdateMedicalShiftViewModel>();
   final List<ReactionDisposer> _disposers = [];
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _disposers.add(reaction<EditMedicalShiftState>(
-        (_) => editMedicalShiftStore.saveState, (validationState) {
-      if (validationState == EditMedicalShiftState.success) {
+    _disposers.add(reaction<UpdateMedicalShiftState>(
+        (_) => _viewModel.state, (state) {
+      if (state == UpdateMedicalShiftState.success) {
         to(
             context,
             const SuccessPage(
               title: 'Plantão editado com sucesso!',
               goToPage: MedicalShiftsPage(),
             ));
-      } else if (validationState == EditMedicalShiftState.error) {
+      } else if (state == UpdateMedicalShiftState.error) {
         CustomToast.show(context,
             type: ToastType.error,
             title: "Editar plantão",
-            description: "Ocorreu um erro ao tentar editar plantão.");
+            description: _viewModel.errorMessage.isNotEmpty 
+                ? _viewModel.errorMessage 
+                : "Ocorreu um erro ao tentar editar plantão.");
       }
     }));
   }
@@ -57,9 +60,8 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
   @override
   void initState() {
     super.initState();
-    editMedicalShiftStore.initializeWithShift(widget.medicalShift);
-    editMedicalShiftStore.getAmountSuggestions();
-    editMedicalShiftStore.getHospitalNameSuggestions();
+    _viewModel.init(widget.medicalShift);
+    _viewModel.loadSuggestions();
   }
 
   @override
@@ -67,7 +69,7 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
     for (var disposer in _disposers) {
       disposer();
     }
-    editMedicalShiftStore.dispose();
+    // _viewModel.dispose(); // Lazy singleton persists
     super.dispose();
   }
 
@@ -76,7 +78,7 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
     return PopScope(
       canPop: false,
       onPopInvoked: (bool didPop) {
-        if (didPop) {}
+        if (didPop) return;
         to(context, const MedicalShiftsPage());
       },
       child: Scaffold(
@@ -87,20 +89,19 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
         ),
         body: Observer(
           builder: (BuildContext context) {
-            if (editMedicalShiftStore.medicalShiftState ==
-                MedicalShiftState.error) {
+            if (_viewModel.state == UpdateMedicalShiftState.error) {
               return Center(
                 child: ErrorRetryWidget(
                   'Algo deu errado',
                   'Por favor, tente novamente',
                   () {
-                    editMedicalShiftStore.fetchAllData();
+                    _viewModel.init(widget.medicalShift);
+                    _viewModel.loadSuggestions();
                   },
                 ),
               );
             }
-            if (editMedicalShiftStore.medicalShiftState ==
-                MedicalShiftState.loading) {
+            if (_viewModel.state == UpdateMedicalShiftState.loading) {
               return const Center(child: CircularProgressIndicator());
             }
             return form(context);
@@ -125,21 +126,30 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
                     if (textEditingValue.text.isEmpty) {
                       return const Iterable<String>.empty();
                     } else {
-                      return editMedicalShiftStore.hospitalNameSuggestions
+                      return _viewModel.hospitalSuggestions
                           .where((word) => word
                               .toLowerCase()
                               .contains(textEditingValue.text.toLowerCase()));
                     }
                   },
                   onSelected: (String selectedHospital) {
-                    editMedicalShiftStore.setHospitalName(selectedHospital);
+                    _viewModel.setHospitalName(selectedHospital);
                   },
                   fieldViewBuilder:
                       (context, controller, focusNode, onEditingComplete) {
-                    controller.text = editMedicalShiftStore.hospitalName;
+                    // Initial value only if empty or matching?
+                    // Controller text must reflect viewModel.hospitalName.
+                    // If we set it every build, cursor jumps?
+                    // Better to set it once or if different.
+                    // For Simplicity in MVVM with TextField, often controller is local and syncs with VM.
+                    // Here we can initialize it.
+                    if (controller.text.isEmpty && _viewModel.hospitalName.isNotEmpty) {
+                       controller.text = _viewModel.hospitalName;
+                    }
+                    
                     return TextField(
                       controller: controller,
-                      onChanged: editMedicalShiftStore.setHospitalName,
+                      onChanged: _viewModel.setHospitalName,
                       focusNode: focusNode,
                       onEditingComplete: onEditingComplete,
                       decoration: InputDecoration(
@@ -170,31 +180,30 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
                       fontWeight: FontWeight.bold,
                     )),
                 MyRadioGroupWorkLoad(
-                  onValueChanged: editMedicalShiftStore.setWorkload,
-                  initialValue: editMedicalShiftStore.workload,
+                  onValueChanged: _viewModel.setWorkload,
+                  initialValue: _viewModel.workload,
                 ),
                 const SizedBox(height: 15),
                 MyInputDate(
-                  onChanged: editMedicalShiftStore.setStartDate,
+                  onChanged: _viewModel.setStartDate,
                   label: 'Data início',
-                  selectedDate:
-                      convertStringToDate(editMedicalShiftStore.startDate),
+                  // convertStringToDate helper from utils
+                  selectedDate: convertStringToDate(_viewModel.startDate),
                   textColor: Theme.of(context).colorScheme.primary,
                 ),
                 const SizedBox(height: 15),
                 MyInputTime(
                   label: 'Hora início',
-                  selectedTime:
-                      stringToTimeOfDay(editMedicalShiftStore.startHour),
-                  onChanged: editMedicalShiftStore.setStartHour,
+                  // stringToTimeOfDay helper from utils
+                  selectedTime: stringToTimeOfDay(_viewModel.startHour),
+                  onChanged: _viewModel.setStartHour,
                   textColor: Theme.of(context).colorScheme.primary,
                 ),
                 const SizedBox(height: 15),
                 Autocomplete(
                   optionsBuilder: (TextEditingValue textEditingValue) {
                     String query = textEditingValue.text;
-                    List<String> suggestions =
-                        editMedicalShiftStore.amountSuggestions;
+                    List<String> suggestions = _viewModel.amountSuggestions;
 
                     String cleanString(String str) {
                       return str.replaceAll(RegExp(r'[^0-9]'), '');
@@ -211,14 +220,19 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
                     }
                   },
                   onSelected: (String selectedAmount) {
-                    editMedicalShiftStore.setAmountCents(selectedAmount);
+                    _viewModel.setAmountCents(selectedAmount);
                   },
                   fieldViewBuilder:
                       (context, controller, focusNode, onEditingComplete) {
-                    controller.text = editMedicalShiftStore.amountCents;
+                    
+                    // Format intial amount
+                    if (controller.text.isEmpty && _viewModel.amount > 0) {
+                         controller.text = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$').format(_viewModel.amount);
+                    }
+
                     return TextField(
                       controller: controller,
-                      onChanged: editMedicalShiftStore.setAmountCents,
+                      onChanged: _viewModel.setAmountCents,
                       focusNode: focusNode,
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
@@ -246,42 +260,24 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
                     );
                   },
                 ),
-                // AutoCompleteReal(
-                //   key: UniqueKey(),
-                //   isCurrency: true,
-                //   fontSize: 16,
-                //   label: 'Valor plantão',
-                //   placeholder: 'Digite o valor do plantão',
-                //   suggestions: editMedicalShiftStore.amountSuggestions,
-                //   initialValue: editMedicalShiftStore.amountCents,
-                //   inputType: TextInputType.number,
-                //   inputFormatters: [
-                //     FilteringTextInputFormatter.digitsOnly,
-                //     RealInputFormatter(moeda: true),
-                //   ],
-                //   onChanged: editMedicalShiftStore.setAmountCents,
-                //   validators: const {'required': true, 'minLength': 3},
-                // ),
                 const SizedBox(height: 15),
                 CustomSwitch(
                   labelText: "Pago",
-                  initialValue: editMedicalShiftStore.paid,
-                  onChanged: editMedicalShiftStore.setpaid,
+                  initialValue: _viewModel.paid,
+                  onChanged: _viewModel.setPaid,
                 ),
                 const SizedBox(height: 15),
                 Center(
                   child: Observer(builder: (_) {
                     return MyButtonWidget(
                       text: 'Salvar alterações',
-                      isLoading: editMedicalShiftStore.saveState ==
-                          EditMedicalShiftState.loading,
+                      isLoading: _viewModel.state == UpdateMedicalShiftState.loading,
                       disabledColor: Colors.grey,
-                      onTap: editMedicalShiftStore.isValidData
+                      onTap: _viewModel.isValidData
                           ? () async {
                               _formKey.currentState?.save();
                               if (_formKey.currentState!.validate()) {
-                                editMedicalShiftStore.updateMedicalShift(
-                                    widget.medicalShift.id!);
+                                _viewModel.updateMedicalShift();
                               } else {
                                 CustomToast.show(context,
                                     type: ToastType.error,

@@ -1,0 +1,59 @@
+name: Flutter CI
+
+on:
+  push:
+    branches: [ "main", "master", "develop" ]
+  pull_request:
+    branches: [ "main", "master", "develop" ]
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: '3.19.4'
+          cache: false
+
+      - name: Verify Flutter Installation
+        run: |
+          flutter doctor -v
+          flutter --version
+
+      - name: Clean Dependencies
+        working-directory: med_system_app
+        run: rm -f pubspec.lock
+
+      - name: Get Dependencies
+        working-directory: med_system_app
+        run: flutter pub get
+
+      - name: Run Build Runner
+        working-directory: med_system_app
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Analyze Code
+        working-directory: med_system_app
+        run: flutter analyze --no-fatal-infos
+
+      - name: Run Tests
+        working-directory: med_system_app
+        run: flutter test --coverage
+
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          file: med_system_app/coverage/lcov.info
+          token: ${{ secrets.CODECOV_TOKEN }}

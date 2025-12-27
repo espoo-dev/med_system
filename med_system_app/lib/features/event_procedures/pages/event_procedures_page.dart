@@ -7,12 +7,11 @@ import 'package:distrito_medico/core/widgets/ext_fab.widget.dart';
 import 'package:distrito_medico/core/widgets/fab.widget.dart';
 import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
 import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
-import 'package:distrito_medico/features/event_procedures/model/event_procedure.model.dart';
 import 'package:distrito_medico/features/event_procedures/pages/add_event_procedure_page.dart';
 import 'package:distrito_medico/features/event_procedures/pages/edit_event_procedure_page.dart';
 import 'package:distrito_medico/features/event_procedures/pages/filter_event_procedures_page.dart';
 import 'package:distrito_medico/features/event_procedures/pages/generate_pdf_screen.page.dart';
-import 'package:distrito_medico/features/event_procedures/store/event_procedure.store.dart';
+import 'package:distrito_medico/features/event_procedures/presentation/viewmodels/event_procedures_list_viewmodel.dart';
 import 'package:distrito_medico/features/home/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -20,7 +19,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mobx/mobx.dart';
+import 'package:mobx/mobx.dart'; // Mantido para reaction, se necessário, mas pode ser removido se não usar Reactions diretas aqui
 
 import '../../../core/utils/navigation_utils.dart';
 
@@ -40,8 +39,7 @@ class EventProceduresPage extends StatefulWidget {
 }
 
 class _EventProceduresPageState extends State<EventProceduresPage> {
-  final eventProcedureStore = GetIt.I.get<EventProcedureStore>();
-  List<EventProcedures>? _listEventProcedures = [];
+  final _viewModel = GetIt.I.get<EventProceduresListViewModel>();
   final ScrollController _scrollController = ScrollController();
   bool isFab = false;
   final List<ReactionDisposer> _disposers = [];
@@ -49,32 +47,14 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _disposers.add(reaction<EditEventProcedureState>(
-        (_) => eventProcedureStore.editState, (validationState) {
-      if (validationState == EditEventProcedureState.success) {
-        CustomToast.show(context,
-            type: ToastType.success,
-            title: "Edição de procedimento",
-            description: "Procedimento editado com sucesso!");
-      } else if (validationState == EditEventProcedureState.error) {
+    // Reações podem ser adicionadas aqui se necessário, por exemplo, observando mensagens de erro globais
+    _disposers.add(reaction<String?>(
+        (_) => _viewModel.errorMessage, (message) {
+      if (message != null) {
         CustomToast.show(context,
             type: ToastType.error,
-            title: "Edição de procedimeto",
-            description: "Ocorreu um erro ao tentar editar procedimento.");
-      }
-    }));
-    _disposers.add(reaction<DeleteEventProcedureState>(
-        (_) => eventProcedureStore.deleteSate, (validationState) {
-      if (validationState == DeleteEventProcedureState.success) {
-        CustomToast.show(context,
-            type: ToastType.success,
-            title: "Exclusão de procedimento",
-            description: "Procedimento excluído com sucesso!");
-      } else if (validationState == DeleteEventProcedureState.error) {
-        CustomToast.show(context,
-            type: ToastType.error,
-            title: "Exclusão de procedimeto",
-            description: "Ocorreu um erro ao tentar excluir procedimento.");
+            title: "Erro",
+            description: message);
       }
     }));
   }
@@ -84,9 +64,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
     for (var disposer in _disposers) {
       disposer();
     }
-    eventProcedureStore.dispose();
     _scrollController.dispose();
-    eventProcedureStore.dispose();
     super.dispose();
   }
 
@@ -98,21 +76,20 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
       infiniteScrolling();
       showFabButton();
     });
-    // setInitialFilter();
-    eventProcedureStore.getAllEventProcedures(isRefresh: true, perPage: 10);
-  }
+    
+    // Configura filtros iniciais se houver
+    bool? initialPaidFilter;
+    if (widget.initialFilter == InitialFilter.paid) {
+      initialPaidFilter = true;
+    } else if (widget.initialFilter == InitialFilter.unpaid) {
+      initialPaidFilter = false;
+    }
 
-  // void setInitialFilter() {
-  //   if (widget.initialFilter != null) {
-  //     if (widget.initialFilter == InitialFilter.paid) {
-  //       eventProcedureStore.updateFilter(false, true, false, false);
-  //     } else if (widget.initialFilter == InitialFilter.unpaid) {
-  //       eventProcedureStore.updateFilter(false, false, true, false);
-  //     } else {
-  //       eventProcedureStore.updateFilter(true, false, false, false);
-  //     }
-  //   }
-  // }
+    _viewModel.loadEventProcedures(
+      refresh: true, 
+      paid: initialPaidFilter
+    );
+  }
 
   showFabButton() {
     if (_scrollController.offset > 50) {
@@ -129,30 +106,17 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
   void infiniteScrolling() {
     if (_scrollController.position.maxScrollExtent ==
             _scrollController.position.pixels &&
-        !(eventProcedureStore.state == EventProcedureState.loading)) {
-      eventProcedureStore.getAllEventProcedures(isRefresh: false, perPage: 10);
+        !_viewModel.isLoading) {
+      // ViewModel controla a paginação internamente
+      // Passamos os mesmos filtros atuais (o ViewModel poderia idealmente guardar o estado dos filtros, 
+      // mas aqui vamos apenas chamar load sem refresh para carregar a próxima página)
+      _viewModel.loadEventProcedures(refresh: false);
     }
   }
-  // void infiniteScrolling() {
-  //   if (_scrollController.position.atEdge) {
-  //     bool isBottom = _scrollController.position.pixels == _scrollController.position.maxScrollExtent;
-  //     if (isBottom) {
-  //       eventProcedureStore.getAllEventProcedures(isRefresh: false);
-  //     }
-  //   }
-  // }
-
-  // inifiteScrolling() {
-  //   var maxScroll = _scrollController.position.maxScrollExtent;
-  //   if (maxScroll == _scrollController.offset) {
-  //     eventProcedureStore.getAllEventProcedures(isRefresh: false);
-  //   }
-  // }
 
   Future _refreshProcedures() async {
     debugPrint('refreshProcedures');
-    await eventProcedureStore.getAllEventProcedures(
-        isRefresh: true, perPage: 10);
+    await _viewModel.loadEventProcedures(refresh: true);
   }
 
   @override
@@ -160,7 +124,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
     return PopScope(
       canPop: false,
       onPopInvoked: (bool didPop) {
-        if (didPop) {}
+        if (didPop) return;
         to(context, const HomePage());
       },
       child: Scaffold(
@@ -176,19 +140,30 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                   context,
                   const EventProcedureGeneratePdfPage(),
                 ),
-            () => push(
-                  context,
-                  const FilterEventProceduresPage(),
-                ),
+            () async {
+              final filters = await push(
+                context,
+                const FilterEventProceduresPage(),
+              );
+              if (filters != null && filters is Map<String, dynamic>) {
+                 _viewModel.loadEventProcedures(
+                   refresh: true,
+                   month: filters['month'],
+                   year: filters['year'],
+                   paid: filters['paid'],
+                   healthInsuranceName: filters['healthInsuranceName'],
+                   hospitalName: filters['hospitalName']
+                 );
+              }
+            },
           ],
           image: null,
         ),
         bottomNavigationBar: Observer(builder: (_) {
           return BottomAppBarContent(
-            total: eventProcedureStore.eventProcedureModel?.total ?? "",
-            totalUnpaid:
-                eventProcedureStore.eventProcedureModel?.totalUnpaid ?? "",
-            totalpaid: eventProcedureStore.eventProcedureModel?.totalpaid ?? "",
+            total: _viewModel.total ?? "",
+            totalUnpaid: _viewModel.totalUnpaid ?? "",
+            totalpaid: _viewModel.totalPaid ?? "",
           );
         }),
         floatingActionButton: isFab
@@ -205,36 +180,28 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Observer(builder: (_) {
-            //   return BottomAppBarContent(
-            //     total: eventProcedureStore.eventProcedureModel?.total ?? "",
-            //     totalUnpaid:
-            //         eventProcedureStore.eventProcedureModel?.totalUnpaid ?? "",
-            //     totalpaid:
-            //         eventProcedureStore.eventProcedureModel?.totalpaid ?? "",
-            //   );
-            // }),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: _refreshProcedures,
                 child: Observer(
                   builder: (BuildContext context) {
-                    if (eventProcedureStore.state ==
-                        EventProcedureState.error) {
-                      return Center(
-                          child: ErrorRetryWidget(
-                              'Algo deu errado', 'Por favor, tente novamente',
-                              () {
-                        eventProcedureStore.getAllEventProcedures(
-                            isRefresh: true, perPage: 10);
-                      }));
-                    }
-                    if (eventProcedureStore.state ==
-                            EventProcedureState.loading &&
-                        _listEventProcedures!.isEmpty) {
+                    if (_viewModel.isLoading && _viewModel.eventProcedures.isEmpty) {
                       return const Center(child: CircularProgressIndicator());
                     }
-                    if (eventProcedureStore.eventProcedureList.isEmpty) {
+                    
+                    if (_viewModel.eventProcedures.isEmpty && !_viewModel.isLoading) {
+                      if (_viewModel.errorMessage != null) {
+                         return Center(
+                          child: ErrorRetryWidget(
+                              'Algo deu errado', 
+                              'Por favor, tente novamente.',
+                              () {
+                                _viewModel.loadEventProcedures(refresh: true);
+                              }
+                          )
+                        );
+                      }
+
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
@@ -266,25 +233,22 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                         ],
                       );
                     }
-                    _listEventProcedures =
-                        eventProcedureStore.eventProcedureList;
+                    
                     return Stack(
                       children: [
                         SlidableAutoCloseBehavior(
                           closeWhenOpened: true,
                           child: ListView.separated(
                               controller: _scrollController,
-                              itemCount: eventProcedureStore.state ==
-                                      EventProcedureState.loading
-                                  ? _listEventProcedures!.length + 1
-                                  : _listEventProcedures!.length,
+                              itemCount: _viewModel.isLoading 
+                                  ? _viewModel.eventProcedures.length + 1
+                                  : _viewModel.eventProcedures.length,
                               itemBuilder: (BuildContext context, int index) {
-                                if (index < _listEventProcedures!.length) {
-                                  EventProcedures eventProcedures =
-                                      _listEventProcedures![index];
+                                if (index < _viewModel.eventProcedures.length) {
+                                  final eventProcedures = _viewModel.eventProcedures[index];
                                   return Slidable(
-                                    key: ValueKey(_listEventProcedures?.length),
-                                    startActionPane: !eventProcedures.paid!
+                                    key: ValueKey(eventProcedures.id),
+                                    startActionPane: !(eventProcedures.paid ?? false)
                                         ? ActionPane(
                                             motion: const StretchMotion(),
                                             children: [
@@ -296,12 +260,10 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                                                   icon: Icons.check,
                                                   label: 'Pagar',
                                                   onPressed: (context) {
-                                                    eventProcedureStore
-                                                        .editPaymentEventProcedure(
-                                                            eventProcedures
-                                                                    .id ??
-                                                                0,
-                                                            index);
+                                                    if (eventProcedures.id != null) {
+                                                      _viewModel.updatePaymentStatus(
+                                                          eventProcedures.id!, true);
+                                                    }
                                                   })
                                             ],
                                           )
@@ -322,11 +284,10 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                                                 textYes: 'Sim',
                                                 textNo: 'Não',
                                                 onPressedConfirm: () {
-                                                  eventProcedureStore
-                                                      .deleteEventProcedure(
-                                                          eventProcedures.id ??
-                                                              0,
-                                                          index);
+                                                  if (eventProcedures.id != null) {
+                                                    _viewModel.deleteEventProcedure(
+                                                        eventProcedures.id!);
+                                                  }
                                                 },
                                                 onPressedCancel: () {},
                                               );
@@ -338,17 +299,17 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                                         to(
                                             context,
                                             EditEventProcedurePage(
-                                                eventProcedures:
+                                                eventProcedure:
                                                     eventProcedures));
                                       },
                                       leading: SvgPicture.asset(
-                                        eventProcedures.paid!
+                                        (eventProcedures.paid ?? false)
                                             ? iconCheckCoreAsset
                                             : iconCloseCoreAsset,
                                         width: 32,
                                         height: 32,
                                         colorFilter: ColorFilter.mode(
-                                          eventProcedures.paid!
+                                          (eventProcedures.paid ?? false)
                                               ? Theme.of(context)
                                                   .colorScheme
                                                   .primary

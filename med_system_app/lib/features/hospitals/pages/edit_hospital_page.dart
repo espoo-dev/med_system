@@ -4,16 +4,17 @@ import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
 import 'package:distrito_medico/core/widgets/my_button_widget.dart';
 import 'package:distrito_medico/core/widgets/my_text_form_field.widget.dart';
 import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
-import 'package:distrito_medico/features/hospitals/model/hospital.model.dart';
+import 'package:distrito_medico/features/hospitals/domain/entities/hospital_entity.dart';
 import 'package:distrito_medico/features/hospitals/pages/hospital_page.dart';
-import 'package:distrito_medico/features/hospitals/store/edit_hospital.store.dart';
+import 'package:distrito_medico/features/hospitals/presentation/viewmodels/hospital_list_viewmodel.dart';
+import 'package:distrito_medico/features/hospitals/presentation/viewmodels/update_hospital_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 
 class EditHospitaltPage extends StatefulWidget {
-  final Hospital hospital;
+  final HospitalEntity hospital;
   const EditHospitaltPage({super.key, required this.hospital});
 
   @override
@@ -21,36 +22,45 @@ class EditHospitaltPage extends StatefulWidget {
 }
 
 class _EditHospitalState extends State<EditHospitaltPage> {
-  final editHospitalStore = GetIt.I.get<EditHospitalStore>();
+  final _viewModel = GetIt.I.get<UpdateHospitalViewModel>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   final List<ReactionDisposer> _disposers = [];
 
   @override
   void initState() {
     super.initState();
-    editHospitalStore.getData(widget.hospital);
+    _viewModel.loadHospital(widget.hospital);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _disposers.add(reaction<SaveHospitalState>(
-        (_) => editHospitalStore.saveState, (validationState) {
-      if (validationState == SaveHospitalState.success) {
-        to(
+    _disposers.add(reaction<UpdateHospitalState>(
+      (_) => _viewModel.state,
+      (state) {
+        if (state == UpdateHospitalState.success) {
+          // Atualiza a lista de hospitais
+          GetIt.I.get<HospitalListViewModel>().loadHospitals(refresh: true);
+
+          to(
             context,
             const SuccessPage(
               title: 'Hospital editado com sucesso!',
               goToPage: HospitalPage(),
-            ));
-      } else if (validationState == SaveHospitalState.error) {
-        CustomToast.show(context,
+            ),
+          );
+        } else if (state == UpdateHospitalState.error) {
+          CustomToast.show(
+            context,
             type: ToastType.error,
             title: "Editar Hospital",
-            description: "Ocorreu um erro ao tentar editar.");
-      }
-    }));
+            description: _viewModel.errorMessage.isNotEmpty
+                ? _viewModel.errorMessage
+                : "Ocorreu um erro ao tentar editar.",
+          );
+        }
+      },
+    ));
   }
 
   @override
@@ -66,16 +76,17 @@ class _EditHospitalState extends State<EditHospitaltPage> {
     return PopScope(
       canPop: false,
       onPopInvoked: (bool didPop) {
-        if (didPop) {}
+        if (didPop) return;
         to(context, const HospitalPage());
       },
       child: Scaffold(
-          appBar: const MyAppBar(
-            title: 'Editar Hospital',
-            hideLeading: true,
-            image: null,
-          ),
-          body: form(context)),
+        appBar: const MyAppBar(
+          title: 'Editar Hospital',
+          hideLeading: true,
+          image: null,
+        ),
+        body: form(context),
+      ),
     );
   }
 
@@ -93,50 +104,56 @@ class _EditHospitalState extends State<EditHospitaltPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       MyTextFormField(
-                          initialValue: widget.hospital.name,
-                          fontSize: 16,
-                          label: 'Nome do hospital',
-                          placeholder: 'Digite o nome do hospital',
-                          inputType: TextInputType.text,
-                          validators: const {'required': true, 'minLength': 3},
-                          onChanged: editHospitalStore.setNameHospital),
+                        initialValue: widget.hospital.name,
+                        fontSize: 16,
+                        label: 'Nome do hospital',
+                        placeholder: 'Digite o nome do hospital',
+                        inputType: TextInputType.text,
+                        validators: const {'required': true, 'minLength': 3},
+                        onChanged: _viewModel.setName,
+                      ),
                       const SizedBox(
                         height: 15,
                       ),
                       MyTextFormField(
-                          initialValue: widget.hospital.address,
-                          fontSize: 16,
-                          label: 'Nome do endereço',
-                          placeholder: 'Digite o nome do endereço',
-                          inputType: TextInputType.text,
-                          validators: const {'required': true, 'minLength': 3},
-                          onChanged: editHospitalStore.setAddress),
+                        initialValue: widget.hospital.address,
+                        fontSize: 16,
+                        label: 'Endereço',
+                        placeholder: 'Digite o endereço do hospital',
+                        inputType: TextInputType.text,
+                        validators: const {'required': true, 'minLength': 5},
+                        onChanged: _viewModel.setAddress,
+                      ),
                       const SizedBox(
                         height: 15,
                       ),
-                      Center(child: Observer(builder: (_) {
-                        return MyButtonWidget(
-                          text: 'Editar paciente',
-                          isLoading: editHospitalStore.saveState ==
-                              SaveHospitalState.loading,
-                          disabledColor: Colors.grey,
-                          onTap: editHospitalStore.isValidData
-                              ? () async {
-                                  _formKey.currentState?.save();
-                                  if (_formKey.currentState!.validate()) {
-                                    editHospitalStore
-                                        .editHospital(widget.hospital.id ?? 0);
-                                  } else {
-                                    CustomToast.show(context,
-                                        type: ToastType.error,
-                                        title: "Editar hospital",
-                                        description:
-                                            "Por favor, preencha os campos.");
-                                  }
-                                }
-                              : null,
-                        );
-                      })),
+                      Center(
+                        child: Observer(
+                          builder: (_) {
+                            return MyButtonWidget(
+                              text: 'Editar hospital',
+                              isLoading: _viewModel.isLoading,
+                              disabledColor: Colors.grey,
+                              onTap: _viewModel.canSubmit
+                                  ? () async {
+                                      _formKey.currentState?.save();
+                                      if (_formKey.currentState!.validate()) {
+                                        await _viewModel.updateHospital();
+                                      } else {
+                                        CustomToast.show(
+                                          context,
+                                          type: ToastType.error,
+                                          title: "Editar hospital",
+                                          description:
+                                              "Por favor, preencha os campos.",
+                                        );
+                                      }
+                                    }
+                                  : null,
+                            );
+                          },
+                        ),
+                      ),
                       const SizedBox(
                         height: 15,
                       ),

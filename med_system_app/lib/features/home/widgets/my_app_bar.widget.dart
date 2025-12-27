@@ -2,6 +2,7 @@ import 'package:distrito_medico/core/theme/icons.dart';
 import 'package:distrito_medico/core/utils/navigation_utils.dart';
 import 'package:distrito_medico/features/event_procedures/pages/event_procedures_page.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/medical_shifts_page.dart';
+// import 'package:distrito_medico/features/medical_shifts/pages/medical_shifts_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

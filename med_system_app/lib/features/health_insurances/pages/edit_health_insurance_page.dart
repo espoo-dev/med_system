@@ -4,51 +4,58 @@ import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
 import 'package:distrito_medico/core/widgets/my_button_widget.dart';
 import 'package:distrito_medico/core/widgets/my_text_form_field.widget.dart';
 import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
-import 'package:distrito_medico/features/health_insurances/model/health_insurances.model.dart';
+import 'package:distrito_medico/features/health_insurances/domain/entities/health_insurance_entity.dart';
 import 'package:distrito_medico/features/health_insurances/pages/health_insurances_page.dart';
-import 'package:distrito_medico/features/health_insurances/store/edit_health_insurance.store.dart';
+import 'package:distrito_medico/features/health_insurances/presentation/viewmodels/health_insurance_list_viewmodel.dart';
+import 'package:distrito_medico/features/health_insurances/presentation/viewmodels/update_health_insurance_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 
 class EditHealthInsurancePage extends StatefulWidget {
-  final HealthInsurance healthInsurance;
-  const EditHealthInsurancePage({super.key, required this.healthInsurance});
+  final HealthInsuranceEntity healthInsuranceEntity;
+  const EditHealthInsurancePage(
+      {super.key, required this.healthInsuranceEntity});
 
   @override
-  State<EditHealthInsurancePage> createState() => _EditHealthInsuranceState();
+  State<EditHealthInsurancePage> createState() =>
+      _EditHealthInsurancePageState();
 }
 
-class _EditHealthInsuranceState extends State<EditHealthInsurancePage> {
-  final editHealthInsuranceStore = GetIt.I.get<EditHealthInsuranceStore>();
+class _EditHealthInsurancePageState extends State<EditHealthInsurancePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  final _viewModel = GetIt.I.get<UpdateHealthInsuranceViewModel>();
   final List<ReactionDisposer> _disposers = [];
 
   @override
   void initState() {
     super.initState();
-    editHealthInsuranceStore.setName(widget.healthInsurance.name ?? "");
+    _viewModel.setHealthInsurance(widget.healthInsuranceEntity);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _disposers.add(reaction<SaveHealthInsurancetState>(
-        (_) => editHealthInsuranceStore.saveState, (validationState) {
-      if (validationState == SaveHealthInsurancetState.success) {
+    _disposers.add(reaction<UpdateHealthInsuranceState>(
+        (_) => _viewModel.state, (state) {
+      if (state == UpdateHealthInsuranceState.success) {
+        // Atualiza a lista
+        GetIt.I.get<HealthInsuranceListViewModel>().loadHealthInsurances(refresh: true);
+        
         to(
             context,
             const SuccessPage(
               title: 'Convênio editado com sucesso!',
-              goToPage: HealthInsurancePage(),
+              goToPage: HealthInsurancesPage(),
             ));
-      } else if (validationState == SaveHealthInsurancetState.error) {
+      } else if (state == UpdateHealthInsuranceState.error) {
         CustomToast.show(context,
             type: ToastType.error,
-            title: "Editar convênio",
-            description: " Ocorreu um erro ao tentar editar.");
+            title: "Editar Convênio",
+            description: _viewModel.errorMessage.isNotEmpty
+                ? _viewModel.errorMessage
+                : "Ocorreu um erro ao tentar editar.");
       }
     }));
   }
@@ -66,12 +73,12 @@ class _EditHealthInsuranceState extends State<EditHealthInsurancePage> {
     return PopScope(
       canPop: false,
       onPopInvoked: (bool didPop) {
-        if (didPop) {}
-        to(context, const HealthInsurancePage());
+        if (didPop) return;
+        to(context, const HealthInsurancesPage());
       },
       child: Scaffold(
           appBar: const MyAppBar(
-            title: 'Editar Convênio',
+            title: 'Editar convênio',
             hideLeading: true,
             image: null,
           ),
@@ -93,33 +100,31 @@ class _EditHealthInsuranceState extends State<EditHealthInsurancePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       MyTextFormField(
-                          initialValue: widget.healthInsurance.name,
-                          fontSize: 16,
-                          label: 'Nome do convênio',
-                          placeholder: 'Digite o nome do convênio',
-                          inputType: TextInputType.text,
-                          validators: const {'required': true, 'minLength': 3},
-                          onChanged: editHealthInsuranceStore.setName),
+                        initialValue: widget.healthInsuranceEntity.name,
+                        fontSize: 16,
+                        label: 'Nome do convênio',
+                        placeholder: 'Digite o nome do convênio',
+                        onChanged: _viewModel.setName,
+                        inputType: TextInputType.text,
+                        validators: const {'required': true, 'minLength': 3},
+                      ),
                       const SizedBox(
                         height: 15,
                       ),
                       Center(child: Observer(builder: (_) {
                         return MyButtonWidget(
                           text: 'Editar convênio',
-                          isLoading: editHealthInsuranceStore.saveState ==
-                              SaveHealthInsurancetState.loading,
+                          isLoading: _viewModel.isLoading,
                           disabledColor: Colors.grey,
-                          onTap: editHealthInsuranceStore.isValidData
+                          onTap: _viewModel.canSubmit
                               ? () async {
                                   _formKey.currentState?.save();
                                   if (_formKey.currentState!.validate()) {
-                                    editHealthInsuranceStore
-                                        .editHealthInsurance(
-                                            widget.healthInsurance.id ?? 0);
+                                    _viewModel.updateHealthInsurance();
                                   } else {
                                     CustomToast.show(context,
                                         type: ToastType.error,
-                                        title: "Editar convênio",
+                                        title: "Editar Convênio",
                                         description:
                                             "Por favor, preencha os campos.");
                                   }

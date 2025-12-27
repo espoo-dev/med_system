@@ -1,11 +1,11 @@
-import 'package:distrito_medico/features/health_insurances/model/health_insurances.model.dart';
+import 'package:distrito_medico/features/health_insurances/domain/entities/health_insurance_entity.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
 class DropdownHealthInsurances extends StatefulWidget {
-  final List<HealthInsurance> healthInsuranceList;
-  final HealthInsurance selectedHealthInsurance;
-  final Function(HealthInsurance?) onChanged;
+  final List<HealthInsuranceEntity> healthInsuranceList;
+  final HealthInsuranceEntity? selectedHealthInsurance;
+  final Function(HealthInsuranceEntity?) onChanged;
 
   const DropdownHealthInsurances({
     super.key,
@@ -23,7 +23,7 @@ class DropdownHealthInsurances extends StatefulWidget {
 class _DropdownHealthInsurancesState extends State<DropdownHealthInsurances> {
   @override
   Widget build(BuildContext context) {
-    return DropdownSearch<HealthInsurance>(
+    return DropdownSearch<HealthInsuranceEntity>(
       dropdownButtonProps: DropdownButtonProps(
         color: Theme.of(context).colorScheme.primary,
       ),
@@ -83,14 +83,14 @@ class _DropdownHealthInsurancesState extends State<DropdownHealthInsurances> {
           return Padding(
             padding: const EdgeInsets.all(15),
             child: Text(
-              item.name ?? "",
+              item.name,
               style: const TextStyle(fontSize: 20),
             ),
           );
         },
       ),
       items: widget.healthInsuranceList,
-      itemAsString: (HealthInsurance hospital) => hospital.name ?? "",
+      itemAsString: (HealthInsuranceEntity healthInsurance) => healthInsurance.name,
       onChanged: widget.onChanged,
       dropdownDecoratorProps: DropDownDecoratorProps(
         dropdownSearchDecoration: InputDecoration(

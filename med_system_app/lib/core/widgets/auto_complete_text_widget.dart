@@ -85,7 +85,7 @@ class AutoCompleteTextField extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatters;
   final List<String>? suggestions;
 
-  AutoCompleteTextField({
+  const AutoCompleteTextField({
     super.key,
     this.onSave,
     this.label,
@@ -106,12 +106,13 @@ class AutoCompleteTextField extends StatefulWidget {
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _AutoCompleteTextFieldState createState() => _AutoCompleteTextFieldState();
 }
 
 class _AutoCompleteTextFieldState extends State<AutoCompleteTextField> {
   late ValueNotifier<List<String>> _filteredSuggestions;
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
@@ -203,7 +204,7 @@ class _AutoCompleteTextFieldState extends State<AutoCompleteTextField> {
                       widget.onChanged?.call(suggestion);
                     },
                   )
-                : SizedBox.shrink();
+                : const SizedBox.shrink();
           },
         ),
         const SizedBox(
@@ -218,7 +219,7 @@ class SuggestionsList extends StatelessWidget {
   final List<String> suggestions;
   final ValueChanged<String> onSuggestionSelected;
 
-  SuggestionsList({
+  const SuggestionsList({super.key, 
     required this.suggestions,
     required this.onSuggestionSelected,
   });

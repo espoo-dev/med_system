@@ -1,6 +1,6 @@
 import 'package:distrito_medico/core/pages/splash/splash_page.dart';
 import 'package:distrito_medico/features/home/pages/home_page.dart';
-import 'package:distrito_medico/features/signin/store/signin.store.dart';
+import 'package:distrito_medico/features/auth/presentation/viewmodels/signin_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -50,7 +50,7 @@ class Template extends StatefulWidget {
 }
 
 class _TemplateState extends State<Template> {
-  final signStore = GetIt.I.get<SignInStore>();
+  final signInViewModel = GetIt.I.get<SignInViewModel>();
   final List<ReactionDisposer> _disposers = [];
 
   @override
@@ -72,7 +72,7 @@ class _TemplateState extends State<Template> {
     _disposers.add(
       autorun(
         (_) {
-          if (!signStore.isAuthenticated) {
+          if (!signInViewModel.isAuthenticated) {
             Navigator.of(context).popUntil((route) => route.isFirst);
           }
         },
@@ -83,7 +83,7 @@ class _TemplateState extends State<Template> {
   @override
   Widget build(BuildContext context) {
     return Observer(
-        builder: (_) => signStore.isAuthenticated
+        builder: (_) => signInViewModel.isAuthenticated
             ? const HomePage()
             : const SplashScreenPage());
   }

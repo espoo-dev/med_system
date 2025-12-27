@@ -1,9 +1,11 @@
 import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown_search_health_insurances.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/widgets/dropdown_search_hospitals.widget.dart';
-import 'package:distrito_medico/features/event_procedures/store/event_procedure.store.dart';
-import 'package:distrito_medico/features/health_insurances/model/health_insurances.model.dart';
-import 'package:distrito_medico/features/hospitals/model/hospital.model.dart';
+// Models for compatibility with widgets
+// ViewModel and Entities
+import 'package:distrito_medico/features/event_procedures/presentation/viewmodels/filter_event_procedures_viewmodel.dart';
+import 'package:distrito_medico/features/hospitals/domain/entities/hospital_entity.dart';
+import 'package:distrito_medico/features/health_insurances/domain/entities/health_insurance_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
@@ -19,12 +21,12 @@ class FilterEventProceduresPage extends StatefulWidget {
 }
 
 class _FilterEventProceduresPageState extends State<FilterEventProceduresPage> {
-  final filterEventProcedureStore = GetIt.I.get<EventProcedureStore>();
+  final _viewModel = GetIt.I.get<FilterEventProceduresViewModel>();
 
   @override
   void initState() {
     super.initState();
-    filterEventProcedureStore.fetchAllData();
+    _viewModel.loadFiltersData();
   }
 
   @override
@@ -36,7 +38,7 @@ class _FilterEventProceduresPageState extends State<FilterEventProceduresPage> {
         trailingIcons: [
           TextButton(
             onPressed: () {
-              filterEventProcedureStore.clearFilters();
+              _viewModel.clearFilters();
             },
             child: const Text('Limpar'),
           ),
@@ -50,6 +52,10 @@ class _FilterEventProceduresPageState extends State<FilterEventProceduresPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Observer(builder: (_) {
+              if (_viewModel.isLoading && _viewModel.hospitals.isEmpty) {
+                 return const Center(child: CircularProgressIndicator());
+              }
+              
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -59,12 +65,12 @@ class _FilterEventProceduresPageState extends State<FilterEventProceduresPage> {
                   ),
                   const SizedBox(height: 10),
                   DropdownButton<int>(
-                    value: filterEventProcedureStore.selectedYear,
+                    value: _viewModel.selectedYear,
                     hint: const Text('Selecione um ano'),
                     onChanged: (int? newValue) {
-                      filterEventProcedureStore.setSelectedYear(newValue);
+                      _viewModel.setSelectedYear(newValue);
                     },
-                    items: filterEventProcedureStore.years
+                    items: _viewModel.years
                         .map<DropdownMenuItem<int>>(
                           (int year) => DropdownMenuItem<int>(
                             value: year,
@@ -90,17 +96,17 @@ class _FilterEventProceduresPageState extends State<FilterEventProceduresPage> {
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
                       ),
-                      itemCount: filterEventProcedureStore.months.length,
+                      itemCount: _viewModel.months.length,
                       itemBuilder: (context, index) {
-                        final month = filterEventProcedureStore.months[index];
+                        final month = _viewModel.months[index];
                         return Observer(builder: (_) {
                           return FilterChip(
                             label: Text(
-                                filterEventProcedureStore.getMonthName(month)),
-                            selected: filterEventProcedureStore.selectedMonth ==
+                                _viewModel.getMonthName(month)),
+                            selected: _viewModel.selectedMonth ==
                                 month,
                             onSelected: (isSelected) {
-                              filterEventProcedureStore
+                              _viewModel
                                   .setSelectedMonth(isSelected ? month : null);
                             },
                           );
@@ -121,9 +127,9 @@ class _FilterEventProceduresPageState extends State<FilterEventProceduresPage> {
                               style: TextStyle(fontSize: 12)),
                           value: true,
                           groupValue:
-                              filterEventProcedureStore.selectedPaymentStatus,
+                              _viewModel.selectedPaymentStatus,
                           onChanged: (value) {
-                            filterEventProcedureStore
+                            _viewModel
                                 .setSelectedPaymentStatus(value);
                           },
                           contentPadding: EdgeInsets.zero,
@@ -135,9 +141,9 @@ class _FilterEventProceduresPageState extends State<FilterEventProceduresPage> {
                               style: TextStyle(fontSize: 12)),
                           value: false,
                           groupValue:
-                              filterEventProcedureStore.selectedPaymentStatus,
+                              _viewModel.selectedPaymentStatus,
                           onChanged: (value) {
-                            filterEventProcedureStore
+                            _viewModel
                                 .setSelectedPaymentStatus(value);
                           },
                           contentPadding: EdgeInsets.zero,
@@ -148,62 +154,35 @@ class _FilterEventProceduresPageState extends State<FilterEventProceduresPage> {
 
                   const SizedBox(height: 10),
                   DropdownSearchHospitals(
-                      hospitalList: filterEventProcedureStore.hospitalList,
-                      selectedHospital:
-                          filterEventProcedureStore.hospital ?? Hospital(),
-                      onChanged: (Hospital? hospital) {
-                        filterEventProcedureStore.setHospitalName(hospital!);
+                      hospitalList: _viewModel.hospitals,
+                      selectedHospital: _viewModel.selectedHospital,
+                      onChanged: (HospitalEntity? hospital) {
+                        _viewModel.setSelectedHospital(hospital);
                       }),
-                  // MyTextFormField(
-                  //   label: 'Nome hospital',
-                  //   placeholder: 'Digite nome do hospital',
-                  //   inputType: TextInputType.text,
-                  //   validators: const {
-                  //     'required': true,
-                  //     'minLength': 4,
-                  //   },
-                  //   onChanged: (value) =>
-                  //       filterEventProcedureStore.setHospitalName(value),
-                  //   initialValue: filterEventProcedureStore.hospitalName ?? '',
-                  // ),
+                  
                   const SizedBox(height: 15),
                   DropdownHealthInsurances(
-                    healthInsuranceList:
-                        filterEventProcedureStore.healthInsuranceList,
-                    selectedHealthInsurance:
-                        filterEventProcedureStore.healthInsurance ??
-                            HealthInsurance(),
-                    onChanged: (HealthInsurance? healthInsurance) =>
-                        filterEventProcedureStore
-                            .setHealthInsuranceName(healthInsurance!),
+                    healthInsuranceList: _viewModel.healthInsurances,
+                    selectedHealthInsurance: _viewModel.selectedHealthInsurance,
+                    onChanged: (HealthInsuranceEntity? healthInsurance) {
+                      _viewModel.setSelectedHealthInsurance(healthInsurance);
+                    }
                   ),
-                  // const Text(
-                  //   'Nome do plano de saúde',
-                  //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  // ),
-                  // const SizedBox(height: 10),
-                  // MyTextFormField(
-                  //   label: 'Nome plano de saúde',
-                  //   placeholder: 'Digite nome do plano de saúde',
-                  //   inputType: TextInputType.text,
-                  //   validators: const {
-                  //     'required': true,
-                  //     'minLength': 4,
-                  //   },
-                  //   onChanged: (value) =>
-                  //       filterEventProcedureStore.setHealthInsuranceName(value),
-                  //   initialValue:
-                  //       filterEventProcedureStore.healthInsuranceName ?? '',
-                  // ),
+                 
                   const SizedBox(height: 15),
                   MyButtonWidget(
                     text: 'Filtrar',
                     isLoading: false,
                     disabledColor: Colors.grey,
                     onTap: () {
-                      filterEventProcedureStore
-                          .getAllEventProceduresByFilters();
-                      Navigator.pop(context);
+                      final filters = {
+                        'month': _viewModel.selectedMonth,
+                        'year': _viewModel.selectedYear,
+                        'paid': _viewModel.selectedPaymentStatus,
+                        'healthInsuranceName': _viewModel.selectedHealthInsurance?.name,
+                        'hospitalName': _viewModel.selectedHospital?.name
+                      };
+                      Navigator.pop(context, filters);
                     },
                   ),
                 ],

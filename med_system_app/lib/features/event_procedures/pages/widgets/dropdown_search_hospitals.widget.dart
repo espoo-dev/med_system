@@ -1,11 +1,11 @@
-import 'package:distrito_medico/features/hospitals/model/hospital.model.dart';
+import 'package:distrito_medico/features/hospitals/domain/entities/hospital_entity.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
 class DropdownSearchHospitals extends StatefulWidget {
-  final List<Hospital> hospitalList;
-  final Hospital selectedHospital;
-  final Function(Hospital?) onChanged;
+  final List<HospitalEntity> hospitalList;
+  final HospitalEntity? selectedHospital;
+  final Function(HospitalEntity?) onChanged;
 
   const DropdownSearchHospitals({
     super.key,
@@ -22,7 +22,7 @@ class DropdownSearchHospitals extends StatefulWidget {
 class _DropdownSearchHospitalState extends State<DropdownSearchHospitals> {
   @override
   Widget build(BuildContext context) {
-    return DropdownSearch<Hospital>(
+    return DropdownSearch<HospitalEntity>(
       dropdownButtonProps: DropdownButtonProps(
         color: Theme.of(context).colorScheme.primary,
       ),
@@ -82,14 +82,14 @@ class _DropdownSearchHospitalState extends State<DropdownSearchHospitals> {
           return Padding(
             padding: const EdgeInsets.all(15),
             child: Text(
-              item.name ?? "",
+              item.name,
               style: const TextStyle(fontSize: 20),
             ),
           );
         },
       ),
       items: widget.hospitalList,
-      itemAsString: (Hospital hospital) => hospital.name ?? "",
+      itemAsString: (HospitalEntity hospital) => hospital.name,
       onChanged: widget.onChanged,
       dropdownDecoratorProps: DropDownDecoratorProps(
         dropdownSearchDecoration: InputDecoration(

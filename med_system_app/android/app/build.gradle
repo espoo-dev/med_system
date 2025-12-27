@@ -24,8 +24,8 @@ if (flutterVersionName == null) {
 
 android {
     namespace "dev.flutter.distrito_medico"
-    compileSdkVersion flutter.compileSdkVersion
-    ndkVersion flutter.ndkVersion
+    compileSdkVersion 36
+    ndkVersion "27.0.12077973"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -41,20 +41,20 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "dev.flutter.distrito_medico"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 21
-        targetSdkVersion flutter.targetSdkVersion
+        
+        // Android SDK versions - Updated for modern libraries
+        minSdkVersion 24  // Required by flutter_secure_storage v10+
+        targetSdkVersion 36  // Latest Android API level
+        
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+            // Using debug signing for development
+            // For production, configure proper signing in keystore.properties
             signingConfig signingConfigs.debug
         }
     }

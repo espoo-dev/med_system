@@ -36,13 +36,13 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   mobx: ^2.2.3
-  chopper: ^7.0.9
-  get_it: ^7.6.4
+  chopper: ^8.2.0
+  get_it: ^9.2.0
   json_annotation: ^4.8.1
   logging: ^1.2.0
   flutter_localizations:
     sdk: flutter
-  flutter_secure_storage: ^5.0.0
+  flutter_secure_storage: ^10.0.0
   freezed: ^2.4.5
   flutter_svg: ^2.0.10+1
   freezed_annotation: ^2.4.1
@@ -50,15 +50,18 @@ dependencies:
   dropdown_search: ^5.0.6
   lottie: ^3.0.0
   brasil_fields: ^1.4.4
-  flutter_launcher_icons: ^0.13.1
-  intl: ^0.18.1
+  flutter_launcher_icons: ^0.14.4
   flutter_slidable: ^3.0.1
   path_provider: ^2.0.3
   table_calendar: ^3.0.9
   flutter_pdfview: ^1.4.0
   webview_flutter: ^4.2.2
-  share_plus: ^6.0.0
+  share_plus: ^10.0.0
   mockito: ^5.0.0
+  intl: any
+  dartz: ^0.10.1
+  equatable: ^2.0.5
+  win32: 5.5.0
 
 
 dev_dependencies:
@@ -66,15 +69,16 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^2.4.7
   mobx_codegen: ^2.4.0
-  chopper_generator: ^7.0.6
+  chopper_generator: ^8.0.3
   json_serializable:
+  mocktail: ^1.0.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^3.0.1
+  flutter_lints: ^4.0.0
 flutter_icons:
   android: true
   ios: true
@@ -148,3 +152,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+dependency_overrides:
+  win32: 5.5.0

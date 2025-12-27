@@ -5,7 +5,8 @@ import 'package:distrito_medico/core/widgets/my_button_widget.dart';
 import 'package:distrito_medico/core/widgets/my_text_form_field.widget.dart';
 import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
 import 'package:distrito_medico/features/procedures/pages/procedures_page.dart';
-import 'package:distrito_medico/features/procedures/store/add_procedure.store.dart';
+import 'package:distrito_medico/features/procedures/presentation/viewmodels/create_procedure_viewmodel.dart';
+import 'package:distrito_medico/features/procedures/presentation/viewmodels/procedure_list_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -23,31 +24,37 @@ class AddProcedurePage extends StatefulWidget {
 
 class _AddProcedurePageState extends State<AddProcedurePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final addProcedureStore = GetIt.I.get<AddProcedureStore>();
+  final _viewModel = GetIt.I.get<CreateProcedureViewModel>();
   final List<ReactionDisposer> _disposers = [];
 
   @override
   void initState() {
     super.initState();
+    _viewModel.reset();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _disposers.add(reaction<SaveProcedureState>(
-        (_) => addProcedureStore.saveState, (validationState) {
-      if (validationState == SaveProcedureState.success) {
+    _disposers.add(reaction<CreateProcedureState>(
+        (_) => _viewModel.state, (state) {
+      if (state == CreateProcedureState.success) {
+        // Atualiza a lista de procedimentos
+        GetIt.I.get<ProcedureListViewModel>().loadProcedures(refresh: true);
+
         to(
             context,
             const SuccessPage(
               title: 'Procedimento criado com sucesso!',
               goToPage: ProcedurePage(),
             ));
-      } else if (validationState == SaveProcedureState.error) {
+      } else if (state == CreateProcedureState.error) {
         CustomToast.show(context,
             type: ToastType.error,
             title: "Cadastrar novo Procedimento",
-            description: "Ocorreu um erro ao tentar cadastrar.");
+            description: _viewModel.errorMessage.isNotEmpty
+                ? _viewModel.errorMessage
+                : "Ocorreu um erro ao tentar cadastrar.");
       }
     }));
   }
@@ -65,7 +72,7 @@ class _AddProcedurePageState extends State<AddProcedurePage> {
     return PopScope(
       canPop: false,
       onPopInvoked: (bool didPop) {
-        if (didPop) {}
+        if (didPop) return;
         to(context, const ProcedurePage());
       },
       child: Scaffold(
@@ -95,7 +102,7 @@ class _AddProcedurePageState extends State<AddProcedurePage> {
                         fontSize: 16,
                         label: 'Nome do procedimento',
                         placeholder: 'Digite o nome do procedimento',
-                        onChanged: addProcedureStore.setName,
+                        onChanged: _viewModel.setName,
                         inputType: TextInputType.text,
                         validators: const {'required': true, 'minLength': 3},
                       ),
@@ -107,7 +114,7 @@ class _AddProcedurePageState extends State<AddProcedurePage> {
                         label: 'Código do procedimento',
                         placeholder: 'Digite o código do procedimento',
                         inputType: TextInputType.text,
-                        onChanged: addProcedureStore.setCode,
+                        onChanged: _viewModel.setCode,
                         validators: const {'required': true, 'minLength': 3},
                       ),
                       const SizedBox(
@@ -118,7 +125,7 @@ class _AddProcedurePageState extends State<AddProcedurePage> {
                         label: 'Digite a descrição',
                         placeholder: 'Digite a descrição do procedimento',
                         inputType: TextInputType.text,
-                        onChanged: addProcedureStore.setDescription,
+                        onChanged: _viewModel.setDescription,
                         validators: const {'required': true, 'minLength': 3},
                       ),
                       const SizedBox(
@@ -133,7 +140,7 @@ class _AddProcedurePageState extends State<AddProcedurePage> {
                           FilteringTextInputFormatter.digitsOnly,
                           RealInputFormatter(moeda: true),
                         ],
-                        onChanged: addProcedureStore.setAmountCents,
+                        onChanged: _viewModel.setAmountCents,
                         validators: const {'required': true, 'minLength': 3},
                       ),
                       const SizedBox(
@@ -142,14 +149,13 @@ class _AddProcedurePageState extends State<AddProcedurePage> {
                       Center(child: Observer(builder: (_) {
                         return MyButtonWidget(
                           text: 'Cadastrar procedimento',
-                          isLoading: addProcedureStore.saveState ==
-                              SaveProcedureState.loading,
+                          isLoading: _viewModel.isLoading,
                           disabledColor: Colors.grey,
-                          onTap: addProcedureStore.isValidData
+                          onTap: _viewModel.canSubmit
                               ? () async {
                                   _formKey.currentState?.save();
                                   if (_formKey.currentState!.validate()) {
-                                    addProcedureStore.createProcedure();
+                                    _viewModel.createProcedure();
                                   } else {
                                     CustomToast.show(context,
                                         type: ToastType.error,

@@ -1,0 +1,61 @@
+name: Flutter CD - Android Build
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:  # Permite executar manualmente
+
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: '3.19.4'
+          cache: false
+
+      - name: Clean Dependencies
+        working-directory: med_system_app
+        run: |
+          rm -f pubspec.lock
+          flutter clean
+          flutter pub cache repair
+
+      - name: Get Dependencies
+        working-directory: med_system_app
+        run: flutter pub get
+
+      - name: Run Build Runner
+        working-directory: med_system_app
+        run: dart run build_runner build --delete-conflicting-outputs
+        
+      - name: Build APK
+        working-directory: med_system_app
+        run: flutter build apk --release
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: med_system_app/build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Upload APK to Release
+        if: github.event_name == 'release'
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: med_system_app/build/app/outputs/flutter-apk/app-release.apk
+          asset_name: med_system_app_${{ github.ref_name }}.apk
+          tag: ${{ github.ref }}

@@ -71,7 +71,7 @@ class SuggestionsList extends StatelessWidget {
   final List<String> suggestions;
   final ValueChanged<String> onSuggestionSelected;
 
-  const SuggestionsList({
+  const SuggestionsList({super.key, 
     required this.suggestions,
     required this.onSuggestionSelected,
   });
@@ -103,7 +103,6 @@ class SuggestionsList extends StatelessWidget {
 // Componente principal AutoCompleteReal
 // ignore: must_be_immutable
 class AutoCompleteReal extends StatefulWidget {
-  final Key? key; // Adicionando a chave
   final Function? onSave;
   final String? label;
   final String? placeholder;
@@ -122,8 +121,8 @@ class AutoCompleteReal extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatters;
   final List<String>? suggestions;
 
-  AutoCompleteReal({
-    this.key, // Adicionando a chave
+  const AutoCompleteReal({
+    super.key,
     this.onSave,
     required this.label,
     required this.placeholder,
@@ -144,6 +143,7 @@ class AutoCompleteReal extends StatefulWidget {
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _AutoCompleteRealState createState() => _AutoCompleteRealState();
 }
 

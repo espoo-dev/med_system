@@ -1,14 +1,14 @@
 import 'package:distrito_medico/core/theme/icons.dart';
 import 'package:distrito_medico/core/utils/navigation_utils.dart';
 import 'package:distrito_medico/core/utils/utils.dart';
-import 'package:distrito_medico/features/medical_shifts/model/medical_shift.model.dart';
+import 'package:distrito_medico/features/medical_shifts/domain/entities/medical_shift_entity.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/edit_medical_shift_page.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/medical_shifts_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class ListMedicalShiftsWidget extends StatefulWidget {
-  final List<MedicalShiftModel> items;
+  final List<MedicalShiftEntity> items;
 
   const ListMedicalShiftsWidget({super.key, required this.items});
 
@@ -36,6 +36,7 @@ class _ListMedicalShiftsWidgetState extends State<ListMedicalShiftsWidget> {
               InkWell(
                 onTap: () {
                   push(context, const MedicalShiftsPage());
+                  // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Funcionalidade em manutenção")));
                 },
                 child: Text(
                   'Ver todos',
@@ -56,7 +57,7 @@ class _ListMedicalShiftsWidgetState extends State<ListMedicalShiftsWidget> {
               scrollDirection: Axis.vertical,
               itemCount: widget.items.length,
               itemBuilder: (BuildContext context, int index) {
-                MedicalShiftModel item = widget.items[index];
+                MedicalShiftEntity item = widget.items[index];
 
                 String iconAsset =
                     item.paid! ? iconCheckCoreAsset : iconCloseCoreAsset;
@@ -117,6 +118,7 @@ class _ListMedicalShiftsWidgetState extends State<ListMedicalShiftsWidget> {
                             EditMedicalShiftPage(
                               medicalShift: item,
                             ));
+                        // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Funcionalidade em manutenção")));
                       },
                     ),
                   ),

@@ -6,13 +6,14 @@ import 'package:distrito_medico/features/event_procedures/pages/add_event_proced
 import 'package:distrito_medico/features/home/model/menu_home.model.dart';
 import 'package:distrito_medico/features/home/model/menu_home_medical_shift.dart';
 import 'package:distrito_medico/features/home/pages/empty_events_procedures_page.dart';
-import 'package:distrito_medico/features/home/store/home.store.dart';
+import 'package:distrito_medico/features/home/presentation/viewmodels/home_viewmodel.dart';
 import 'package:distrito_medico/features/home/widgets/build_header.widget.dart';
 import 'package:distrito_medico/features/home/widgets/build_welcome.widget.dart';
 import 'package:distrito_medico/features/home/widgets/list_events.widget.dart';
 import 'package:distrito_medico/features/home/widgets/list_medical_shifts.widget.dart';
 import 'package:distrito_medico/features/home/widgets/my_app_bar.widget.dart';
 import 'package:distrito_medico/features/home/widgets/my_drawer.widget.dart';
+import 'package:distrito_medico/features/medical_shifts/domain/entities/medical_shift_entity.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/add_medical_shift_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -30,29 +31,28 @@ class _HomePageState extends State<HomePage> {
   MenuHomeModel menuHomeModel = MenuHomeModel();
   MenuHomeMedicalSfhitModel menuHomeMedicalShiftsaModel =
       MenuHomeMedicalSfhitModel();
-  final homeStore = GetIt.I.get<HomeStore>();
+  final homeViewModel = GetIt.I.get<HomeViewModel>();
   final List<EventProcedures> _listEventProcedures = [];
 
   @override
   void initState() {
     super.initState();
-    homeStore.fetchAllData();
+    homeViewModel.fetchAllData();
   }
 
   _buildPageBody(BuildContext context) {
     return Observer(builder: (BuildContext context) {
-      if (homeStore.state == HomeState.error) {
+      if (homeViewModel.errorMessage != null) {
         return Center(
             child: ErrorRetryWidget(
                 'Algo deu errado', 'Por favor, tente novamente', () {
-          homeStore.fetchAllData();
+          homeViewModel.fetchAllData();
         }));
       }
-      if (homeStore.state == HomeState.loading &&
-          _listEventProcedures.isEmpty) {
+      if (homeViewModel.isLoading && _listEventProcedures.isEmpty) {
         return const Center(child: CircularProgressIndicator());
       }
-      if (homeStore.eventProcedureList.isEmpty) {
+      if (homeViewModel.eventProcedures.isEmpty) {
         return const EmptyPageEventsProcedure();
       }
       return ListView(
@@ -73,36 +73,37 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   FilterChip(
                     label: const Text('Procedimentos'),
-                    selected:
-                        homeStore.selectedFilter == HomeFilterType.procedures,
+                    selected: homeViewModel.selectedFilter ==
+                        HomeFilterType.procedures,
                     onSelected: (bool selected) {
                       if (selected) {
-                        homeStore.setSelectedFilter(HomeFilterType.procedures);
+                        homeViewModel
+                            .setSelectedFilter(HomeFilterType.procedures);
                       }
                     },
                     selectedColor: Theme.of(context).colorScheme.primary,
                     showCheckmark: false,
                     labelStyle: TextStyle(
-                      color:
-                          homeStore.selectedFilter == HomeFilterType.procedures
-                              ? Colors.white
-                              : Colors.black,
+                      color: homeViewModel.selectedFilter ==
+                              HomeFilterType.procedures
+                          ? Colors.white
+                          : Colors.black,
                     ),
                   ),
                   FilterChip(
                     label: const Text('Plantões'),
-                    selected: homeStore.selectedFilter ==
+                    selected: homeViewModel.selectedFilter ==
                         HomeFilterType.medicalShifts,
                     onSelected: (bool selected) {
                       if (selected) {
-                        homeStore
+                        homeViewModel
                             .setSelectedFilter(HomeFilterType.medicalShifts);
                       }
                     },
                     selectedColor: Theme.of(context).colorScheme.primary,
                     showCheckmark: false,
                     labelStyle: TextStyle(
-                      color: homeStore.selectedFilter ==
+                      color: homeViewModel.selectedFilter ==
                               HomeFilterType.medicalShifts
                           ? Colors.white
                           : Colors.black,
@@ -113,24 +114,45 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 20),
             HorizontalMenuWidget(
-              menuItems: homeStore.selectedFilter == HomeFilterType.procedures
-                  ? menuHomeModel.buildMenuHome(
-                      homeStore.eventProcedureModel.total,
-                      homeStore.eventProcedureModel.totalpaid,
-                      homeStore.eventProcedureModel.totalUnpaid,
-                      context)
-                  : menuHomeMedicalShiftsaModel.buildMenuHome(
-                      homeStore.medicalShift.total,
-                      homeStore.medicalShift.totalpaid,
-                      homeStore.medicalShift.totalUnpaid,
-                      context),
+              menuItems:
+                  homeViewModel.selectedFilter == HomeFilterType.procedures
+                      ? menuHomeModel.buildMenuHome(
+                          homeViewModel.totalProcedures.toString(),
+                          homeViewModel.totalPaidProcedures.toString(),
+                          homeViewModel.totalUnpaidProcedures.toString(),
+                          context)
+                      : menuHomeMedicalShiftsaModel.buildMenuHome(
+                          homeViewModel.totalMedicalShifts.toString(),
+                          homeViewModel.totalPaidMedicalShifts.toString(),
+                          homeViewModel.totalUnpaidMedicalShifts.toString(),
+                          context),
             ),
-            homeStore.selectedFilter == HomeFilterType.procedures
+            homeViewModel.selectedFilter == HomeFilterType.procedures
                 ? ListEventsWidget(
-                    items: homeStore.eventProcedureList,
+                    items: homeViewModel.eventProcedures
+                        .map((e) => EventProcedures(
+                              id: e.id,
+                              patient: e.patient,
+                              procedure: e.procedure,
+                              hospital: e.hospital,
+                              date: e.date,
+                              paid: e.paid,
+                              paidAt: e.paidAt,
+                              payment: e.payment,
+                            ))
+                        .toList(),
                   )
                 : ListMedicalShiftsWidget(
-                    items: homeStore.medicalShiftList,
+                    items: homeViewModel.medicalShifts
+                        .map((s) => MedicalShiftEntity(
+                              id: s.id,
+                              hospitalName: s.hospitalName,
+                              date: s.date,
+                              workload: s.workload,
+                              amountCents: s.amountCents,
+                              paid: s.paid,
+                            ))
+                        .toList(),
                   ),
           ]);
     });
@@ -144,10 +166,10 @@ class _HomePageState extends State<HomePage> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Observer(builder: (BuildContext context) {
           return Visibility(
-            visible: homeStore.showFloatingActionButton,
+            visible: homeViewModel.showFloatingActionButton,
             child: FloatingActionButton(
               onPressed: () {
-                if (homeStore.selectedFilter == HomeFilterType.procedures) {
+                if (homeViewModel.selectedFilter == HomeFilterType.procedures) {
                   push(
                     context,
                     const AddEventProcedurePage(
@@ -172,7 +194,7 @@ class _HomePageState extends State<HomePage> {
           );
         }),
         bottomNavigationBar: Observer(builder: (BuildContext context) {
-          return MyBottomAppBar(visible: homeStore.showBottomAppBar);
+          return MyBottomAppBar(visible: homeViewModel.showBottomAppBar);
         }),
         drawer: const MyDrawer(),
         body: SafeArea(

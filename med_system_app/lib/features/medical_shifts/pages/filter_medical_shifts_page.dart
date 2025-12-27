@@ -1,6 +1,6 @@
 import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
 import 'package:distrito_medico/core/widgets/my_text_form_field.widget.dart';
-import 'package:distrito_medico/features/medical_shifts/store/medical_shift.store.dart';
+import 'package:distrito_medico/features/medical_shifts/presentation/viewmodels/medical_shifts_list_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
@@ -16,11 +16,17 @@ class FilterMedicalShiftsPage extends StatefulWidget {
 }
 
 class _FilterMedicalShiftsPageState extends State<FilterMedicalShiftsPage> {
-  final filterMedicalShiftStore = GetIt.I.get<MedicalShiftStore>();
+  final _viewModel = GetIt.I.get<MedicalShiftsListViewModel>();
+
   @override
   void initState() {
     super.initState();
-    filterMedicalShiftStore.init();
+    // Don't init() here as it resets to current month. We want to see current filter state.
+    // If we want to start fresh: _viewModel.clearFilters();
+    // But typically user expects to see what is currently filtered if coming from list.
+    // Actually typically filter page starts clean OR with current filters.
+    // existing store code called 'init()' which might have done something.
+    // I'll leave it as is (using current state).
   }
 
   @override
@@ -33,15 +39,15 @@ class _FilterMedicalShiftsPageState extends State<FilterMedicalShiftsPage> {
           Text('Limpar'),
         ],
         onTrailingPressed: [
-          () {
-            filterMedicalShiftStore.clearFilters();
+            () {
+            _viewModel.clearFilters();
           },
         ],
         image: null,
       ),
       body: SingleChildScrollView(
         padding:
-            const EdgeInsets.only(left: 30, right: 20, top: 30, bottom: 20),
+        const EdgeInsets.only(left: 30, right: 20, top: 30, bottom: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -55,18 +61,18 @@ class _FilterMedicalShiftsPageState extends State<FilterMedicalShiftsPage> {
                   ),
                   const SizedBox(height: 10),
                   DropdownButton<int>(
-                    value: filterMedicalShiftStore.selectedYear,
+                    value: _viewModel.selectedYear,
                     hint: const Text('Selecione um ano'),
                     onChanged: (int? newValue) {
-                      filterMedicalShiftStore.setSelectedYear(newValue);
+                      _viewModel.setSelectedYear(newValue);
                     },
-                    items: filterMedicalShiftStore.years
+                    items: _viewModel.years
                         .map<DropdownMenuItem<int>>(
                           (int year) => DropdownMenuItem<int>(
-                            value: year,
-                            child: Text(year.toString()),
-                          ),
-                        )
+                        value: year,
+                        child: Text(year.toString()),
+                      ),
+                    )
                         .toList(),
                   ),
                   const SizedBox(height: 20),
@@ -81,22 +87,22 @@ class _FilterMedicalShiftsPageState extends State<FilterMedicalShiftsPage> {
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
+                      const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 5,
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
                       ),
-                      itemCount: filterMedicalShiftStore.months.length,
+                      itemCount: _viewModel.months.length,
                       itemBuilder: (context, index) {
-                        final month = filterMedicalShiftStore.months[index];
+                        final month = _viewModel.months[index];
                         return Observer(builder: (_) {
                           return FilterChip(
                             label: Text(
-                                filterMedicalShiftStore.getMonthName(month)),
+                                _viewModel.getMonthName(month)),
                             selected:
-                                filterMedicalShiftStore.selectedMonth == month,
+                            _viewModel.selectedMonth == month,
                             onSelected: (isSelected) {
-                              filterMedicalShiftStore
+                              _viewModel
                                   .setSelectedMonth(isSelected ? month : null);
                             },
                           );
@@ -117,9 +123,9 @@ class _FilterMedicalShiftsPageState extends State<FilterMedicalShiftsPage> {
                                 style: TextStyle(fontSize: 12)),
                             value: true,
                             groupValue:
-                                filterMedicalShiftStore.selectedPaymentStatus,
+                            _viewModel.selectedPaymentStatus,
                             onChanged: (value) {
-                              filterMedicalShiftStore
+                              _viewModel
                                   .setSelectedPaymentStatus(value);
                             },
                             contentPadding: EdgeInsets.zero),
@@ -130,9 +136,9 @@ class _FilterMedicalShiftsPageState extends State<FilterMedicalShiftsPage> {
                               style: TextStyle(fontSize: 12)),
                           value: false,
                           groupValue:
-                              filterMedicalShiftStore.selectedPaymentStatus,
+                          _viewModel.selectedPaymentStatus,
                           onChanged: (value) {
-                            filterMedicalShiftStore
+                            _viewModel
                                 .setSelectedPaymentStatus(value);
                           },
                           contentPadding: EdgeInsets.zero,
@@ -154,8 +160,8 @@ class _FilterMedicalShiftsPageState extends State<FilterMedicalShiftsPage> {
                       'minLength': 4,
                     },
                     onChanged: (value) =>
-                        filterMedicalShiftStore.setHospitalName(value),
-                    initialValue: filterMedicalShiftStore.hospitalName ?? '',
+                        _viewModel.setHospitalNameFilter(value),
+                    initialValue: _viewModel.hospitalNameFilter ?? '',
                   ),
                   const SizedBox(height: 20),
                   MyButtonWidget(
@@ -163,7 +169,7 @@ class _FilterMedicalShiftsPageState extends State<FilterMedicalShiftsPage> {
                     isLoading: false,
                     disabledColor: Colors.grey,
                     onTap: () {
-                      filterMedicalShiftStore.getAllMedicalShiftByFilters();
+                      _viewModel.loadMedicalShifts(isRefresh: true);
                       Navigator.pop(context);
                     },
                   ),

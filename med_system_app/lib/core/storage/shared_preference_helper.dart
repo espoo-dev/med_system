@@ -1,7 +1,7 @@
 import 'dart:convert' show json;
 
 import 'package:distrito_medico/core/storage/constants/preferences.dart';
-import 'package:distrito_medico/features/signin/model/user.model.dart';
+import 'package:distrito_medico/features/auth/data/models/user_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SharedPreferenceHelper {
@@ -14,12 +14,12 @@ class SharedPreferenceHelper {
         key: Preferences.isUser, value: json.encode(user));
   }
 
-  Future<UserModel> get userData async {
+  Future<UserModel?> get userData async {
     String? user = await _sharedPreference.read(key: Preferences.isUser);
     if (user != null) {
       return UserModel.fromJson(json.decode(user));
     }
-    return UserModel();
+    return null;
   }
 
   Future deleteSecureData(String key) async {
