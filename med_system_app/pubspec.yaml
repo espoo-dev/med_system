@@ -42,7 +42,7 @@ dependencies:
   logging: ^1.2.0
   flutter_localizations:
     sdk: flutter
-  flutter_secure_storage: ^10.0.0
+  flutter_secure_storage: ^9.0.0
   freezed: ^2.4.5
   flutter_svg: ^2.0.10+1
   freezed_annotation: ^2.4.1
