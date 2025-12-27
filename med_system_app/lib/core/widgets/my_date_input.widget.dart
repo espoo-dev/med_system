@@ -7,8 +7,8 @@ class MyInputDate extends StatefulWidget {
   final Color? fillColor;
   final Color? borderColor;
   final Color? textColor;
-  DateTime? selectedDate;
-  Function? onChanged;
+  final DateTime? selectedDate; // Changed to final
+  final Function? onChanged;    // Changed to final
 
   MyInputDate({
     super.key,
@@ -27,20 +27,28 @@ class MyInputDate extends StatefulWidget {
 }
 
 class _MyInputDateState extends State<MyInputDate> {
+  DateTime? _internalSelectedDate;
+
   @override
   void initState() {
     super.initState();
-    if (widget.selectedDate != null && widget.onChanged != null) {
-      widget.onChanged!(getSelectedDateString());
+    _internalSelectedDate = widget.selectedDate;
+  }
+
+  @override
+  void didUpdateWidget(MyInputDate oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.selectedDate != oldWidget.selectedDate) {
+      _internalSelectedDate = widget.selectedDate;
     }
   }
 
   String getSelectedDateString() {
-    if (widget.selectedDate == null) return '';
+    if (_internalSelectedDate == null) return '';
 
-    String day = widget.selectedDate!.day.toString();
-    String month = widget.selectedDate!.month.toString();
-    String year = widget.selectedDate!.year.toString();
+    String day = _internalSelectedDate!.day.toString().padLeft(2, '0'); // Pad left for better formatting
+    String month = _internalSelectedDate!.month.toString().padLeft(2, '0');
+    String year = _internalSelectedDate!.year.toString();
 
     return '$day/$month/$year';
   }
@@ -57,7 +65,7 @@ class _MyInputDateState extends State<MyInputDate> {
       helpText: 'Selecione a data',
       locale: const Locale('pt', 'BR'),
       initialEntryMode: DatePickerEntryMode.calendar,
-      initialDate: widget.selectedDate ??
+      initialDate: _internalSelectedDate ??
           DateTime(DateTime.now().year, DateTime.now().month, 1),
       firstDate: DateTime(2001),
       lastDate: DateTime(DateTime.now().year + 1),
@@ -69,14 +77,16 @@ class _MyInputDateState extends State<MyInputDate> {
       },
     );
 
-    setState(() {
-      if (date != null) {
-        widget.selectedDate = date;
-        if (widget.onChanged != null) {
-          widget.onChanged!(getSelectedDateString());
-        }
+    if (date != null) {
+      setState(() {
+        _internalSelectedDate = date;
+      });
+      if (widget.onChanged != null) {
+        // Construct string manually to match getSelectedDateString but simpler or use same helper?
+        // Using helper method on internal state:
+        widget.onChanged!(getSelectedDateString());
       }
-    });
+    }
   }
 
   @override

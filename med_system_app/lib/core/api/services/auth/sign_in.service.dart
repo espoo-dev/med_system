@@ -1,4 +1,4 @@
-import "dart:async";
+﻿import "dart:async";
 import 'package:chopper/chopper.dart';
 
 part "sign_in.service.chopper.dart";
@@ -7,6 +7,6 @@ part "sign_in.service.chopper.dart";
 abstract class SignInService extends ChopperService {
   static SignInService create([ChopperClient? client]) =>
       _$SignInService(client);
-  @Post(path: 'users/tokens/sign_in')
+  @POST(path: 'users/tokens/sign_in')
   Future<Response> signIn(@Body() dynamic body);
 }

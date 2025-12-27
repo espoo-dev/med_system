@@ -14,6 +14,7 @@ class MedicalShiftModel extends MedicalShiftEntity {
     super.date,
     super.hour,
     super.medicalShiftRecurrenceId,
+    super.color,
   });
 
   factory MedicalShiftModel.fromJson(Map<String, dynamic> json) {
@@ -30,6 +31,7 @@ class MedicalShiftModel extends MedicalShiftEntity {
       date: json['date'],
       hour: json['hour'],
       medicalShiftRecurrenceId: json['medical_shift_recurrence_id'],
+      color: json['color'],
     );
   }
 
@@ -47,6 +49,8 @@ class MedicalShiftModel extends MedicalShiftEntity {
     data['date'] = date;
     data['hour'] = hour;
     data['medical_shift_recurrence_id'] = medicalShiftRecurrenceId;
+    data['color'] = color;
     return data;
   }
 }
+

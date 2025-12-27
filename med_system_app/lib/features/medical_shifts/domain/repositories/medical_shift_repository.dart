@@ -19,6 +19,7 @@ abstract class IMedicalShiftRepository {
     required String startHour,
     required double amount,
     required bool paid,
+    String? color,
   });
 
   Future<Either<Failure, void>> createMedicalShiftRecurrence({
@@ -41,6 +42,7 @@ abstract class IMedicalShiftRepository {
     required String startHour,
     required double amount,
     required bool paid,
+    String? color,
   });
 
   Future<Either<Failure, void>> deleteMedicalShift({

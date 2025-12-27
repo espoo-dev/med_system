@@ -20,6 +20,7 @@ class UpdateMedicalShiftUseCase implements UseCase<MedicalShiftEntity, UpdateMed
       startHour: params.startHour,
       amount: params.amount,
       paid: params.paid,
+      color: params.color,
     );
   }
 }
@@ -32,6 +33,7 @@ class UpdateMedicalShiftParams extends Equatable {
   final String startHour;
   final double amount;
   final bool paid;
+  final String? color;
 
   const UpdateMedicalShiftParams({
     required this.id,
@@ -41,6 +43,7 @@ class UpdateMedicalShiftParams extends Equatable {
     required this.startHour,
     required this.amount,
     required this.paid,
+    this.color,
   });
 
   @override
@@ -52,5 +55,6 @@ class UpdateMedicalShiftParams extends Equatable {
         startHour,
         amount,
         paid,
+        color,
       ];
 }

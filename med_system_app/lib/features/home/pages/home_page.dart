@@ -40,6 +40,8 @@ class _HomePageState extends State<HomePage> {
     homeViewModel.fetchAllData();
   }
 
+
+
   _buildPageBody(BuildContext context) {
     return Observer(builder: (BuildContext context) {
       if (homeViewModel.errorMessage != null) {
@@ -117,14 +119,14 @@ class _HomePageState extends State<HomePage> {
               menuItems:
                   homeViewModel.selectedFilter == HomeFilterType.procedures
                       ? menuHomeModel.buildMenuHome(
-                          homeViewModel.totalProcedures.toString(),
-                          homeViewModel.totalPaidProcedures.toString(),
-                          homeViewModel.totalUnpaidProcedures.toString(),
+                          homeViewModel.totalProcedures,
+                          homeViewModel.totalPaidProcedures,
+                          homeViewModel.totalUnpaidProcedures,
                           context)
                       : menuHomeMedicalShiftsaModel.buildMenuHome(
-                          homeViewModel.totalMedicalShifts.toString(),
-                          homeViewModel.totalPaidMedicalShifts.toString(),
-                          homeViewModel.totalUnpaidMedicalShifts.toString(),
+                          homeViewModel.totalMedicalShifts,
+                          homeViewModel.totalPaidMedicalShifts,
+                          homeViewModel.totalUnpaidMedicalShifts,
                           context),
             ),
             homeViewModel.selectedFilter == HomeFilterType.procedures

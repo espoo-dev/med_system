@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../event_procedures/domain/entities/event_procedure_entity.dart';
@@ -70,22 +71,40 @@ abstract class _HomeViewModelBase with Store {
       eventProcedures.isNotEmpty || medicalShifts.isNotEmpty;
 
   @computed
-  String get totalProcedures => _totalProcedures;
+  String get totalProcedures => _formatCurrency(_totalProcedures);
 
   @computed
-  String get totalPaidProcedures => _totalPaidProcedures;
+  String get totalPaidProcedures => _formatCurrency(_totalPaidProcedures);
 
   @computed
-  String get totalUnpaidProcedures => _totalUnpaidProcedures;
+  String get totalUnpaidProcedures => _formatCurrency(_totalUnpaidProcedures);
 
   @computed
-  String get totalMedicalShifts => _totalMedicalShifts;
+  String get totalMedicalShifts => _formatCurrency(_totalMedicalShifts);
 
   @computed
-  String get totalPaidMedicalShifts => _totalPaidMedicalShifts;
+  String get totalPaidMedicalShifts => _formatCurrency(_totalPaidMedicalShifts);
 
   @computed
-  String get totalUnpaidMedicalShifts => _totalUnpaidMedicalShifts;
+  String get totalUnpaidMedicalShifts => _formatCurrency(_totalUnpaidMedicalShifts);
+
+  String _formatCurrency(String value) {
+    if (value.isEmpty) return 'R\$ 0,00';
+    try {
+      // Remove symbols if present to parse
+      String cleaned = value.replaceAll(RegExp(r'[R\$\s]'), '');
+      if (cleaned.contains(',')) {
+         // Assume PT-BR input (1.000,00) -> 1000.00
+         cleaned = cleaned.replaceAll('.', '').replaceAll(',', '.');
+      }
+      double number = double.parse(cleaned);
+      // Use NumberFormat from intl package.
+      // NOTE: Ensure intl is imported.
+      return NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$').format(number);
+    } catch (e) {
+      return value;
+    }
+  }
 
 
 

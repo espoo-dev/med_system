@@ -193,6 +193,22 @@ mixin _$CreateMedicalShiftViewModel on _CreateMedicalShiftViewModelBase, Store {
     });
   }
 
+  late final _$colorAtom =
+      Atom(name: '_CreateMedicalShiftViewModelBase.color', context: context);
+
+  @override
+  String? get color {
+    _$colorAtom.reportRead();
+    return super.color;
+  }
+
+  @override
+  set color(String? value) {
+    _$colorAtom.reportWrite(value, super.color, () {
+      super.color = value;
+    });
+  }
+
   late final _$stateAtom =
       Atom(name: '_CreateMedicalShiftViewModelBase.state', context: context);
 
@@ -427,6 +443,18 @@ mixin _$CreateMedicalShiftViewModel on _CreateMedicalShiftViewModelBase, Store {
   }
 
   @override
+  void setColor(String? value) {
+    final _$actionInfo = _$_CreateMedicalShiftViewModelBaseActionController
+        .startAction(name: '_CreateMedicalShiftViewModelBase.setColor');
+    try {
+      return super.setColor(value);
+    } finally {
+      _$_CreateMedicalShiftViewModelBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void reset() {
     final _$actionInfo = _$_CreateMedicalShiftViewModelBaseActionController
         .startAction(name: '_CreateMedicalShiftViewModelBase.reset');
@@ -452,6 +480,7 @@ frequency: ${frequency},
 dayOfWeek: ${dayOfWeek},
 dayOfMonth: ${dayOfMonth},
 endDate: ${endDate},
+color: ${color},
 state: ${state},
 errorMessage: ${errorMessage},
 hospitalSuggestions: ${hospitalSuggestions},

@@ -46,6 +46,7 @@ class MedicalShiftRepositoryImpl implements IMedicalShiftRepository {
     required String startHour,
     required double amount,
     required bool paid,
+    String? color,
   }) async {
     try {
       final request = AddMedicalShiftRequestModel(
@@ -55,6 +56,7 @@ class MedicalShiftRepositoryImpl implements IMedicalShiftRepository {
         startHour: startHour,
         amountCents: (amount * 100).toInt(),
         paid: paid,
+        color: color,
       );
       final result = await remoteDataSource.createMedicalShift(request);
       return Right(result);
@@ -103,6 +105,7 @@ class MedicalShiftRepositoryImpl implements IMedicalShiftRepository {
     required String startHour,
     required double amount,
     required bool paid,
+    String? color,
   }) async {
     try {
       final request = AddMedicalShiftRequestModel(
@@ -112,6 +115,7 @@ class MedicalShiftRepositoryImpl implements IMedicalShiftRepository {
         startHour: startHour,
         amountCents: (amount * 100).toInt(),
         paid: paid,
+        color: color,
       );
       final result = await remoteDataSource.editMedicalShift(id, request);
       return Right(result);

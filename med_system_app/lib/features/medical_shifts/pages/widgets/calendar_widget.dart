@@ -138,23 +138,22 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                       if (dayEvents.isNotEmpty) {
                         return Positioned(
                           bottom: 1,
-                          right: 1,
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: const BoxDecoration(
-                              color: Colors.red,
-                              shape: BoxShape.circle,
-                            ),
-                            child: dayEvents.length > 1
-                                ? Text(
-                                    '${dayEvents.length}',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                : null,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: dayEvents.take(3).map((event) {
+                              Color color = event.color != null
+                                  ? Color(int.parse(event.color!.replaceAll('#', '0xFF')))
+                                  : Colors.red;
+                              return Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 1.0),
+                                width: 7,
+                                height: 7,
+                                decoration: BoxDecoration(
+                                  color: color,
+                                  shape: BoxShape.circle,
+                                ),
+                              );
+                            }).toList(),
                           ),
                         );
                       }
