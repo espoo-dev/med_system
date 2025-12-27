@@ -13,6 +13,7 @@ class MedicalShiftEntity extends Equatable {
   final String? date;
   final String? hour;
   final int? medicalShiftRecurrenceId;
+  final String? color;
 
   const MedicalShiftEntity({
     this.id,
@@ -27,6 +28,7 @@ class MedicalShiftEntity extends Equatable {
     this.date,
     this.hour,
     this.medicalShiftRecurrenceId,
+    this.color,
   });
 
   @override
@@ -43,6 +45,7 @@ class MedicalShiftEntity extends Equatable {
         date,
         hour,
         medicalShiftRecurrenceId,
+        color,
       ];
       
   MedicalShiftEntity copyWith({
@@ -58,6 +61,7 @@ class MedicalShiftEntity extends Equatable {
     String? date,
     String? hour,
     int? medicalShiftRecurrenceId,
+    String? color,
   }) {
     return MedicalShiftEntity(
       id: id ?? this.id,
@@ -73,6 +77,8 @@ class MedicalShiftEntity extends Equatable {
       hour: hour ?? this.hour,
       medicalShiftRecurrenceId:
           medicalShiftRecurrenceId ?? this.medicalShiftRecurrenceId,
+      color: color ?? this.color,
     );
   }
 }
+

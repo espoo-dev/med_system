@@ -14,6 +14,7 @@ import 'package:distrito_medico/features/medical_shifts/pages/widgets/radio_grou
 import 'package:distrito_medico/features/medical_shifts/presentation/viewmodels/update_medical_shift_viewmodel.dart';
 import 'package:distrito_medico/features/procedures/util/real_input_format.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
@@ -37,8 +38,8 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _disposers.add(reaction<UpdateMedicalShiftState>(
-        (_) => _viewModel.state, (state) {
+    _disposers.add(
+        reaction<UpdateMedicalShiftState>((_) => _viewModel.state, (state) {
       if (state == UpdateMedicalShiftState.success) {
         to(
             context,
@@ -50,8 +51,8 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
         CustomToast.show(context,
             type: ToastType.error,
             title: "Editar plantão",
-            description: _viewModel.errorMessage.isNotEmpty 
-                ? _viewModel.errorMessage 
+            description: _viewModel.errorMessage.isNotEmpty
+                ? _viewModel.errorMessage
                 : "Ocorreu um erro ao tentar editar plantão.");
       }
     }));
@@ -126,10 +127,9 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
                     if (textEditingValue.text.isEmpty) {
                       return const Iterable<String>.empty();
                     } else {
-                      return _viewModel.hospitalSuggestions
-                          .where((word) => word
-                              .toLowerCase()
-                              .contains(textEditingValue.text.toLowerCase()));
+                      return _viewModel.hospitalSuggestions.where((word) => word
+                          .toLowerCase()
+                          .contains(textEditingValue.text.toLowerCase()));
                     }
                   },
                   onSelected: (String selectedHospital) {
@@ -143,10 +143,11 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
                     // Better to set it once or if different.
                     // For Simplicity in MVVM with TextField, often controller is local and syncs with VM.
                     // Here we can initialize it.
-                    if (controller.text.isEmpty && _viewModel.hospitalName.isNotEmpty) {
-                       controller.text = _viewModel.hospitalName;
+                    if (controller.text.isEmpty &&
+                        _viewModel.hospitalName.isNotEmpty) {
+                      controller.text = _viewModel.hospitalName;
                     }
-                    
+
                     return TextField(
                       controller: controller,
                       onChanged: _viewModel.setHospitalName,
@@ -184,21 +185,25 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
                   initialValue: _viewModel.workload,
                 ),
                 const SizedBox(height: 15),
-                MyInputDate(
-                  onChanged: _viewModel.setStartDate,
-                  label: 'Data início',
-                  // convertStringToDate helper from utils
-                  selectedDate: convertStringToDate(_viewModel.startDate),
-                  textColor: Theme.of(context).colorScheme.primary,
-                ),
+                Observer(builder: (_) {
+                  return MyInputDate(
+                    key: ValueKey(_viewModel.startDate),
+                    onChanged: _viewModel.setStartDate,
+                    label: 'Data início',
+                    selectedDate: convertStringToDate(_viewModel.startDate),
+                    textColor: Theme.of(context).colorScheme.primary,
+                  );
+                }),
                 const SizedBox(height: 15),
-                MyInputTime(
-                  label: 'Hora início',
-                  // stringToTimeOfDay helper from utils
-                  selectedTime: stringToTimeOfDay(_viewModel.startHour),
-                  onChanged: _viewModel.setStartHour,
-                  textColor: Theme.of(context).colorScheme.primary,
-                ),
+                Observer(builder: (_) {
+                  return MyInputTime(
+                    key: ValueKey(_viewModel.startHour),
+                    label: 'Hora início',
+                    selectedTime: stringToTimeOfDay(_viewModel.startHour),
+                    onChanged: _viewModel.setStartHour,
+                    textColor: Theme.of(context).colorScheme.primary,
+                  );
+                }),
                 const SizedBox(height: 15),
                 Autocomplete(
                   optionsBuilder: (TextEditingValue textEditingValue) {
@@ -224,10 +229,11 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
                   },
                   fieldViewBuilder:
                       (context, controller, focusNode, onEditingComplete) {
-                    
                     // Format intial amount
                     if (controller.text.isEmpty && _viewModel.amount > 0) {
-                         controller.text = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$').format(_viewModel.amount);
+                      controller.text =
+                          NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$')
+                              .format(_viewModel.amount);
                     }
 
                     return TextField(
@@ -267,11 +273,99 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
                   onChanged: _viewModel.setPaid,
                 ),
                 const SizedBox(height: 15),
+                // Color Picker
+                const Text("Cor do evento",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    )),
+                const SizedBox(height: 8),
+                Observer(builder: (_) {
+                  Color currentColor = _viewModel.color != null
+                      ? Color(
+                          int.parse(_viewModel.color!.replaceAll('#', '0xFF')))
+                      : Theme.of(context).colorScheme.primary;
+
+                  return GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          Color pickerColor = currentColor;
+                          return AlertDialog(
+                            title: const Text('Escolha uma cor'),
+                            content: SingleChildScrollView(
+                              child: BlockPicker(
+                                pickerColor: pickerColor,
+                                onColorChanged: (Color color) {
+                                  pickerColor = color;
+                                },
+                              ),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text('Cancelar'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              TextButton(
+                                child: const Text('Selecionar'),
+                                onPressed: () {
+                                  // Format FF0000 -> #000000
+                                  String hex = pickerColor.value
+                                      .toRadixString(16)
+                                      .padLeft(8, '0')
+                                      .toUpperCase();
+                                  if (hex.length == 8) {
+                                    hex = hex.substring(2);
+                                  }
+                                  String hexColor = '#$hex';
+                                  _viewModel.setColor(hexColor);
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: currentColor,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.grey),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.palette,
+                              color: currentColor.computeLuminance() > 0.5
+                                  ? Colors.black
+                                  : Colors.white),
+                          const SizedBox(width: 8),
+                          Text(
+                            _viewModel.color ?? "Toque para selecionar",
+                            style: TextStyle(
+                              color: currentColor.computeLuminance() > 0.5
+                                  ? Colors.black
+                                  : Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+                const SizedBox(height: 15),
                 Center(
                   child: Observer(builder: (_) {
                     return MyButtonWidget(
                       text: 'Salvar alterações',
-                      isLoading: _viewModel.state == UpdateMedicalShiftState.loading,
+                      isLoading:
+                          _viewModel.state == UpdateMedicalShiftState.loading,
                       disabledColor: Colors.grey,
                       onTap: _viewModel.isValidData
                           ? () async {

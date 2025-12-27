@@ -113,6 +113,22 @@ mixin _$UpdateMedicalShiftViewModel on _UpdateMedicalShiftViewModelBase, Store {
     });
   }
 
+  late final _$colorAtom =
+      Atom(name: '_UpdateMedicalShiftViewModelBase.color', context: context);
+
+  @override
+  String? get color {
+    _$colorAtom.reportRead();
+    return super.color;
+  }
+
+  @override
+  set color(String? value) {
+    _$colorAtom.reportWrite(value, super.color, () {
+      super.color = value;
+    });
+  }
+
   late final _$stateAtom =
       Atom(name: '_UpdateMedicalShiftViewModelBase.state', context: context);
 
@@ -299,6 +315,18 @@ mixin _$UpdateMedicalShiftViewModel on _UpdateMedicalShiftViewModelBase, Store {
   }
 
   @override
+  void setColor(String? value) {
+    final _$actionInfo = _$_UpdateMedicalShiftViewModelBaseActionController
+        .startAction(name: '_UpdateMedicalShiftViewModelBase.setColor');
+    try {
+      return super.setColor(value);
+    } finally {
+      _$_UpdateMedicalShiftViewModelBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 hospitalName: ${hospitalName},
@@ -307,6 +335,7 @@ startDate: ${startDate},
 startHour: ${startHour},
 amount: ${amount},
 paid: ${paid},
+color: ${color},
 state: ${state},
 errorMessage: ${errorMessage},
 hospitalSuggestions: ${hospitalSuggestions},

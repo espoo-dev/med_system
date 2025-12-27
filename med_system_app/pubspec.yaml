@@ -61,7 +61,8 @@ dependencies:
   intl: any
   dartz: ^0.10.1
   equatable: ^2.0.5
-  win32: 5.5.0
+  flutter_colorpicker: ^1.1.0
+
 
 
 dev_dependencies:
@@ -153,5 +154,4 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
 
-dependency_overrides:
-  win32: 5.5.0
+

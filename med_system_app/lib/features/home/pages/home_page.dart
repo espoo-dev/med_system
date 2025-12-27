@@ -18,6 +18,7 @@ import 'package:distrito_medico/features/medical_shifts/pages/add_medical_shift_
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -39,6 +40,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     homeViewModel.fetchAllData();
   }
+
+
 
   _buildPageBody(BuildContext context) {
     return Observer(builder: (BuildContext context) {
@@ -117,14 +120,14 @@ class _HomePageState extends State<HomePage> {
               menuItems:
                   homeViewModel.selectedFilter == HomeFilterType.procedures
                       ? menuHomeModel.buildMenuHome(
-                          homeViewModel.totalProcedures.toString(),
-                          homeViewModel.totalPaidProcedures.toString(),
-                          homeViewModel.totalUnpaidProcedures.toString(),
+                          homeViewModel.totalProcedures,
+                          homeViewModel.totalPaidProcedures,
+                          homeViewModel.totalUnpaidProcedures,
                           context)
                       : menuHomeMedicalShiftsaModel.buildMenuHome(
-                          homeViewModel.totalMedicalShifts.toString(),
-                          homeViewModel.totalPaidMedicalShifts.toString(),
-                          homeViewModel.totalUnpaidMedicalShifts.toString(),
+                          homeViewModel.totalMedicalShifts,
+                          homeViewModel.totalPaidMedicalShifts,
+                          homeViewModel.totalUnpaidMedicalShifts,
                           context),
             ),
             homeViewModel.selectedFilter == HomeFilterType.procedures

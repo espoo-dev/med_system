@@ -19,6 +19,7 @@ class CreateMedicalShiftUseCase implements UseCase<MedicalShiftEntity, CreateMed
       startHour: params.startHour,
       amount: params.amount,
       paid: params.paid,
+      color: params.color,
     );
   }
 }
@@ -30,6 +31,7 @@ class CreateMedicalShiftParams extends Equatable {
   final String startHour;
   final double amount;
   final bool paid;
+  final String? color;
 
   const CreateMedicalShiftParams({
     required this.hospitalName,
@@ -38,6 +40,7 @@ class CreateMedicalShiftParams extends Equatable {
     required this.startHour,
     required this.amount,
     required this.paid,
+    this.color,
   });
 
   @override
@@ -48,5 +51,6 @@ class CreateMedicalShiftParams extends Equatable {
         startHour,
         amount,
         paid,
+        color,
       ];
 }

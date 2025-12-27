@@ -62,6 +62,8 @@ abstract class _PatientListViewModelBase with Store {
 
   @action
   Future<void> loadPatients({bool refresh = false}) async {
+    if (isLoading) return;
+
     if (refresh) {
       currentPage = 1;
       patients.clear();
@@ -86,11 +88,23 @@ abstract class _PatientListViewModelBase with Store {
         if (refresh) {
           patients.clear();
         }
-        patients.addAll(patientList);
+        
+        // Evita duplicação verificando se o item já existe (opcional, mas seguro)
+        // Ou simplesmente confia na paginação.
+        // Dado o relato de duplicação, vamos adicionar apenas os novos.
+        for (var patient in patientList) {
+          if (!patients.any((p) => p.id == patient.id)) {
+            patients.add(patient);
+          }
+        }
+        
         state = PatientListState.success;
         
-        if (!refresh) {
-          currentPage++;
+        // Só incrementa a página se retornou itens e se a quantidade retornada
+        // for igual ao perPage (indicando que pode haver mais).
+        // Como o perPage é 10000, dificilmente entrará aqui, o que é bom pois evita request da pag 2 indevido.
+        if (patientList.length >= perPage) {
+           currentPage++;
         }
       },
     );

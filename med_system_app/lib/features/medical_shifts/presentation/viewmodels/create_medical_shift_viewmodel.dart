@@ -59,6 +59,9 @@ abstract class _CreateMedicalShiftViewModelBase with Store {
   String? endDate;
 
   @observable
+  String? color;
+
+  @observable
   CreateMedicalShiftState state = CreateMedicalShiftState.idle;
 
   @observable
@@ -135,6 +138,9 @@ abstract class _CreateMedicalShiftViewModelBase with Store {
   void setEndDate(String? value) => endDate = value;
 
   @action
+  void setColor(String? value) => color = value;
+
+  @action
   Future<void> loadSuggestions() async {
     final hospResult = await getHospitalSuggestionsUseCase(const NoParams());
     hospResult.fold((l) {}, (r) => hospitalSuggestions = ObservableList.of(r));
@@ -157,6 +163,7 @@ abstract class _CreateMedicalShiftViewModelBase with Store {
       startHour: startHour,
       amount: amount,
       paid: paid,
+      color: color,
     );
 
     final result = await createMedicalShiftUseCase(params);
@@ -212,6 +219,7 @@ abstract class _CreateMedicalShiftViewModelBase with Store {
     dayOfWeek = null;
     dayOfMonth = null;
     endDate = null;
+    color = null;
     state = CreateMedicalShiftState.idle;
     errorMessage = '';
   }

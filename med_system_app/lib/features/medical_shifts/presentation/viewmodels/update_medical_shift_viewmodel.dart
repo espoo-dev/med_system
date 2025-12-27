@@ -10,7 +10,8 @@ part 'update_medical_shift_viewmodel.g.dart';
 enum UpdateMedicalShiftState { idle, loading, success, error }
 
 // ignore: library_private_types_in_public_api
-class UpdateMedicalShiftViewModel = _UpdateMedicalShiftViewModelBase with _$UpdateMedicalShiftViewModel;
+class UpdateMedicalShiftViewModel = _UpdateMedicalShiftViewModelBase
+    with _$UpdateMedicalShiftViewModel;
 
 abstract class _UpdateMedicalShiftViewModelBase with Store {
   final UpdateMedicalShiftUseCase updateMedicalShiftUseCase;
@@ -39,15 +40,18 @@ abstract class _UpdateMedicalShiftViewModelBase with Store {
 
   @observable
   double amount = 0.0;
-  
+
   // Helper for UI to show amount string, though UI can format double.
   // Actually UI uses setAmountCents with string.
   // I should provide getters if needed, but UI formats logic locally in TextField usually.
-  // But initial value for TextField comes from here. 
+  // But initial value for TextField comes from here.
   // I'll add a getter for amountString if needed.
 
   @observable
   bool paid = false;
+
+  @observable
+  String? color;
 
   @observable
   UpdateMedicalShiftState state = UpdateMedicalShiftState.idle;
@@ -74,57 +78,78 @@ abstract class _UpdateMedicalShiftViewModelBase with Store {
     id = entity.id;
     hospitalName = entity.hospitalName ?? '';
     workload = entity.workload ?? '';
-    startDate = entity.startDate ?? '';
-    startHour = entity.startHour ?? '';
+    startDate = entity.startDate ?? entity.date ?? '';
+    startHour = entity.startHour ?? entity.hour ?? '';
     if (entity.amountCents != null) {
-       // amountCents in Entity is String e.g. "R$ 1.000,00" or similar?
-       // Wait, Check entity definition.
-       // Step 93 `medical_shift_model.dart`: `String? amountCents`.
-       // `MedicalShiftEntity`: `String? amountCents`.
-       // Repository `getMedicalShifts` -> `MedicalShiftListModel.fromJson`.
-       // `MedicalShiftModel.fromJson` sets `amountCents` as String.
-       // `MedicalShiftRepositoryImpl` uses `(amount * 100).toInt()` for creating.
-       // But when reading, it reads what?
-       // `MedicalShiftModel.fromJson` (Step 18 in Step 98 summary, created file):
-       // `amountCents = json['amount_cents'];` which is dynamic?
-       // If API returns int (cents), `amountCents` in Model/Entity should probably be int?
-       // Or is it formatted string "10000"?
-       // Code in `EditMedicalShiftStore`:
-       // `editMedicalShiftStore.amountCents` is String.
-       // `EditMedicalShiftStore`: `setAmountCents(String)` 
-       // `addMedicalShiftStore`: `parseReal` logic.
-       // Ideally `Entity` has raw data.
-       // Start of code inspection: `c:\...\medical_shifts\model\medical_shift.model.dart` line 84:
-       // `amountCents = json['amount_cents'];`
-       // `String? amountCents;`
-       // If API returns int, and we assign to String? Dart runtime error if checking type? Or dynamic cast?
-       // If standard json decode, int to string doesn't happen automatically.
-       // `MedicalShiftRemoteDataSource`: `return MedicalShiftListModel.fromJson(json.decode(response.body));`
-       
-       // I should check `MedicalShiftEntity` definition again.
-       // Step 98 Summary: line 1 edited file. `MedicalShiftEntity`. I saw lines 1-71.
-       // I'll check `medical_shift_entity.dart`.
+      // amountCents in Entity is String e.g. "R$ 1.000,00" or similar?
+      // Wait, Check entity definition.
+      // Step 93 `medical_shift_model.dart`: `String? amountCents`.
+      // `MedicalShiftEntity`: `String? amountCents`.
+      // Repository `getMedicalShifts` -> `MedicalShiftListModel.fromJson`.
+      // `MedicalShiftModel.fromJson` sets `amountCents` as String.
+      // `MedicalShiftRepositoryImpl` uses `(amount * 100).toInt()` for creating.
+      // But when reading, it reads what?
+      // `MedicalShiftModel.fromJson` (Step 18 in Step 98 summary, created file):
+      // `amountCents = json['amount_cents'];` which is dynamic?
+      // If API returns int (cents), `amountCents` in Model/Entity should probably be int?
+      // Or is it formatted string "10000"?
+      // Code in `EditMedicalShiftStore`:
+      // `editMedicalShiftStore.amountCents` is String.
+      // `EditMedicalShiftStore`: `setAmountCents(String)`
+      // `addMedicalShiftStore`: `parseReal` logic.
+      // Ideally `Entity` has raw data.
+      // Start of code inspection: `c:\...\medical_shifts\model\medical_shift.model.dart` line 84:
+      // `amountCents = json['amount_cents'];`
+      // `String? amountCents;`
+      // If API returns int, and we assign to String? Dart runtime error if checking type? Or dynamic cast?
+      // If standard json decode, int to string doesn't happen automatically.
+      // `MedicalShiftRemoteDataSource`: `return MedicalShiftListModel.fromJson(json.decode(response.body));`
+
+      // I should check `MedicalShiftEntity` definition again.
+      // Step 98 Summary: line 1 edited file. `MedicalShiftEntity`. I saw lines 1-71.
+      // I'll check `medical_shift_entity.dart`.
     }
-    
+
     // Assuming Entity has amountCents as String (formatted or not).
     // If it is "R$ 100,00", parsing is hard.
     // If it is "10000" (cents string), it's easier.
-    
+
     // I will try to parse it.
     if (entity.amountCents != null) {
-       try {
-         // Remove non-digits
-         String digits = entity.amountCents!.replaceAll(RegExp(r'[^0-9]'), '');
-         int val = int.parse(digits);
-         amount = val / 100.0;
-       } catch (e) {
-         amount = 0.0;
-       }
+      try {
+        // Remove non-digits
+        String digits = entity.amountCents!.replaceAll(RegExp(r'[^0-9]'), '');
+        int val = int.parse(digits);
+        amount = val / 100.0;
+      } catch (e) {
+        amount = 0.0;
+      }
     } else {
       amount = 0.0;
     }
-    
+
     paid = entity.paid ?? false;
+    color = entity.color;
+
+    // Fix Workload Mapping
+    if (workload == '6h') {
+      workload = 'six';
+    } else if (workload == '12h') {
+      workload = 'twelve';
+    } else if (workload == '24h') {
+      workload = 'twenty_four';
+    }
+
+    // Fix Date Format if needed (yyyy-MM-dd -> dd/MM/yyyy)
+    if (startDate.contains('-')) {
+      try {
+        DateTime parsedDate = DateTime.parse(startDate);
+        startDate =
+            "${parsedDate.day.toString().padLeft(2, '0')}/${parsedDate.month.toString().padLeft(2, '0')}/${parsedDate.year}";
+      } catch (e) {
+        // Keep original if parse fails
+      }
+    }
   }
 
   @action
@@ -153,10 +178,13 @@ abstract class _UpdateMedicalShiftViewModelBase with Store {
   void setPaid(bool value) => paid = value;
 
   @action
+  void setColor(String? value) => color = value;
+
+  @action
   Future<void> loadSuggestions() async {
     final hospResult = await getHospitalSuggestionsUseCase(const NoParams());
     hospResult.fold((l) {}, (r) => hospitalSuggestions = ObservableList.of(r));
-    
+
     final amountResult = await getAmountSuggestionsUseCase(const NoParams());
     amountResult.fold((l) {}, (r) => amountSuggestions = ObservableList.of(r));
   }
@@ -168,7 +196,7 @@ abstract class _UpdateMedicalShiftViewModelBase with Store {
       state = UpdateMedicalShiftState.error;
       return;
     }
-  
+
     state = UpdateMedicalShiftState.loading;
     errorMessage = '';
 
@@ -180,6 +208,7 @@ abstract class _UpdateMedicalShiftViewModelBase with Store {
       startHour: startHour,
       amount: amount,
       paid: paid,
+      color: color,
     );
 
     final result = await updateMedicalShiftUseCase(params);

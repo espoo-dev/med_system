@@ -433,14 +433,29 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
                                           ),
                                         ],
                                       ),
-                                      trailing: Text(
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
-                                          medicalShift.amountCents ?? ""),
+                                      trailing: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          if (medicalShift.color != null)
+                                            Container(
+                                              width: 12,
+                                              height: 12,
+                                              margin: const EdgeInsets.only(right: 8),
+                                              decoration: BoxDecoration(
+                                                color: Color(int.parse(medicalShift.color!.replaceAll('#', '0xFF'))),
+                                                shape: BoxShape.circle,
+                                              ),
+                                            ),
+                                          Text(
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary),
+                                              medicalShift.amountCents ?? ""),
+                                        ],
+                                      ),
                                     ),
                                   );
                                 } else {

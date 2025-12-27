@@ -7,8 +7,8 @@ class MyInputTime extends StatefulWidget {
   final Color? fillColor;
   final Color? borderColor;
   final Color? textColor;
-  TimeOfDay? selectedTime;
-  Function? onChanged;
+  final TimeOfDay? selectedTime; // Changed to final
+  final Function? onChanged;    // Changed to final
 
   MyInputTime({
     super.key,
@@ -27,19 +27,28 @@ class MyInputTime extends StatefulWidget {
 }
 
 class _MyInputTimeState extends State<MyInputTime> {
+  TimeOfDay? _internalSelectedTime;
+
   @override
   void initState() {
     super.initState();
-    if (widget.selectedTime != null && widget.onChanged != null) {
-      widget.onChanged!(getSelectedTimeString());
+    _internalSelectedTime = widget.selectedTime;
+    // Initial onChanged call removed as it might be redundant or override controller/vm logic with old state if vm is trying to set it.
+  }
+
+  @override
+  void didUpdateWidget(MyInputTime oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.selectedTime != oldWidget.selectedTime) {
+      _internalSelectedTime = widget.selectedTime;
     }
   }
 
   String getSelectedTimeString() {
-    if (widget.selectedTime == null) return '';
+    if (_internalSelectedTime == null) return '';
 
-    String hour = widget.selectedTime!.hour.toString().padLeft(2, '0');
-    String minute = widget.selectedTime!.minute.toString().padLeft(2, '0');
+    String hour = _internalSelectedTime!.hour.toString().padLeft(2, '0');
+    String minute = _internalSelectedTime!.minute.toString().padLeft(2, '0');
 
     return '$hour:$minute';
   }
@@ -47,7 +56,7 @@ class _MyInputTimeState extends State<MyInputTime> {
   Future<void> _selectTime(BuildContext context) async {
     final time = await showTimePicker(
       context: context,
-      initialTime: widget.selectedTime ?? TimeOfDay.now(),
+      initialTime: _internalSelectedTime ?? TimeOfDay.now(),
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: Theme.of(context),
@@ -56,14 +65,14 @@ class _MyInputTimeState extends State<MyInputTime> {
       },
     );
 
-    setState(() {
-      if (time != null) {
-        widget.selectedTime = time;
-        if (widget.onChanged != null) {
-          widget.onChanged!(getSelectedTimeString());
-        }
+    if (time != null) {
+      setState(() {
+        _internalSelectedTime = time;
+      });
+      if (widget.onChanged != null) {
+        widget.onChanged!(getSelectedTimeString());
       }
-    });
+    }
   }
 
   @override

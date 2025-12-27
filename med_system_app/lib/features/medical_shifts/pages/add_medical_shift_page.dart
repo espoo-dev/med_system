@@ -12,6 +12,7 @@ import 'package:distrito_medico/features/medical_shifts/pages/widgets/radio_grou
 import 'package:distrito_medico/features/medical_shifts/presentation/viewmodels/create_medical_shift_viewmodel.dart';
 import 'package:distrito_medico/features/procedures/util/real_input_format.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
@@ -35,6 +36,7 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _viewModel = GetIt.I.get<CreateMedicalShiftViewModel>();
   final List<ReactionDisposer> _disposers = [];
+  bool _isColorInitialized = false;
 
   @override
   void didChangeDependencies() {
@@ -57,6 +59,24 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                 : "Ocorreu um erro ao tentar cadastrar.");
       }
     }));
+
+    if (!_isColorInitialized) {
+      final primary = Theme.of(context).colorScheme.primary;
+      String hexInt = primary.value.toRadixString(16).padLeft(8, '0').toUpperCase();
+      // toRadixString returns ARGB, we want RGB usually for hex codes if opacity isn't key, but format #AARRGGBB is fine if parsed correctly.
+      // The parser used later is: int.parse(_viewModel.color!.replaceAll('#', '0xFF')) which assumes the stored string is #RRGGBB and replaces # with 0xFF (full opacity).
+      // So I should store #RRGGBB.
+      if (hexInt.length == 8) {
+          hexInt = hexInt.substring(2);
+      }
+      String hex = '#$hexInt';
+      
+      // Only set if not already set (e.g. by user navigation back and forth without dispose? but reset is called on initState)
+      if (_viewModel.color == null) {
+          _viewModel.setColor(hex);
+      }
+      _isColorInitialized = true;
+    }
   }
 
   @override
@@ -598,6 +618,89 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                                 ),
                               ],
                             ],
+                          );
+                        }),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        // Color Picker
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text("Cor do evento",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              )),
+                        ),
+                        const SizedBox(height: 8),
+                        Observer(builder: (_) {
+                          Color currentColor = _viewModel.color != null
+                              ? Color(int.parse(_viewModel.color!.replaceAll('#', '0xFF')))
+                              : Theme.of(context).colorScheme.primary;
+
+                          return GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  Color pickerColor = currentColor;
+                                  return AlertDialog(
+                                    title: const Text('Escolha uma cor'),
+                                    content: SingleChildScrollView(
+                                      child: BlockPicker(
+                                        pickerColor: pickerColor,
+                                        onColorChanged: (Color color) {
+                                          pickerColor = color;
+                                        },
+                                      ),
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: const Text('Cancelar'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: const Text('Selecionar'),
+                                        onPressed: () {
+                                          // Format FF0000 -> #000000
+                                          String hex = pickerColor.value.toRadixString(16).padLeft(8, '0').toUpperCase();
+                                          if (hex.length == 8) {
+                                            hex = hex.substring(2);
+                                          }
+                                          String hexColor = '#$hex';
+                                          _viewModel.setColor(hexColor);
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            child: Container(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: currentColor,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: Colors.grey),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.palette, color: currentColor.computeLuminance() > 0.5 ? Colors.black : Colors.white),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    _viewModel.color ?? "Toque para selecionar",
+                                    style: TextStyle(
+                                      color: currentColor.computeLuminance() > 0.5 ? Colors.black : Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           );
                         }),
                         const SizedBox(
