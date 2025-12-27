@@ -18,7 +18,6 @@ import 'package:distrito_medico/features/medical_shifts/pages/add_medical_shift_
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
