@@ -1,5 +1,6 @@
 import 'package:distrito_medico/core/pages/success/success.page.dart';
 import 'package:distrito_medico/core/utils/navigation_utils.dart';
+import 'package:distrito_medico/core/utils/utils.dart';
 import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
 import 'package:distrito_medico/core/widgets/my_button_widget.dart';
 import 'package:distrito_medico/core/widgets/my_date_input.widget.dart';
@@ -85,14 +86,15 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
     _viewModel.reset(); // Reset viewmodel on entry
     _viewModel.loadSuggestions();
     
-    // Set initial date if provided
-    if (widget.initialDate != null) {
-      // Assuming format needed is String
-      // MyInputDate expects what? It emits normalized string.
-      // But _viewModel.startDate expects String.
-      String formatted = "${widget.initialDate!.day.toString().padLeft(2, '0')}/${widget.initialDate!.month.toString().padLeft(2, '0')}/${widget.initialDate!.year}";
-      _viewModel.setStartDate(formatted);
-    }
+    // Set initial date
+    final date = widget.initialDate ?? DateTime.now();
+    String formatted = "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}";
+    _viewModel.setStartDate(formatted);
+    
+    // Set initial time to current time
+    final now = TimeOfDay.now();
+    String timeFormatted = "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}";
+    _viewModel.setStartHour(timeFormatted);
   }
 
   List<String> addSpaceToCurrency(List<String> amounts) {
@@ -151,7 +153,6 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
   }
 
   Widget form(BuildContext context) {
-    TimeOfDay? selectedTime;
     return ListView(
       children: [
         SafeArea(
@@ -234,11 +235,15 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                         const SizedBox(
                           height: 15,
                         ),
-                        MyInputTime(
+                        Observer(builder: (_) {
+                          return MyInputTime(
+                            key: ValueKey(_viewModel.startHour),
                             label: 'Hora início',
-                            selectedTime: selectedTime,
+                            selectedTime: stringToTimeOfDay(_viewModel.startHour),
                             onChanged: _viewModel.setStartHour,
-                            textColor: Theme.of(context).colorScheme.primary),
+                            textColor: Theme.of(context).colorScheme.primary,
+                          );
+                        }),
                         const SizedBox(
                           height: 15,
                         ),
