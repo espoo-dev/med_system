@@ -32,6 +32,7 @@ abstract class IMedicalShiftRepository {
     required double amount,
     required String hospitalName,
     required String startHour,
+    String? color,
   });
 
   Future<Either<Failure, MedicalShiftEntity>> editMedicalShift({

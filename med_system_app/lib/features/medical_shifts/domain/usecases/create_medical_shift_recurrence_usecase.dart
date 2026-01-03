@@ -21,6 +21,7 @@ class CreateMedicalShiftRecurrenceUseCase implements UseCase<void, CreateMedical
       amount: params.amount,
       hospitalName: params.hospitalName,
       startHour: params.startHour,
+      color: params.color,
     );
   }
 }
@@ -35,6 +36,7 @@ class CreateMedicalShiftRecurrenceParams extends Equatable {
   final double amount;
   final String hospitalName;
   final String startHour;
+  final String? color;
 
   const CreateMedicalShiftRecurrenceParams({
     required this.frequency,
@@ -46,6 +48,7 @@ class CreateMedicalShiftRecurrenceParams extends Equatable {
     required this.amount,
     required this.hospitalName,
     required this.startHour,
+    this.color,
   });
 
   @override
@@ -59,5 +62,6 @@ class CreateMedicalShiftRecurrenceParams extends Equatable {
         amount,
         hospitalName,
         startHour,
+        color,
       ];
 }

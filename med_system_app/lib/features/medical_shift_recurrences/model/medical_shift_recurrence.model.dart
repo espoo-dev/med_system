@@ -9,6 +9,7 @@ class MedicalShiftRecurrenceModel {
   int? amountCents;
   String? hospitalName;
   String? startHour;
+  String? color;
 
   MedicalShiftRecurrenceModel({
     this.id,
@@ -21,6 +22,7 @@ class MedicalShiftRecurrenceModel {
     this.amountCents,
     this.hospitalName,
     this.startHour,
+    this.color,
   });
 
   MedicalShiftRecurrenceModel.fromJson(Map<String, dynamic> json) {
@@ -34,6 +36,7 @@ class MedicalShiftRecurrenceModel {
     amountCents = json['amount_cents'];
     hospitalName = json['hospital_name'];
     startHour = json['start_hour'];
+    color = json['color'];
   }
 
   Map<String, dynamic> toJson() {
@@ -48,6 +51,7 @@ class MedicalShiftRecurrenceModel {
     data['amount_cents'] = amountCents;
     data['hospital_name'] = hospitalName;
     data['start_hour'] = startHour;
+    data['color'] = color;
     return data;
   }
 }

@@ -76,6 +76,7 @@ class MedicalShiftRepositoryImpl implements IMedicalShiftRepository {
     required double amount,
     required String hospitalName,
     required String startHour,
+    String? color,
   }) async {
     try {
       final request = MedicalShiftRecurrenceModel(
@@ -88,6 +89,7 @@ class MedicalShiftRepositoryImpl implements IMedicalShiftRepository {
         amountCents: (amount * 100).toInt(),
         hospitalName: hospitalName,
         startHour: startHour,
+        color: color,
       );
       await remoteDataSource.createMedicalShiftRecurrence(request);
       return const Right(null);
