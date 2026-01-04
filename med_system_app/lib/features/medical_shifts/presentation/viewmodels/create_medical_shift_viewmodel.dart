@@ -193,6 +193,7 @@ abstract class _CreateMedicalShiftViewModelBase with Store {
         amount: amount,
         hospitalName: hospitalName,
         startHour: startHour,
+        color: color,
      );
 
      final result = await createMedicalShiftRecurrenceUseCase(recurrenceParams);
