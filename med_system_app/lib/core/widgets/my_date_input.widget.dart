@@ -33,6 +33,14 @@ class _MyInputDateState extends State<MyInputDate> {
   void initState() {
     super.initState();
     _internalSelectedDate = widget.selectedDate;
+    
+    // Call onChanged if we have an initial date to ensure parent is notified
+    if (_internalSelectedDate != null && widget.onChanged != null) {
+      // Use WidgetsBinding to call after build is complete
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget.onChanged!(getSelectedDateString());
+      });
+    }
   }
 
   @override

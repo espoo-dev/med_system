@@ -263,6 +263,21 @@ abstract class _UpdateEventProcedureViewModelBase with Store {
     return true;
   }
 
+  // Helper method to convert formatted currency string to cents
+  int _convertToCents(String formattedValue) {
+    if (formattedValue.isEmpty) return 0;
+    
+    // Remove all non-digit characters except comma and period
+    // The RealInputFormatter formats as "R$ 1.500,00"
+    // We need to extract just the digits
+    final digitsOnly = formattedValue.replaceAll(RegExp('[^0-9]'), '');
+    
+    if (digitsOnly.isEmpty) return 0;
+    
+    // The formatter already stores the value in cents (last 2 digits are cents)
+    return int.tryParse(digitsOnly) ?? 0;
+  }
+
   @action
   Future<void> updateEventProcedure() async {
     if (!isValidFullData || _eventProcedureId == null) {
@@ -297,14 +312,16 @@ abstract class _UpdateEventProcedureViewModelBase with Store {
         'id': null,
         'name': otherProcedureName,
         'code': null,
-        'amount_cents': int.tryParse(otherProcedureAmount) ?? 0,
+        'amount_cents': _convertToCents(otherProcedureAmount),
         'description': otherProcedureDescription,
         'custom': true
       };
       
+      // Add timestamp to custom health insurance name to avoid duplicates
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
       healthInsuranceAttributes = {
         'id': null,
-        'name': otherHealthInsuranceName,
+        'name': '${otherHealthInsuranceName}_$timestamp',
         'custom': true
       };
     }
