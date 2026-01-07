@@ -256,11 +256,11 @@ abstract class _CreateEventProcedureViewModelBase with Store {
         'custom': true
       };
       
-      // Add timestamp to custom health insurance name to avoid duplicates
-      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      
+      // Custom health insurance - no need for timestamp as backend handles uniqueness
       healthInsuranceAttributes = {
         'id': null,
-        'name': '${otherHealthInsuranceName}_$timestamp',
+        'name': otherHealthInsuranceName,
         'custom': true
       };
     }

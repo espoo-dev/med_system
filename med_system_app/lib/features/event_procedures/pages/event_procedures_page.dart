@@ -48,13 +48,10 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     // Reações podem ser adicionadas aqui se necessário, por exemplo, observando mensagens de erro globais
-    _disposers.add(reaction<String?>(
-        (_) => _viewModel.errorMessage, (message) {
+    _disposers.add(reaction<String?>((_) => _viewModel.errorMessage, (message) {
       if (message != null) {
         CustomToast.show(context,
-            type: ToastType.error,
-            title: "Erro",
-            description: message);
+            type: ToastType.error, title: "Erro", description: message);
       }
     }));
   }
@@ -76,7 +73,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
       infiniteScrolling();
       showFabButton();
     });
-    
+
     // Configura filtros iniciais se houver
     bool? initialPaidFilter;
     if (widget.initialFilter == InitialFilter.paid) {
@@ -85,10 +82,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
       initialPaidFilter = false;
     }
 
-    _viewModel.loadEventProcedures(
-      refresh: true, 
-      paid: initialPaidFilter
-    );
+    _viewModel.loadEventProcedures(refresh: true, paid: initialPaidFilter);
   }
 
   showFabButton() {
@@ -108,7 +102,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
             _scrollController.position.pixels &&
         !_viewModel.isLoading) {
       // ViewModel controla a paginação internamente
-      // Passamos os mesmos filtros atuais (o ViewModel poderia idealmente guardar o estado dos filtros, 
+      // Passamos os mesmos filtros atuais (o ViewModel poderia idealmente guardar o estado dos filtros,
       // mas aqui vamos apenas chamar load sem refresh para carregar a próxima página)
       _viewModel.loadEventProcedures(refresh: false);
     }
@@ -146,14 +140,13 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                 const FilterEventProceduresPage(),
               );
               if (filters != null && filters is Map<String, dynamic>) {
-                 _viewModel.loadEventProcedures(
-                   refresh: true,
-                   month: filters['month'],
-                   year: filters['year'],
-                   paid: filters['paid'],
-                   healthInsuranceName: filters['healthInsuranceName'],
-                   hospitalName: filters['hospitalName']
-                 );
+                _viewModel.loadEventProcedures(
+                    refresh: true,
+                    month: filters['month'],
+                    year: filters['year'],
+                    paid: filters['paid'],
+                    healthInsuranceName: filters['healthInsuranceName'],
+                    hospitalName: filters['hospitalName']);
               }
             },
           ],
@@ -185,21 +178,19 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                 onRefresh: _refreshProcedures,
                 child: Observer(
                   builder: (BuildContext context) {
-                    if (_viewModel.isLoading && _viewModel.eventProcedures.isEmpty) {
+                    if (_viewModel.isLoading &&
+                        _viewModel.eventProcedures.isEmpty) {
                       return const Center(child: CircularProgressIndicator());
                     }
-                    
-                    if (_viewModel.eventProcedures.isEmpty && !_viewModel.isLoading) {
+
+                    if (_viewModel.eventProcedures.isEmpty &&
+                        !_viewModel.isLoading) {
                       if (_viewModel.errorMessage != null) {
-                         return Center(
-                          child: ErrorRetryWidget(
-                              'Algo deu errado', 
-                              'Por favor, tente novamente.',
-                              () {
-                                _viewModel.loadEventProcedures(refresh: true);
-                              }
-                          )
-                        );
+                        return Center(
+                            child: ErrorRetryWidget('Algo deu errado',
+                                'Por favor, tente novamente.', () {
+                          _viewModel.loadEventProcedures(refresh: true);
+                        }));
                       }
 
                       return Column(
@@ -233,22 +224,24 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                         ],
                       );
                     }
-                    
+
                     return Stack(
                       children: [
                         SlidableAutoCloseBehavior(
                           closeWhenOpened: true,
                           child: ListView.separated(
                               controller: _scrollController,
-                              itemCount: _viewModel.isLoading 
+                              itemCount: _viewModel.isLoading
                                   ? _viewModel.eventProcedures.length + 1
                                   : _viewModel.eventProcedures.length,
                               itemBuilder: (BuildContext context, int index) {
                                 if (index < _viewModel.eventProcedures.length) {
-                                  final eventProcedures = _viewModel.eventProcedures[index];
+                                  final eventProcedures =
+                                      _viewModel.eventProcedures[index];
                                   return Slidable(
                                     key: ValueKey(eventProcedures.id),
-                                    startActionPane: !(eventProcedures.paid ?? false)
+                                    startActionPane: !(eventProcedures.paid ??
+                                            false)
                                         ? ActionPane(
                                             motion: const StretchMotion(),
                                             children: [
@@ -260,9 +253,13 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                                                   icon: Icons.check,
                                                   label: 'Pagar',
                                                   onPressed: (context) {
-                                                    if (eventProcedures.id != null) {
-                                                      _viewModel.updatePaymentStatus(
-                                                          eventProcedures.id!, true);
+                                                    if (eventProcedures.id !=
+                                                        null) {
+                                                      _viewModel
+                                                          .updatePaymentStatus(
+                                                              eventProcedures
+                                                                  .id!,
+                                                              true);
                                                     }
                                                   })
                                             ],
@@ -284,9 +281,12 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
                                                 textYes: 'Sim',
                                                 textNo: 'Não',
                                                 onPressedConfirm: () {
-                                                  if (eventProcedures.id != null) {
-                                                    _viewModel.deleteEventProcedure(
-                                                        eventProcedures.id!);
+                                                  if (eventProcedures.id !=
+                                                      null) {
+                                                    _viewModel
+                                                        .deleteEventProcedure(
+                                                            eventProcedures
+                                                                .id!);
                                                   }
                                                 },
                                                 onPressedCancel: () {},

@@ -9,6 +9,7 @@ import 'package:distrito_medico/features/patients/domain/entities/patient_entity
 import 'package:distrito_medico/features/patients/domain/usecases/get_all_patients_usecase.dart';
 import 'package:distrito_medico/features/procedures/domain/entities/procedure_entity.dart';
 import 'package:distrito_medico/features/procedures/domain/usecases/get_all_procedures_usecase.dart';
+import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 
 part 'update_event_procedure_viewmodel.g.dart';
@@ -127,21 +128,39 @@ abstract class _UpdateEventProcedureViewModelBase with Store {
     // Ideally we match from list to ensure consistency.
     
     try {
+      // Load hospitals and patients (always needed)
       await Future.wait([
         _loadHospitals(eventProcedure.hospital),
         _loadPatients(eventProcedure.patient),
-        _loadProcedures(eventProcedure.procedure),
-        _loadHealthInsurances(eventProcedure.healthInsurance)
       ]);
       
-      // Handle 'Others' fields if applicable
+      // Handle 'Others' fields if applicable (custom payment)
       if (paymentType != 'health_insurance') {
         otherProcedureName = eventProcedure.procedure ?? '';
-        otherProcedureAmount = eventProcedure.totalAmountCents ?? ''; // Using totalAmountCents
-        // Description?
-        // Health Insurance Other Name?
+        // Store only the cents value (digits) for RealInputFormatter to work correctly
+        otherProcedureAmount = eventProcedure.totalAmountCents ?? ''; 
+        otherProcedureDescription = eventProcedure.procedureDescription ?? '';
+        
+        // Remove timestamp suffix if present (format: name_timestamp)
+        String insuranceName = eventProcedure.healthInsurance ?? '';
+        if (insuranceName.contains('_')) {
+          // Check if the part after last underscore is a number (timestamp)
+          final parts = insuranceName.split('_');
+          if (parts.length >= 2 && int.tryParse(parts.last) != null) {
+            // Remove the timestamp suffix
+            otherHealthInsuranceName = parts.sublist(0, parts.length - 1).join('_');
+          } else {
+            otherHealthInsuranceName = insuranceName;
+          }
+        } else {
+          otherHealthInsuranceName = insuranceName;
+        }
       } else {
-         // If standard, finding in list should have set selectedProcedure/Insurance
+        // Load standard procedures and health insurances only for standard payment
+        await Future.wait([
+          _loadProcedures(eventProcedure.procedure),
+          _loadHealthInsurances(eventProcedure.healthInsurance)
+        ]);
       }
 
     } catch (e) {
@@ -258,6 +277,8 @@ abstract class _UpdateEventProcedureViewModelBase with Store {
     } else {
       if (otherProcedureName.isEmpty) return false;
       if (otherHealthInsuranceName.isEmpty) return false;
+      if (otherProcedureAmount.isEmpty) return false;
+      if (otherProcedureDescription.isEmpty) return false;
     }
     
     return true;
@@ -317,11 +338,10 @@ abstract class _UpdateEventProcedureViewModelBase with Store {
         'custom': true
       };
       
-      // Add timestamp to custom health insurance name to avoid duplicates
-      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      // Custom health insurance - no need for timestamp as backend handles uniqueness
       healthInsuranceAttributes = {
         'id': null,
-        'name': '${otherHealthInsuranceName}_$timestamp',
+        'name': otherHealthInsuranceName,
         'custom': true
       };
     }
