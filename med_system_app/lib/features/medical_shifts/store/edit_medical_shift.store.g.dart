@@ -161,6 +161,22 @@ mixin _$EditMedicalShiftStore on _EditMedicalShiftStoreBase, Store {
     });
   }
 
+  late final _$_colorAtom =
+      Atom(name: '_EditMedicalShiftStoreBase._color', context: context);
+
+  @override
+  String? get _color {
+    _$_colorAtom.reportRead();
+    return super._color;
+  }
+
+  @override
+  set _color(String? value) {
+    _$_colorAtom.reportWrite(value, super._color, () {
+      super._color = value;
+    });
+  }
+
   late final _$updateMedicalShiftAsyncAction = AsyncAction(
       '_EditMedicalShiftStoreBase.updateMedicalShift',
       context: context);
@@ -263,6 +279,17 @@ mixin _$EditMedicalShiftStore on _EditMedicalShiftStoreBase, Store {
         .startAction(name: '_EditMedicalShiftStoreBase.setpaid');
     try {
       return super.setpaid(paid);
+    } finally {
+      _$_EditMedicalShiftStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setColor(String? color) {
+    final _$actionInfo = _$_EditMedicalShiftStoreBaseActionController
+        .startAction(name: '_EditMedicalShiftStoreBase.setColor');
+    try {
+      return super.setColor(color);
     } finally {
       _$_EditMedicalShiftStoreBaseActionController.endAction(_$actionInfo);
     }

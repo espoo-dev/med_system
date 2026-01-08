@@ -88,6 +88,14 @@ abstract class _EditMedicalShiftStoreBase with Store {
     _paid = paid;
   }
 
+  @observable
+  String? _color;
+  get color => _color;
+  @action
+  void setColor(String? color) {
+    _color = color;
+  }
+
   @action
   void initializeWithShift(MedicalShiftModel shift) {
     _hospitalName = shift.hospitalName ?? "";
@@ -96,6 +104,7 @@ abstract class _EditMedicalShiftStoreBase with Store {
     _startHour = shift.hour ?? "";
     _amountCents = shift.amountCents?.toString() ?? "";
     _paid = shift.paid ?? false;
+    _color = shift.color;
   }
 
   bool validateHospitalName() {
@@ -140,6 +149,7 @@ abstract class _EditMedicalShiftStoreBase with Store {
           startHour: _startHour,
           amountCents: parseReal(_amountCents),
           paid: _paid,
+          color: _color,
         ),
       );
 
@@ -202,6 +212,7 @@ abstract class _EditMedicalShiftStoreBase with Store {
     _startHour = "";
     _amountCents = "";
     _paid = false;
+    _color = null;
     saveState = EditMedicalShiftState.idle;
   }
 

@@ -91,6 +91,14 @@ abstract class _AddMedicalShiftStoreBase with Store {
     _paid = paid;
   }
 
+  @observable
+  String? _color;
+  get color => _color;
+  @action
+  void setColor(String? color) {
+    _color = color;
+  }
+
   // Recurrence fields
   @observable
   bool _isRecurrent = false;
@@ -188,6 +196,7 @@ abstract class _AddMedicalShiftStoreBase with Store {
           startHour: _startHour,
           amountCents: parseReal(_amountCents),
           paid: _paid,
+          color: _color,
         ),
       );
 
@@ -217,6 +226,7 @@ abstract class _AddMedicalShiftStoreBase with Store {
         amountCents: parseReal(_amountCents),
         hospitalName: _hospitalName,
         startHour: _startHour,
+        color: _color,
       );
 
       await _recurrenceRepository.createMedicalShiftRecurrence(recurrenceModel);
@@ -276,6 +286,7 @@ abstract class _AddMedicalShiftStoreBase with Store {
     _startHour = "";
     _amountCents = "";
     _paid = false;
+    _color = null;
     _isRecurrent = false;
     _frequency = null;
     _dayOfWeek = null;

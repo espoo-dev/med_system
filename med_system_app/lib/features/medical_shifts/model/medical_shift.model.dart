@@ -13,6 +13,7 @@ class MedicalShiftModel {
   String? date;
   String? hour;
   int? medicalShiftRecurrenceId;
+  String? color;
 
   MedicalShiftModel(
       {this.id,
@@ -26,7 +27,8 @@ class MedicalShiftModel {
       this.shift,
       this.date,
       this.hour,
-      this.medicalShiftRecurrenceId});
+      this.medicalShiftRecurrenceId,
+      this.color});
 
   MedicalShiftModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -41,6 +43,7 @@ class MedicalShiftModel {
     date = json['date'];
     hour = json['hour'];
     medicalShiftRecurrenceId = json['medical_shift_recurrence_id'];
+    color = json['color'];
   }
 
   Map<String, dynamic> toJson() {
@@ -56,6 +59,7 @@ class MedicalShiftModel {
     data['shift'] = shift;
     data['hour'] = hour;
     data['medical_shift_recurrence_id'] = medicalShiftRecurrenceId;
+    data['color'] = color;
     return data;
   }
 
@@ -71,7 +75,8 @@ class MedicalShiftModel {
       String? shift,
       String? date,
       String? hour,
-      int? medicalShiftRecurrenceId}) {
+      int? medicalShiftRecurrenceId,
+      String? color}) {
     return MedicalShiftModel(
         id: id ?? this.id,
         hospitalName: hospitalName ?? this.hospitalName,
@@ -85,7 +90,8 @@ class MedicalShiftModel {
         date: date ?? this.date,
         hour: hour ?? this.hour,
         medicalShiftRecurrenceId:
-            medicalShiftRecurrenceId ?? this.medicalShiftRecurrenceId);
+            medicalShiftRecurrenceId ?? this.medicalShiftRecurrenceId,
+        color: color ?? this.color);
   }
 
   Icon get shiftIcon {
