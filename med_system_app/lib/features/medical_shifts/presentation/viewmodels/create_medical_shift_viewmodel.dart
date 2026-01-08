@@ -29,7 +29,7 @@ abstract class _CreateMedicalShiftViewModelBase with Store {
   String hospitalName = '';
 
   @observable
-  String workload = 'six';
+  String workload = '';
 
   @observable
   String startDate = '';
