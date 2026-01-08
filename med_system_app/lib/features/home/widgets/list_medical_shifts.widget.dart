@@ -1,6 +1,7 @@
 import 'package:distrito_medico/core/theme/icons.dart';
 import 'package:distrito_medico/core/utils/navigation_utils.dart';
 import 'package:distrito_medico/core/utils/utils.dart';
+import 'package:distrito_medico/core/utils/color_helper.dart';
 import 'package:distrito_medico/features/medical_shifts/model/medical_shift.model.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/edit_medical_shift_page.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/medical_shifts_page.dart';
@@ -76,6 +77,15 @@ class _ListMedicalShiftsWidgetState extends State<ListMedicalShiftsWidget> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(9),
                       color: const Color(0xFFECF2F3),
+                      border: Border(
+                        left: BorderSide(
+                          color: ColorHelper.hexToColor(
+                            item.color,
+                            defaultColor: ColorHelper.defaultMedicalShiftColor,
+                          ),
+                          width: 4,
+                        ),
+                      ),
                     ),
                     child: ListTile(
                       title: Row(

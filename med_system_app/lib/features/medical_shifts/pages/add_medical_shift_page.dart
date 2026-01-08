@@ -8,6 +8,8 @@ import 'package:distrito_medico/core/widgets/my_date_input.widget.dart';
 import 'package:distrito_medico/core/widgets/my_time_input.widget.dart';
 import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
 import 'package:distrito_medico/core/widgets/custom_switch.widget.dart';
+import 'package:distrito_medico/core/widgets/color_picker.widget.dart';
+import 'package:distrito_medico/core/utils/color_helper.dart';
 import 'package:distrito_medico/features/home/pages/home_page.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/medical_shifts_page.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/widgets/radio_group_workload.widget.dart';
@@ -291,6 +293,23 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
                           initialValue: false,
                           onChanged: addMedicalShiftStore.setpaid,
                         ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Observer(builder: (_) {
+                          return ColorPickerWidget(
+                            currentColor: ColorHelper.hexToColor(
+                              addMedicalShiftStore.color,
+                              defaultColor: ColorHelper.defaultMedicalShiftColor,
+                            ),
+                            onColorChanged: (color) {
+                              addMedicalShiftStore.setColor(
+                                ColorHelper.colorToHex(color),
+                              );
+                            },
+                            label: 'Cor do Plantão',
+                          );
+                        }),
                         // Recurrence Section
                         Observer(builder: (_) {
                           return Column(

@@ -1,4 +1,5 @@
 import 'package:distrito_medico/features/medical_shifts/model/medical_shift.model.dart';
+import 'package:distrito_medico/core/utils/color_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -130,30 +131,49 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   calendarBuilders: CalendarBuilders(
                     markerBuilder: (context, day, events) {
                       List<MedicalShiftModel> dayEvents = getEventsForDay(day);
-                      if (dayEvents.isNotEmpty) {
+                      if (dayEvents.isEmpty) {
+                        return const SizedBox();
+                      }
+
+                      // Se houver apenas um plantão, mostra um círculo com a cor
+                      if (dayEvents.length == 1) {
                         return Positioned(
                           bottom: 1,
-                          right: 1,
                           child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: const BoxDecoration(
-                              color: Colors.red,
+                            width: 6,
+                            height: 6,
+                            decoration: BoxDecoration(
+                              color: ColorHelper.hexToColor(
+                                dayEvents[0].color,
+                                defaultColor: ColorHelper.defaultMedicalShiftColor,
+                              ),
                               shape: BoxShape.circle,
                             ),
-                            child: dayEvents.length > 1
-                                ? Text(
-                                    '${dayEvents.length}',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                : null,
                           ),
                         );
                       }
-                      return const SizedBox();
+
+                      // Se houver múltiplos plantões, mostra múltiplos pontos coloridos
+                      return Positioned(
+                        bottom: 1,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: dayEvents.take(3).map((shift) {
+                            return Container(
+                              width: 5,
+                              height: 5,
+                              margin: const EdgeInsets.symmetric(horizontal: 1),
+                              decoration: BoxDecoration(
+                                color: ColorHelper.hexToColor(
+                                  shift.color,
+                                  defaultColor: ColorHelper.defaultMedicalShiftColor,
+                                ),
+                                shape: BoxShape.circle,
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      );
                     },
                   ),
                   locale: 'pt_BR',

@@ -8,6 +8,8 @@ import 'package:distrito_medico/core/widgets/my_date_input.widget.dart';
 import 'package:distrito_medico/core/widgets/my_time_input.widget.dart';
 import 'package:distrito_medico/core/widgets/my_toast.widget.dart';
 import 'package:distrito_medico/core/widgets/custom_switch.widget.dart';
+import 'package:distrito_medico/core/widgets/color_picker.widget.dart';
+import 'package:distrito_medico/core/utils/color_helper.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/medical_shifts_page.dart';
 import 'package:distrito_medico/features/medical_shifts/pages/widgets/radio_group_workload.widget.dart';
 import 'package:distrito_medico/features/medical_shifts/store/edit_medical_shift.store.dart';
@@ -268,6 +270,21 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
                   initialValue: editMedicalShiftStore.paid,
                   onChanged: editMedicalShiftStore.setpaid,
                 ),
+                const SizedBox(height: 15),
+                Observer(builder: (_) {
+                  return ColorPickerWidget(
+                    currentColor: ColorHelper.hexToColor(
+                      editMedicalShiftStore.color,
+                      defaultColor: ColorHelper.defaultMedicalShiftColor,
+                    ),
+                    onColorChanged: (color) {
+                      editMedicalShiftStore.setColor(
+                        ColorHelper.colorToHex(color),
+                      );
+                    },
+                    label: 'Cor do Plantão',
+                  );
+                }),
                 const SizedBox(height: 15),
                 Center(
                   child: Observer(builder: (_) {

@@ -1,6 +1,7 @@
 import 'package:distrito_medico/core/theme/icons.dart';
 import 'package:distrito_medico/core/utils/delete_recurrence_dialog.dart';
 import 'package:distrito_medico/core/utils/ui.dart';
+import 'package:distrito_medico/core/utils/color_helper.dart';
 import 'package:distrito_medico/core/widgets/bottom_bar_widget.dart';
 import 'package:distrito_medico/core/widgets/error.widget.dart';
 import 'package:distrito_medico/core/widgets/ext_fab.widget.dart';
@@ -366,20 +367,37 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
                                                 medicalShift:
                                                     medicalShiftModel));
                                       },
-                                      leading: SvgPicture.asset(
-                                        medicalShiftModel.paid!
-                                            ? iconCheckCoreAsset
-                                            : iconCloseCoreAsset,
-                                        width: 32,
-                                        height: 32,
-                                        colorFilter: ColorFilter.mode(
-                                          medicalShiftModel.paid!
-                                              ? Theme.of(context)
-                                                  .colorScheme
-                                                  .primary
-                                              : const Color(0xFFEC2A58),
-                                          BlendMode.srcIn,
-                                        ),
+                                      leading: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                            width: 4,
+                                            height: 48,
+                                            decoration: BoxDecoration(
+                                              color: ColorHelper.hexToColor(
+                                                medicalShiftModel.color,
+                                                defaultColor: ColorHelper.defaultMedicalShiftColor,
+                                              ),
+                                              borderRadius: BorderRadius.circular(2),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 12),
+                                          SvgPicture.asset(
+                                            medicalShiftModel.paid!
+                                                ? iconCheckCoreAsset
+                                                : iconCloseCoreAsset,
+                                            width: 32,
+                                            height: 32,
+                                            colorFilter: ColorFilter.mode(
+                                              medicalShiftModel.paid!
+                                                  ? Theme.of(context)
+                                                      .colorScheme
+                                                      .primary
+                                                  : const Color(0xFFEC2A58),
+                                              BlendMode.srcIn,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                       title: Text(
                                         medicalShiftModel.title ?? "",
