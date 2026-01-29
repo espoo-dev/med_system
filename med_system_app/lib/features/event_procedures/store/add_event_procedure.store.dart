@@ -215,6 +215,19 @@ abstract class _AddEventProcedureStoreBase with Store {
     _createdDate = createdDate;
   }
 
+  DateTime get date {
+    if (_createdDate.isEmpty) {
+      return DateTime.now();
+    }
+    try {
+      List<String> listDate = _createdDate.split("/");
+      return DateTime(int.parse(listDate[2]), int.parse(listDate[1]),
+          int.parse(listDate[0]));
+    } catch (e) {
+      return DateTime.now();
+    }
+  }
+
   bool validateCreatedDate() {
     if (_createdDate.isEmpty) {
       return false;
