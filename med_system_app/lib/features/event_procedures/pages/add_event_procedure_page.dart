@@ -159,7 +159,7 @@ class _AddEventProcedureState extends State<AddEventProcedurePage> {
                           onChanged: addEventProcedureStore.setCreatedDate,
                           label: 'Data',
                           textColor: Theme.of(context).colorScheme.primary,
-                          selectedDate: DateTime.now(),
+                          selectedDate: addEventProcedureStore.date,
                         ),
                         const SizedBox(
                           height: 15,

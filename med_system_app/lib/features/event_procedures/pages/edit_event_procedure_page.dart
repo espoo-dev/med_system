@@ -63,6 +63,8 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
     editEventProcedureStore.setUrgency(widget.eventProcedures.urgency ?? false);
     editEventProcedureStore
         .setAccommodation(widget.eventProcedures.roomType ?? "");
+    editEventProcedureStore
+        .setCreatedDate(widget.eventProcedures.date ?? "");
   }
 
   @override
@@ -184,8 +186,7 @@ class _EditEventProcedureState extends State<EditEventProcedurePage> {
                           onChanged: editEventProcedureStore.setCreatedDate,
                           label: 'Data',
                           textColor: Theme.of(context).colorScheme.primary,
-                          selectedDate: convertStringToDate(
-                              widget.eventProcedures.date ?? ""),
+                          selectedDate: editEventProcedureStore.date,
                         ),
                         const SizedBox(
                           height: 15,
