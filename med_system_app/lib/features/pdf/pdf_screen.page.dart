@@ -31,11 +31,12 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
     super.dispose();
   }
 
-  Future<void> sharePdf(XFile pdfFile) async {
+  Future<void> sharePdf(XFile pdfFile, Rect? sharePositionOrigin) async {
     try {
       await Share.shareXFiles(
         [pdfFile],
         text: "Relatório de procedimento",
+        sharePositionOrigin: sharePositionOrigin,
       );
     } catch (e) {
       // ignore: use_build_context_synchronously
@@ -51,13 +52,18 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.share),
-            onPressed: () async {
-              final pdfFile = XFile(widget.pdfPath);
-              await sharePdf(pdfFile);
-            },
-          ),
+          Builder(builder: (context) {
+            return IconButton(
+              icon: const Icon(Icons.share),
+              onPressed: () async {
+                final box = context.findRenderObject() as RenderBox?;
+                final sharePositionOrigin =
+                    box != null ? box.localToGlobal(Offset.zero) & box.size : null;
+                final pdfFile = XFile(widget.pdfPath);
+                await sharePdf(pdfFile, sharePositionOrigin);
+              },
+            );
+          }),
         ],
       ),
       body: Column(
