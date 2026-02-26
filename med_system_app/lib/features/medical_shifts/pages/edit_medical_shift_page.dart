@@ -62,6 +62,10 @@ class _EditMedicalShiftPageState extends State<EditMedicalShiftPage> {
     editMedicalShiftStore.initializeWithShift(widget.medicalShift);
     editMedicalShiftStore.getAmountSuggestions();
     editMedicalShiftStore.getHospitalNameSuggestions();
+    if (editMedicalShiftStore.color == null) {
+      editMedicalShiftStore.setColor(
+          ColorHelper.colorToHex(ColorHelper.defaultMedicalShiftColor));
+    }
   }
 
   @override
