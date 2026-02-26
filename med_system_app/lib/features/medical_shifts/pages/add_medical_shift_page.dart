@@ -66,6 +66,10 @@ class _AddMedicalShiftPageState extends State<AddMedicalShiftPage> {
     super.initState();
     addMedicalShiftStore.getAmountSuggestions();
     addMedicalShiftStore.getHospitalNameSuggestions();
+    if (addMedicalShiftStore.color == null) {
+      addMedicalShiftStore.setColor(
+          ColorHelper.colorToHex(ColorHelper.defaultMedicalShiftColor));
+    }
   }
 
   List<String> addSpaceToCurrency(List<String> amounts) {
