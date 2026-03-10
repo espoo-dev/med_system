@@ -138,7 +138,7 @@ class _MedicalShiftsPageState extends State<MedicalShiftsPage> {
       child: Scaffold(
         appBar: MyAppBar(
           title: 'Plantões',
-          hideLeading: true,
+          hideLeading: false,
           trailingIcons: const [
             Icon(Icons.description),
             Icon(Icons.filter_list),

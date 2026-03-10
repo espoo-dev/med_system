@@ -166,7 +166,7 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
       child: Scaffold(
         appBar: MyAppBar(
           title: 'Procedimentos',
-          hideLeading: true,
+          hideLeading: false,
           trailingIcons: const [
             Icon(Icons.description),
             Icon(Icons.filter_list)

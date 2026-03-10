@@ -269,19 +269,25 @@ class MedicalShiftRepository {
     return null;
   }
 
-  Future<Result<Response>?> generatePdfReport(
-      {String? entityName,
-      int? month,
-      int? year,
-      bool? paid,
-      String? hospitalName}) async {
+  Future<Result<Response>?> generatePdfReport({
+    String? entityName,
+    int? month,
+    int? year,
+    bool? paid,
+    String? hospitalName,
+    bool? hideValues,
+    List<int>? ids,
+  }) async {
     try {
       final response = await medicalShiftService.generatePdfReport(
-          entityName: 'medical_shifts',
-          month: month,
-          year: year,
-          paid: paid,
-          hospitalName: hospitalName);
+        entityName: 'medical_shifts',
+        month: month,
+        year: year,
+        paid: paid,
+        hospitalName: hospitalName,
+        hideValues: hideValues,
+        ids: ids,
+      );
 
       if (response.isSuccessful) {
         return Result.success(response);

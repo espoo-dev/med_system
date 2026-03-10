@@ -63,6 +63,12 @@ abstract class _EventProcedureStore with Store {
   String pdfErrorMessage = "";
 
   @observable
+  bool? hideValues = false;
+
+  @observable
+  ObservableList<int> selectedEventProcedureIds = ObservableList<int>();
+
+  @observable
   String _pdfPath = "";
   get pdfPath => _pdfPath;
 
@@ -92,6 +98,9 @@ abstract class _EventProcedureStore with Store {
 
   @observable
   String? healthInsuranceName;
+
+  @observable
+  String? patientName;
 
   @observable
   HealthInsurance? _healthInsurance;
@@ -152,7 +161,11 @@ abstract class _EventProcedureStore with Store {
     selectedMonth = null;
     selectedPaymentStatus = null;
     hospitalName = null;
+    hospitalName = null;
     healthInsuranceName = null;
+    patientName = null;
+    hideValues = false;
+    selectedEventProcedureIds.clear();
   }
 
   String getMonthName(int month) {
@@ -240,7 +253,8 @@ abstract class _EventProcedureStore with Store {
             year: selectedYear,
             paid: selectedPaymentStatus,
             healthInsuranceName: healthInsuranceName,
-            hospitalName: hospitalName)
+            hospitalName: hospitalName,
+            patientName: patientName)
         .asObservable();
 
     resultEventProcedures?.when(
@@ -315,6 +329,7 @@ abstract class _EventProcedureStore with Store {
     //selectedYear = null;
     hospitalName = null;
     healthInsuranceName = null;
+    patientName = null;
   }
 
   @action
@@ -323,11 +338,14 @@ abstract class _EventProcedureStore with Store {
 
     Result<Response>? pdfResult =
         await _eventProcedureRepository.generatePdfReport(
-            month: selectedMonth,
-            year: selectedYear,
-            paid: selectedPaymentStatus,
-            healthInsuranceName: healthInsuranceName,
-            hospitalName: hospitalName);
+        month: selectedMonth,
+        year: selectedYear,
+        paid: selectedPaymentStatus,
+        healthInsuranceName: healthInsuranceName,
+        hospitalName: hospitalName,
+        hideValues: hideValues,
+        ids: selectedEventProcedureIds.isEmpty ? null : selectedEventProcedureIds.toList(),
+      );
 
     pdfResult?.when(
       success: (response) async {

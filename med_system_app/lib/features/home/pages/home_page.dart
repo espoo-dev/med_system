@@ -1,4 +1,5 @@
 import 'package:distrito_medico/core/utils/navigation_utils.dart';
+import 'package:distrito_medico/features/home/pages/search_patient_page.dart';
 import 'package:distrito_medico/core/widgets/error.widget.dart';
 import 'package:distrito_medico/core/widgets/my_horizontal_menu.widget.dart';
 import 'package:distrito_medico/features/event_procedures/model/event_procedure.model.dart';
@@ -32,11 +33,31 @@ class _HomePageState extends State<HomePage> {
       MenuHomeMedicalSfhitModel();
   final homeStore = GetIt.I.get<HomeStore>();
   final List<EventProcedures> _listEventProcedures = [];
+  
+  bool _isSearchExpanded = false;
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     homeStore.fetchAllData();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchSubmit() {
+    if (_searchController.text.isNotEmpty) {
+      final query = _searchController.text;
+      setState(() {
+        _isSearchExpanded = false;
+        _searchController.clear();
+      });
+      push(context, SearchPatientPage(initialQuery: query));
+    }
   }
 
   _buildPageBody(BuildContext context) {
@@ -103,7 +124,7 @@ class _HomePageState extends State<HomePage> {
                     showCheckmark: false,
                     labelStyle: TextStyle(
                       color: homeStore.selectedFilter ==
-                              HomeFilterType.medicalShifts
+                                HomeFilterType.medicalShifts
                           ? Colors.white
                           : Colors.black,
                     ),
@@ -179,6 +200,70 @@ class _HomePageState extends State<HomePage> {
           child: Stack(
             children: [
               _buildPageBody(context),
+              
+              // Bubble Search Field (WhatsApp style)
+              if (_isSearchExpanded)
+                Positioned(
+                  bottom: 90,
+                  right: 20,
+                  child: Material(
+                    elevation: 8,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(5), // Tail effect
+                    ),
+                    color: Colors.white,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      width: MediaQuery.of(context).size.width * 0.75,
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _searchController,
+                              autofocus: true,
+                              decoration: const InputDecoration(
+                                hintText: 'Nome do paciente...',
+                                border: InputBorder.none,
+                                hintStyle: TextStyle(fontSize: 14),
+                              ),
+                              onSubmitted: (_) => _onSearchSubmit(),
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.send, color: Theme.of(context).colorScheme.primary),
+                            onPressed: _onSearchSubmit,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+              // Search FAB on the right
+              Positioned(
+                bottom: 20,
+                right: 20,
+                child: FloatingActionButton(
+                  mini: true,
+                  onPressed: () {
+                    setState(() {
+                      _isSearchExpanded = !_isSearchExpanded;
+                      if (!_isSearchExpanded) {
+                        _searchController.clear();
+                      }
+                    });
+                  },
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  child: Icon(
+                    _isSearchExpanded ? Icons.close : Icons.search,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
             ],
           ),
         ),

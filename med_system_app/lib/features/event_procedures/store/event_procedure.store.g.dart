@@ -121,6 +121,39 @@ mixin _$EventProcedureStore on _EventProcedureStore, Store {
     });
   }
 
+  late final _$hideValuesAtom =
+      Atom(name: '_EventProcedureStore.hideValues', context: context);
+
+  @override
+  bool? get hideValues {
+    _$hideValuesAtom.reportRead();
+    return super.hideValues;
+  }
+
+  @override
+  set hideValues(bool? value) {
+    _$hideValuesAtom.reportWrite(value, super.hideValues, () {
+      super.hideValues = value;
+    });
+  }
+
+  late final _$selectedEventProcedureIdsAtom = Atom(
+      name: '_EventProcedureStore.selectedEventProcedureIds', context: context);
+
+  @override
+  ObservableList<int> get selectedEventProcedureIds {
+    _$selectedEventProcedureIdsAtom.reportRead();
+    return super.selectedEventProcedureIds;
+  }
+
+  @override
+  set selectedEventProcedureIds(ObservableList<int> value) {
+    _$selectedEventProcedureIdsAtom
+        .reportWrite(value, super.selectedEventProcedureIds, () {
+      super.selectedEventProcedureIds = value;
+    });
+  }
+
   late final _$_pdfPathAtom =
       Atom(name: '_EventProcedureStore._pdfPath', context: context);
 
@@ -264,6 +297,22 @@ mixin _$EventProcedureStore on _EventProcedureStore, Store {
   set healthInsuranceName(String? value) {
     _$healthInsuranceNameAtom.reportWrite(value, super.healthInsuranceName, () {
       super.healthInsuranceName = value;
+    });
+  }
+
+  late final _$patientNameAtom =
+      Atom(name: '_EventProcedureStore.patientName', context: context);
+
+  @override
+  String? get patientName {
+    _$patientNameAtom.reportRead();
+    return super.patientName;
+  }
+
+  @override
+  set patientName(String? value) {
+    _$patientNameAtom.reportWrite(value, super.patientName, () {
+      super.patientName = value;
     });
   }
 
@@ -448,11 +497,14 @@ editState: ${editState},
 deleteSate: ${deleteSate},
 pdfState: ${pdfState},
 pdfErrorMessage: ${pdfErrorMessage},
+hideValues: ${hideValues},
+selectedEventProcedureIds: ${selectedEventProcedureIds},
 selectedYear: ${selectedYear},
 selectedMonth: ${selectedMonth},
 selectedPaymentStatus: ${selectedPaymentStatus},
 hospitalName: ${hospitalName},
-healthInsuranceName: ${healthInsuranceName}
+healthInsuranceName: ${healthInsuranceName},
+patientName: ${patientName}
     ''';
   }
 }
