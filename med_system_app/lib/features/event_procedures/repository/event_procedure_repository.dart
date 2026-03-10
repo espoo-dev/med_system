@@ -16,7 +16,8 @@ class EventProcedureRepository {
       int? year,
       bool? paid,
       String? healthInsuranceName,
-      String? hospitalName}) async {
+      String? hospitalName,
+      String? patientName}) async {
     try {
       final response = await eventProcedureService.getEventProceduresByFilters(
           page: page,
@@ -25,7 +26,8 @@ class EventProcedureRepository {
           year: year,
           paid: paid,
           healthInsuranceName: healthInsuranceName,
-          hospitalName: hospitalName);
+          hospitalName: hospitalName,
+          patientName: patientName);
       if (response.isSuccessful) {
         EventProcedureModel? eventProcedureModel =
             EventProcedureModel.fromJson(json.decode(response.body));

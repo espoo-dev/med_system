@@ -51,6 +51,7 @@ abstract class EventProcedureService extends ChopperService {
     @Query('paid') bool? paid,
     @Query('health_insurance[name]') String? healthInsuranceName,
     @Query('hospital[name]') String? hospitalName,
+    @Query('patient[name]') String? patientName,
   });
 
   @Get(path: 'api/v1/pdf_reports/generate')

@@ -33,7 +33,8 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: hideLeading
           ? null
           : IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+              icon: Icon(Icons.arrow_back_ios_new,
+                  color: Theme.of(context).colorScheme.primary),
               onPressed: onPressed ?? () => Navigator.of(context).pop(),
             ),
       actions: trailingIcons != null && trailingIcons!.isNotEmpty

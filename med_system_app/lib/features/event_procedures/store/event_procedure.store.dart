@@ -100,6 +100,9 @@ abstract class _EventProcedureStore with Store {
   String? healthInsuranceName;
 
   @observable
+  String? patientName;
+
+  @observable
   HealthInsurance? _healthInsurance;
 
   HealthInsurance? get healthInsurance => _healthInsurance;
@@ -160,6 +163,7 @@ abstract class _EventProcedureStore with Store {
     hospitalName = null;
     hospitalName = null;
     healthInsuranceName = null;
+    patientName = null;
     hideValues = false;
     selectedEventProcedureIds.clear();
   }
@@ -249,7 +253,8 @@ abstract class _EventProcedureStore with Store {
             year: selectedYear,
             paid: selectedPaymentStatus,
             healthInsuranceName: healthInsuranceName,
-            hospitalName: hospitalName)
+            hospitalName: hospitalName,
+            patientName: patientName)
         .asObservable();
 
     resultEventProcedures?.when(
@@ -324,6 +329,7 @@ abstract class _EventProcedureStore with Store {
     //selectedYear = null;
     hospitalName = null;
     healthInsuranceName = null;
+    patientName = null;
   }
 
   @action

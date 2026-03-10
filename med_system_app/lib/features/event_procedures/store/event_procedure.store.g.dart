@@ -300,6 +300,22 @@ mixin _$EventProcedureStore on _EventProcedureStore, Store {
     });
   }
 
+  late final _$patientNameAtom =
+      Atom(name: '_EventProcedureStore.patientName', context: context);
+
+  @override
+  String? get patientName {
+    _$patientNameAtom.reportRead();
+    return super.patientName;
+  }
+
+  @override
+  set patientName(String? value) {
+    _$patientNameAtom.reportWrite(value, super.patientName, () {
+      super.patientName = value;
+    });
+  }
+
   late final _$_healthInsuranceAtom =
       Atom(name: '_EventProcedureStore._healthInsurance', context: context);
 
@@ -487,7 +503,8 @@ selectedYear: ${selectedYear},
 selectedMonth: ${selectedMonth},
 selectedPaymentStatus: ${selectedPaymentStatus},
 hospitalName: ${hospitalName},
-healthInsuranceName: ${healthInsuranceName}
+healthInsuranceName: ${healthInsuranceName},
+patientName: ${patientName}
     ''';
   }
 }
