@@ -192,6 +192,8 @@ final class _$EventProcedureService extends EventProcedureService {
     bool? paid,
     String? healthInsuranceName,
     String? hospitalName,
+    bool? hideValues,
+    List<int>? ids,
   }) {
     final Uri $url = Uri.parse('/api/v1/pdf_reports/generate');
     final Map<String, dynamic> $params = <String, dynamic>{
@@ -201,6 +203,8 @@ final class _$EventProcedureService extends EventProcedureService {
       'paid': paid,
       'health_insurance[name]': healthInsuranceName,
       'hospital[name]': hospitalName,
+      'hide_values': hideValues,
+      'ids[]': ids,
     };
     final Request $request = Request(
       'GET',

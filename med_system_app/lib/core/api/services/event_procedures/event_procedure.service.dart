@@ -61,5 +61,7 @@ abstract class EventProcedureService extends ChopperService {
     @Query('paid') bool? paid,
     @Query('health_insurance[name]') String? healthInsuranceName,
     @Query('hospital[name]') String? hospitalName,
+    @Query('hide_values') bool? hideValues,
+    @Query('ids[]') List<int>? ids,
   });
 }

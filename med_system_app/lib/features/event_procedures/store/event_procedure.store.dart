@@ -63,6 +63,12 @@ abstract class _EventProcedureStore with Store {
   String pdfErrorMessage = "";
 
   @observable
+  bool? hideValues = false;
+
+  @observable
+  ObservableList<int> selectedEventProcedureIds = ObservableList<int>();
+
+  @observable
   String _pdfPath = "";
   get pdfPath => _pdfPath;
 
@@ -152,7 +158,10 @@ abstract class _EventProcedureStore with Store {
     selectedMonth = null;
     selectedPaymentStatus = null;
     hospitalName = null;
+    hospitalName = null;
     healthInsuranceName = null;
+    hideValues = false;
+    selectedEventProcedureIds.clear();
   }
 
   String getMonthName(int month) {
@@ -323,11 +332,14 @@ abstract class _EventProcedureStore with Store {
 
     Result<Response>? pdfResult =
         await _eventProcedureRepository.generatePdfReport(
-            month: selectedMonth,
-            year: selectedYear,
-            paid: selectedPaymentStatus,
-            healthInsuranceName: healthInsuranceName,
-            hospitalName: hospitalName);
+        month: selectedMonth,
+        year: selectedYear,
+        paid: selectedPaymentStatus,
+        healthInsuranceName: healthInsuranceName,
+        hospitalName: hospitalName,
+        hideValues: hideValues,
+        ids: selectedEventProcedureIds.isEmpty ? null : selectedEventProcedureIds.toList(),
+      );
 
     pdfResult?.when(
       success: (response) async {

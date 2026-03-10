@@ -236,6 +236,40 @@ mixin _$MedicalShiftStore on _MedicalShiftStoreBase, Store {
     });
   }
 
+  late final _$hideValuesAtom =
+      Atom(name: '_MedicalShiftStoreBase.hideValues', context: context);
+
+  @override
+  bool? get hideValues {
+    _$hideValuesAtom.reportRead();
+    return super.hideValues;
+  }
+
+  @override
+  set hideValues(bool? value) {
+    _$hideValuesAtom.reportWrite(value, super.hideValues, () {
+      super.hideValues = value;
+    });
+  }
+
+  late final _$selectedEventProcedureIdsAtom = Atom(
+      name: '_MedicalShiftStoreBase.selectedEventProcedureIds',
+      context: context);
+
+  @override
+  ObservableList<int> get selectedEventProcedureIds {
+    _$selectedEventProcedureIdsAtom.reportRead();
+    return super.selectedEventProcedureIds;
+  }
+
+  @override
+  set selectedEventProcedureIds(ObservableList<int> value) {
+    _$selectedEventProcedureIdsAtom
+        .reportWrite(value, super.selectedEventProcedureIds, () {
+      super.selectedEventProcedureIds = value;
+    });
+  }
+
   late final _$_pdfPathAtom =
       Atom(name: '_MedicalShiftStoreBase._pdfPath', context: context);
 
@@ -457,7 +491,9 @@ selectedPaymentStatus: ${selectedPaymentStatus},
 hospitalName: ${hospitalName},
 healthInsuranceName: ${healthInsuranceName},
 pdfState: ${pdfState},
-pdfErrorMessage: ${pdfErrorMessage}
+pdfErrorMessage: ${pdfErrorMessage},
+hideValues: ${hideValues},
+selectedEventProcedureIds: ${selectedEventProcedureIds}
     ''';
   }
 }

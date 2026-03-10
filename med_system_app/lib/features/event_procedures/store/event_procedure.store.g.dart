@@ -121,6 +121,39 @@ mixin _$EventProcedureStore on _EventProcedureStore, Store {
     });
   }
 
+  late final _$hideValuesAtom =
+      Atom(name: '_EventProcedureStore.hideValues', context: context);
+
+  @override
+  bool? get hideValues {
+    _$hideValuesAtom.reportRead();
+    return super.hideValues;
+  }
+
+  @override
+  set hideValues(bool? value) {
+    _$hideValuesAtom.reportWrite(value, super.hideValues, () {
+      super.hideValues = value;
+    });
+  }
+
+  late final _$selectedEventProcedureIdsAtom = Atom(
+      name: '_EventProcedureStore.selectedEventProcedureIds', context: context);
+
+  @override
+  ObservableList<int> get selectedEventProcedureIds {
+    _$selectedEventProcedureIdsAtom.reportRead();
+    return super.selectedEventProcedureIds;
+  }
+
+  @override
+  set selectedEventProcedureIds(ObservableList<int> value) {
+    _$selectedEventProcedureIdsAtom
+        .reportWrite(value, super.selectedEventProcedureIds, () {
+      super.selectedEventProcedureIds = value;
+    });
+  }
+
   late final _$_pdfPathAtom =
       Atom(name: '_EventProcedureStore._pdfPath', context: context);
 
@@ -448,6 +481,8 @@ editState: ${editState},
 deleteSate: ${deleteSate},
 pdfState: ${pdfState},
 pdfErrorMessage: ${pdfErrorMessage},
+hideValues: ${hideValues},
+selectedEventProcedureIds: ${selectedEventProcedureIds},
 selectedYear: ${selectedYear},
 selectedMonth: ${selectedMonth},
 selectedPaymentStatus: ${selectedPaymentStatus},
