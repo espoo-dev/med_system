@@ -27,7 +27,7 @@ class _SearchPatientPageState extends State<SearchPatientPage> {
     if (widget.initialQuery != null) {
       _searchController.text = widget.initialQuery!;
       _store.patientName = widget.initialQuery;
-      _store.getAllEventProceduresByFilters();
+      _store.getEventProceduresByPatient(widget.initialQuery!);
     } else {
       _store.eventProcedureList.clear();
       _store.patientName = null;
@@ -85,7 +85,7 @@ class _SearchPatientPageState extends State<SearchPatientPage> {
               ),
               onSubmitted: (val) {
                 _store.patientName = val;
-                _store.getAllEventProceduresByFilters();
+                _store.getEventProceduresByPatient(val);
               },
             ),
           ),

@@ -360,6 +360,16 @@ mixin _$EventProcedureStore on _EventProcedureStore, Store {
         .run(() => super.getAllEventProceduresByFilters());
   }
 
+  late final _$getEventProceduresByPatientAsyncAction = AsyncAction(
+      '_EventProcedureStore.getEventProceduresByPatient',
+      context: context);
+
+  @override
+  Future getEventProceduresByPatient(String name) {
+    return _$getEventProceduresByPatientAsyncAction
+        .run(() => super.getEventProceduresByPatient(name));
+  }
+
   late final _$deleteEventProcedureAsyncAction = AsyncAction(
       '_EventProcedureStore.deleteEventProcedure',
       context: context);

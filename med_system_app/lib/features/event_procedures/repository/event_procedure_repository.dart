@@ -16,8 +16,7 @@ class EventProcedureRepository {
       int? year,
       bool? paid,
       String? healthInsuranceName,
-      String? hospitalName,
-      String? patientName}) async {
+      String? hospitalName}) async {
     try {
       final response = await eventProcedureService.getEventProceduresByFilters(
           page: page,
@@ -26,8 +25,29 @@ class EventProcedureRepository {
           year: year,
           paid: paid,
           healthInsuranceName: healthInsuranceName,
-          hospitalName: hospitalName,
-          patientName: patientName);
+          hospitalName: hospitalName);
+      if (response.isSuccessful) {
+        EventProcedureModel? eventProcedureModel =
+            EventProcedureModel.fromJson(json.decode(response.body));
+
+        return Result.success(eventProcedureModel);
+      } else if (response.statusCode == 500) {
+        return Result.failure(NetworkExceptions.getException(
+            const NetworkExceptions.internalServerError()));
+      }
+    } catch (e) {
+      throw Result.failure(NetworkExceptions.getException(e));
+    }
+    return null;
+  }
+
+  Future<Result<EventProcedureModel?>?> getEventProceduresByPatient(
+      {int? page, int? perPage, String? patientName}) async {
+    try {
+      page ??= 1;
+      perPage ??= 10;
+      final response = await eventProcedureService.getEventProceduresByPatient(
+          page, perPage, patientName!);
       if (response.isSuccessful) {
         EventProcedureModel? eventProcedureModel =
             EventProcedureModel.fromJson(json.decode(response.body));

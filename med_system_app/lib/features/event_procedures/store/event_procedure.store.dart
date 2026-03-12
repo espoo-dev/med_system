@@ -253,8 +253,28 @@ abstract class _EventProcedureStore with Store {
             year: selectedYear,
             paid: selectedPaymentStatus,
             healthInsuranceName: healthInsuranceName,
-            hospitalName: hospitalName,
-            patientName: patientName)
+            hospitalName: hospitalName)
+        .asObservable();
+
+    resultEventProcedures?.when(
+      success: (EventProcedureModel? eventProcedureModel) {
+        _eventProcedureModel = eventProcedureModel;
+        handleSuccess(eventProcedureModel?.eventProceduresList);
+      },
+      failure: (NetworkExceptions error) {
+        handleError(NetworkExceptions.getErrorMessage(error));
+      },
+    );
+  }
+
+  @action
+  getEventProceduresByPatient(String name) async {
+    Result<EventProcedureModel?>? resultEventProcedures;
+    eventProcedureList.clear();
+    state = EventProcedureState.loading;
+
+    resultEventProcedures = await _eventProcedureRepository
+        .getEventProceduresByPatient(patientName: name)
         .asObservable();
 
     resultEventProcedures?.when(
