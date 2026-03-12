@@ -365,9 +365,11 @@ mixin _$EventProcedureStore on _EventProcedureStore, Store {
       context: context);
 
   @override
-  Future getEventProceduresByPatient(String name) {
-    return _$getEventProceduresByPatientAsyncAction
-        .run(() => super.getEventProceduresByPatient(name));
+  Future getEventProceduresByPatient(String name,
+      {bool isRefresh = false, int perPage = 10}) {
+    return _$getEventProceduresByPatientAsyncAction.run(() => super
+        .getEventProceduresByPatient(name,
+            isRefresh: isRefresh, perPage: perPage));
   }
 
   late final _$deleteEventProcedureAsyncAction = AsyncAction(

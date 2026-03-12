@@ -268,13 +268,21 @@ abstract class _EventProcedureStore with Store {
   }
 
   @action
-  getEventProceduresByPatient(String name) async {
+  getEventProceduresByPatient(String name,
+      {bool isRefresh = false, int perPage = 10}) async {
     Result<EventProcedureModel?>? resultEventProcedures;
-    eventProcedureList.clear();
+    if (isRefresh) {
+      _page = 1;
+      eventProcedureList.clear();
+    }
     state = EventProcedureState.loading;
+    if (!isRefresh) {
+      _page++;
+    }
 
     resultEventProcedures = await _eventProcedureRepository
-        .getEventProceduresByPatient(patientName: name)
+        .getEventProceduresByPatient(
+            page: _page, perPage: perPage, patientName: name)
         .asObservable();
 
     resultEventProcedures?.when(
