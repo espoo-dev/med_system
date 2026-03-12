@@ -29,6 +29,13 @@ abstract class EventProcedureService extends ChopperService {
     @Query('year') int? year,
   );
 
+  @Get(path: 'api/v1/event_procedures')
+  Future<Response> getEventProceduresByPatient(
+    @Query('page') int page,
+    @Query('per_page') int perPage,
+    @Query('patient[name]') String patientName,
+  );
+
   @Post(path: 'api/v1/event_procedures')
   Future<Response> registerEventProcedure(@Body() dynamic body);
 
@@ -51,7 +58,6 @@ abstract class EventProcedureService extends ChopperService {
     @Query('paid') bool? paid,
     @Query('health_insurance[name]') String? healthInsuranceName,
     @Query('hospital[name]') String? hospitalName,
-    @Query('patient[name]') String? patientName,
   });
 
   @Get(path: 'api/v1/pdf_reports/generate')

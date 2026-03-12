@@ -253,8 +253,36 @@ abstract class _EventProcedureStore with Store {
             year: selectedYear,
             paid: selectedPaymentStatus,
             healthInsuranceName: healthInsuranceName,
-            hospitalName: hospitalName,
-            patientName: patientName)
+            hospitalName: hospitalName)
+        .asObservable();
+
+    resultEventProcedures?.when(
+      success: (EventProcedureModel? eventProcedureModel) {
+        _eventProcedureModel = eventProcedureModel;
+        handleSuccess(eventProcedureModel?.eventProceduresList);
+      },
+      failure: (NetworkExceptions error) {
+        handleError(NetworkExceptions.getErrorMessage(error));
+      },
+    );
+  }
+
+  @action
+  getEventProceduresByPatient(String name,
+      {bool isRefresh = false, int perPage = 10}) async {
+    Result<EventProcedureModel?>? resultEventProcedures;
+    if (isRefresh) {
+      _page = 1;
+      eventProcedureList.clear();
+    }
+    state = EventProcedureState.loading;
+    if (!isRefresh) {
+      _page++;
+    }
+
+    resultEventProcedures = await _eventProcedureRepository
+        .getEventProceduresByPatient(
+            page: _page, perPage: perPage, patientName: name)
         .asObservable();
 
     resultEventProcedures?.when(

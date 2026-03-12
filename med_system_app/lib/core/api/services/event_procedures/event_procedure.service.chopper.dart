@@ -100,6 +100,27 @@ final class _$EventProcedureService extends EventProcedureService {
   }
 
   @override
+  Future<Response<dynamic>> getEventProceduresByPatient(
+    int page,
+    int perPage,
+    String patientName,
+  ) {
+    final Uri $url = Uri.parse('/api/v1/event_procedures');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'page': page,
+      'per_page': perPage,
+      'patient[name]': patientName,
+    };
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
   Future<Response<dynamic>> registerEventProcedure(dynamic body) {
     final Uri $url = Uri.parse('/api/v1/event_procedures');
     final $body = body;
@@ -164,7 +185,6 @@ final class _$EventProcedureService extends EventProcedureService {
     bool? paid,
     String? healthInsuranceName,
     String? hospitalName,
-    String? patientName,
   }) {
     final Uri $url = Uri.parse('/api/v1/event_procedures');
     final Map<String, dynamic> $params = <String, dynamic>{
@@ -175,7 +195,6 @@ final class _$EventProcedureService extends EventProcedureService {
       'paid': paid,
       'health_insurance[name]': healthInsuranceName,
       'hospital[name]': hospitalName,
-      'patient[name]': patientName,
     };
     final Request $request = Request(
       'GET',
