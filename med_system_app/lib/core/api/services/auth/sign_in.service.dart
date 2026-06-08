@@ -9,4 +9,7 @@ abstract class SignInService extends ChopperService {
       _$SignInService(client);
   @Post(path: 'users/tokens/sign_in')
   Future<Response> signIn(@Body() dynamic body);
+
+  @Delete(path: 'api/v1/users/destroy_self')
+  Future<Response> destroySelf();
 }

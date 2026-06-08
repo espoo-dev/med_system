@@ -29,4 +29,15 @@ final class _$SignInService extends SignInService {
     );
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<dynamic>> destroySelf() {
+    final Uri $url = Uri.parse('/api/v1/users/destroy_self');
+    final Request $request = Request(
+      'DELETE',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
 }

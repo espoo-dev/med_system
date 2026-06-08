@@ -48,4 +48,19 @@ class SignInRepository {
   clearUserStorage() async {
     return await _sharedPrefsHelper.deleteSecureData(Preferences.isUser);
   }
+
+  Future<Result<dynamic>> destroySelf() async {
+    try {
+      final response = await signInService.destroySelf();
+      if (response.isSuccessful) {
+        return const Result.success(true);
+      } else {
+        ErrorModelResponse? errorModelResponse =
+            ErrorModelResponse(message: "Erro ao excluir conta.");
+        return Result.success(errorModelResponse);
+      }
+    } catch (e) {
+      return Result.failure(NetworkExceptions.getException(e));
+    }
+  }
 }

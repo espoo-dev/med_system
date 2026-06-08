@@ -1,9 +1,11 @@
+import 'package:distrito_medico/core/utils/ui.dart';
 import 'package:distrito_medico/core/widgets/my_app_bar.widget.dart';
 import 'package:distrito_medico/features/event_procedures/pages/edit_event_procedure_page.dart';
 import 'package:distrito_medico/features/event_procedures/pages/generate_pdf_screen.page.dart';
 import 'package:distrito_medico/features/event_procedures/store/event_procedure.store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:distrito_medico/core/theme/icons.dart';
@@ -134,68 +136,117 @@ class _SearchPatientPageState extends State<SearchPatientPage> {
 
                 return RefreshIndicator(
                   onRefresh: _refreshProcedures,
-                  child: ListView.separated(
-                    controller: _scrollController,
-                    padding: const EdgeInsets.only(bottom: 20),
-                    itemCount: _store.state == EventProcedureState.loading
-                        ? _store.eventProcedureList.length + 1
-                        : _store.eventProcedureList.length,
-                    separatorBuilder: (_, __) => const Divider(),
-                    itemBuilder: (context, index) {
-                      if (index < _store.eventProcedureList.length) {
-                        final item = _store.eventProcedureList[index];
-                        return ListTile(
-                          onTap: () {
-                            to(context,
-                                EditEventProcedurePage(eventProcedures: item));
-                          },
-                          leading: SvgPicture.asset(
-                            item.paid! ? iconCheckCoreAsset : iconCloseCoreAsset,
-                            width: 32,
-                            height: 32,
-                            colorFilter: ColorFilter.mode(
-                              item.paid!
-                                  ? Theme.of(context).colorScheme.primary
-                                  : const Color(0xFFEC2A58),
-                              BlendMode.srcIn,
+                  child: SlidableAutoCloseBehavior(
+                    closeWhenOpened: true,
+                    child: ListView.separated(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.only(bottom: 20),
+                      itemCount: _store.state == EventProcedureState.loading
+                          ? _store.eventProcedureList.length + 1
+                          : _store.eventProcedureList.length,
+                      separatorBuilder: (_, __) => const Divider(),
+                      itemBuilder: (context, index) {
+                        if (index < _store.eventProcedureList.length) {
+                          final item = _store.eventProcedureList[index];
+                          return Slidable(
+                            key: ValueKey(item.id),
+                            startActionPane: !item.paid!
+                                ? ActionPane(
+                                    motion: const StretchMotion(),
+                                    children: [
+                                      SlidableAction(
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        icon: Icons.check,
+                                        label: 'Pagar',
+                                        onPressed: (context) {
+                                          _store.editPaymentEventProcedure(
+                                              item.id ?? 0, index);
+                                        },
+                                      ),
+                                    ],
+                                  )
+                                : null,
+                            endActionPane: ActionPane(
+                              motion: const BehindMotion(),
+                              children: [
+                                SlidableAction(
+                                  backgroundColor: Colors.red,
+                                  icon: Icons.delete,
+                                  label: 'Deletar',
+                                  onPressed: (context) {
+                                    showAlert(
+                                      context: context,
+                                      title: 'Excluir Procedimento',
+                                      content:
+                                          'Tem certeza que deseja excluir este procedimento?',
+                                      textYes: 'Sim',
+                                      textNo: 'Não',
+                                      onPressedConfirm: () {
+                                        _store.deleteEventProcedure(
+                                            item.id ?? 0, index);
+                                      },
+                                      onPressedCancel: () {},
+                                    );
+                                  },
+                                ),
+                              ],
                             ),
-                          ),
-                          title: Text(
-                            item.patient ?? "",
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(item.procedure ?? "",
-                                  maxLines: 1, overflow: TextOverflow.ellipsis),
-                              Row(
+                            child: ListTile(
+                              onTap: () {
+                                to(context,
+                                    EditEventProcedurePage(eventProcedures: item));
+                              },
+                              leading: SvgPicture.asset(
+                                item.paid! ? iconCheckCoreAsset : iconCloseCoreAsset,
+                                width: 32,
+                                height: 32,
+                                colorFilter: ColorFilter.mode(
+                                  item.paid!
+                                      ? Theme.of(context).colorScheme.primary
+                                      : const Color(0xFFEC2A58),
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                              title: Text(
+                                item.patient ?? "",
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(item.healthInsurance ?? "",
-                                      style: const TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold)),
-                                  const SizedBox(width: 10),
-                                  Text(item.date ?? "",
-                                      style: const TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold)),
+                                  Text(item.procedure ?? "",
+                                      maxLines: 1, overflow: TextOverflow.ellipsis),
+                                  Row(
+                                    children: [
+                                      Text(item.healthInsurance ?? "",
+                                          style: const TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold)),
+                                      const SizedBox(width: 10),
+                                      Text(item.date ?? "",
+                                          style: const TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold)),
+                                    ],
+                                  ),
                                 ],
                               ),
-                            ],
-                          ),
-                          trailing: Text(
-                            item.totalAmountCents ?? "",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.primary,
+                              trailing: Text(
+                                item.totalAmountCents ?? "",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
                             ),
-                          ),
-                        );
-                      } else {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                    },
+                          );
+                        } else {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                      },
+                    ),
                   ),
                 );
               },

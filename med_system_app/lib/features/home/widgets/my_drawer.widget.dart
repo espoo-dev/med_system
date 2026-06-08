@@ -133,6 +133,78 @@ class MyDrawer extends StatelessWidget {
           ),
           ListTile(
             onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext dialogContext) {
+                  return AlertDialog(
+                    title: const Text("Excluir Conta"),
+                    content: const Text(
+                        "Tem certeza que deseja excluir sua conta? Esta ação é irreversível."),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(dialogContext),
+                        child: const Text("Cancelar"),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          Navigator.pop(dialogContext); // Fecha diálogo de confirmação
+
+                          // Usa o context externo (drawer/scaffold), que ainda é válido
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (_) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          );
+
+                          await signInStore.deleteAccount();
+
+                          if (context.mounted) {
+                            Navigator.pop(context); // Fecha o loading
+                          }
+
+                          if (signInStore.deleteAccountState == SignInState.success) {
+                            if (context.mounted) {
+                              Navigator.pop(context); // Fecha o Drawer
+                              to(context, const SignInPage());
+                            }
+                          } else {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    signInStore.errorMessage?.isNotEmpty == true
+                                        ? signInStore.errorMessage!
+                                        : "Erro ao excluir conta. Tente novamente.",
+                                  ),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          }
+                        },
+                        child: const Text(
+                          "Excluir",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            title: const Text(
+              "Excluir Conta",
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.red),
+            ),
+            leading: const Icon(
+              Icons.delete_forever,
+              color: Colors.red,
+            ),
+          ),
+          ListTile(
+            onTap: () {
               signInStore.forceLogout();
               to(context, const SignInPage());
             },

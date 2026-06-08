@@ -47,6 +47,9 @@ abstract class _SignInBaseStore with Store {
   var signInState = SignInState.idle;
 
   @observable
+  var deleteAccountState = SignInState.idle;
+
+  @observable
   String _errorMessage = "";
   get errorMessage => _errorMessage;
 
@@ -93,5 +96,23 @@ abstract class _SignInBaseStore with Store {
 
   handleError(String reason) {
     _errorMessage = reason;
+  }
+
+  @action
+  deleteAccount() async {
+    deleteAccountState = SignInState.loading;
+    var authResult = await _signInRepository.destroySelf();
+    await authResult.when(success: (dynamic result) async {
+      if (result == true) {
+        await forceLogout();
+        deleteAccountState = SignInState.success;
+      } else {
+        handleError(result.message);
+        deleteAccountState = SignInState.error;
+      }
+    }, failure: (NetworkExceptions error) async {
+      handleError(NetworkExceptions.getErrorMessage(error));
+      deleteAccountState = SignInState.error;
+    });
   }
 }

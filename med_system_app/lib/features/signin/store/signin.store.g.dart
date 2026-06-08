@@ -73,6 +73,22 @@ mixin _$SignInStore on _SignInBaseStore, Store {
     });
   }
 
+  late final _$deleteAccountStateAtom =
+      Atom(name: '_SignInBaseStore.deleteAccountState', context: context);
+
+  @override
+  SignInState get deleteAccountState {
+    _$deleteAccountStateAtom.reportRead();
+    return super.deleteAccountState;
+  }
+
+  @override
+  set deleteAccountState(SignInState value) {
+    _$deleteAccountStateAtom.reportWrite(value, super.deleteAccountState, () {
+      super.deleteAccountState = value;
+    });
+  }
+
   late final _$_errorMessageAtom =
       Atom(name: '_SignInBaseStore._errorMessage', context: context);
 
@@ -111,6 +127,14 @@ mixin _$SignInStore on _SignInBaseStore, Store {
   @override
   Future forceLogout() {
     return _$forceLogoutAsyncAction.run(() => super.forceLogout());
+  }
+
+  late final _$deleteAccountAsyncAction =
+      AsyncAction('_SignInBaseStore.deleteAccount', context: context);
+
+  @override
+  Future deleteAccount() {
+    return _$deleteAccountAsyncAction.run(() => super.deleteAccount());
   }
 
   late final _$_SignInBaseStoreActionController =
@@ -163,7 +187,8 @@ mixin _$SignInStore on _SignInBaseStore, Store {
   @override
   String toString() {
     return '''
-signInState: ${signInState}
+signInState: ${signInState},
+deleteAccountState: ${deleteAccountState}
     ''';
   }
 }
