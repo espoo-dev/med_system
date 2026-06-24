@@ -187,6 +187,15 @@ abstract class _AddMedicalShiftStoreBase with Store {
   createMedicalShift() async {
     if (isValidData) {
       saveState = SaveMedicalShiftState.loading;
+
+      // Plantão recorrente: só chama o endpoint de recorrência.
+      // Ele já gera todos os plantões (incluindo o da data inicial).
+      // Chamar também o endpoint avulso duplicaria o plantão da data de início.
+      if (_isRecurrent && _frequency != null) {
+        await _createRecurrence();
+        return;
+      }
+
       var registerShiftResult =
           await _medicalShiftRepository.registerMedicalShift(
         AddMedicalShiftRequestModel(
@@ -201,10 +210,6 @@ abstract class _AddMedicalShiftStoreBase with Store {
       );
 
       registerShiftResult?.when(success: (shift) async {
-        // If recurrence is enabled, create the recurrence
-        if (_isRecurrent && _frequency != null) {
-          await _createRecurrence();
-        }
         saveState = SaveMedicalShiftState.success;
       }, failure: (NetworkExceptions error) {
         handleError(NetworkExceptions.getErrorMessage(error));
@@ -251,10 +256,19 @@ abstract class _AddMedicalShiftStoreBase with Store {
         color: _color,
       );
 
-      await _recurrenceRepository.createMedicalShiftRecurrence(recurrenceModel);
+      final result = await _recurrenceRepository.createMedicalShiftRecurrence(recurrenceModel);
+      result?.when(
+        success: (_) {
+          saveState = SaveMedicalShiftState.success;
+        },
+        failure: (NetworkExceptions error) {
+          handleError(NetworkExceptions.getErrorMessage(error));
+          saveState = SaveMedicalShiftState.error;
+        },
+      );
     } catch (e) {
-      // Log error but don't fail the shift creation
       handleError('Erro ao criar recorrência: ${e.toString()}');
+      saveState = SaveMedicalShiftState.error;
     }
   }
 
