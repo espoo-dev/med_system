@@ -41,7 +41,17 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   List<MedicalShiftModel> getEventsForDay(DateTime day) {
     List<MedicalShiftModel> eventsForDay = [];
     for (var event in widget.events) {
-      DateTime eventDate = DateFormat('dd/MM/yyyy').parse(event.date ?? '');
+      if (event.date == null || event.date!.isEmpty) continue;
+      DateTime? eventDate;
+      try {
+        eventDate = DateFormat('d/M/yyyy').parse(event.date!);
+      } catch (_) {
+        try {
+          eventDate = DateFormat('dd/MM/yyyy').parse(event.date!);
+        } catch (_) {
+          continue;
+        }
+      }
       if (eventDate.year == day.year &&
           eventDate.month == day.month &&
           eventDate.day == day.day) {

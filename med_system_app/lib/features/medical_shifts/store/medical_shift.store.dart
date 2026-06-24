@@ -72,6 +72,8 @@ abstract class _MedicalShiftStoreBase with Store {
   int _page = 1;
   get page => _page;
 
+  int _requestVersion = 0;
+
   @observable
   PdfReportState pdfState = PdfReportState.idle;
 
@@ -168,6 +170,7 @@ abstract class _MedicalShiftStoreBase with Store {
 
   @action
   getAllMedicalShifts({bool isRefresh = false}) async {
+    final version = ++_requestVersion;
     Result<MedicalShiftList?>? resultMedicalShifts;
     if (isRefresh) {
       _page = 1;
@@ -180,6 +183,8 @@ abstract class _MedicalShiftStoreBase with Store {
     }
     await Future.delayed(const Duration(seconds: 3));
 
+    if (version != _requestVersion) return;
+
     resultMedicalShifts = await _medicalShiftRepository
         .getMedicalShiftsByFilters(
             page: _page,
@@ -189,6 +194,8 @@ abstract class _MedicalShiftStoreBase with Store {
             paid: selectedPaymentStatus,
             hospitalName: hospitalName)
         .asObservable();
+
+    if (version != _requestVersion) return;
 
     resultMedicalShifts?.when(
       success: (MedicalShiftList? medicalShiftModel) {
@@ -203,12 +210,15 @@ abstract class _MedicalShiftStoreBase with Store {
 
   @action
   getAllMedicalShiftByFilters({bool isRefresh = false}) async {
+    final version = ++_requestVersion;
     Result<MedicalShiftList?>? resultMedicalShifts;
     medicalShiftList.clear();
     medicalShiftListCalendar.clear();
     state = MedicalShiftState.loading;
 
     await Future.delayed(const Duration(seconds: 3));
+
+    if (version != _requestVersion) return;
 
     resultMedicalShifts = await _medicalShiftRepository
         .getMedicalShiftsByFilters(
@@ -217,6 +227,8 @@ abstract class _MedicalShiftStoreBase with Store {
             paid: selectedPaymentStatus,
             hospitalName: hospitalName)
         .asObservable();
+
+    if (version != _requestVersion) return;
 
     resultMedicalShifts?.when(
       success: (MedicalShiftList? medicalShiftModel) {
@@ -349,8 +361,12 @@ abstract class _MedicalShiftStoreBase with Store {
       }
 
       try {
-        DateTime eventDate =
-            DateFormat('dd/MM/yyyy').parse(medicalShift.date ?? '');
+        DateTime? eventDate;
+        try {
+          eventDate = DateFormat('d/M/yyyy').parse(medicalShift.date ?? '');
+        } catch (_) {
+          eventDate = DateFormat('dd/MM/yyyy').parse(medicalShift.date ?? '');
+        }
 
         eventDate = DateTime(eventDate.year, eventDate.month, eventDate.day);
         selectedDate =
