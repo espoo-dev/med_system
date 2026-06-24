@@ -213,12 +213,34 @@ abstract class _AddMedicalShiftStoreBase with Store {
     }
   }
 
+  /// Converte Dart weekday (1=Seg..7=Dom) para 0=Dom,1=Seg..6=Sáb
+  int? _dayOfWeekFromStartDate() {
+    if (_startDate.isEmpty) return null;
+    try {
+      final parts = _startDate.split('/');
+      if (parts.length != 3) return null;
+      final date = DateTime(
+        int.parse(parts[2]),
+        int.parse(parts[1]),
+        int.parse(parts[0]),
+      );
+      // Dart: 1=Mon … 7=Sun  →  destino: 0=Sun, 1=Mon … 6=Sat
+      return date.weekday % 7;
+    } catch (_) {
+      return null;
+    }
+  }
+
   @action
   Future<void> _createRecurrence() async {
     try {
+      // Se o usuário não selecionou explicitamente o dia da semana,
+      // calcula a partir da data de início para evitar off-by-one no backend.
+      final effectiveDayOfWeek = _dayOfWeek ?? _dayOfWeekFromStartDate();
+
       final recurrenceModel = MedicalShiftRecurrenceModel(
         frequency: _frequency,
-        dayOfWeek: _dayOfWeek,
+        dayOfWeek: effectiveDayOfWeek,
         dayOfMonth: _dayOfMonth,
         endDate: _endDate,
         workload: _workload,
