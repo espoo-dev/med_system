@@ -86,7 +86,6 @@ class _EventProceduresPageState extends State<EventProceduresPage> {
     }
     eventProcedureStore.dispose();
     _scrollController.dispose();
-    eventProcedureStore.dispose();
     super.dispose();
   }
 

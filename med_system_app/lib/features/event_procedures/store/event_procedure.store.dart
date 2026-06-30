@@ -80,6 +80,8 @@ abstract class _EventProcedureStore with Store {
   int _page = 1;
   get page => _page;
 
+  int _requestVersion = 0;
+
   @observable
   EventProcedureModel? _eventProcedureModel = EventProcedureModel();
   get eventProcedureModel => _eventProcedureModel;
@@ -208,6 +210,7 @@ abstract class _EventProcedureStore with Store {
 
   @action
   getAllEventProcedures({bool isRefresh = false, int perPage = 10000}) async {
+    final version = ++_requestVersion;
     Result<EventProcedureModel?>? resultEventProcedures;
     if (isRefresh) {
       _page = 1;
@@ -219,6 +222,8 @@ abstract class _EventProcedureStore with Store {
     }
     await Future.delayed(const Duration(seconds: 3));
 
+    if (version != _requestVersion) return;
+
     resultEventProcedures = await _eventProcedureRepository
         .getEventProceduresByFilters(
             page: _page,
@@ -229,6 +234,8 @@ abstract class _EventProcedureStore with Store {
             healthInsuranceName: healthInsuranceName,
             hospitalName: hospitalName)
         .asObservable();
+
+    if (version != _requestVersion) return;
 
     resultEventProcedures?.when(
       success: (EventProcedureModel? eventProcedureModel) {
@@ -243,6 +250,7 @@ abstract class _EventProcedureStore with Store {
 
   @action
   getAllEventProceduresByFilters() async {
+    final version = ++_requestVersion;
     Result<EventProcedureModel?>? resultEventProcedures;
     eventProcedureList.clear();
     state = EventProcedureState.loading;
@@ -255,6 +263,8 @@ abstract class _EventProcedureStore with Store {
             healthInsuranceName: healthInsuranceName,
             hospitalName: hospitalName)
         .asObservable();
+
+    if (version != _requestVersion) return;
 
     resultEventProcedures?.when(
       success: (EventProcedureModel? eventProcedureModel) {
